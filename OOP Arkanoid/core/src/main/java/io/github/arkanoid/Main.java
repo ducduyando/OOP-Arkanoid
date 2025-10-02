@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -17,11 +18,14 @@ public class Main extends ApplicationAdapter {
 
     SpriteBatch batch;
     OrthographicCamera camera;
-    Texture ball;
-    Texture bar;
 
-    Rectangle ballRect;
-    Rectangle barRect;
+    Texture barImage;
+    Texture ballImage;
+
+    Boss bar;
+    Boss ball;
+
+    Stage stage;
 
     @Override
     public void create() {
@@ -29,25 +33,30 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        ball = new Texture("ball.png");
-        bar = new Texture("bar.png");
+        barImage = new Texture("bar.png");
+        ballImage = new Texture("ball.png");
 
-        ballRect = new Rectangle(100f, 200f, ball.getWidth()/2f, ball.getHeight()/2f);
-        barRect = new Rectangle(0f, 0f, bar.getWidth()/2f, bar.getHeight()/2f);
+        bar = new Boss(barImage, 0, 0);
+        ball = new Boss(ballImage, 100, 200);
+
+        stage = new Stage();
+
+        stage.addActor(ball);
+        stage.addActor(bar);
+
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(Color.BLUE);
+        ScreenUtils.clear(Color.GRAY);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        barRect.x ++;
-
         batch.begin();
-        batch.draw(ball, ballRect.x, ballRect.y, ballRect.width, ballRect.height);
-        batch.draw(bar, barRect.x, barRect.y, barRect.width, barRect.height);
         batch.end();
+
+        stage.act();
+        stage.draw();
     }
 
 
