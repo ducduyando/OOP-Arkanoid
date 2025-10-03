@@ -1,19 +1,16 @@
 package io.github.arkanoid;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Boss extends Actor {
+public class Ball extends Actor {
     TextureRegion textureRegion;
 
-    Boss(Texture texture, float x, float y) {
+    Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
         setPosition(x, y);
-        setScale(0.5f, 0.5f);
         setSize(texture.getWidth(), texture.getHeight());
         setOrigin(texture.getWidth() / 2f, texture.getHeight() / 2f);
     }

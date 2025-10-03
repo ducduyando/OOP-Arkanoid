@@ -22,8 +22,8 @@ public class Main extends ApplicationAdapter {
     Texture barImage;
     Texture ballImage;
 
-    Boss bar;
-    Boss ball;
+    Bar bar;
+    Ball ball;
 
     Stage stage;
 
@@ -36,8 +36,8 @@ public class Main extends ApplicationAdapter {
         barImage = new Texture("bar.png");
         ballImage = new Texture("ball.png");
 
-        bar = new Boss(barImage, 0, 0);
-        ball = new Boss(ballImage, 100, 200);
+        bar = new Bar(barImage, 0, 0);
+        ball = new Ball(ballImage, 100, 200);
 
         stage = new Stage();
 
