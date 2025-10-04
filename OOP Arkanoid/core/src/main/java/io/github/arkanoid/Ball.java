@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.awt.*;
 
@@ -11,10 +12,8 @@ import static io.github.arkanoid.Constants.*;
 
 public class Ball extends Actor {
     TextureRegion textureRegion;
-    private float velocityX = 100;
-    private float velocityY = 100;
+    Vector velocityVector = new Vector(BALL_VELOCITY_X, BALL_VELOCITY_Y);
     private boolean wasColliding = false;
-
 
     Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, BALL_WIDTH, BALL_HEIGHT);
@@ -23,16 +22,24 @@ public class Ball extends Actor {
         setOrigin(texture.getWidth() / 2f, texture.getHeight() / 2f);
     }
 
+    public boolean getWasColliding() {
+        return wasColliding;
+    }
+
+    public void setWasColliding(boolean wasColliding) {
+        this.wasColliding = wasColliding;
+    }
+
     @Override
     public void act(float delta) {
-        moveBy(velocityX * delta, velocityY * delta);
+        moveBy(velocityVector.getX(), velocityVector.getY());
 
       // va cham tuong trai va phai
-        if (getX() <= 0 || getX() >= 800 - getWidth()) {
-            velocityX = -velocityX;
+        if (getX() <= LEFT_BOUNDARY || getX() >= RIGHT_BOUNDARY) {
+            this.velocityVector.mulX(-1);
         }
-        if (getY() <= 0 || getY() >= 600 - getHeight()) {
-            velocityY = -velocityY;
+        if (getY() <= DOWN_BOUNDARY || getY() >= UP_BOUNDARY) {
+            this.velocityVector.mulY(-1);
         }
 
     }
@@ -43,28 +50,15 @@ public class Ball extends Actor {
     }
 
     public Rectangle getBound(){
-        return new Rectangle((int) getX(),(int) getY(),(int) getWidth(),(int) getHeight());
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
-
-    public void bounceStronger(){
-        velocityY=-velocityY*2;
-    }
-    public void bounce() {
-        velocityY = -velocityY;
-    }
     public void reverseX() {
-        velocityX = -velocityX;
-    } public void reverseY() {
-        velocityY = -velocityY;
-    }
-    public boolean isWasColliding() {
-        return wasColliding;
+        this.velocityVector.mulX(-1);
     }
 
-    public void setWasColliding(boolean wasColliding) {
-        this.wasColliding = wasColliding;
+    public void reverseY() {
+        this.velocityVector.mulY(-1);
     }
-
 
 }

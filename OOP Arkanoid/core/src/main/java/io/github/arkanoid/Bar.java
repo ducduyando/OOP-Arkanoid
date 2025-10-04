@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.awt.*;
 
@@ -13,6 +14,7 @@ import static io.github.arkanoid.Constants.*;
 
 public class Bar extends Actor {
     TextureRegion textureRegion;
+    Vector velocityVector = new Vector(BAR_VELOCITY_X, BAR_VELOCITY_Y);
 
     Bar(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, BAR_WIDTH, BAR_HEIGHT);
@@ -30,19 +32,19 @@ public class Bar extends Actor {
     @Override
     public void act(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() >= 0) {
-            moveBy(-BAR_SPEED, 0);
+            moveBy(-velocityVector.getX(), 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            moveBy(BAR_SPEED, 0);
+            moveBy(velocityVector.getX(), 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() >= 0) {
-            moveBy(0, -BAR_SPEED);
+            moveBy(0, -velocityVector.getY());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            moveBy(0, BAR_SPEED);
+            moveBy(0, velocityVector.getY());
         }
     }
     public Rectangle getBound(){
-        return new Rectangle((int) getX(),(int) getY(),(int) getWidth(),(int) getHeight());
+        return new Rectangle( getX(), getY(), getWidth(), getHeight());
     }
 }
