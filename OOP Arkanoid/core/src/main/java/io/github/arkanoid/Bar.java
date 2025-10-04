@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import java.awt.*;
+
 import static io.github.arkanoid.Constants.*;
 
 public class Bar extends Actor {
@@ -38,5 +41,8 @@ public class Bar extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             moveBy(0, BAR_SPEED);
         }
+    }
+    public Rectangle getBound(){
+        return new Rectangle((int) getX(),(int) getY(),(int) getWidth(),(int) getHeight());
     }
 }
