@@ -15,7 +15,6 @@ import static io.github.arkanoid.Constants.*;
 public class Ball extends Actor {
     TextureRegion textureRegion;
     Vector velocityVector = new Vector(BALL_VELOCITY_X, BALL_VELOCITY_Y);
-    private boolean wasColliding = false;
 // check xem bong dc ban ra chua
  private boolean isLaunched = false;
  // lay vi tri thanh bar
@@ -29,12 +28,49 @@ public class Ball extends Actor {
         setOrigin(getWidth() / 2f, getHeight() / 2f);
     }
 
-    public boolean getWasColliding() {
-        return wasColliding;
+    public Rectangle getBound(){
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
-    public void setWasColliding(boolean wasColliding) {
-        this.wasColliding = wasColliding;
+    public void boundaryCollision() {
+        if (getX() <= LEFT_BOUNDARY || getX() + getWidth() >= RIGHT_BOUNDARY) {
+            this.velocityVector.mulX(-1);
+        }
+        if (getY() <= DOWN_BOUNDARY || getY() + getHeight() >= UP_BOUNDARY) {
+            this.velocityVector.mulY(-1);
+        }
+    }
+
+    public void barCollision() {
+        Rectangle ballRect = getBound();
+        Rectangle barRect = barRef.getBound();
+        if (ballRect.overlaps(barRect)) {
+            if (getY() + BALL_HEIGHT > barRect.getY() && velocityVector.getY() < 0) {
+
+                setY(barRef.getY() + barRef.getHeight());
+
+                // tinh goc phan xa
+                float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
+                float ballCenterX = getX() + getWidth() / 2f;
+
+                // khoang cach giua bong va tam bar
+                float relativeIntersect = (ballCenterX - barCenterX) / (barRef.getWidth() / 2f);
+
+                // khoang gioi han
+                relativeIntersect = Math.max(-1f, Math.min(1f, relativeIntersect));
+
+                // Goc phan xa that
+                float bounceAngle = relativeIntersect * MAX_BOUNCE_ANGLE;
+
+                // toc do tong cua bong
+                float speed = velocityVector.length();
+
+                // cap nhap lai gia tri vector
+                velocityVector.setX(speed * (float) Math.sin(bounceAngle));
+                // huong Y phai duong de di len tren (toa do y tang len tren)
+                velocityVector.setY(Math.abs(speed * (float) Math.cos(bounceAngle)));
+            }
+        }
     }
 
     @Override
@@ -56,48 +92,8 @@ public class Ball extends Actor {
         }
         moveBy(velocityVector.getX(), velocityVector.getY());
 
-      // va cham tuong trai va phai
-        if (getX() <= LEFT_BOUNDARY || getX() >= RIGHT_BOUNDARY) {
-            this.velocityVector.mulX(-1);
-        }
-        if (getY() <= DOWN_BOUNDARY || getY() >= UP_BOUNDARY) {
-            this.velocityVector.mulY(-1);
-        }
-        // va cham voi thanh bar
-        Rectangle ballRect = getBound();
-        Rectangle barRect = barRef.getBound();
-        if (ballRect.overlaps(barRect) && velocityVector.getY() < 0f) {
-            // Chi bat ball phia tren
-            if (getY() > barRef.getY() + barRef.getHeight() / 2f) {
-
-                // Chinh lai vi tri thanh bar
-                setY(barRef.getY() + barRef.getHeight());
-
-                // tinh goc phan xa
-                float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
-                float ballCenterX = getX() + getWidth() / 2f;
-
-                // khoang cach giua bong va tam bar
-                float relativeIntersect = (ballCenterX - barCenterX) / (barRef.getWidth() / 2f);
-
-                // khoang gioi han
-                relativeIntersect = Math.max(-1f, Math.min(1f, relativeIntersect));
-
-                // Goc lech doi da
-                float maxBounceAngle = (float) Math.toRadians(60);
-
-                // Goc phan xa that
-                float bounceAngle = relativeIntersect * maxBounceAngle;
-
-                // toc do tong cua bong
-                float speed = velocityVector.length();
-
-                // cap nhap lai gia tri vector
-                velocityVector.setX(speed * (float) Math.sin(bounceAngle));
-                // huong Y phai duong de di len tren (toa do y tang len tren)
-                velocityVector.setY(Math.abs(speed * (float) Math.cos(bounceAngle)));
-            }
-        }
+        boundaryCollision();
+        barCollision();
     }
 
 
@@ -119,17 +115,6 @@ public class Ball extends Actor {
         batch.begin();
     }
 
-    public Rectangle getBound(){
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
-    }
-
-    public void reverseX() {
-        this.velocityVector.mulX(-1);
-    }
-
-    public void reverseY() {
-        this.velocityVector.mulY(-1);
-    }
     public void resetLaunch() {
         isLaunched = false;
     }

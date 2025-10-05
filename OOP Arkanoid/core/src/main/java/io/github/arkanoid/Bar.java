@@ -23,6 +23,11 @@ public class Bar extends Actor {
         setOrigin(getWidth() / 2f, getHeight() / 2f);
 
     }
+
+    public Rectangle getBound(){
+        return new Rectangle( getX(), getY(), getWidth(), getHeight());
+    }
+
     // ve hit box trc
     private static final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -49,17 +54,14 @@ public class Bar extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() > 0) {
             moveBy(-velocityVector.getX(), 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + getWidth() < Gdx.graphics.getWidth()) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + getWidth() < SCREEN_WIDTH) {
             moveBy(velocityVector.getX(), 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > 0) {
             moveBy(0, -velocityVector.getY());
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + getHeight() < Gdx.graphics.getHeight()) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + getHeight() < SCREEN_HEIGHT) {
             moveBy(0, velocityVector.getY());
         }
-    }
-    public Rectangle getBound(){
-        return new Rectangle( getX(), getY(), getWidth(), getHeight());
     }
 }
