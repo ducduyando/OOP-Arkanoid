@@ -40,4 +40,8 @@ public class Vector {
     public void mulY(float delta) {
         this.y *= delta;
     }
+
+    public float length() {
+        return (float) Math.sqrt(x * x + y * y);
+    }
 }

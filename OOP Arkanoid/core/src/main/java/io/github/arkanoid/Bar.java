@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
-
-import java.awt.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Color;
 
 import static io.github.arkanoid.Constants.*;
 
@@ -17,30 +17,45 @@ public class Bar extends Actor {
     Vector velocityVector = new Vector(BAR_VELOCITY_X, BAR_VELOCITY_Y);
 
     Bar(Texture texture, float x, float y) {
-        this.textureRegion = new TextureRegion(texture, BAR_WIDTH, BAR_HEIGHT);
+        this.textureRegion = new TextureRegion(texture);
         setPosition(x, y);
-        setSize(texture.getWidth(), texture.getHeight());
-        setOrigin(texture.getWidth() / 2f, texture.getHeight() / 2f);
+        setSize(BAR_WIDTH, BAR_HEIGHT);
+        setOrigin(getWidth() / 2f, getHeight() / 2f);
 
     }
+    // ve hit box trc
+    private static final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.end();
+
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+
+        // Ve hit box
+        shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
+
+        shapeRenderer.end();
+
+
+        batch.begin();
     }
 
     @Override
     public void act(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() >= 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() > 0) {
             moveBy(-velocityVector.getX(), 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + getWidth() < Gdx.graphics.getWidth()) {
             moveBy(velocityVector.getX(), 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() >= 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > 0) {
             moveBy(0, -velocityVector.getY());
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + getHeight() < Gdx.graphics.getHeight()) {
             moveBy(0, velocityVector.getY());
         }
     }

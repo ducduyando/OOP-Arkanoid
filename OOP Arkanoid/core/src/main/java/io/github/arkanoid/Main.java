@@ -12,8 +12,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Input;
 
-import java.awt.*;
-
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 
@@ -36,11 +34,12 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        barImage = new Texture("bar.png");
-        ballImage = new Texture("ball.png");
+        barImage = new Texture("Bar.png");
+        ballImage = new Texture("Ball.png");
 
         bar = new Bar(barImage, 0, 0);
-        ball = new Ball(ballImage, 100, 200);
+        ball = new Ball(ballImage, bar, bar.getX(), bar.getY() + bar.getHeight());
+
 
         stage = new Stage();
 
