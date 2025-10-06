@@ -6,15 +6,15 @@ public class Constants {
 
     public static final int BAR_WIDTH = 464;
     public static final int BAR_HEIGHT = 56;
-    public static final int BAR_VELOCITY_X = 10;
-    public static final int BAR_VELOCITY_Y = 10;
+    public static final float BAR_VELOCITY_X = 600f;
+    public static final float BAR_VELOCITY_Y = 600f;
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
 
 
     public static final int BALL_WIDTH = 64;
     public static final int BALL_HEIGHT = 64;
-    public static final int BALL_VELOCITY_X = 10;
-    public static final int BALL_VELOCITY_Y = 10;
+    public static final float BALL_VELOCITY_X = 600f;
+    public static final float BALL_VELOCITY_Y = 600f;
 
     /** Screen boundary. */
     public static final int LEFT_BOUNDARY = 0;

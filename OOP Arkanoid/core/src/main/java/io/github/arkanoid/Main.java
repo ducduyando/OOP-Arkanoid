@@ -23,6 +23,7 @@ public class Main extends ApplicationAdapter {
 
     Bar bar;
     Ball ball;
+    GameLogic gameLogic;
 
     Stage stage;
 
@@ -38,7 +39,8 @@ public class Main extends ApplicationAdapter {
         ballImage = new Texture("Ball.png");
 
         bar = new Bar(barImage, 0, 0);
-        ball = new Ball(ballImage, bar, bar.getX(), bar.getY() + bar.getHeight());
+        ball = new Ball(ballImage, 0, 0);
+        gameLogic = new GameLogic(ball, bar);
 
 
         stage = new Stage();
@@ -69,6 +71,9 @@ public class Main extends ApplicationAdapter {
         batch.end();
 
         stage.act();
+        gameLogic.launch();
+        gameLogic.barCollision();
+        gameLogic.boundaryCollision();
         stage.draw();
 
     }
