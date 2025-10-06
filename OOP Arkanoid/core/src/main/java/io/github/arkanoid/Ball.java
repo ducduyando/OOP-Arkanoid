@@ -15,11 +15,9 @@ import static io.github.arkanoid.Constants.*;
 public class Ball extends Actor {
     TextureRegion textureRegion;
     Vector velocityVector = new Vector(BALL_VELOCITY_X, BALL_VELOCITY_Y);
-// check xem bong dc ban ra chua
- private boolean isLaunched = false;
- // lay vi tri thanh bar
+    private boolean isLaunched = false;
     private Bar barRef;
-    private static final ShapeRenderer shapeRenderer = new ShapeRenderer();
+
     Ball(Texture texture, Bar bar, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
         this.barRef = bar;
@@ -29,14 +27,36 @@ public class Ball extends Actor {
     }
 
     public Rectangle getBound(){
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+        return new Rectangle(getX(), getY(), BALL_WIDTH, BALL_HEIGHT);
+    }
+
+    public void resetLaunch() {
+        isLaunched = false;
+    }
+
+    public void launch() {
+        if (!isLaunched) {
+            float barCenterX = barRef.getX() + BAR_WIDTH / 2f;
+            float ballX = barCenterX - BALL_WIDTH / 2f;
+            float ballY = barRef.getY() + BAR_HEIGHT;
+            setPosition(ballX, ballY);
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                isLaunched = true;
+                velocityVector.setX(0f);
+                velocityVector.setY(BALL_VELOCITY_Y);
+            }
+        }
     }
 
     public void boundaryCollision() {
-        if (getX() <= LEFT_BOUNDARY || getX() + getWidth() >= RIGHT_BOUNDARY) {
+        if (getY() <= DOWN_BOUNDARY) {
+            resetLaunch();
+        }
+        if (getX() <= LEFT_BOUNDARY || getX() + BALL_WIDTH >= RIGHT_BOUNDARY) {
             this.velocityVector.mulX(-1);
         }
-        if (getY() <= DOWN_BOUNDARY || getY() + getHeight() >= UP_BOUNDARY) {
+        if (getY() + BALL_HEIGHT >= UP_BOUNDARY) {
             this.velocityVector.mulY(-1);
         }
     }
@@ -49,25 +69,18 @@ public class Ball extends Actor {
 
                 setY(barRef.getY() + barRef.getHeight());
 
-                // tinh goc phan xa
                 float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
                 float ballCenterX = getX() + getWidth() / 2f;
 
-                // khoang cach giua bong va tam bar
                 float relativeIntersect = (ballCenterX - barCenterX) / (barRef.getWidth() / 2f);
 
-                // khoang gioi han
                 relativeIntersect = Math.max(-1f, Math.min(1f, relativeIntersect));
 
-                // Goc phan xa that
                 float bounceAngle = relativeIntersect * MAX_BOUNCE_ANGLE;
 
-                // toc do tong cua bong
                 float speed = velocityVector.length();
 
-                // cap nhap lai gia tri vector
                 velocityVector.setX(speed * (float) Math.sin(bounceAngle));
-                // huong Y phai duong de di len tren (toa do y tang len tren)
                 velocityVector.setY(Math.abs(speed * (float) Math.cos(bounceAngle)));
             }
         }
@@ -75,49 +88,18 @@ public class Ball extends Actor {
 
     @Override
     public void act(float delta) {
-        if (!isLaunched) {
-            float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
-            float ballX = barCenterX - getWidth() / 2f;
-            float ballY = barRef.getY() + barRef.getHeight();
-            setPosition(ballX, ballY);
 
-            // bam space de ban bong
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                isLaunched = true;
-                // ban thang len tren
-                velocityVector.setX(0f);
-                velocityVector.setY(BALL_VELOCITY_Y);
-            }
-            return;
+        launch();
+        if (isLaunched) {
+            moveBy(velocityVector.getX(), velocityVector.getY());
+            boundaryCollision();
+            barCollision();
         }
-        moveBy(velocityVector.getX(), velocityVector.getY());
-
-        boundaryCollision();
-        barCollision();
     }
 
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-        batch.end();
-
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-
-        // Ve hitbox
-        shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
-
-        shapeRenderer.end();
-
-
-        batch.begin();
     }
-
-    public void resetLaunch() {
-        isLaunched = false;
-    }
-
-
 }

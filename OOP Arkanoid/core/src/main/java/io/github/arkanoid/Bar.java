@@ -17,7 +17,7 @@ public class Bar extends Actor {
     Vector velocityVector = new Vector(BAR_VELOCITY_X, BAR_VELOCITY_Y);
 
     Bar(Texture texture, float x, float y) {
-        this.textureRegion = new TextureRegion(texture);
+        this.textureRegion = new TextureRegion(texture,  0, 0, BAR_WIDTH, BAR_HEIGHT);
         setPosition(x, y);
         setSize(BAR_WIDTH, BAR_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
@@ -25,7 +25,7 @@ public class Bar extends Actor {
     }
 
     public Rectangle getBound(){
-        return new Rectangle( getX(), getY(), getWidth(), getHeight());
+        return new Rectangle(getX(), getY(), BAR_WIDTH, BAR_HEIGHT);
     }
 
     // ve hit box trc
@@ -34,19 +34,6 @@ public class Bar extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-        batch.end();
-
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-
-        // Ve hit box
-        shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
-
-        shapeRenderer.end();
-
-
-        batch.begin();
     }
 
     @Override
@@ -54,13 +41,13 @@ public class Bar extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() > 0) {
             moveBy(-velocityVector.getX(), 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + getWidth() < SCREEN_WIDTH) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + BAR_WIDTH < SCREEN_WIDTH) {
             moveBy(velocityVector.getX(), 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > 0) {
             moveBy(0, -velocityVector.getY());
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + getHeight() < SCREEN_HEIGHT) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT < SCREEN_HEIGHT) {
             moveBy(0, velocityVector.getY());
         }
     }
