@@ -20,6 +20,9 @@ public class Boss extends Actor {
     private int currentFrame = 0;
     private float animationTimer = 0f;
     private final float frameDuration = 0.1f;
+    private float direction=1f;//1=sang phai,-1=sang trai
+    private float stopTimer=0f;
+    private boolean isStopped=false;
 
     Boss(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, 0, 0, BOSS1_WIDTH, BOSS1_HEIGHT);
@@ -44,6 +47,37 @@ public class Boss extends Actor {
     public void act(float delta) {
         super.act(delta);
         if (isDead()) return;
+        float speed=BOSS1_VELOCITY_X*delta;
+        // o giua
+        if(isStopped){
+            stopTimer+=delta;
+			if(stopTimer>=3f){
+				isStopped=false;
+				stopTimer=0;
+			}
+        }
+        else{
+			// di chuyen sang trai phai
+			float prevX = getX();
+			moveBy(direction*speed,0);
+			hitBox.setPosition(getX(),getY());
+			// neu cat qua diem giua man hinh thi dung lai 3s
+			float centerX=(SCREEN_WIDTH/2f)-(BOSS1_WIDTH/2f);
+			boolean crossedCenterToRight = direction > 0 && prevX < centerX && getX() >= centerX;
+			boolean crossedCenterToLeft = direction < 0 && prevX > centerX && getX() <= centerX;
+			if(crossedCenterToRight || crossedCenterToLeft){
+				setX(centerX);
+				isStopped = true;
+			}
+            // tao gioi han bien man hinh
+            if (getX() <= LEFT_BOUNDARY) {
+                setX(LEFT_BOUNDARY);
+                direction = 1;
+            } else if (getX() + getWidth() >= RIGHT_BOUNDARY) {
+                setX(RIGHT_BOUNDARY - getWidth());
+                direction = -1;
+            }
+        }
         animationTimer += delta;
         if (animationTimer >= frameDuration) {
             animationTimer -= frameDuration;
