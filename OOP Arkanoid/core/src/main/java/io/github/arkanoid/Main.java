@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Input;
 
+import static io.github.arkanoid.Constants.*;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 
@@ -21,9 +23,13 @@ public class Main extends ApplicationAdapter {
     Texture barImage;
     Texture ballImage;
 
+    Texture boss1Image;
+
     Bar bar;
     Ball ball;
     GameLogic gameLogic;
+
+    Boss boss1;
 
     Stage stage;
 
@@ -37,16 +43,20 @@ public class Main extends ApplicationAdapter {
 
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
+        boss1Image = new Texture("Boss1.png");
 
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
         gameLogic = new GameLogic(ball, bar);
 
+        boss1 = new Boss(boss1Image, 700, 700);
 
         stage = new Stage();
 
         stage.addActor(ball);
         stage.addActor(bar);
+
+        stage.addActor(boss1);
 
         menu = new Menu();
 

@@ -12,12 +12,14 @@ import static io.github.arkanoid.Constants.*;
 
 public class Bar extends Actor {
     TextureRegion textureRegion;
+    Vector velocityVector;
     Rectangle hitBox;
     private int state = 0;
-    Vector velocityVector = new Vector(BAR_VELOCITY_X, BAR_VELOCITY_Y);
+
 
     Bar(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, 0, 0, BAR_WIDTH, BAR_HEIGHT);
+        this.velocityVector = new Vector(BAR_VELOCITY_X, BAR_VELOCITY_Y);
         this.hitBox = new Rectangle(x, y, BAR_WIDTH, BAR_HEIGHT);
         setPosition(x, y);
         setSize(BAR_WIDTH, BAR_HEIGHT);
@@ -40,7 +42,7 @@ public class Bar extends Actor {
         this.hitBox.setPosition(getX() + newXOffset, getY());
     }
 
-    public Rectangle getBound(){
+    public Rectangle getHitBox(){
         return hitBox;
     }
 

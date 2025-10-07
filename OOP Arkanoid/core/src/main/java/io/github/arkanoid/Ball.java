@@ -13,19 +13,20 @@ import static io.github.arkanoid.Constants.*;
 
 public class Ball extends Actor {
     TextureRegion textureRegion;
-    Vector velocityVector = new Vector(BALL_VELOCITY_X, BALL_VELOCITY_Y);
+    Vector velocityVector;
     Rectangle hitBox;
     private boolean isLaunched = false;
 
     Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
+        this.velocityVector = new Vector(BALL_VELOCITY_X, BALL_VELOCITY_Y);
         this.hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);
         setPosition(x, y);
         setSize(BALL_WIDTH, BALL_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
     }
 
-    public Rectangle getBound(){
+    public Rectangle getHitBox() {
         return hitBox;
     }
 
@@ -43,9 +44,9 @@ public class Ball extends Actor {
 
     @Override
     public void act(float delta) {
-
         if (isLaunched) {
             moveBy(velocityVector.getX() * delta, velocityVector.getY() * delta);
+            hitBox.setPosition(getX(), getY());
         }
     }
 

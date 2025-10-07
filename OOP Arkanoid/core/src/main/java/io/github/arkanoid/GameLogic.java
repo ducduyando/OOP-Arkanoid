@@ -34,10 +34,10 @@ public class GameLogic {
     }
 
     public void barCollision() {
-        Rectangle ballRect = ballRef.getBound();
-        Rectangle barRect = barRef.getBound();
+        Rectangle ballRect = ballRef.getHitBox();
+        Rectangle barRect = barRef.getHitBox();
         if (ballRect.overlaps(barRect)) {
-            if (ballRef.getY() >= barRect.getY() + barRef.getHeight() && ballRef.velocityVector.getY() < 0) {
+            if (ballRef.velocityVector.getY() < 0) {
 
                 ballRef.setY(barRef.getY() + barRef.getHeight());
 
