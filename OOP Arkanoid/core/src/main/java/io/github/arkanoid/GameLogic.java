@@ -20,9 +20,9 @@ public class GameLogic {
 
     public void launch() {
         if (!ballRef.isLaunched()) {
-            float barCenterX = barRef.getX() + BAR_WIDTH / 2f;
+            float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
             float ballX = barCenterX - BALL_WIDTH / 2f;
-            float ballY = barRef.getY() + BAR_HEIGHT;
+            float ballY = barRef.getY() + barRef.getHeight();
             ballRef.setPosition(ballX, ballY);
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -37,7 +37,7 @@ public class GameLogic {
         Rectangle ballRect = ballRef.getBound();
         Rectangle barRect = barRef.getBound();
         if (ballRect.overlaps(barRect)) {
-            if (ballRef.getY() + BALL_HEIGHT > barRect.getY() && ballRef.velocityVector.getY() < 0) {
+            if (ballRef.getY() >= barRect.getY() + barRef.getHeight() && ballRef.velocityVector.getY() < 0) {
 
                 ballRef.setY(barRef.getY() + barRef.getHeight());
 
@@ -62,7 +62,6 @@ public class GameLogic {
         if (ballRef.getY() <= DOWN_BOUNDARY) {
             int currentState = barRef.getState() + 1;
             barRef.setState(currentState);
-            barRef.textureRegion = barRef.regions[currentState];
             ballRef.resetLaunch();
         }
         if (ballRef.getX() <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH >= RIGHT_BOUNDARY) {

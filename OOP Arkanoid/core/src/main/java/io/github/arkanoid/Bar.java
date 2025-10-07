@@ -8,27 +8,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static io.github.arkanoid.Constants.*;
 
 public class Bar extends Actor {
-    TextureRegion[] regions = new TextureRegion[7];
     TextureRegion textureRegion;
-    Rectangle[] hitBoxes = new Rectangle[7];
-    int state;
+    Rectangle hitBox;
+    private int state = 0;
     Vector velocityVector = new Vector(BAR_VELOCITY_X, BAR_VELOCITY_Y);
 
     Bar(Texture texture, float x, float y) {
-        state = 0;
-        for (int i = 0; i < 7; i++) {
-            regions[i] = new TextureRegion(texture,  BAR_WIDTH * i, 0, BAR_WIDTH, BAR_HEIGHT);
-        }
-        for (int i = 0; i < 7; i++) {
-            hitBoxes[i] = new Rectangle(getX() + 32 * i, getY(), BAR_WIDTH - 64 * i, BAR_HEIGHT);
-        }
-        this.textureRegion = regions[state];
+        this.textureRegion = new TextureRegion(texture, 0, 0, BAR_WIDTH, BAR_HEIGHT);
+        this.hitBox = new Rectangle(x, y, BAR_WIDTH, BAR_HEIGHT);
         setPosition(x, y);
         setSize(BAR_WIDTH, BAR_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
@@ -39,12 +29,19 @@ public class Bar extends Actor {
         return state;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setState(int newState) {
+        this.state = newState;
+        this.textureRegion.setRegion(BAR_WIDTH * newState, 0, BAR_WIDTH, BAR_HEIGHT);
+
+        float newWidth = BAR_WIDTH - (64 * newState);
+        float newXOffset = 32 * newState;
+
+        this.hitBox.setWidth(newWidth);
+        this.hitBox.setPosition(getX() + newXOffset, getY());
     }
 
     public Rectangle getBound(){
-        return hitBoxes[state];
+        return hitBox;
     }
 
     @Override
@@ -66,5 +63,8 @@ public class Bar extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT < SCREEN_HEIGHT) {
             moveBy(0, velocityVector.getY() * delta);
         }
+
+        float currentXOffset = 32 * state;
+        hitBox.setPosition(getX() + currentXOffset, getY());
     }
 }

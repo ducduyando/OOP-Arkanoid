@@ -67,9 +67,6 @@ public class Main extends ApplicationAdapter {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();
-        batch.end();
-
         stage.act();
         gameLogic.launch();
         gameLogic.barCollision();
