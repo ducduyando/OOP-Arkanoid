@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -13,13 +14,13 @@ import static io.github.arkanoid.Constants.*;
 
 public class Ball extends Actor {
     TextureRegion textureRegion;
-    Vector velocityVector;
+    Vector2 velocityVector;
     Rectangle hitBox;
     private boolean isLaunched = false;
 
     Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
-        this.velocityVector = new Vector(BALL_VELOCITY_X, BALL_VELOCITY_Y);
+        this.velocityVector = new Vector2(BALL_VELOCITY_X, BALL_VELOCITY_Y);
         this.hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);
         setPosition(x, y);
         setSize(BALL_WIDTH, BALL_HEIGHT);
@@ -45,7 +46,7 @@ public class Ball extends Actor {
     @Override
     public void act(float delta) {
         if (isLaunched) {
-            moveBy(velocityVector.getX() * delta, velocityVector.getY() * delta);
+            moveBy(velocityVector.x * delta, velocityVector.y * delta);
             hitBox.setPosition(getX(), getY());
         }
     }

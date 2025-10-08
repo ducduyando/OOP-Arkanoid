@@ -6,6 +6,8 @@ public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
     public static final int SCREEN_HEIGHT = 1080;
+    public static final int ROWS = 6;
+    public static final int COLS = 12;
 
     /** Bar. */
     public static final int BAR_WIDTH = 464;

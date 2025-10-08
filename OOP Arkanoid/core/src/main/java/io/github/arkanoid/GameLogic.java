@@ -40,8 +40,7 @@ public class GameLogic {
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 ballRef.setLaunched(true);
-                ballRef.velocityVector.setX(0f);
-                ballRef.velocityVector.setY(BALL_VELOCITY_Y);
+                ballRef.velocityVector.set(0f, BALL_VELOCITY_Y);
             }
         }
     }
@@ -50,14 +49,12 @@ public class GameLogic {
         Rectangle ballRect = ballRef.getHitBox();
         Rectangle barRect = barRef.getHitBox();
         if (ballRect.overlaps(barRect)) {
-            if (ballRef.velocityVector.getY() < 0) {
+            if (ballRef.velocityVector.y < 0) {
 
                 ballRef.setY(barRef.getY() + barRef.getHeight());
 
-                float speed = ballRef.velocityVector.length();
-
-                ballRef.velocityVector.setX(speed * (float) Math.sin(bounceAngle(ballRect, barRect)));
-                ballRef.velocityVector.setY(Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, barRect))));
+                float speed = ballRef.velocityVector.len();
+                ballRef.velocityVector.set(speed * (float) Math.sin(bounceAngle(ballRect, barRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, barRect))));
             }
         }
     }
@@ -68,11 +65,11 @@ public class GameLogic {
             barRef.setState(currentState);
             ballRef.resetLaunch();
         }
-        if (ballRef.getX() + ballRef.velocityVector.getX() * delta <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH + + ballRef.velocityVector.getX() * delta  >= RIGHT_BOUNDARY) {
-            ballRef.velocityVector.mulX(-1);
+        if (ballRef.getX() + ballRef.velocityVector.x * delta <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH + ballRef.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
+            ballRef.velocityVector.x =  -ballRef.velocityVector.x;
         }
-        if (ballRef.getY() + BALL_HEIGHT + ballRef.velocityVector.getY() * delta >= UP_BOUNDARY) {
-            ballRef.velocityVector.mulY(-1);
+        if (ballRef.getY() + BALL_HEIGHT + ballRef.velocityVector.y * delta >= UP_BOUNDARY) {
+            ballRef.velocityVector.y =  -ballRef.velocityVector.y;
         }
     }
 
@@ -82,20 +79,22 @@ public class GameLogic {
         Rectangle bossRect = boss1Ref.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
-            float speed = ballRef.velocityVector.length();
+            boss1Ref.takeDamage(10);
+            float speed = ballRef.velocityVector.len();
             float ballCenterX = ballRect.getX() + ballRect.getWidth() / 2f;
             float ballCenterY = ballRect.getY() + ballRect.getHeight() / 2f;
             float bossCenterX = bossRect.getX() + bossRect.getWidth() / 2f;
             float bossCenterY = bossRect.getY() + bossRect.getHeight() / 2f;
             float angle = (float) Math.atan2(ballCenterY - bossCenterY, ballCenterX - bossCenterX);
 
-            ballRef.velocityVector.setX(speed * (float) Math.sin(angle));
+            ballRef.velocityVector.x = speed * (float) Math.sin(angle);
 
             float newVeY = Math.abs(speed * (float) Math.cos(angle));
             if ((ballRect.getY() + ballRect.getHeight() / 2f) < (bossRect.getY() + bossRect.getHeight() / 2f)) {
                 newVeY *= -1;
             }
-            ballRef.velocityVector.setY(newVeY);
+
+            ballRef.velocityVector.y = newVeY;
 
             if ((ballRect.getY() + ballRect.getHeight() / 2f) < (bossRect.getY() + bossRect.getHeight() / 2f)) {
                 ballRef.setY(bossRect.getY() - BALL_HEIGHT);
