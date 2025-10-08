@@ -80,12 +80,20 @@ public class GameLogic {
         Rectangle barRect = barRef.getHitBox();
         Rectangle ballRect = ballRef.getHitBox();
         Rectangle bossRect = boss1Ref.getHitBox();
+
         if (ballRect.overlaps(bossRect)) {
             float speed = ballRef.velocityVector.length();
             float angle = bounceAngle(ballRect, bossRect);
+
             ballRef.velocityVector.setX(speed * (float) Math.sin(angle));
-            ballRef.velocityVector.setY(Math.abs(speed * (float) Math.cos(angle)) * (((ballRect.getY() + ballRect.getHeight() / 2f) <  ( bossRect.getY() + bossRect.getHeight() / 2f)) ? -1 : 1));
-            if ( (ballRect.getY() + ballRect.getHeight() / 2f) <  (bossRect.getY() + bossRect.getHeight() / 2f)) {
+
+            float newVeY = Math.abs(speed * (float) Math.cos(angle));
+            if ((ballRect.getY() + ballRect.getHeight() / 2f) < (bossRect.getY() + bossRect.getHeight() / 2f)) {
+                newVeY *= -1;
+            }
+            ballRef.velocityVector.setY(newVeY);
+
+            if ((ballRect.getY() + ballRect.getHeight() / 2f) < (bossRect.getY() + bossRect.getHeight() / 2f)) {
                 ballRef.setY(bossRect.getY() - BALL_HEIGHT);
             } else {
                 ballRef.setY(bossRect.getY() + bossRect.getHeight());
@@ -93,11 +101,12 @@ public class GameLogic {
 
             ballRef.getHitBox().setPosition(ballRef.getX(), ballRef.getY());
         }
+
         if (barRect.overlaps(bossRect)) {
             int currentState = barRef.getState() + 1;
             barRef.setState(currentState);
         }
+
     }
 
-
-}
+    }
