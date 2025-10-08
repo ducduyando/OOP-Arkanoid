@@ -68,7 +68,7 @@ public class GameLogic {
             barRef.setState(currentState);
             ballRef.resetLaunch();
         }
-        if (ballRef.getX() <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH >= RIGHT_BOUNDARY) {
+        if (ballRef.getX() + ballRef.velocityVector.getX() * delta <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH + + ballRef.velocityVector.getX() * delta  >= RIGHT_BOUNDARY) {
             ballRef.velocityVector.mulX(-1);
         }
         if (ballRef.getY() + BALL_HEIGHT + ballRef.velocityVector.getY() * delta >= UP_BOUNDARY) {
