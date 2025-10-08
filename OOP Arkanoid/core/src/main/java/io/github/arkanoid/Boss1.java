@@ -9,7 +9,7 @@ import static io.github.arkanoid.Constants.BOSS1_HEIGHT;
 import static io.github.arkanoid.Constants.BOSS1_WIDTH;
 import static io.github.arkanoid.Constants.LEFT_BOUNDARY;
 import static io.github.arkanoid.Constants.RIGHT_BOUNDARY;
-
+//
 public class Boss1 extends Boss {
     private int currentFrame = 0;
     private float animationTimer = 0f;
