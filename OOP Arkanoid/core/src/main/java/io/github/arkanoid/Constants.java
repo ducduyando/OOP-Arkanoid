@@ -1,5 +1,7 @@
 package io.github.arkanoid;
 
+import com.badlogic.gdx.Gdx;
+
 public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;

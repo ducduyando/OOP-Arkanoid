@@ -62,7 +62,7 @@ public class Bar extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > 0) {
             moveBy(0, -velocityVector.getY() * delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT < SCREEN_HEIGHT) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT + BALL_HEIGHT < SCREEN_HEIGHT) {
             moveBy(0, velocityVector.getY() * delta);
         }
 

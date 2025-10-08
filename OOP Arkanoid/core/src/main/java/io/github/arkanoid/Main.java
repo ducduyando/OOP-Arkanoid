@@ -29,7 +29,7 @@ public class Main extends ApplicationAdapter {
     Ball ball;
     GameLogic gameLogic;
 
-    Boss boss1;
+    Boss1 boss1;
 
     Stage stage;
 
@@ -47,10 +47,10 @@ public class Main extends ApplicationAdapter {
 
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
-        gameLogic = new GameLogic(ball, bar);
 
-        boss1 = new Boss(boss1Image, 700, 700);
+        boss1 = new Boss1(boss1Image, 700, 700);
 
+        gameLogic = new GameLogic(ball, bar, boss1);
         stage = new Stage();
 
         stage.addActor(ball);
@@ -77,11 +77,23 @@ public class Main extends ApplicationAdapter {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        stage.act();
+        float delta = Gdx.graphics.getDeltaTime();
+        stage.act(delta);
         gameLogic.launch();
         gameLogic.barCollision();
-        gameLogic.boundaryCollision();
+        gameLogic.boundaryCollision(delta);
+        gameLogic.bossCollision();
         stage.draw();
 
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+        barImage.dispose();
+        ballImage.dispose();
+        boss1Image.dispose();
+        stage.dispose();
+        menu.dispose();
     }
 }
