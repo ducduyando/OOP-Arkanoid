@@ -83,7 +83,11 @@ public class GameLogic {
 
         if (ballRect.overlaps(bossRect)) {
             float speed = ballRef.velocityVector.length();
-            float angle = bounceAngle(ballRect, bossRect);
+            float ballCenterX = ballRect.getX() + ballRect.getWidth() / 2f;
+            float ballCenterY = ballRect.getY() + ballRect.getHeight() / 2f;
+            float bossCenterX = bossRect.getX() + bossRect.getWidth() / 2f;
+            float bossCenterY = bossRect.getY() + bossRect.getHeight() / 2f;
+            float angle = (float) Math.atan2(ballCenterY - bossCenterY, ballCenterX - bossCenterX);
 
             ballRef.velocityVector.setX(speed * (float) Math.sin(angle));
 

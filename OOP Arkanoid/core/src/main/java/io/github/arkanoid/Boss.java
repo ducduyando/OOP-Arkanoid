@@ -16,12 +16,13 @@ public class Boss extends Actor {
     Vector velocityVector;
     Rectangle hitBox;
     private int hp;
-
     Boss(float x, float y) {
         this.hp = 100;
         setPosition(x, y);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
     }
+
+
 
     public boolean isDead() {
         return hp <= 0;
