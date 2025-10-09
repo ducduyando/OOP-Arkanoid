@@ -24,8 +24,8 @@ public class Main extends ApplicationAdapter {
     Texture ballImage;
 
     Texture boss1Image;
-    Texture boss1SkillImage;
-
+    Texture boss1Skill1Image;
+    Texture boss1Skill2Image;
     Bar bar;
     Ball ball;
     GameLogic gameLogic;
@@ -45,11 +45,12 @@ public class Main extends ApplicationAdapter {
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
         boss1Image = new Texture("Boss1.png");
-        boss1SkillImage = new Texture("Boss1_Skill1.png");
+        boss1Skill1Image = new Texture("Boss1_Skill1.png");
+        boss1Skill2Image = new Texture("Boss1_Skill2.png");
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
 
-        boss1 = new Boss1(boss1Image, boss1SkillImage, (SCREEN_WIDTH / 2f - BOSS1_WIDTH + SCREEN_HEIGHT) / 2, (SCREEN_HEIGHT - BOSS1_HEIGHT) / 2f);
+        boss1 = new Boss1(boss1Image, boss1Skill1Image, boss1Skill2Image,(SCREEN_WIDTH / 2f - BOSS1_WIDTH + SCREEN_HEIGHT) / 2, (SCREEN_HEIGHT - BOSS1_HEIGHT) / 2f);
         gameLogic = new GameLogic(ball, bar, boss1);
         stage = new Stage();
 
@@ -93,7 +94,8 @@ public class Main extends ApplicationAdapter {
         barImage.dispose();
         ballImage.dispose();
         boss1Image.dispose();
-        boss1SkillImage.dispose();
+        boss1Skill1Image.dispose();
+        boss1Skill2Image.dispose();
         stage.dispose();
         menu.dispose();
     }

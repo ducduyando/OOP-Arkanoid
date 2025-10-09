@@ -39,5 +39,8 @@ public class Constants {
     public static final float BOMB_SPEED_Y = 400f;
     public static final float BOMB_FRAME_DURATION = 0.1f;
     public static final float BOSS_STOP_TIME = 1f;
-    public static final float BOMB_DROP_CHANCE = 0.5f;
+    public static final int BOMB_DROP_CHANCE = 100;
+
+    public static final int LASER_WIDTH = 80;
+    public static final int LASER_HEIGHT = 1080;
 }
