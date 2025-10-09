@@ -21,9 +21,9 @@ public class Boss1 extends Boss {
     private final float[][] positionY = new float[ROWS][COLS];
     private float targetX;
     private float targetY;
-    private ArrayList<Boss1Skill1> bombs = new ArrayList<>();
-    private Texture bombTexture;
-    private Random random = new Random();
+    private final java.util.List<Boss1Skill1> bombs = new ArrayList<>();
+    private final Texture bombTexture;
+    private final Random random = new Random();
 
     Boss1(Texture texture, Texture boss1SkillImage, float x, float y) {
         super(x, y);
@@ -34,14 +34,14 @@ public class Boss1 extends Boss {
         maxFrame = texture.getWidth() / BOSS1_WIDTH;
         setSize(BOSS1_WIDTH, BOSS1_HEIGHT);
 
-        float cell_x_size = (float) (SCREEN_WIDTH - BOSS1_WIDTH) / COLS;
-        float cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / ROWS;
+        float cell_X_Size = (float) (SCREEN_WIDTH - BOSS1_WIDTH) / COLS;
+        float cell_Y_Size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / ROWS;
 
         for(int r = 0;r < ROWS;r++) {
             for(int c = 0;c < COLS;c++) {
 
-                positionX[r][c] = c * cell_x_size;
-                positionY[r][c] = SCREEN_HEIGHT / 2f + r * cell_y_size;
+                positionX[r][c] = c * cell_X_Size;
+                positionY[r][c] = SCREEN_HEIGHT / 2f + r * cell_Y_Size;
             }
         }
         chooseNewTarget();
@@ -68,7 +68,6 @@ public class Boss1 extends Boss {
     }
 
     private void chooseNewTarget() {
-        Random random = new Random();
         int r = random.nextInt(ROWS);
         int c = random.nextInt(COLS);
         targetX = positionX[r][c];
