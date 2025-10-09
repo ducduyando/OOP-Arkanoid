@@ -14,6 +14,7 @@ public class Boss1Skill2 extends Actor {
     private float stateTime = 0f;
     private boolean finished = false;
     private Rectangle hitbox;
+    private int thaydoi;
 
     public Boss1Skill2(Texture texture, float bossX, float bossY) {
         int maxFrame = texture.getWidth() / LASER_WIDTH;
