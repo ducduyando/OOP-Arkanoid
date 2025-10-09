@@ -93,6 +93,7 @@ public class Boss1 extends Boss {
                 setPosition(targetX, targetY);
                 isStopped = true;
                 dropBomb();
+                //hello
             } else {
                 Vector2 direction = targetPosition.sub(currentPosition).nor();
                 moveBy(direction.x * velocityVector.x * delta, direction.y * velocityVector.y * delta);
