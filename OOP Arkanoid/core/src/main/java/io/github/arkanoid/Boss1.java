@@ -15,6 +15,7 @@ public class Boss1 extends Boss {
     private boolean isStopped = false;
     private final int maxFrame;
     private int skill1Counter = 1;
+    private boolean isSkill1Paused = true;
     private final float[][] positionX = new float[ROWS][COLS];
     private final float[][] positionY = new float[ROWS][COLS];
     private float targetX;
@@ -49,6 +50,7 @@ public class Boss1 extends Boss {
         if (distance < velocityVector.len() * delta) {
             setPosition(centerPosition.x, centerPosition.y);
             skill1Counter = 0;
+            isSkill1Paused = false;
             isStopped = true;
         } else {
             Vector2 direction = centerPosition.sub(currentPosition).nor();
@@ -65,10 +67,10 @@ public class Boss1 extends Boss {
     }
 
     public void skill1(float delta) {
-        if(isStopped) {
+        if(isSkill1Paused) {
             stopTimer += delta;
             if(stopTimer >= 2f){
-                isStopped = false;
+                isSkill1Paused = false;
                 stopTimer = 0;
                 skill1Counter ++;
                 chooseNewTarget();
@@ -81,7 +83,7 @@ public class Boss1 extends Boss {
             float distance = currentPosition.dst(targetPosition);
             if (distance < velocityVector.len() * delta) {
                 setPosition(targetX, targetY);
-                isStopped = true;
+                isSkill1Paused = true;
             } else {
                 Vector2 direction = targetPosition.sub(currentPosition).nor();
                 moveBy(direction.x * velocityVector.x * delta, direction.y * velocityVector.y * delta);
@@ -96,11 +98,20 @@ public class Boss1 extends Boss {
     @Override
     public void act(float delta) {
         if (!isDead()) {
-            if (skill1Counter <= 3) {
-                skill1 (delta);
+            if (!isStopped) {
+                if (skill1Counter <= 3) {
+                    skill1 (delta);
+                }
+                else {
+                    toCenter(delta);
+                }
             }
             else {
-                toCenter(delta);
+                stopTimer += delta;
+                if(stopTimer >= 3f){
+                    isStopped = false;
+                    stopTimer = 0;
+                }
             }
 
             animationTimer += delta;
