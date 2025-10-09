@@ -93,7 +93,9 @@ public class Boss1 extends Boss {
             if (distance < velocityVector.len() * delta) {
                 setPosition(targetX, targetY);
                 isStopped = true;
-                dropBomb();
+                if (random.nextFloat() < BOMB_DROP_CHANCE) {
+                    dropBomb();
+                }
             } else {
                 Vector2 direction = targetPosition.sub(currentPosition).nor();
                 moveBy(direction.x * velocityVector.x * delta, direction.y * velocityVector.y * delta);
