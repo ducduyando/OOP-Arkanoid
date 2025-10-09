@@ -2,6 +2,8 @@ package io.github.arkanoid;
 
 import com.badlogic.gdx.Gdx;
 
+import java.util.ArrayList;
+
 public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
@@ -33,4 +35,9 @@ public class Constants {
     public static final int RIGHT_BOUNDARY = SCREEN_WIDTH;
     public static final int UP_BOUNDARY = SCREEN_HEIGHT;
     public static final int DOWN_BOUNDARY = 0;
+     //cac bien cho skill 1
+    public static final float BOMB_SPEED_Y = 400f;
+    public static final float BOMB_FRAME_DURATION = 0.1f;
+    public static final float BOSS_STOP_TIME = 1f;
+    public static final float BOMB_DROP_CHANCE = 0.5f;
 }
