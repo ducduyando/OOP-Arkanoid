@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import static io.github.arkanoid.Constants.*;
 
 public class Boss1Skill1 {
-
+//
     private Animation<TextureRegion> animation;
     private TextureRegion currentFrame;
     private float stateTime = 0f;

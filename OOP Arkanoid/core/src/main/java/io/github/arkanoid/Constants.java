@@ -35,7 +35,7 @@ public class Constants {
     public static final int RIGHT_BOUNDARY = SCREEN_WIDTH;
     public static final int UP_BOUNDARY = SCREEN_HEIGHT;
     public static final int DOWN_BOUNDARY = 0;
-     //cac bien cho skill 1
+     //cac bien cho skill 1 cua boss
     public static final float BOMB_SPEED_Y = 400f;
     public static final float BOMB_FRAME_DURATION = 0.1f;
     public static final float BOSS_STOP_TIME = 1f;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static io.github.arkanoid.Constants.*;
-
+//
 public class Boss1 extends Boss {
     private int currentFrame = 0;
     private float animationTimer = 0f;

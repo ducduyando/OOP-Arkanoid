@@ -50,7 +50,6 @@ public class Main extends ApplicationAdapter {
         ball = new Ball(ballImage, 0, 0);
 
         boss1 = new Boss1(boss1Image, boss1SkillImage, (SCREEN_WIDTH / 2f - BOSS1_WIDTH + SCREEN_HEIGHT) / 2, (SCREEN_HEIGHT - BOSS1_HEIGHT) / 2f);
-
         gameLogic = new GameLogic(ball, bar, boss1);
         stage = new Stage();
 
