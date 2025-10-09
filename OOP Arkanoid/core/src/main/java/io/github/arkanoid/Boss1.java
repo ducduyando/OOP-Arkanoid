@@ -30,7 +30,7 @@ public class Boss1 extends Boss {
         setSize(BOSS1_WIDTH, BOSS1_HEIGHT);
 
         float cell_x_size = (float) (SCREEN_WIDTH - BOSS1_WIDTH) / COLS;
-        float cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / COLS;
+        float cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / ROWS;
 
         for(int r = 0;r < ROWS;r++) {
             for(int c = 0;c < COLS;c++) {
