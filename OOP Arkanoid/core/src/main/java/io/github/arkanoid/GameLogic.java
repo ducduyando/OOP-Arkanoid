@@ -72,8 +72,7 @@ public class GameLogic {
 
     public void boundaryCollision(float delta) {
         if (ballRef.getY() <= DOWN_BOUNDARY) {
-            int currentState = barRef.getState() + 1;
-            barRef.setState(currentState);
+            barRef.takeDamage();
             ballRef.resetLaunch();
         }
         if (ballRef.getX() + ballRef.velocityVector.x * delta <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH + ballRef.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
@@ -124,8 +123,7 @@ public class GameLogic {
         }
 
         if (barRect.overlaps(bossRect)) {
-            int currentState = barRef.getState() + 1;
-            barRef.setState(currentState);
+            barRef.takeDamage();
         }
     }
     }

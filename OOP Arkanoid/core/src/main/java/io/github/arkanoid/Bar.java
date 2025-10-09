@@ -15,6 +15,8 @@ public class Bar extends Actor {
     TextureRegion textureRegion;
     Vector2 velocityVector;
     Rectangle hitBox;
+    private float stopTimer = 0f;
+    private boolean isInvincible = false;
     private int state = 0;
 
 
@@ -26,6 +28,14 @@ public class Bar extends Actor {
         setSize(BAR_WIDTH, BAR_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
 
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
+    public void setInvincible(boolean invincible) {
+        isInvincible = invincible;
     }
 
     public int getState() {
@@ -48,6 +58,15 @@ public class Bar extends Actor {
         return hitBox;
     }
 
+    public void takeDamage() {
+        if (!isInvincible) {
+            int currentState = getState() + 1;
+            setState(currentState);
+            isInvincible = true;
+            stopTimer = 0f;
+        }
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
@@ -66,6 +85,14 @@ public class Bar extends Actor {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT + BALL_HEIGHT < SCREEN_HEIGHT) {
             moveBy(0, velocityVector.y * delta);
+        }
+
+        if (isInvincible) {
+            stopTimer += delta;
+            if (stopTimer >= 2f) {
+                isInvincible = false;
+                stopTimer = 0f;
+            }
         }
 
         float currentXOffset = 32 * state;
