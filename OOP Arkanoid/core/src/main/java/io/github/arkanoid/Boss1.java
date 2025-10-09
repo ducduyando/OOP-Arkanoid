@@ -25,14 +25,11 @@ public class Boss1 extends Boss {
     private Texture bombTexture;
     private Random random = new Random();
 
-    private Texture laserTexture;
-
-    Boss1(Texture texture, Texture boss1Skill1Image, Texture boss1Skill2Image , float x, float y) {
+    Boss1(Texture texture, Texture boss1SkillImage, float x, float y) {
         super(x, y);
         this.textureRegion = new TextureRegion(texture, 0, 0, BOSS1_WIDTH, BOSS1_HEIGHT);
         this.velocityVector = new Vector2(BOSS1_VELOCITY_X, BOSS1_VELOCITY_Y);
-        this.bombTexture = boss1Skill1Image;
-        this.laserTexture = boss1Skill2Image;
+        this.bombTexture = boss1SkillImage;
         this.hitBox = new Rectangle(x, y, BOSS1_WIDTH, BOSS1_HEIGHT);
         maxFrame = texture.getWidth() / BOSS1_WIDTH;
         setSize(BOSS1_WIDTH, BOSS1_HEIGHT);
@@ -40,8 +37,8 @@ public class Boss1 extends Boss {
         float cell_x_size = (float) (SCREEN_WIDTH - BOSS1_WIDTH) / COLS;
         float cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / ROWS;
 
-        for(int r = 0; r < ROWS; r++) {
-            for(int c = 0; c < COLS; c++) {
+        for(int r = 0;r < ROWS;r++) {
+            for(int c = 0;c < COLS;c++) {
 
                 positionX[r][c] = c * cell_x_size;
                 positionY[r][c] = SCREEN_HEIGHT / 2f + r * cell_y_size;
@@ -53,13 +50,6 @@ public class Boss1 extends Boss {
     private void dropBomb() {
         Boss1Skill1 bomb = new Boss1Skill1(bombTexture, getX() + BOSS1_WIDTH / 2f, getY());
         bombs.add(bomb);
-    }
-
-    private void fireLaser() {
-        Boss1Skill2 laser = new Boss1Skill2(laserTexture, getX(), getY());
-        if (getStage() != null) {
-            getStage().addActor(laser);
-        }
     }
 
     public void toCenter(float delta) {
@@ -103,12 +93,7 @@ public class Boss1 extends Boss {
             if (distance < velocityVector.len() * delta) {
                 setPosition(targetX, targetY);
                 isStopped = true;
-                int value = random.nextInt(100) + 1;
-                if (value > 0 && value <= 25) {
-                    dropBomb();
-                } else if (value > 25 && value <= 50) {
-                    fireLaser();
-                }
+                dropBomb();
             } else {
                 Vector2 direction = targetPosition.sub(currentPosition).nor();
                 moveBy(direction.x * velocityVector.x * delta, direction.y * velocityVector.y * delta);

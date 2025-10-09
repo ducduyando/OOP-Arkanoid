@@ -10,16 +10,15 @@ import com.badlogic.gdx.math.Vector2;
 import static io.github.arkanoid.Constants.*;
 
 public class Boss1Skill1 {
-//
-    private Animation<TextureRegion> animation;
+    private final Animation<TextureRegion> animation;
     private TextureRegion currentFrame;
     private float stateTime = 0f;
-    private Vector2 position;
-    private Vector2 velocity;
-    private Rectangle hitBox;
+    private final Vector2 position;
+    private final Vector2 velocity;
+    private final Rectangle hitBox;
     private boolean active = true;
     public Boss1Skill1(Texture texture, float startX, float startY) {
-        int frameCount = 3; // chia 3 frame ngang
+        int frameCount = 3;
         int frameWidth = texture.getWidth() / frameCount;
         int frameHeight = texture.getHeight();
 
@@ -32,7 +31,7 @@ public class Boss1Skill1 {
         this.currentFrame = frames[0];
 
         this.position = new Vector2(startX - frameWidth / 2f, startY);
-        this.velocity = new Vector2(0, -BOMB_SPEED_Y); // Bắn thẳng xuống
+        this.velocity = new Vector2(0, -BOMB_SPEED_Y);
         this.hitBox = new Rectangle(position.x, position.y, frameWidth, frameHeight);
     }
     public void update(float delta) {
