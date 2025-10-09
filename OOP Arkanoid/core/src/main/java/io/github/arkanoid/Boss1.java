@@ -1,9 +1,11 @@
 package io.github.arkanoid;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static io.github.arkanoid.Constants.*;
@@ -19,17 +21,21 @@ public class Boss1 extends Boss {
     private final float[][] positionY = new float[ROWS][COLS];
     private float targetX;
     private float targetY;
+    private ArrayList<Boss1Skill1> bombs = new ArrayList<>();
+    private Texture bombTexture;
+    private Random random = new Random();
 
-    Boss1(Texture texture, float x, float y) {
+    Boss1(Texture texture, Texture boss1SkillImage, float x, float y) {
         super(x, y);
         this.textureRegion = new TextureRegion(texture, 0, 0, BOSS1_WIDTH, BOSS1_HEIGHT);
         this.velocityVector = new Vector2(BOSS1_VELOCITY_X, BOSS1_VELOCITY_Y);
+        this.bombTexture = boss1SkillImage;
         this.hitBox = new Rectangle(x, y, BOSS1_WIDTH, BOSS1_HEIGHT);
         maxFrame = texture.getWidth() / BOSS1_WIDTH;
         setSize(BOSS1_WIDTH, BOSS1_HEIGHT);
 
         float cell_x_size = (float) (SCREEN_WIDTH - BOSS1_WIDTH) / COLS;
-        float cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / COLS;
+        float cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / ROWS;
 
         for(int r = 0;r < ROWS;r++) {
             for(int c = 0;c < COLS;c++) {
@@ -39,6 +45,11 @@ public class Boss1 extends Boss {
             }
         }
         chooseNewTarget();
+    }
+
+    private void dropBomb() {
+        Boss1Skill1 bomb = new Boss1Skill1(bombTexture, getX() + BOSS1_WIDTH / 2f, getY());
+        bombs.add(bomb);
     }
 
     public void toCenter(float delta) {
@@ -67,7 +78,7 @@ public class Boss1 extends Boss {
     public void skill1(float delta) {
         if(isStopped) {
             stopTimer += delta;
-            if(stopTimer >= 2f){
+            if(stopTimer >= BOSS_STOP_TIME){
                 isStopped = false;
                 stopTimer = 0;
                 skill1Counter ++;
@@ -82,6 +93,7 @@ public class Boss1 extends Boss {
             if (distance < velocityVector.len() * delta) {
                 setPosition(targetX, targetY);
                 isStopped = true;
+                dropBomb();
             } else {
                 Vector2 direction = targetPosition.sub(currentPosition).nor();
                 moveBy(direction.x * velocityVector.x * delta, direction.y * velocityVector.y * delta);
@@ -110,6 +122,18 @@ public class Boss1 extends Boss {
                 this.textureRegion.setRegion(BOSS1_WIDTH * currentFrame, 0, BOSS1_WIDTH, BOSS1_HEIGHT);
             }
             hitBox.setPosition(getX(), getY());
+        }
+        for (Boss1Skill1 bomb : bombs) {
+            bomb.update(delta);
+        }
+        bombs.removeIf(b -> !b.isActive());
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        for (Boss1Skill1 bomb : bombs) {
+            bomb.render(batch);
         }
     }
 }
