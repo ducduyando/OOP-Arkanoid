@@ -34,14 +34,8 @@ public class GameLogic {
 
     private static final Vector2 tempVec = new Vector2();
     public static Vector2 reflect(Vector2 incoming, Vector2 normal) {
-        // Công thức: v' = v - 2  (v . n)  n
-        // Bước 1: Tính tích vô hướng (dot product)
         float dot = incoming.dot(normal);
-
-        // Bước 2: Tính phần vector (2  dot  n) và lưu vào vector tạm
         tempVec.set(normal).scl(2 * dot);
-
-        // Bước 3: Lấy vector incoming trừ đi vector tạm
         incoming.sub(tempVec);
 
         return incoming;
@@ -95,45 +89,34 @@ public class GameLogic {
         Rectangle ballRect = ballRef.getHitBox();
         Rectangle bossRect = boss1Ref.getHitBox();
 
-        // 1. Kiểm tra va chạm
         if (ballRect.overlaps(bossRect)) {
-            // Gây sát thương cho trùm (bạn đã làm đúng)
             boss1Ref.takeDamage(10);
 
-            // 2. Tính toán các giá trị cần thiết
             float ballCenterX = ballRect.x + ballRect.width / 2;
             float ballCenterY = ballRect.y + ballRect.height / 2;
             float bossCenterX = bossRect.x + bossRect.width / 2;
             float bossCenterY = bossRect.y + bossRect.height / 2;
 
-            // Tính toán độ "xâm nhập" của bóng vào trùm ở cả hai trục
             float overlapX = (ballRect.width / 2 + bossRect.width / 2) - Math.abs(ballCenterX - bossCenterX);
             float overlapY = (ballRect.height / 2 + bossRect.height / 2) - Math.abs(ballCenterY - bossCenterY);
 
             Vector2 normal = new Vector2();
 
-            // 3. Xác định cạnh va chạm và vector pháp tuyến
             if (overlapX < overlapY) {
-                // Đây là va chạm bên hông (trái hoặc phải)
                 if (ballCenterX < bossCenterX) {
-                    // Va chạm vào cạnh trái của trùm
                     normal.set(-1, 0);
-                    ballRef.setX(bossRect.x - ballRect.width); // Đẩy bóng ra ngoài
+                    ballRef.setX(bossRect.x - ballRect.width);
                 } else {
-                    // Va chạm vào cạnh phải của trùm
                     normal.set(1, 0);
-                    ballRef.setX(bossRect.x + bossRect.width); // Đẩy bóng ra ngoài
+                    ballRef.setX(bossRect.x + bossRect.width);
                 }
             } else {
-                // Đây là va chạm ở trên hoặc dưới
                 if (ballCenterY < bossCenterY) {
-                    // Va chạm vào cạnh dưới của trùm
                     normal.set(0, -1);
-                    ballRef.setY(bossRect.y - ballRect.height); // Đẩy bóng ra ngoài
+                    ballRef.setY(bossRect.y - ballRect.height);
                 } else {
-                    // Va chạm vào cạnh trên của trùm
                     normal.set(0, 1);
-                    ballRef.setY(bossRect.y + bossRect.height); // Đẩy bóng ra ngoài
+                    ballRef.setY(bossRect.y + bossRect.height);
                 }
             }
 
@@ -141,7 +124,6 @@ public class GameLogic {
             ballRef.velocityVector = reflect(ballRef.velocityVector, normal);
         }
 
-        // Phần code va chạm giữa thanh và trùm giữ nguyên
         if (barRect.overlaps(bossRect)) {
             int currentState = barRef.getState() + 1;
             barRef.setState(currentState);

@@ -41,6 +41,7 @@ public class Bar extends Actor {
 
         this.hitBox.setWidth(newWidth);
         this.hitBox.setPosition(getX() + newXOffset, getY());
+
     }
 
     public Rectangle getHitBox(){

@@ -4,13 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import java.util.Random;
 
 import static io.github.arkanoid.Constants.*;
-import static io.github.arkanoid.Constants.BOSS1_HEIGHT;
-import static io.github.arkanoid.Constants.BOSS1_WIDTH;
-import static io.github.arkanoid.Constants.LEFT_BOUNDARY;
-import static io.github.arkanoid.Constants.RIGHT_BOUNDARY;
-//m
+
 public class Boss1 extends Boss {
     private int currentFrame = 0;
     private float animationTimer = 0f;
@@ -47,8 +44,9 @@ public class Boss1 extends Boss {
 
     private void chooseNewTarget() {
         do{
-            int r = (int) (Math.random() * ROWS);
-            int c = (int) (Math.random() * COLS);
+            Random random = new Random();
+            int r = random.nextInt(ROWS);
+            int c = random.nextInt(COLS);
             targetX = positionX[r][c];
             targetY = positionY[r][c];
         }
@@ -74,14 +72,14 @@ public class Boss1 extends Boss {
 		else{
         float prevX = getX();
         moveBy(direction * speed,0);
-        float dx= targetX -getX();
-         float dy =targetY -getY();
-         if(Math.abs(dy) >2f){
-             float vy =Math.signum(dy) *(speed / 2f);
+        float dx = targetX -getX();
+         float dy = targetY -getY();
+         if(Math.abs(dy) > 2f){
+             float vy = Math.signum(dy) * (speed / 2f);
              moveBy(0, vy);
          }
-            if(Math.abs(dx) >4f){
-                float vx =Math.signum(dx) *(speed / 4f);
+            if(Math.abs(dx) > 4f){
+                float vx =Math.signum(dx) * (speed / 4f);
                 moveBy(vx, 0);
             }
             hitBox.setPosition(getX(),getY());
