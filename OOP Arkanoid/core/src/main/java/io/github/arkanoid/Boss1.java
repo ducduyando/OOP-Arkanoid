@@ -11,12 +11,10 @@ import static io.github.arkanoid.Constants.*;
 public class Boss1 extends Boss {
     private int currentFrame = 0;
     private float animationTimer = 0f;
-    private float direction = 1f;
     private float stopTimer = 0f;
     private boolean isStopped = false;
     private final int maxFrame;
-    private final float cell_x_size;
-    private final float cell_y_size;
+    private int skill1Counter = 1;
     private final float[][] positionX = new float[ROWS][COLS];
     private final float[][] positionY = new float[ROWS][COLS];
     private float targetX;
@@ -30,8 +28,8 @@ public class Boss1 extends Boss {
         maxFrame = texture.getWidth() / BOSS1_WIDTH;
         setSize(BOSS1_WIDTH, BOSS1_HEIGHT);
 
-        cell_x_size = (float) (SCREEN_WIDTH - BOSS1_WIDTH) / COLS;
-        cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / COLS;
+        float cell_x_size = (float) (SCREEN_WIDTH - BOSS1_WIDTH) / COLS;
+        float cell_y_size = (float) (SCREEN_HEIGHT / 2 - BOSS1_HEIGHT) / COLS;
 
         for(int r = 0;r < ROWS;r++) {
             for(int c = 0;c < COLS;c++) {
@@ -40,71 +38,78 @@ public class Boss1 extends Boss {
                 positionY[r][c] = SCREEN_HEIGHT / 2f + r * cell_y_size;
             }
         }
+        chooseNewTarget();
+    }
+
+    public void toCenter(float delta) {
+        Vector2 currentPosition = new Vector2(getX(), getY());
+        Vector2 centerPosition = new Vector2((SCREEN_WIDTH - BOSS1_WIDTH) / 2f,  (SCREEN_HEIGHT / 2f - BOSS1_HEIGHT + SCREEN_HEIGHT) / 2f);
+
+        float distance = currentPosition.dst(centerPosition);
+        if (distance < velocityVector.len() * delta) {
+            setPosition(centerPosition.x, centerPosition.y);
+            skill1Counter = 0;
+            isStopped = true;
+        } else {
+            Vector2 direction = centerPosition.sub(currentPosition).nor();
+            moveBy(direction.x * velocityVector.x * delta, direction.y * velocityVector.y * delta);
+        }
     }
 
     private void chooseNewTarget() {
-        do{
-            Random random = new Random();
-            int r = random.nextInt(ROWS);
-            int c = random.nextInt(COLS);
-            targetX = positionX[r][c];
-            targetY = positionY[r][c];
-        }
-        while (Math.abs(targetX - getX()) <= cell_x_size && Math.abs(targetY - getY()) <= cell_y_size);
-
-
+        Random random = new Random();
+        int r = random.nextInt(ROWS);
+        int c = random.nextInt(COLS);
+        targetX = positionX[r][c];
+        targetY = positionY[r][c];
     }
+
+    public void skill1(float delta) {
+        if(isStopped) {
+            stopTimer += delta;
+            if(stopTimer >= 2f){
+                isStopped = false;
+                stopTimer = 0;
+                skill1Counter ++;
+                chooseNewTarget();
+            }
+        }
+        else {
+            Vector2 currentPosition = new Vector2(getX(), getY());
+            Vector2 targetPosition = new Vector2(targetX, targetY);
+
+            float distance = currentPosition.dst(targetPosition);
+            if (distance < velocityVector.len() * delta) {
+                setPosition(targetX, targetY);
+                isStopped = true;
+            } else {
+                Vector2 direction = targetPosition.sub(currentPosition).nor();
+                moveBy(direction.x * velocityVector.x * delta, direction.y * velocityVector.y * delta);
+            }
+        }
+    }
+
     public Rectangle getHitBox() {
         return hitBox;
     }
+
     @Override
     public void act(float delta) {
-        if (isDead()) return;
-        float speed = BOSS1_VELOCITY_X * delta;
-		if(isStopped) {
-			stopTimer += delta;
-			if(stopTimer >= 2f){
-				isStopped = false;
-				stopTimer = 0;
-				chooseNewTarget();
-			}
-		}
-		else{
-        float prevX = getX();
-        moveBy(direction * speed,0);
-        float dx = targetX -getX();
-         float dy = targetY -getY();
-         if(Math.abs(dy) > 2f){
-             float vy = Math.signum(dy) * (speed / 2f);
-             moveBy(0, vy);
-         }
-            if(Math.abs(dx) > 4f){
-                float vx =Math.signum(dx) * (speed / 4f);
-                moveBy(vx, 0);
+        if (!isDead()) {
+            if (skill1Counter <= 3) {
+                skill1 (delta);
             }
-            hitBox.setPosition(getX(),getY());
-            float centerX = (SCREEN_WIDTH -  BOSS1_WIDTH) / 2f;
-            boolean crossedCenterToRight = prevX < centerX && getX() >= centerX;
-            boolean crossedCenterToLeft = prevX > centerX && getX() <= centerX;
-            if(crossedCenterToRight || crossedCenterToLeft){
-                setX(centerX);
-                isStopped = true;
+            else {
+                toCenter(delta);
             }
-            if (getX() <= LEFT_BOUNDARY) {
-                setX(LEFT_BOUNDARY);
-                direction = 1;
-            } else if (getX() + getWidth() >= RIGHT_BOUNDARY) {
-                setX(RIGHT_BOUNDARY - getWidth());
-                direction = -1;
-            }
-        }
-        animationTimer += delta;
-        if (animationTimer >= delta * 10) {
-            animationTimer = 0f;
-            currentFrame = (currentFrame + 1) % maxFrame;
-            this.textureRegion.setRegion(BOSS1_WIDTH * currentFrame, 0, BOSS1_WIDTH, BOSS1_HEIGHT);
-        }
 
-        hitBox.setPosition(getX(), getY());
+            animationTimer += delta;
+            if (animationTimer >= delta * 10) {
+                animationTimer = 0f;
+                currentFrame = (currentFrame + 1) % maxFrame;
+                this.textureRegion.setRegion(BOSS1_WIDTH * currentFrame, 0, BOSS1_WIDTH, BOSS1_HEIGHT);
+            }
+            hitBox.setPosition(getX(), getY());
+        }
     }
 }

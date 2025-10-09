@@ -48,7 +48,7 @@ public class Main extends ApplicationAdapter {
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
 
-        boss1 = new Boss1(boss1Image, 700, 700);
+        boss1 = new Boss1(boss1Image, (SCREEN_WIDTH / 2f - BOSS1_WIDTH + SCREEN_HEIGHT) / 2, (SCREEN_HEIGHT - BOSS1_HEIGHT) / 2f);
 
         gameLogic = new GameLogic(ball, bar, boss1);
         stage = new Stage();

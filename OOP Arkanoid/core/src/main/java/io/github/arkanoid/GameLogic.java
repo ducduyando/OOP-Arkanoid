@@ -47,12 +47,12 @@ public class GameLogic {
             float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
             float ballX = barCenterX - BALL_WIDTH / 2f;
             float ballY = barRef.getY() + barRef.getHeight();
-            ballRef.setPosition(ballX, ballY);
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 ballRef.setLaunched(true);
                 ballRef.velocityVector.set(0f, BALL_VELOCITY_Y);
             }
+            ballRef.setPosition(ballX, ballY);
         }
     }
 
@@ -120,7 +120,6 @@ public class GameLogic {
                 }
             }
 
-            // 4. Thực hiện phản xạ!
             ballRef.velocityVector = reflect(ballRef.velocityVector, normal);
         }
 
