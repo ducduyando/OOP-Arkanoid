@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import static io.github.arkanoid.Constants.*;
 
@@ -13,12 +15,12 @@ public class GameLogic {
 
     Ball ballRef;
     Bar barRef;
-    Boss1 boss1Ref;
+    Boss bossRef;
 
-    GameLogic (Ball ballRef, Bar barRef, Boss1 boss1Ref) {
+    GameLogic (Ball ballRef, Bar barRef, Boss bossRef) {
         this.ballRef = ballRef;
         this.barRef = barRef;
-        this.boss1Ref = boss1Ref;
+        this.bossRef = bossRef;
     }
 
     public float bounceAngle (Rectangle ballRect, Rectangle objectRect) {
@@ -86,10 +88,10 @@ public class GameLogic {
     public void bossCollision() {
         Rectangle barRect = barRef.getHitBox();
         Rectangle ballRect = ballRef.getHitBox();
-        Rectangle bossRect = boss1Ref.getHitBox();
+        Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
-            boss1Ref.takeDamage(10);
+            bossRef.takeDamage(10);
 
             float ballCenterX = ballRect.x + ballRect.width / 2;
             float ballCenterY = ballRect.y + ballRect.height / 2;
@@ -126,4 +128,23 @@ public class GameLogic {
             barRef.takeDamage();
         }
     }
+
+    public void skillCollision(Stage stage) {
+        Rectangle barHitbox = barRef.getHitBox();
+        for (Actor actor : stage.getActors()) {
+            if (actor instanceof Boss1Skill1) {
+                Boss1Skill1 bomb = (Boss1Skill1) actor;
+                if (bomb.getHitbox().overlaps(barHitbox)) {
+                    barRef.takeDamage();
+                    bomb.remove();
+                }
+            }
+            else if (actor instanceof Boss1Skill2) {
+                Boss1Skill2 laser = (Boss1Skill2) actor;
+                if (!laser.isFinished() && laser.getHitbox().overlaps(barHitbox)) {
+                    barRef.takeDamage();
+                }
+            }
+        }
     }
+}

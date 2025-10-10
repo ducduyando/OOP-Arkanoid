@@ -6,63 +6,53 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.Constants.*;
 
-public class Boss1Skill1 {
+public class Boss1Skill1 extends Actor {
     private final Animation<TextureRegion> animation;
-    private TextureRegion currentFrame;
     private float stateTime = 0f;
-    private final Vector2 position;
-    private final Vector2 velocity;
     private final Rectangle hitBox;
-    private boolean active = true;
-    public Boss1Skill1(Texture texture, float startX, float startY) {
-        int frameCount = 3;
-        int frameWidth = texture.getWidth() / frameCount;
-        int frameHeight = texture.getHeight();
+
+    public Boss1Skill1(Texture texture, float x, float y) {
+        int frameCount = texture.getWidth() / BOSS1_SKILL1_WIDTH;
 
         TextureRegion[] frames = new TextureRegion[frameCount];
         for (int i = 0; i < frameCount; i++) {
-            frames[i] = new TextureRegion(texture, i * frameWidth, 0, frameWidth, frameHeight);
+            frames[i] = new TextureRegion(texture, i * BOSS1_SKILL1_WIDTH, 0, BOSS1_SKILL1_WIDTH, BOSS1_SKILL1_HEIGHT);
         }
-        this.animation = new Animation<TextureRegion>(BOMB_FRAME_DURATION, frames);
+        this.animation = new Animation<>(BOMB_FRAME_DURATION, frames);
         this.animation.setPlayMode(Animation.PlayMode.LOOP);
-        this.currentFrame = frames[0];
 
-        this.position = new Vector2(startX - frameWidth / 2f, startY);
-        this.velocity = new Vector2(0, -BOMB_SPEED_Y);
-        this.hitBox = new Rectangle(position.x, position.y, frameWidth, frameHeight);
+        setPosition(x - BOSS1_SKILL1_WIDTH / 2f, y);
+        setSize(BOSS1_SKILL1_WIDTH, BOSS1_SKILL1_HEIGHT);
+        this.hitBox = new Rectangle(getX(), getY(), BOSS1_SKILL1_WIDTH, BOSS1_SKILL1_HEIGHT);
     }
-    public void update(float delta) {
-        if (!active) return;
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
         stateTime += delta;
-        currentFrame = animation.getKeyFrame(stateTime, true);
-        position.add(velocity.x * delta, velocity.y * delta);
-        hitBox.set(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
-        if (position.y + currentFrame.getRegionHeight() < 0) {
-            active = false;
-        }
-    }
-    public void render(Batch batch) {
-        if (active) {
-            batch.draw(currentFrame, position.x, position.y);
+        moveBy(0, -BOMB_SPEED_Y * delta);
+        hitBox.setPosition(getX(), getY());
+
+        if (getY() + getHeight() < 0) {
+            this.remove();
         }
     }
 
-    public boolean isActive() {
-        return active;
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
+        batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
     }
 
     public Rectangle getHitBox() {
         return hitBox;
     }
 
-    public void deactivate() {
-        active = false;
-    }
-
-    public Vector2 getPosition() {
-        return position;
+    public Rectangle getHitbox() {
+        return hitBox;
     }
 }

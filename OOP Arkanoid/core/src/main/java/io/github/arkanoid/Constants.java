@@ -11,6 +11,12 @@ public class Constants {
     public static final int ROWS = 6;
     public static final int COLS = 12;
 
+    /** Screen boundary. */
+    public static final int LEFT_BOUNDARY = 0;
+    public static final int RIGHT_BOUNDARY = SCREEN_WIDTH;
+    public static final int UP_BOUNDARY = SCREEN_HEIGHT;
+    public static final int DOWN_BOUNDARY = 0;
+
     /** Bar. */
     public static final int BAR_WIDTH = 464;
     public static final int BAR_HEIGHT = 56;
@@ -30,16 +36,14 @@ public class Constants {
     public static final float BOSS1_VELOCITY_X = 900f;
     public static final float BOSS1_VELOCITY_Y = 900f;
 
-    /** Screen boundary. */
-    public static final int LEFT_BOUNDARY = 0;
-    public static final int RIGHT_BOUNDARY = SCREEN_WIDTH;
-    public static final int UP_BOUNDARY = SCREEN_HEIGHT;
-    public static final int DOWN_BOUNDARY = 0;
-     //cac bien cho skill 1 cua boss
+    /** Boss1 Skill1. */
+    public static final int BOSS1_SKILL1_WIDTH = 80;
+    public static final int BOSS1_SKILL1_HEIGHT = 144;
+
+    /** Bomb. */
     public static final float BOMB_SPEED_Y = 400f;
-    public static final float BOMB_FRAME_DURATION = 0.1f;
+    public static final float BOMB_FRAME_DURATION = 0.15f;
     public static final float BOSS_STOP_TIME = 1f;
-    public static final int BOMB_DROP_CHANCE = 100;
 
     public static final int LASER_WIDTH = 80;
     public static final int LASER_HEIGHT = 1080;

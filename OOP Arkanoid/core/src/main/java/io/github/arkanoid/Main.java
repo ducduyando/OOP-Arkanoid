@@ -50,7 +50,10 @@ public class Main extends ApplicationAdapter {
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
 
-        boss1 = new Boss1(boss1Image, boss1Skill1Image, boss1Skill2Image,(SCREEN_WIDTH / 2f - BOSS1_WIDTH + SCREEN_HEIGHT) / 2, (SCREEN_HEIGHT - BOSS1_HEIGHT) / 2f);
+        float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
+        float bossInitialY = SCREEN_HEIGHT * 0.7f;
+
+        boss1 = new Boss1(boss1Image, boss1Skill1Image, boss1Skill2Image,bossInitialX, bossInitialY, 100);
         gameLogic = new GameLogic(ball, bar, boss1);
         stage = new Stage();
 
@@ -84,6 +87,7 @@ public class Main extends ApplicationAdapter {
         gameLogic.barCollision();
         gameLogic.boundaryCollision(delta);
         gameLogic.bossCollision();
+        gameLogic.skillCollision(stage);
         stage.draw();
 
     }
