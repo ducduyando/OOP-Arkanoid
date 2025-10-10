@@ -1,14 +1,6 @@
 package io.github.arkanoid;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.function.Consumer;
 
 import static io.github.arkanoid.Constants.*;
 
@@ -21,23 +13,29 @@ public class Boss1 extends Boss {
         this.bombTexture = bombTexture;
         this.laserTexture = laserTexture;
 
-        Consumer<Boss> dropBombAction = (b) -> {
-            if (getStage() != null) {
-                getStage().addActor(new Boss1Skill1(this.bombTexture, b.getX() + b.getWidth() / 2f, b.getY()));
-            }
-        };
+        Boss1Centering centering = new Boss1Centering(this);
+        Boss1BombingSkill bombingSkill = new Boss1BombingSkill(this);
+        Boss1SweepingLaser laserSkill = new Boss1SweepingLaser(this);
 
-        Consumer<Boss> shootLaserAction = (b) -> {
-            if (getStage() != null) {
-                getStage().addActor(new Boss1Skill2(this.laserTexture, b.getX(), b.getY()));
-            }
-        };
+        centering.setNextSkills(bombingSkill, laserSkill);
+        bombingSkill.setNextSkill(centering);
+        laserSkill.setNextSkill(centering);
 
-        StationaryAttackSkill laserSkill = new StationaryAttackSkill(5f, shootLaserAction);
+        setSkill(centering);
+    }
 
-        MoveToRandomPointAndActSkill bombingSkill = new MoveToRandomPointAndActSkill(3, dropBombAction, laserSkill);
+    public Texture getBombTexture() {
+        return bombTexture;
+    }
 
-        setSkill(bombingSkill);
+    public Texture getLaserTexture() {
+        return laserTexture;
+    }
+
+    public void dropBomb() {
+        if (getStage() != null) {
+            getStage().addActor(new BombProjectile(this.bombTexture, getX() + getWidth() / 2, getY()));
+        }
     }
 
 }

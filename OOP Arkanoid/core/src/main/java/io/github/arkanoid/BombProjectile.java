@@ -5,24 +5,23 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.Constants.*;
 
-public class Boss1Skill1 extends Actor {
+public class BombProjectile extends Actor {
     private final Animation<TextureRegion> animation;
     private float stateTime = 0f;
     private final Rectangle hitBox;
 
-    public Boss1Skill1(Texture texture, float x, float y) {
+    public BombProjectile(Texture texture, float x, float y) {
         int frameCount = texture.getWidth() / BOSS1_SKILL1_WIDTH;
 
         TextureRegion[] frames = new TextureRegion[frameCount];
         for (int i = 0; i < frameCount; i++) {
             frames[i] = new TextureRegion(texture, i * BOSS1_SKILL1_WIDTH, 0, BOSS1_SKILL1_WIDTH, BOSS1_SKILL1_HEIGHT);
         }
-        this.animation = new Animation<>(BOMB_FRAME_DURATION, frames);
+        this.animation = new Animation<>(FRAME_DURATION, frames);
         this.animation.setPlayMode(Animation.PlayMode.LOOP);
 
         setPosition(x - BOSS1_SKILL1_WIDTH / 2f, y);

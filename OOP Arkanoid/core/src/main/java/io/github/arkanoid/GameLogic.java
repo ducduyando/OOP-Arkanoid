@@ -132,16 +132,16 @@ public class GameLogic {
     public void skillCollision(Stage stage) {
         Rectangle barHitbox = barRef.getHitBox();
         for (Actor actor : stage.getActors()) {
-            if (actor instanceof Boss1Skill1) {
-                Boss1Skill1 bomb = (Boss1Skill1) actor;
+            if (actor instanceof BombProjectile) {
+                BombProjectile bomb = (BombProjectile) actor;
                 if (bomb.getHitbox().overlaps(barHitbox)) {
                     barRef.takeDamage();
                     bomb.remove();
                 }
             }
-            else if (actor instanceof Boss1Skill2) {
-                Boss1Skill2 laser = (Boss1Skill2) actor;
-                if (!laser.isFinished() && laser.getHitbox().overlaps(barHitbox)) {
+            else if (actor instanceof LaserEffect) {
+                LaserEffect laser = (LaserEffect) actor;
+                if (laser.getHitbox().overlaps(barHitbox)) {
                     barRef.takeDamage();
                 }
             }

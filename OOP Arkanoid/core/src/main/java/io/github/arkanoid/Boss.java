@@ -1,7 +1,5 @@
 package io.github.arkanoid;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -31,7 +29,7 @@ public class Boss extends Actor {
             frames[i] = new TextureRegion(texture, i * boss_width, 0, boss_width, boss_height);
         }
 
-        this.animation = new Animation<TextureRegion>(BOMB_FRAME_DURATION, frames);
+        this.animation = new Animation<TextureRegion>(FRAME_DURATION, frames);
         this.animation.setPlayMode(Animation.PlayMode.LOOP);
         this.currentFrame = frames[0];
 

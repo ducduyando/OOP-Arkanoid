@@ -1,9 +1,5 @@
 package io.github.arkanoid;
 
-import com.badlogic.gdx.Gdx;
-
-import java.util.ArrayList;
-
 public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
@@ -42,8 +38,8 @@ public class Constants {
 
     /** Bomb. */
     public static final float BOMB_SPEED_Y = 400f;
-    public static final float BOMB_FRAME_DURATION = 0.15f;
-    public static final float BOSS_STOP_TIME = 1f;
+    public static final float FRAME_DURATION = 0.15f;
+    public static final float BOSS_STOP_TIME = 2f;
 
     public static final int LASER_WIDTH = 80;
     public static final int LASER_HEIGHT = 1080;
