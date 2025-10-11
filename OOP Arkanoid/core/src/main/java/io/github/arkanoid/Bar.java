@@ -18,6 +18,8 @@ public class Bar extends Actor {
     private float stopTimer = 0f;
     private boolean isInvincible = false;
     private int state = 0;
+    private float blinkTimer = 0f;
+    private boolean isVisible = true;
 
 
     Bar(Texture texture, float x, float y) {
@@ -69,7 +71,9 @@ public class Bar extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        if (isVisible) {
+            batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        }
     }
 
     @Override
@@ -89,9 +93,17 @@ public class Bar extends Actor {
 
         if (isInvincible) {
             stopTimer += delta;
+            blinkTimer += delta;
+            if (blinkTimer >= 0.1f) {
+                isVisible = !isVisible;
+                blinkTimer = 0f;
+            }
+
             if (stopTimer >= 2f) {
                 isInvincible = false;
                 stopTimer = 0f;
+                blinkTimer = 0f;
+                isVisible = true;
             }
         }
 
