@@ -12,6 +12,11 @@ import static io.github.arkanoid.Constants.*;
 
 
 public class Boss extends Actor {
+    protected enum State {
+        NORMAL,
+        TAKING_DAMAGE,
+    }
+
     public TextureRegion currentFrame;
     public final Animation<TextureRegion> animation;
     public Vector2 velocity;
@@ -21,25 +26,37 @@ public class Boss extends Actor {
     protected BossSkill currentSkill;
     protected float stateTime = 0f;
 
-    Boss(Texture texture, float x, float y, int boss_width, int boss_height, float velocity_x, float velocity_y, int maxHp) {
-        int frameCount = texture.getWidth() / boss_width;
+    protected final Animation<TextureRegion> takeDamageAnimation;
+    protected State state = State.NORMAL;
+    protected float takeDamageTimer = 0f;
+
+    Boss(Texture texture, Texture takeDamage, float x, float y, int bossWidth, int bossHeight, float velocity_x, float velocity_y, int maxHp) {
+        int frameCount = texture.getWidth() / bossWidth;
 
         TextureRegion[] frames = new TextureRegion[frameCount];
         for (int i = 0; i < frameCount; i++) {
-            frames[i] = new TextureRegion(texture, i * boss_width, 0, boss_width, boss_height);
+            frames[i] = new TextureRegion(texture, i * bossWidth, 0, bossWidth, bossHeight);
         }
 
         this.animation = new Animation<TextureRegion>(FRAME_DURATION, frames);
         this.animation.setPlayMode(Animation.PlayMode.LOOP);
         this.currentFrame = frames[0];
 
+        int takeDamageFrameCount = takeDamage.getWidth() / bossWidth;
+        TextureRegion[] takeDamageFrames = new TextureRegion[takeDamageFrameCount];
+        for (int i = 0; i < takeDamageFrameCount; i++) {
+            takeDamageFrames[i] = new TextureRegion(takeDamage, i * bossWidth, 0, bossWidth, bossHeight);
+        }
+
+        this.takeDamageAnimation = new Animation<TextureRegion>(FRAME_DURATION, takeDamageFrames);
+
         setPosition(x, y);
-        setSize(boss_width, boss_height);
-        setOrigin(boss_width / 2f, boss_height / 2f);
+        setSize(bossWidth, bossHeight);
+        setOrigin(bossWidth / 2f, bossHeight / 2f);
 
         this.hp = maxHp;
         this.velocity = new Vector2(velocity_x, velocity_y);
-        this.hitBox = new Rectangle(x, y, boss_width, boss_height);
+        this.hitBox = new Rectangle(x, y, getWidth(), getHeight());
     }
 
     public void setSkill(BossSkill newSkill) {
@@ -50,9 +67,14 @@ public class Boss extends Actor {
     }
 
     public void takeDamage(int damage) {
-        this.hp -= damage;
-        if (this.hp < 0) {
-            this.hp = 0;
+        if (state == State.NORMAL) {
+            this.hp -= damage;
+            if (this.hp <= 0) {
+                this.hp = 0;
+            }
+
+            this.state =  State.TAKING_DAMAGE;
+            this.takeDamageTimer = 0f;
         }
     }
 
@@ -67,12 +89,28 @@ public class Boss extends Actor {
     @Override
     public void act(float delta) {
         hitBox.setPosition(getX(), getY());
-        if (!isDead() && currentSkill != null) {
-            currentSkill.update(this, delta);
+        if (isDead()) {
+            this.remove();
+            return;
         }
 
-        stateTime += delta;
-        currentFrame = animation.getKeyFrame(stateTime, true);
+        if (state == State.TAKING_DAMAGE) {
+            takeDamageTimer += delta;
+
+            currentFrame = takeDamageAnimation.getKeyFrame(takeDamageTimer, false);
+
+            if (takeDamageAnimation.isAnimationFinished(takeDamageTimer)) {
+                setOrigin(getWidth() / 2f, getHeight() / 2f);
+                state = State.NORMAL;
+            }
+        }
+
+        else if (state == State.NORMAL) {
+            stateTime += delta;
+            currentFrame = animation.getKeyFrame(stateTime, true);
+
+            currentSkill.update(this, delta);
+        }
     }
 
     @Override

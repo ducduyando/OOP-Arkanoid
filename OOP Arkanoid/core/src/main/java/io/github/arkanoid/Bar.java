@@ -94,7 +94,7 @@ public class Bar extends Actor {
         if (isInvincible) {
             stopTimer += delta;
             blinkTimer += delta;
-            if (blinkTimer >= 0.1f) {
+            if (blinkTimer >= FRAME_DURATION) {
                 isVisible = !isVisible;
                 blinkTimer = 0f;
             }

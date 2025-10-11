@@ -24,6 +24,7 @@ public class Main extends ApplicationAdapter {
     Texture ballImage;
 
     Texture boss1Image;
+    Texture boss1TakeDamage;
     Texture boss1Skill1Image;
     Texture boss1Skill2Image;
     Bar bar;
@@ -45,6 +46,7 @@ public class Main extends ApplicationAdapter {
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
         boss1Image = new Texture("Boss1.png");
+        boss1TakeDamage = new Texture("Boss1TakeDamage.png");
         boss1Skill1Image = new Texture("Boss1_Skill1.png");
         boss1Skill2Image = new Texture("Boss1_Skill2.png");
         bar = new Bar(barImage, 0, 0);
@@ -53,7 +55,7 @@ public class Main extends ApplicationAdapter {
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
         float bossInitialY = SCREEN_HEIGHT * 0.7f;
 
-        boss1 = new Boss1(boss1Image, boss1Skill1Image, boss1Skill2Image,bossInitialX, bossInitialY, 100);
+        boss1 = new Boss1(boss1Image, boss1TakeDamage, boss1Skill1Image, boss1Skill2Image,bossInitialX, bossInitialY, 100);
         gameLogic = new GameLogic(ball, bar, boss1);
         stage = new Stage();
 

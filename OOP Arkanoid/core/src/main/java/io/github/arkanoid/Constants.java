@@ -6,6 +6,7 @@ public class Constants {
     public static final int SCREEN_HEIGHT = 1080;
     public static final int ROWS = 6;
     public static final int COLS = 12;
+    public static final float FRAME_DURATION = 0.15f;
 
     /** Screen boundary. */
     public static final int LEFT_BOUNDARY = 0;
@@ -38,7 +39,6 @@ public class Constants {
 
     /** Bomb. */
     public static final float BOMB_SPEED_Y = 400f;
-    public static final float FRAME_DURATION = 0.15f;
     public static final float BOSS_STOP_TIME = 2f;
 
     public static final int LASER_WIDTH = 80;
