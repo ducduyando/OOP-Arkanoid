@@ -42,13 +42,15 @@ public class Main extends ApplicationAdapter {
     public void create() {
         stage = new Stage(new ScreenViewport());
 
-        Texture[] bgTextures = new Texture[4];
-        bgTextures[0] = new Texture("background_layer1.png");
-        bgTextures[1] = new Texture("background_layer2.png");
-        bgTextures[2] = new Texture("background_layer3.png");
-        bgTextures[3] = new Texture("background_layer4.png");
+        Texture[] bgTextures = new Texture[5];
 
-        float[] bgSpeeds = new float[] {20f, 30f, 40f, 50f};
+        bgTextures[0] = new Texture("background_layer0.png");
+        bgTextures[1] = new Texture("background_layer1.png");
+        bgTextures[2] = new Texture("background_layer2.png");
+        bgTextures[3] = new Texture("background_layer3.png");
+        bgTextures[4] = new Texture("background_layer4.png");
+
+        float[] bgSpeeds = new float[] {0f, 20f, 30f, 40f, 50f};
 
         parallaxBackground =  new ParallaxBackground(bgTextures,bgSpeeds);
 
