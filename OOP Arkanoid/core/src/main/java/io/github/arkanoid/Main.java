@@ -11,14 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import static io.github.arkanoid.Constants.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-
-    SpriteBatch batch;
-    OrthographicCamera camera;
 
     Texture barImage;
     Texture ballImage;
@@ -31,17 +29,30 @@ public class Main extends ApplicationAdapter {
     Ball ball;
     GameLogic gameLogic;
 
+    ParallaxBackground parallaxBackground;
+
     Boss1 boss1;
 
     Stage stage;
 
     Menu menu;
     int gameState = 0;
+
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage = new Stage(new ScreenViewport());
+
+        Texture[] bgTextures = new Texture[4];
+        bgTextures[0] = new Texture("background_layer1.png");
+        bgTextures[1] = new Texture("background_layer2.png");
+        bgTextures[2] = new Texture("background_layer3.png");
+        bgTextures[3] = new Texture("background_layer4.png");
+
+        float[] bgSpeeds = new float[] {20f, 30f, 40f, 50f};
+
+        parallaxBackground =  new ParallaxBackground(bgTextures,bgSpeeds);
+
+        stage.addActor(parallaxBackground);
 
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
@@ -57,7 +68,6 @@ public class Main extends ApplicationAdapter {
 
         boss1 = new Boss1(boss1Image, boss1TakeDamage, boss1Skill1Image, boss1Skill2Image,bossInitialX, bossInitialY, 100);
         gameLogic = new GameLogic(ball, bar, boss1);
-        stage = new Stage();
 
         stage.addActor(ball);
         stage.addActor(bar);
@@ -70,6 +80,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
+        ScreenUtils.clear(0, 0, 0, 1);
         if (gameState == 0) {
             int result = menu.showMenu();
             if (result == 0) {
@@ -79,29 +90,29 @@ public class Main extends ApplicationAdapter {
             }
             return;
         }
-        ScreenUtils.clear(Color.GRAY);
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
 
         float delta = Gdx.graphics.getDeltaTime();
-        stage.act(delta);
+
         gameLogic.launch();
         gameLogic.barCollision();
         gameLogic.boundaryCollision(delta);
         gameLogic.bossCollision();
         gameLogic.skillCollision(stage);
+
+        stage.act(delta);
+
         stage.draw();
 
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
         barImage.dispose();
         ballImage.dispose();
         boss1Image.dispose();
         boss1Skill1Image.dispose();
         boss1Skill2Image.dispose();
+        parallaxBackground.dispose();
         stage.dispose();
         menu.dispose();
     }
