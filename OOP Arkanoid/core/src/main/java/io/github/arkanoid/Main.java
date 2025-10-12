@@ -25,22 +25,32 @@ public class Main extends ApplicationAdapter {
     Bar bar;
     Ball ball;
     HealthBar bossHealthBar;
+    Button button;
 
     Boss1 boss1;
 
     GameLogic gameLogic;
 
-    ParallaxBackground parallaxBackground;
     ParallaxBackground menuBackground;
+    ParallaxBackground parallaxBackground;
 
     Stage stage;
 
-    Menu menu;
     int gameState = 0;
 
     @Override
     public void create() {
         stage = new Stage(new ScreenViewport());
+
+        Texture[] menuTextures = new Texture[4];
+
+        for (int i = 0; i < 4; i++) {
+            menuTextures[i] = new Texture("menu_layer" + (i + 1) + ".png");
+        }
+
+        float[] menuSpeeds = new float[] {0f, 100f, 0f, 0f};
+
+        menuBackground = new ParallaxBackground(menuTextures, menuSpeeds);
 
         Texture[] bgTextures = new Texture[5];
 
@@ -51,8 +61,6 @@ public class Main extends ApplicationAdapter {
         float[] bgSpeeds = new float[] {0f, 50f, 40f, 30f, 20f};
 
         parallaxBackground =  new ParallaxBackground(bgTextures,bgSpeeds);
-
-        stage.addActor(parallaxBackground);
 
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
@@ -66,15 +74,11 @@ public class Main extends ApplicationAdapter {
 
         boss1 = new Boss1("Boss1",bossInitialX, bossInitialY, 100);
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
+        button = new Button();
         gameLogic = new GameLogic(ball, bar, boss1);
 
-        stage.addActor(ball);
-        stage.addActor(bar);
-        stage.addActor(bossHealthBar);
-
-        stage.addActor(boss1);
-
-        menu = new Menu();
+        stage.addActor(menuBackground);
+        stage.addActor(button);
 
     }
 
@@ -84,13 +88,26 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         if (gameState == 0) {
-            int result = menu.showMenu();
-            if (result == 0) {
-                gameState = 1; // New Game
-            } else if (result == 1) {
-                Gdx.app.exit();
+            if (button.isGameModeChosen()) {
+                if (button.getMode() == Button.Mode.PLAY) {
+
+                    button.remove();
+                    menuBackground.remove();
+
+                    stage.addActor(ball);
+                    stage.addActor(bar);
+                    stage.addActor(bossHealthBar);
+                    stage.addActor(parallaxBackground);
+
+                    stage.addActor(boss1);
+
+                    gameState = 1;
+
+                }
+                else {
+                    Gdx.app.exit();
+                }
             }
-            return;
         }
 
         if (gameState == 1) {
@@ -112,9 +129,10 @@ public class Main extends ApplicationAdapter {
         barImage.dispose();
         ballImage.dispose();
         bossHealthBarImage.dispose();
+        menuBackground.dispose();
+        button.dispose();
         boss1.dispose();
         parallaxBackground.dispose();
         stage.dispose();
-        menu.dispose();
     }
 }

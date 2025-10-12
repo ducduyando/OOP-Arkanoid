@@ -4,6 +4,8 @@ public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
     public static final int SCREEN_HEIGHT = 1080;
+    public static final int BUTTON_WIDTH = 880;
+    public static final int BUTTON_HEIGHT = 272;
     public static final int HP_WIDTH = 1920;
     public static final int HP_HEIGHT = 144;
     public static final int ROWS = 6;
