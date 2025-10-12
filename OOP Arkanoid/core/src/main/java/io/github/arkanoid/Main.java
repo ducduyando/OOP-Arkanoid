@@ -91,17 +91,18 @@ public class Main extends ApplicationAdapter {
             if (button.isGameModeChosen()) {
                 if (button.getMode() == Button.Mode.PLAY) {
 
+                    gameState = 1;
+
                     button.remove();
                     menuBackground.remove();
+
+                    stage.addActor(parallaxBackground);
 
                     stage.addActor(ball);
                     stage.addActor(bar);
                     stage.addActor(bossHealthBar);
-                    stage.addActor(parallaxBackground);
 
                     stage.addActor(boss1);
-
-                    gameState = 1;
 
                 }
                 else {
