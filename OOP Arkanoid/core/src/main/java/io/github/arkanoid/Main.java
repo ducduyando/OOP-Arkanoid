@@ -27,14 +27,11 @@ public class Main extends ApplicationAdapter {
     HealthBar bossHealthBar;
 
     Boss1 boss1;
-    Texture boss1Image;
-    Texture boss1TakeDamage;
-    Texture boss1Skill1Image;
-    Texture boss1Skill2Image;
 
     GameLogic gameLogic;
 
     ParallaxBackground parallaxBackground;
+    ParallaxBackground menuBackground;
 
     Stage stage;
 
@@ -47,13 +44,11 @@ public class Main extends ApplicationAdapter {
 
         Texture[] bgTextures = new Texture[5];
 
-        bgTextures[0] = new Texture("background_layer0.png");
-        bgTextures[1] = new Texture("background_layer1.png");
-        bgTextures[2] = new Texture("background_layer2.png");
-        bgTextures[3] = new Texture("background_layer3.png");
-        bgTextures[4] = new Texture("background_layer4.png");
+        for (int i = 0; i < 5; i++) {
+            bgTextures[i] = new Texture("background_layer" + i + ".png");
+        }
 
-        float[] bgSpeeds = new float[] {0f, 20f, 30f, 40f, 50f};
+        float[] bgSpeeds = new float[] {0f, 50f, 40f, 30f, 20f};
 
         parallaxBackground =  new ParallaxBackground(bgTextures,bgSpeeds);
 
@@ -63,17 +58,13 @@ public class Main extends ApplicationAdapter {
         ballImage = new Texture("Ball.png");
         bossHealthBarImage = new Texture("HealthBar.png");
 
-        boss1Image = new Texture("Boss1.png");
-        boss1TakeDamage = new Texture("Boss1TakeDamage.png");
-        boss1Skill1Image = new Texture("Boss1_Skill1.png");
-        boss1Skill2Image = new Texture("Boss1_Skill2.png");
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
         float bossInitialY = SCREEN_HEIGHT * 0.6f;
 
-        boss1 = new Boss1(boss1Image, boss1TakeDamage, boss1Skill1Image, boss1Skill2Image,bossInitialX, bossInitialY, 100);
+        boss1 = new Boss1("Boss1",bossInitialX, bossInitialY, 100);
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
         gameLogic = new GameLogic(ball, bar, boss1);
 
@@ -90,6 +81,8 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1);
+        float delta = Gdx.graphics.getDeltaTime();
+
         if (gameState == 0) {
             int result = menu.showMenu();
             if (result == 0) {
@@ -100,13 +93,13 @@ public class Main extends ApplicationAdapter {
             return;
         }
 
-        float delta = Gdx.graphics.getDeltaTime();
-
-        gameLogic.launch();
-        gameLogic.barCollision();
-        gameLogic.boundaryCollision(delta);
-        gameLogic.bossCollision();
-        gameLogic.skillCollision(stage);
+        if (gameState == 1) {
+            gameLogic.launch();
+            gameLogic.barCollision();
+            gameLogic.boundaryCollision(delta);
+            gameLogic.bossCollision();
+            gameLogic.skillCollision(stage);
+        }
 
         stage.act(delta);
 
@@ -119,9 +112,7 @@ public class Main extends ApplicationAdapter {
         barImage.dispose();
         ballImage.dispose();
         bossHealthBarImage.dispose();
-        boss1Image.dispose();
-        boss1Skill1Image.dispose();
-        boss1Skill2Image.dispose();
+        boss1.dispose();
         parallaxBackground.dispose();
         stage.dispose();
         menu.dispose();

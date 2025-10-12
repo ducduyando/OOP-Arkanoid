@@ -4,7 +4,7 @@ import java.util.Random;
 
 import static io.github.arkanoid.Constants.*;
 
-public class Boss1SweepingLaser implements BossSkill {
+public class Boss1_Skill2 implements BossSkill {
     private enum Phase {
         CHARGING,
         SWEEPING,
@@ -17,7 +17,7 @@ public class Boss1SweepingLaser implements BossSkill {
     private int sweepDirection;
     private final float SWEEP_SPEED = 400f;
 
-    public Boss1SweepingLaser(Boss1 owner) {
+    public Boss1_Skill2(Boss1 owner) {
         this.owner = owner;
     }
 
@@ -27,7 +27,7 @@ public class Boss1SweepingLaser implements BossSkill {
 
     @Override
     public void enter(Boss boss) {
-        this.laserInstance = new LaserEffect(owner.getLaserTexture(), boss.getX(), boss.getY());
+        this.laserInstance = new LaserEffect(owner.getSkill2Texture(), boss.getX(), boss.getY());
         owner.getStage().addActor(this.laserInstance);
 
         currentPhase = Phase.CHARGING;

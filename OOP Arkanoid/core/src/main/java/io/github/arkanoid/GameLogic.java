@@ -91,7 +91,12 @@ public class GameLogic {
         Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
-            bossRef.takeDamage(10);
+            if (bossRef instanceof Boss1) {
+                bossRef.takeDamage(15);
+                if (bossRef.isDead()) {
+                    ballRef.resetLaunch();
+                }
+            }
 
             float ballCenterX = ballRect.x + ballRect.width / 2;
             float ballCenterY = ballRect.y + ballRect.height / 2;

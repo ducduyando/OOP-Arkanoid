@@ -5,17 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import static io.github.arkanoid.Constants.*;
 
 public class Boss1 extends Boss {
-    private final Texture bombTexture;
-    private final Texture laserTexture;
 
-    Boss1(Texture texture, Texture takeDamage, Texture bombTexture, Texture laserTexture, float x, float y, int maxHp) {
-        super(texture, takeDamage, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY_X, BOSS1_VELOCITY_Y, maxHp);
-        this.bombTexture = bombTexture;
-        this.laserTexture = laserTexture;
+    Boss1(String name, float x, float y, int maxHp) {
+        super(name, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY_X, BOSS1_VELOCITY_Y, maxHp);
 
-        Boss1Centering centering = new Boss1Centering(this);
-        Boss1BombingSkill bombingSkill = new Boss1BombingSkill(this);
-        Boss1SweepingLaser laserSkill = new Boss1SweepingLaser(this);
+        BossCentering centering = new BossCentering(this);
+        Boss1_Skill1 bombingSkill = new Boss1_Skill1(this);
+        Boss1_Skill2 laserSkill = new Boss1_Skill2(this);
 
         centering.setNextSkills(bombingSkill, laserSkill);
         bombingSkill.setNextSkill(centering);
@@ -24,23 +20,23 @@ public class Boss1 extends Boss {
         setSkill(centering);
     }
 
-    public Texture getBombTexture() {
-        return bombTexture;
+    public Texture getSkill1Texture() {
+        return this.skill1Texture;
     }
 
-    public Texture getLaserTexture() {
-        return laserTexture;
+    public Texture getSkill2Texture() {
+        return this.skill2Texture;
     }
 
-    public void dropBomb() {
+    public void skill1() {
         if (getStage() != null) {
-            getStage().addActor(new BombProjectile(this.bombTexture, getX() + getWidth() / 2, getY()));
+            getStage().addActor(new BombProjectile(this.skill1Texture, getX() + getWidth() / 2, getY()));
         }
     }
 
-    public void shootLaser() {
+    public void skill2() {
         if (getStage() != null) {
-            getStage().addActor(new LaserEffect(this.laserTexture, getX() + getWidth() / 2, getY()));
+            getStage().addActor(new LaserEffect(this.skill2Texture, getX() + getWidth() / 2, getY()));
         }
     }
 

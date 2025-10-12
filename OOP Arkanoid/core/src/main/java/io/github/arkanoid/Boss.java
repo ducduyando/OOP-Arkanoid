@@ -15,7 +15,11 @@ public class Boss extends Actor {
     protected enum State {
         NORMAL,
         TAKING_DAMAGE,
+        DYING,
     }
+
+    public final Texture skill1Texture;
+    public final Texture skill2Texture;
 
     public TextureRegion currentFrame;
     public final Animation<TextureRegion> animation;
@@ -23,33 +27,53 @@ public class Boss extends Actor {
     protected Rectangle hitBox;
     private int hp;
     private final int maxHp;
+    protected State state = State.NORMAL;
 
     protected BossSkill currentSkill;
     protected float stateTime = 0f;
 
     protected final Animation<TextureRegion> takeDamageAnimation;
-    protected State state = State.NORMAL;
     protected float takeDamageTimer = 0f;
 
-    Boss(Texture texture, Texture takeDamage, float x, float y, int bossWidth, int bossHeight, float velocity_x, float velocity_y, int maxHp) {
-        int frameCount = texture.getWidth() / bossWidth;
+    protected final Animation<TextureRegion> deathAnimation;
+    protected float deathTimer = 0f;
+    protected boolean isReadyToDeath = false;
+
+
+    Boss(String name, float x, float y, int bossWidth, int bossHeight, float velocity_x, float velocity_y, int maxHp) {
+
+        Texture normalSprite = new Texture(name + ".png");
+        Texture takeDamageSprite = new Texture(name + "_TakeDamage.png");
+        Texture deathSprite = new Texture(name + "_Death.png");
+        this.skill1Texture = new Texture(name + "_Skill1.png");
+        this.skill2Texture = new Texture(name + "_Skill2.png");
+
+        int frameCount = normalSprite.getWidth() / bossWidth;
 
         TextureRegion[] frames = new TextureRegion[frameCount];
         for (int i = 0; i < frameCount; i++) {
-            frames[i] = new TextureRegion(texture, i * bossWidth, 0, bossWidth, bossHeight);
+            frames[i] = new TextureRegion(normalSprite, i * bossWidth, 0, bossWidth, bossHeight);
         }
 
         this.animation = new Animation<TextureRegion>(FRAME_DURATION, frames);
         this.animation.setPlayMode(Animation.PlayMode.LOOP);
         this.currentFrame = frames[0];
 
-        int takeDamageFrameCount = takeDamage.getWidth() / bossWidth;
+        int takeDamageFrameCount = takeDamageSprite.getWidth() / bossWidth;
         TextureRegion[] takeDamageFrames = new TextureRegion[takeDamageFrameCount];
         for (int i = 0; i < takeDamageFrameCount; i++) {
-            takeDamageFrames[i] = new TextureRegion(takeDamage, i * bossWidth, 0, bossWidth, bossHeight);
+            takeDamageFrames[i] = new TextureRegion(takeDamageSprite, i * bossWidth, 0, bossWidth, bossHeight);
         }
 
         this.takeDamageAnimation = new Animation<TextureRegion>(FRAME_DURATION, takeDamageFrames);
+
+        int deathFrameCount = deathSprite.getWidth() / bossWidth;
+        TextureRegion[] deathFrames = new TextureRegion[deathFrameCount];
+        for (int i = 0; i < deathFrameCount; i++) {
+            deathFrames[i] = new TextureRegion(deathSprite, i * bossWidth, 0, bossWidth, bossHeight);
+        }
+
+        this.deathAnimation = new Animation<TextureRegion>(FRAME_DURATION, deathFrames);
 
         setPosition(x, y);
         setSize(bossWidth, bossHeight);
@@ -99,8 +123,22 @@ public class Boss extends Actor {
     @Override
     public void act(float delta) {
         hitBox.setPosition(getX(), getY());
+
+        if (state == State.DYING) {
+            deathTimer += delta;
+
+            currentFrame = deathAnimation.getKeyFrame(deathTimer, false);
+
+            if (deathAnimation.isAnimationFinished(deathTimer)) {
+                isReadyToDeath = true;
+                this.remove();
+            }
+            return;
+        }
+
         if (isDead()) {
-            this.remove();
+            state = State.DYING;
+            hitBox.setSize(0,0);
             return;
         }
 
@@ -118,9 +156,14 @@ public class Boss extends Actor {
         else if (state == State.NORMAL) {
             stateTime += delta;
             currentFrame = animation.getKeyFrame(stateTime, true);
-
-            currentSkill.update(this, delta);
         }
+
+        currentSkill.update(this, delta);
+    }
+
+    public void dispose() {
+        skill1Texture.dispose();
+        skill2Texture.dispose();
     }
 
     @Override

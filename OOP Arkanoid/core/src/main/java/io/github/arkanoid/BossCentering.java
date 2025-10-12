@@ -6,8 +6,8 @@ import java.util.Random;
 
 import static io.github.arkanoid.Constants.*;
 
-public class Boss1Centering implements BossSkill{
-    private final Boss1 owner;
+public class BossCentering implements BossSkill{
+    private final Boss owner;
     private BossSkill bombingSkill;
     private BossSkill laserSkill;
     private boolean hasArrived = false;
@@ -15,7 +15,7 @@ public class Boss1Centering implements BossSkill{
     private float cooldownTimer = 0f;
     private final float COOLDOWN_DURATION = 3f;
 
-    public Boss1Centering(Boss1 owner) {
+    public BossCentering(Boss1 owner) {
         this.owner = owner;
     }
 

@@ -6,7 +6,7 @@ import java.util.Random;
 
 import static io.github.arkanoid.Constants.*;
 
-public class Boss1BombingSkill implements BossSkill {
+public class Boss1_Skill1 implements BossSkill {
     private final Boss1 owner;
     private BossSkill nextSkill;
     private final int REPEAT_COUNT = 3;
@@ -19,7 +19,7 @@ public class Boss1BombingSkill implements BossSkill {
     private final float[][] positionGridX = new float [ROWS][COLS];
     private final float[][] positionGridY = new float [ROWS][COLS];
 
-    public Boss1BombingSkill(Boss1 owner) {
+    public Boss1_Skill1(Boss1 owner) {
         this.owner = owner;
 
         float cellXSize = (SCREEN_WIDTH - BOSS1_WIDTH) / (float) (COLS);
@@ -74,7 +74,7 @@ public class Boss1BombingSkill implements BossSkill {
             if (currentPos.dst(targetPos) <= boss.velocity.len() * delta) {
                 boss.setPosition(targetX, targetY);
                 isStopped = true;
-                owner.dropBomb();
+                owner.skill1();
                 actionCounter++;
             } else {
                 Vector2 dir = targetPos.sub(currentPos).nor();
