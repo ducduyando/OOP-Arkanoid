@@ -45,4 +45,16 @@ public class Constants {
 
     public static final int LASER_WIDTH = 80;
     public static final int LASER_HEIGHT = 1080;
+
+    /** Menu buttons. */
+    public static final int BUTTON_FRAME_WIDTH = 440;
+    public static final int BUTTON_FRAME_HEIGHT = 272;
+    public static final float BUTTON_SCALE = 0.8f;
+    public static final float BUTTON_SPACING = 500f;
+
+    /** Menu animation. */
+    public static final float MENU_ANIM_FRAME_TIME = 0.4f;
+    public static final float MENU_GLITCH_SPEED = 30f;
+    public static final float MENU_GLITCH_RANGE = 20f;
+    public static final float MENU_KEY_COOLDOWN = 0.2f;
 }
