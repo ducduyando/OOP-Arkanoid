@@ -23,7 +23,7 @@ public class Boss1BombingSkill implements BossSkill {
         this.owner = owner;
 
         float cellXSize = (SCREEN_WIDTH - BOSS1_WIDTH) / (float) (COLS);
-        float cellYSize = (SCREEN_HEIGHT / 2f - BOSS1_HEIGHT) / (float) (ROWS);
+        float cellYSize = (SCREEN_HEIGHT / 2f - BOSS1_HEIGHT - HP_HEIGHT) / (float) (ROWS);
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {

@@ -4,6 +4,8 @@ public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
     public static final int SCREEN_HEIGHT = 1080;
+    public static final int HP_WIDTH = 1920;
+    public static final int HP_HEIGHT = 144;
     public static final int ROWS = 6;
     public static final int COLS = 12;
     public static final float FRAME_DURATION = 0.15f;
@@ -11,7 +13,7 @@ public class Constants {
     /** Screen boundary. */
     public static final int LEFT_BOUNDARY = 0;
     public static final int RIGHT_BOUNDARY = SCREEN_WIDTH;
-    public static final int UP_BOUNDARY = SCREEN_HEIGHT;
+    public static final int UP_BOUNDARY = SCREEN_HEIGHT - HP_HEIGHT;
     public static final int DOWN_BOUNDARY = 0;
 
     /** Bar. */

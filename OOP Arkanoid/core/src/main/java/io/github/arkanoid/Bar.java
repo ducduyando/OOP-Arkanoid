@@ -78,16 +78,16 @@ public class Bar extends Actor {
 
     @Override
     public void act(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() + 32 * state > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() + 32 * state > LEFT_BOUNDARY) {
             moveBy(-velocityVector.x * delta, 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + BAR_WIDTH - 32 * state < SCREEN_WIDTH) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + BAR_WIDTH - 32 * state < RIGHT_BOUNDARY) {
             moveBy(velocityVector.x * delta, 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > DOWN_BOUNDARY) {
             moveBy(0, -velocityVector.y * delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT + BALL_HEIGHT < SCREEN_HEIGHT) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT + BALL_HEIGHT < UP_BOUNDARY) {
             moveBy(0, velocityVector.y * delta);
         }
 

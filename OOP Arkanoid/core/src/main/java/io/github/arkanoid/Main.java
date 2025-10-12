@@ -20,18 +20,21 @@ public class Main extends ApplicationAdapter {
 
     Texture barImage;
     Texture ballImage;
+    Texture bossHealthBarImage;
 
+    Bar bar;
+    Ball ball;
+    HealthBar bossHealthBar;
+
+    Boss1 boss1;
     Texture boss1Image;
     Texture boss1TakeDamage;
     Texture boss1Skill1Image;
     Texture boss1Skill2Image;
-    Bar bar;
-    Ball ball;
+
     GameLogic gameLogic;
 
     ParallaxBackground parallaxBackground;
-
-    Boss1 boss1;
 
     Stage stage;
 
@@ -58,6 +61,8 @@ public class Main extends ApplicationAdapter {
 
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
+        bossHealthBarImage = new Texture("HealthBar.png");
+
         boss1Image = new Texture("Boss1.png");
         boss1TakeDamage = new Texture("Boss1TakeDamage.png");
         boss1Skill1Image = new Texture("Boss1_Skill1.png");
@@ -66,13 +71,15 @@ public class Main extends ApplicationAdapter {
         ball = new Ball(ballImage, 0, 0);
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
-        float bossInitialY = SCREEN_HEIGHT * 0.7f;
+        float bossInitialY = SCREEN_HEIGHT * 0.6f;
 
         boss1 = new Boss1(boss1Image, boss1TakeDamage, boss1Skill1Image, boss1Skill2Image,bossInitialX, bossInitialY, 100);
+        bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
         gameLogic = new GameLogic(ball, bar, boss1);
 
         stage.addActor(ball);
         stage.addActor(bar);
+        stage.addActor(bossHealthBar);
 
         stage.addActor(boss1);
 
@@ -111,6 +118,7 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         barImage.dispose();
         ballImage.dispose();
+        bossHealthBarImage.dispose();
         boss1Image.dispose();
         boss1Skill1Image.dispose();
         boss1Skill2Image.dispose();

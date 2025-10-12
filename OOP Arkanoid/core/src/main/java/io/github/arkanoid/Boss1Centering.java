@@ -34,7 +34,7 @@ public class Boss1Centering implements BossSkill{
     public void update(Boss boss, float delta) {
         if (!hasArrived) {
             Vector2 currentPosition = new Vector2(boss.getX(), boss.getY());
-            Vector2 centerPoint = new Vector2((SCREEN_WIDTH - boss.getWidth()) / 2f, SCREEN_HEIGHT * 0.7f);
+            Vector2 centerPoint = new Vector2((SCREEN_WIDTH - boss.getWidth()) / 2f, SCREEN_HEIGHT * 0.6f);
 
             if (currentPosition.dst(centerPoint) < boss.velocity.len() * delta) {
                 boss.setPosition(centerPoint.x,  centerPoint.y);

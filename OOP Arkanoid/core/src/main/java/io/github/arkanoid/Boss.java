@@ -22,6 +22,7 @@ public class Boss extends Actor {
     public Vector2 velocity;
     protected Rectangle hitBox;
     private int hp;
+    private final int maxHp;
 
     protected BossSkill currentSkill;
     protected float stateTime = 0f;
@@ -55,6 +56,7 @@ public class Boss extends Actor {
         setOrigin(bossWidth / 2f, bossHeight / 2f);
 
         this.hp = maxHp;
+        this.maxHp = maxHp;
         this.velocity = new Vector2(velocity_x, velocity_y);
         this.hitBox = new Rectangle(x, y, getWidth(), getHeight());
     }
@@ -76,6 +78,14 @@ public class Boss extends Actor {
             this.state =  State.TAKING_DAMAGE;
             this.takeDamageTimer = 0f;
         }
+    }
+
+    public int  getHp() {
+        return hp;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
     }
 
     public boolean isDead() {
