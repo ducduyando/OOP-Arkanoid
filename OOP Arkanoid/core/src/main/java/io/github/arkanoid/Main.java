@@ -17,7 +17,8 @@ import static io.github.arkanoid.Constants.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-
+    SpriteBatch batch;
+    Texture pauseBgTexture;
     Texture barImage;
     Texture ballImage;
     Texture bossHealthBarImage;
@@ -26,13 +27,13 @@ public class Main extends ApplicationAdapter {
     Ball ball;
     HealthBar bossHealthBar;
     Button button;
-
     Boss1 boss1;
-
     GameLogic gameLogic;
 
     ParallaxBackground menuBackground;
     ParallaxBackground parallaxBackground;
+    PauseMenu pauseMenu;
+
 
     Stage stage;
 
@@ -61,6 +62,8 @@ public class Main extends ApplicationAdapter {
         float[] bgSpeeds = new float[] {0f, 50f, 40f, 30f, 20f};
 
         parallaxBackground =  new ParallaxBackground(bgTextures,bgSpeeds);
+
+        pauseMenu = new PauseMenu();
 
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
@@ -112,16 +115,50 @@ public class Main extends ApplicationAdapter {
         }
 
         if (gameState == 1) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.P) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                gameState = 2;
+                pauseMenu.reset();
+                stage.addActor(pauseMenu);
+            }
             gameLogic.launch();
             gameLogic.barCollision();
             gameLogic.boundaryCollision(delta);
             gameLogic.bossCollision();
             gameLogic.skillCollision(stage);
         }
+        else if (gameState == 2) {
+            // Unpause
+            if (Gdx.input.isKeyJustPressed(Input.Keys.P) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                gameState = 1;
+                pauseMenu.remove();
+            }
 
-        stage.act(delta);
+            if (pauseMenu.isOptionChosen()) {
+                if (pauseMenu.getOption() == PauseMenu.Option.RESUME) {
+                    gameState = 1;
+                    pauseMenu.remove();
+                } else {
+                    Gdx.app.exit();
+                }
+            }
+        }
 
-        stage.draw();
+
+        if (gameState == 2) {
+
+            pauseMenu.act(delta);
+
+
+            stage.draw();
+        } else {
+
+            stage.act(delta);
+            stage.draw();
+        }
+
+
 
     }
 
@@ -134,6 +171,7 @@ public class Main extends ApplicationAdapter {
         button.dispose();
         boss1.dispose();
         parallaxBackground.dispose();
+        pauseMenu.dispose();
         stage.dispose();
     }
 }

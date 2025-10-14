@@ -61,4 +61,9 @@ public class Constants {
     public static final float MENU_GLITCH_SPEED = 30f;
     public static final float MENU_GLITCH_RANGE = 20f;
     public static final float MENU_KEY_COOLDOWN = 0.2f;
+
+    /** Pause Menu Buttons. */
+    public static final int PAUSE_BUTTON_WIDTH = BUTTON_WIDTH;
+    public static final int PAUSE_BUTTON_HEIGHT = BUTTON_HEIGHT;
+    public static final float PAUSE_MENU_Y_OFFSET = 500f;
 }
