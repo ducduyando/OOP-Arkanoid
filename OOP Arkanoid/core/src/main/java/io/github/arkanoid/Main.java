@@ -37,6 +37,7 @@ public class Main extends ApplicationAdapter {
     Stage stage;
 
     double gameState = 0;
+    String s = "Hung beo";
 
     @Override
     public void create() {
