@@ -17,8 +17,6 @@ import static io.github.arkanoid.Constants.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-    SpriteBatch batch;
-    Texture pauseBgTexture;
     Texture barImage;
     Texture ballImage;
     Texture bossHealthBarImage;

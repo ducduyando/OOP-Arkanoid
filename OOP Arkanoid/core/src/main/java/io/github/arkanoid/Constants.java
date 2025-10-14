@@ -4,8 +4,10 @@ public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
     public static final int SCREEN_HEIGHT = 1080;
-    public static final int BUTTON_WIDTH = 880;
-    public static final int BUTTON_HEIGHT = 272;
+    public static final int PLAY_BUTTON_WIDTH = 880;
+    public static final int PLAY_BUTTON_HEIGHT = 272;
+    public static final int PAUSE_BUTTON_WIDTH = 1008;
+    public static final int PAUSE_BUTTON_HEIGHT = 272;
     public static final int HP_WIDTH = 1920;
     public static final int HP_HEIGHT = 144;
     public static final int LOADING_WIDTH = 896;
@@ -49,21 +51,4 @@ public class Constants {
 
     public static final int LASER_WIDTH = 80;
     public static final int LASER_HEIGHT = 1080;
-
-    /** Menu buttons. */
-    public static final int BUTTON_FRAME_WIDTH = 440;
-    public static final int BUTTON_FRAME_HEIGHT = 272;
-    public static final float BUTTON_SCALE = 0.8f;
-    public static final float BUTTON_SPACING = 500f;
-
-    /** Menu animation. */
-    public static final float MENU_ANIM_FRAME_TIME = 0.4f;
-    public static final float MENU_GLITCH_SPEED = 30f;
-    public static final float MENU_GLITCH_RANGE = 20f;
-    public static final float MENU_KEY_COOLDOWN = 0.2f;
-
-    /** Pause Menu Buttons. */
-    public static final int PAUSE_BUTTON_WIDTH = BUTTON_WIDTH;
-    public static final int PAUSE_BUTTON_HEIGHT = BUTTON_HEIGHT;
-    public static final float PAUSE_MENU_Y_OFFSET = 500f;
 }

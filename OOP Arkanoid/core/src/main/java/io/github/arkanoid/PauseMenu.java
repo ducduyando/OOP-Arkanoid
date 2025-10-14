@@ -16,8 +16,6 @@ public class PauseMenu extends Actor {
     private final Texture buttonSprite = new Texture("pause/layer1.png");
 
     private TextureRegion currentFrame;
-    private int frameWidth;
-    private int frameHeight;
     private float stateTime = 0f;
 
     protected enum Option { RESUME, QUIT }
@@ -29,29 +27,26 @@ public class PauseMenu extends Actor {
     private final Animation<TextureRegion> quitAnimation;
 
     public PauseMenu() {
-        this.frameWidth = buttonSprite.getWidth() / 2;
-        this.frameHeight = buttonSprite.getHeight() / 2;
-
         TextureRegion[] resumeFrames = new TextureRegion[2];
         TextureRegion[] quitFrames = new TextureRegion[2];
 
         for (int i = 0; i < 2; i++) {
             resumeFrames[i] = new TextureRegion(
                 buttonSprite,
-                i * frameWidth,
+                i * PAUSE_BUTTON_WIDTH,
                 0,
-                frameWidth,
-                frameHeight
+                PAUSE_BUTTON_WIDTH,
+                PAUSE_BUTTON_HEIGHT
             );
         }
 
         for (int i = 0; i < 2; i++) {
             quitFrames[i] = new TextureRegion(
                 buttonSprite,
-                i * frameWidth,
-                frameHeight,
-                frameWidth,
-                frameHeight
+                i * PAUSE_BUTTON_WIDTH,
+                PAUSE_BUTTON_HEIGHT,
+                PAUSE_BUTTON_WIDTH,
+                PAUSE_BUTTON_HEIGHT
             );
         }
 
@@ -61,11 +56,11 @@ public class PauseMenu extends Actor {
         this.currentFrame = resumeFrames[0];
 
         setPosition(
-            (SCREEN_WIDTH - frameWidth) / 2f,
-            SCREEN_HEIGHT / 2f - frameHeight / 2f
+            (SCREEN_WIDTH - PAUSE_BUTTON_WIDTH) / 2f,
+            (SCREEN_HEIGHT - PAUSE_BUTTON_HEIGHT) / 2f
         );
 
-        setSize(frameWidth, frameHeight);
+        setSize(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_HEIGHT);
     }
 
     public boolean isOptionChosen() {

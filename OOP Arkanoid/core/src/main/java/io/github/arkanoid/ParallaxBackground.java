@@ -19,8 +19,6 @@ public class ParallaxBackground extends Actor {
             this.speed = speed;
             this.y1 = 0;
             this.y2 = SCREEN_HEIGHT;
-            texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.ClampToEdge);
-
         }
 
         public void update(float delta) {

@@ -32,11 +32,11 @@ public class Button extends Actor {
         TextureRegion[] quitFrames = new TextureRegion[2];
 
         for (int i = 0; i < 2; i++) {
-            playFrames[i] = new TextureRegion(buttonSprite, i * BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+            playFrames[i] = new TextureRegion(buttonSprite, i * PLAY_BUTTON_WIDTH, 0, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
 
         for (int i = 0; i < 2; i++) {
-            quitFrames[i] = new TextureRegion(buttonSprite, i * BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+            quitFrames[i] = new TextureRegion(buttonSprite, i * PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
 
         this.playAnimation = new Animation<>(FRAME_DURATION * 3, playFrames);
@@ -44,8 +44,8 @@ public class Button extends Actor {
 
         this.currentFrame = playFrames[0];
 
-        setPosition((SCREEN_WIDTH - BUTTON_WIDTH) /2f, 300);
-        setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        setPosition((SCREEN_WIDTH - PLAY_BUTTON_WIDTH) /2f, 300);
+        setSize(PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         setOrigin(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
 
     }
