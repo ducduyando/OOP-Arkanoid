@@ -25,6 +25,9 @@ public class BossCentering implements BossSkill{
     }
 
     @Override
+    public void cleanup() {}
+
+    @Override
     public void enter(Boss boss) {
         this.hasArrived = false;
         this.cooldownTimer = 0f;

@@ -40,6 +40,14 @@ public class Boss1_Skill2 implements BossSkill {
     }
 
     @Override
+    public void cleanup() {
+        if (laserInstance != null) {
+            laserInstance.remove();
+            laserInstance = null;
+        }
+    }
+
+    @Override
     public void update(Boss boss, float delta) {
         if (laserInstance == null) {
             boss.setSkill(nextSkill);
@@ -59,9 +67,7 @@ public class Boss1_Skill2 implements BossSkill {
                 (sweepDirection == 1 && boss.getX() + boss.getWidth() >= RIGHT_BOUNDARY);
 
             if (hitBoundary) {
-                laserInstance.destroy();
-                laserInstance = null;
-                boss.setSkill(nextSkill);
+                cleanup();
             }
         }
     }

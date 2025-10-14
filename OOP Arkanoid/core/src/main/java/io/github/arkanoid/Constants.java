@@ -8,6 +8,8 @@ public class Constants {
     public static final int BUTTON_HEIGHT = 272;
     public static final int HP_WIDTH = 1920;
     public static final int HP_HEIGHT = 144;
+    public static final int LOADING_WIDTH = 896;
+    public static final int LOADING_HEIGHT = 336;
     public static final int ROWS = 6;
     public static final int COLS = 12;
     public static final float FRAME_DURATION = 0.15f;
@@ -43,7 +45,7 @@ public class Constants {
 
     /** Bomb. */
     public static final float BOMB_SPEED_Y = 400f;
-    public static final float BOSS_STOP_TIME = 2f;
+    public static final float BOSS_STOP_TIME = 1f;
 
     public static final int LASER_WIDTH = 80;
     public static final int LASER_HEIGHT = 1080;

@@ -16,7 +16,7 @@ import static io.github.arkanoid.Constants.*;
 public class Button extends Actor {
     private TextureRegion currentFrame;
     private float stateTime = 0f;
-    private final Texture buttonSprite = new Texture("menu_layer5.png");
+    private final Texture buttonSprite = new Texture("menu/" + "layer" + 4 + ".png");
     protected enum Mode {
         PLAY,
         QUIT

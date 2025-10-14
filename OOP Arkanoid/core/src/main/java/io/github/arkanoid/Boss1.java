@@ -6,8 +6,10 @@ import static io.github.arkanoid.Constants.*;
 
 public class Boss1 extends Boss {
 
-    Boss1(String name, float x, float y, int maxHp) {
-        super(name, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY_X, BOSS1_VELOCITY_Y, maxHp);
+
+
+    Boss1(int number, float x, float y, int maxHp) {
+        super(number, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY_X, BOSS1_VELOCITY_Y, maxHp);
 
         BossCentering centering = new BossCentering(this);
         Boss1_Skill1 bombingSkill = new Boss1_Skill1(this);

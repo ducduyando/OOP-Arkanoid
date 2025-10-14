@@ -34,10 +34,6 @@ public class LaserEffect extends Actor {
         hitbox = new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
-    public void destroy() {
-        this.remove();
-    }
-
     public boolean isAnimationDone() {
         return isAnimationFinished;
     }

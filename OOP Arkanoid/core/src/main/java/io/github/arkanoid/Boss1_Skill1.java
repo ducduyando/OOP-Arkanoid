@@ -47,6 +47,9 @@ public class Boss1_Skill1 implements BossSkill {
     }
 
     @Override
+    public void cleanup() {}
+
+    @Override
     public void enter(Boss boss) {
         this.actionCounter = 0;
         this.isStopped = false;

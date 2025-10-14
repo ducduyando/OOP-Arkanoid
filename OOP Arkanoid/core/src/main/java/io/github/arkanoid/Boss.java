@@ -40,13 +40,13 @@ public class Boss extends Actor {
     protected boolean isReadyToDeath = false;
 
 
-    Boss(String name, float x, float y, int bossWidth, int bossHeight, float velocity_x, float velocity_y, int maxHp) {
+    Boss(int number, float x, float y, int bossWidth, int bossHeight, float velocity_x, float velocity_y, int maxHp) {
 
-        Texture normalSprite = new Texture(name + ".png");
-        Texture takeDamageSprite = new Texture(name + "_TakeDamage.png");
-        Texture deathSprite = new Texture(name + "_Death.png");
-        this.skill1Texture = new Texture(name + "_Skill1.png");
-        this.skill2Texture = new Texture(name + "_Skill2.png");
+        Texture normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
+        Texture takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");
+        Texture deathSprite = new Texture("boss" + number + "/" + "death" + ".png");
+        this.skill1Texture = new Texture("boss" + number + "/" + "skill1" + ".png");
+        this.skill2Texture = new Texture("boss" + number + "/" + "skill2" + ".png");
 
         int frameCount = normalSprite.getWidth() / bossWidth;
 
@@ -139,6 +139,11 @@ public class Boss extends Actor {
         if (isDead()) {
             state = State.DYING;
             hitBox.setSize(0,0);
+
+            if (currentSkill != null) {
+                currentSkill.cleanup();
+            }
+
             return;
         }
 
@@ -160,6 +165,7 @@ public class Boss extends Actor {
 
         currentSkill.update(this, delta);
     }
+
 
     public void dispose() {
         skill1Texture.dispose();

@@ -45,7 +45,7 @@ public class Main extends ApplicationAdapter {
         Texture[] menuTextures = new Texture[4];
 
         for (int i = 0; i < 4; i++) {
-            menuTextures[i] = new Texture("menu_layer" + (i + 1) + ".png");
+            menuTextures[i] = new Texture( "menu/" + "layer" + i + ".png");
         }
 
         float[] menuSpeeds = new float[] {0f, 100f, 0f, 0f};
@@ -55,7 +55,7 @@ public class Main extends ApplicationAdapter {
         Texture[] bgTextures = new Texture[5];
 
         for (int i = 0; i < 5; i++) {
-            bgTextures[i] = new Texture("background_layer" + i + ".png");
+            bgTextures[i] = new Texture(  "background/" + "layer" + i + ".png");
         }
 
         float[] bgSpeeds = new float[] {0f, 50f, 40f, 30f, 20f};
@@ -72,7 +72,7 @@ public class Main extends ApplicationAdapter {
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
         float bossInitialY = SCREEN_HEIGHT * 0.6f;
 
-        boss1 = new Boss1("Boss1",bossInitialX, bossInitialY, 100);
+        boss1 = new Boss1(1,bossInitialX, bossInitialY, 100);
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
         button = new Button();
         gameLogic = new GameLogic(ball, bar, boss1);
