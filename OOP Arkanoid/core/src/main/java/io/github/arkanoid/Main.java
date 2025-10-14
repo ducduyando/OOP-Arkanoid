@@ -2,16 +2,13 @@ package io.github.arkanoid;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
 
 import static io.github.arkanoid.Constants.*;
 
@@ -20,11 +17,14 @@ public class Main extends ApplicationAdapter {
     Texture barImage;
     Texture ballImage;
     Texture bossHealthBarImage;
+    Texture Stage1;
 
     Bar bar;
     Ball ball;
     HealthBar bossHealthBar;
     Button button;
+    LoadingStage loadingStage1;
+    int Stage = 0;
     Boss1 boss1;
     GameLogic gameLogic;
 
@@ -32,10 +32,11 @@ public class Main extends ApplicationAdapter {
     ParallaxBackground parallaxBackground;
     PauseMenu pauseMenu;
 
+    ArrayList<Texture> Stages = new ArrayList<>();
 
     Stage stage;
 
-    int gameState = 0;
+    double gameState = 0;
 
     @Override
     public void create() {
@@ -66,9 +67,12 @@ public class Main extends ApplicationAdapter {
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
         bossHealthBarImage = new Texture("HealthBar.png");
+        Stage1 = new Texture("stages/" + "stage1.png");
 
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
+
+        Stages.add(Stage1);
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
         float bossInitialY = SCREEN_HEIGHT * 0.6f;
@@ -77,7 +81,6 @@ public class Main extends ApplicationAdapter {
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
         button = new Button();
         gameLogic = new GameLogic(ball, bar, boss1);
-
         stage.addActor(menuBackground);
         stage.addActor(button);
 
@@ -87,32 +90,40 @@ public class Main extends ApplicationAdapter {
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1);
         float delta = Gdx.graphics.getDeltaTime();
-
         if (gameState == 0) {
-            if (button.isGameModeChosen()) {
-                if (button.getMode() == Button.Mode.PLAY) {
+            if (button.isGameModeChosen() && button.getMode() == Button.Mode.PLAY) {
+                gameState = 0.5;
 
-                    gameState = 1;
+                loadingStage1 = new LoadingStage(Stages.get(Stage));
 
-                    button.remove();
-                    menuBackground.remove();
+                button.remove();
+                menuBackground.remove();
 
-                    stage.addActor(parallaxBackground);
-
-                    stage.addActor(ball);
-                    stage.addActor(bar);
-                    stage.addActor(bossHealthBar);
-
-                    stage.addActor(boss1);
-
-                }
-                else {
-                    Gdx.app.exit();
-                }
+                stage.addActor(loadingStage1);
             }
         }
 
-        if (gameState == 1) {
+        else if (gameState == 0.5) {
+            loadingStage1.act(delta);
+            stage.draw();
+
+            if (loadingStage1.getProcess() == LoadingStage.Process.DONE) {
+                gameState = 1;
+
+                stage.addActor(parallaxBackground);
+
+                stage.addActor(ball);
+                stage.addActor(bar);
+                stage.addActor(bossHealthBar);
+
+                stage.addActor(boss1);
+
+                loadingStage1.remove();
+                loadingStage1.dispose();
+            }
+        }
+
+        else if (gameState == 1) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.P) ||
                 Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 gameState = 2;
@@ -143,7 +154,6 @@ public class Main extends ApplicationAdapter {
             }
         }
 
-
         if (gameState == 2) {
 
             pauseMenu.act(delta);
@@ -167,6 +177,7 @@ public class Main extends ApplicationAdapter {
         bossHealthBarImage.dispose();
         menuBackground.dispose();
         button.dispose();
+        loadingStage1.dispose();
         boss1.dispose();
         parallaxBackground.dispose();
         pauseMenu.dispose();

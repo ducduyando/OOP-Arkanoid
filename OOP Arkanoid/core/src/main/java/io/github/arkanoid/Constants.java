@@ -51,4 +51,5 @@ public class Constants {
 
     public static final int LASER_WIDTH = 80;
     public static final int LASER_HEIGHT = 1080;
+
 }
