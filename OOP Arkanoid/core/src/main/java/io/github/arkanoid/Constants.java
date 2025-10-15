@@ -1,5 +1,7 @@
 package io.github.arkanoid;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
@@ -34,6 +36,7 @@ public class Constants {
     public static final int BALL_HEIGHT = 64;
     public static final float BALL_VELOCITY_X = 900f;
     public static final float BALL_VELOCITY_Y = 900f;
+    public static final Vector2 BALL_VELOCITY = new Vector2(900f, 900f);
 
     /** Boss1. */
     public static final int BOSS1_WIDTH = 272;
