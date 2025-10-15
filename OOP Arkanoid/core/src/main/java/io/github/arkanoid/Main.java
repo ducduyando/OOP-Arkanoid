@@ -17,14 +17,13 @@ public class Main extends ApplicationAdapter {
     Texture barImage;
     Texture ballImage;
     Texture bossHealthBarImage;
-    Texture Stage1;
 
     Bar bar;
     Ball ball;
     HealthBar bossHealthBar;
     Button button;
     LoadingStage loadingStage1;
-    int Stage = 0;
+    int Stage = 0; /**tao so dem luu chi so cua mang Stages, tang len moi khi qua man.*/
     Boss1 boss1;
     GameLogic gameLogic;
 
@@ -32,12 +31,11 @@ public class Main extends ApplicationAdapter {
     ParallaxBackground parallaxBackground;
     PauseMenu pauseMenu;
 
-    ArrayList<Texture> Stages = new ArrayList<>();
+    Texture[] Stages = new Texture[1]; /**tao mang luu cac stages texture.*/
 
     Stage stage;
 
     double gameState = 0;
-    String s = "Hung beo";
 
     @Override
     public void create() {
@@ -68,12 +66,13 @@ public class Main extends ApplicationAdapter {
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
         bossHealthBarImage = new Texture("HealthBar.png");
-        Stage1 = new Texture("stages/" + "stage1.png");
 
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
 
-        Stages.add(Stage1);
+        for (int i = 0; i < Stages.length; i++) {
+            Stages[i] = new Texture("stages/stage" + (i + 1) + ".png"); /** them cac texture vao mang. */
+        }
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
         float bossInitialY = SCREEN_HEIGHT * 0.6f;
@@ -95,7 +94,7 @@ public class Main extends ApplicationAdapter {
             if (button.isGameModeChosen() && button.getMode() == Button.Mode.PLAY) {
                 gameState = 0.5;
 
-                loadingStage1 = new LoadingStage(Stages.get(Stage));
+                loadingStage1 = new LoadingStage(Stages[Stage]);
 
                 button.remove();
                 menuBackground.remove();
