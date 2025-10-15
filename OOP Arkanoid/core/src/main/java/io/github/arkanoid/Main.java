@@ -37,6 +37,8 @@ public class Main extends ApplicationAdapter {
 
     double gameState = 0;
 
+    String s = "check";
+
     @Override
     public void create() {
         stage = new Stage(new ScreenViewport());
