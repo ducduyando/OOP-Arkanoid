@@ -8,8 +8,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.util.ArrayList;
-
 import static io.github.arkanoid.Constants.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -23,7 +21,7 @@ public class Main extends ApplicationAdapter {
     HealthBar bossHealthBar;
     Button button;
     LoadingStage loadingStage1;
-    int Stage = 0; /**tao so dem luu chi so cua mang Stages, tang len moi khi qua man.*/
+    int stageNumber = 0; // Tạo số đếm chỉ phần tử trong mảng Stages, thay đổi khi qua màn.
     Boss1 boss1;
     GameLogic gameLogic;
 
@@ -31,13 +29,11 @@ public class Main extends ApplicationAdapter {
     ParallaxBackground parallaxBackground;
     PauseMenu pauseMenu;
 
-    Texture[] Stages = new Texture[1]; /**tao mang luu cac stages texture.*/
+    Texture[] Stages = new Texture[1]; // Tạo mảng lưu stage textures.
 
     Stage stage;
 
     double gameState = 0;
-
-    String s = "check";
 
     @Override
     public void create() {
@@ -73,7 +69,7 @@ public class Main extends ApplicationAdapter {
         ball = new Ball(ballImage, 0, 0);
 
         for (int i = 0; i < Stages.length; i++) {
-            Stages[i] = new Texture("stages/stage" + (i + 1) + ".png"); /** them cac texture vao mang. */
+            Stages[i] = new Texture("stages/stage" + (i + 1) + ".png"); // Thêm các textures vào mảng Stages.
         }
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
@@ -96,7 +92,7 @@ public class Main extends ApplicationAdapter {
             if (button.isGameModeChosen() && button.getMode() == Button.Mode.PLAY) {
                 gameState = 0.5;
 
-                loadingStage1 = new LoadingStage(Stages[Stage]);
+                loadingStage1 = new LoadingStage(Stages[stageNumber]);
 
                 button.remove();
                 menuBackground.remove();
