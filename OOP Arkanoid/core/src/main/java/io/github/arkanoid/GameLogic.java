@@ -52,7 +52,7 @@ public class GameLogic {
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 ballRef.setLaunched(true);
-                ballRef.velocityVector.set(0f, BALL_VELOCITY_Y);
+                ballRef.velocityVector.set(0f, BALL_VELOCITY.y);
             }
             ballRef.setPosition(ballX, ballY);
         }

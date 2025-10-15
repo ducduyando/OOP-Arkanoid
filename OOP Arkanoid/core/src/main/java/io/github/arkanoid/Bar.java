@@ -13,7 +13,6 @@ import static io.github.arkanoid.Constants.*;
 
 public class Bar extends Actor {
     TextureRegion textureRegion;
-    Vector2 velocityVector;
     Rectangle hitBox;
     private float stopTimer = 0f;
     private boolean isInvincible = false;
@@ -21,10 +20,8 @@ public class Bar extends Actor {
     private float blinkTimer = 0f;
     private boolean isVisible = true;
 
-
     Bar(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, 0, 0, BAR_WIDTH, BAR_HEIGHT);
-        this.velocityVector = new Vector2(BAR_VELOCITY_X, BAR_VELOCITY_Y);
         this.hitBox = new Rectangle(x, y, BAR_WIDTH, BAR_HEIGHT);
         setPosition(x, y);
         setSize(BAR_WIDTH, BAR_HEIGHT);
@@ -79,16 +76,16 @@ public class Bar extends Actor {
     @Override
     public void act(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() + 32 * state > LEFT_BOUNDARY) {
-            moveBy(-velocityVector.x * delta, 0);
+            moveBy(-BAR_VELOCITY.x * delta, 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + BAR_WIDTH - 32 * state < RIGHT_BOUNDARY) {
-            moveBy(velocityVector.x * delta, 0);
+            moveBy(BAR_VELOCITY.x * delta, 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > DOWN_BOUNDARY) {
-            moveBy(0, -velocityVector.y * delta);
+            moveBy(0, -BAR_VELOCITY.y * delta);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT + BALL_HEIGHT < UP_BOUNDARY) {
-            moveBy(0, velocityVector.y * delta);
+            moveBy(0, BAR_VELOCITY.y * delta);
         }
 
         if (isInvincible) {

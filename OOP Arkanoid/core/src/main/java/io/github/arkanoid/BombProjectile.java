@@ -47,10 +47,6 @@ public class BombProjectile extends Actor {
         batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
     }
 
-    public Rectangle getHitBox() {
-        return hitBox;
-    }
-
     public Rectangle getHitbox() {
         return hitBox;
     }

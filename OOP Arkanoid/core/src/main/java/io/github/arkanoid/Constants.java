@@ -27,22 +27,18 @@ public class Constants {
     /** Bar. */
     public static final int BAR_WIDTH = 464;
     public static final int BAR_HEIGHT = 56;
-    public static final float BAR_VELOCITY_X = 900f;
-    public static final float BAR_VELOCITY_Y = 900f;
+    public static final Vector2 BAR_VELOCITY = new Vector2(900f, 900f);
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
 
     /** Ball. */
     public static final int BALL_WIDTH = 64;
     public static final int BALL_HEIGHT = 64;
-    public static final float BALL_VELOCITY_X = 900f;
-    public static final float BALL_VELOCITY_Y = 900f;
     public static final Vector2 BALL_VELOCITY = new Vector2(900f, 900f);
 
     /** Boss1. */
     public static final int BOSS1_WIDTH = 272;
     public static final int BOSS1_HEIGHT = 224;
-    public static final float BOSS1_VELOCITY_X = 900f;
-    public static final float BOSS1_VELOCITY_Y = 900f;
+    public static final Vector2 BOSS1_VELOCITY = new Vector2(900f, 900f);
 
     /** Boss1 Skill1. */
     public static final int BOSS1_SKILL1_WIDTH = 80;

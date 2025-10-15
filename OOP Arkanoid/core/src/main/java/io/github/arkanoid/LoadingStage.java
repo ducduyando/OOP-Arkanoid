@@ -15,7 +15,6 @@ public class LoadingStage extends Actor {
         LOADING,
         DONE
     }
-    private ArrayList<Texture> Stages;
     private float stateTime = 0f;
     private TextureRegion currentFrame;
     private final Animation<TextureRegion> loading;

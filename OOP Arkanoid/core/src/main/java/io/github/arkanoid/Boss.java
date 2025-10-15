@@ -40,7 +40,7 @@ public class Boss extends Actor {
     protected boolean isReadyToDeath = false;
 
 
-    Boss(int number, float x, float y, int bossWidth, int bossHeight, float velocity_x, float velocity_y, int maxHp) {
+    Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
 
         Texture normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
         Texture takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");
@@ -81,7 +81,7 @@ public class Boss extends Actor {
 
         this.hp = maxHp;
         this.maxHp = maxHp;
-        this.velocity = new Vector2(velocity_x, velocity_y);
+        this.velocity = velocity;
         this.hitBox = new Rectangle(x, y, getWidth(), getHeight());
     }
 

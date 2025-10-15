@@ -20,7 +20,7 @@ public class Ball extends Actor {
 
     Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
-        this.velocityVector = new Vector2(BALL_VELOCITY_X, BALL_VELOCITY_Y);
+        this.velocityVector = BALL_VELOCITY;
         this.hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);
         setPosition(x, y);
         setSize(BALL_WIDTH, BALL_HEIGHT);
