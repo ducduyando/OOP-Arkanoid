@@ -35,7 +35,10 @@ public class HealthBar extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        int frameIndex = (owner.getMaxHp() - owner.getHp()) / 5;
+        float percentHpLost = (float) (owner.getMaxHp() - owner.getHp()) / owner.getMaxHp();
+        int frameIndex = (int) (percentHpLost * (maxFrame - 1));
+
+        frameIndex = Math.min(maxFrame - 1, Math.max(0, frameIndex));
 
         batch.draw(frames[frameIndex], getX(), getY(), getWidth(), getHeight());
     }

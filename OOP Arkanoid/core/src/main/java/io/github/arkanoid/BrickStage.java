@@ -15,14 +15,13 @@ import java.util.Random;
 import static io.github.arkanoid.Constants.*;
 
 public class BrickStage extends Stage {
-    private Bar bar;
-    private Ball ball;
+    private final Bar bar = new Bar(new Texture("Bar.png"), (SCREEN_WIDTH - BAR_WIDTH) / 2f, 60);
+    private final Ball ball = new Ball(new Texture("ball/" + "normal" + ".png"), SCREEN_WIDTH / 2f, 120);
     private ArrayList<BrickActor> bricks = new ArrayList<>();
     private GameLogic gameLogic;
-    private Texture backgroundTexture;
+    private final Texture backgroundTexture = new Texture("brick/" + "background" + ".png");
     private boolean finished = false;
-    private Random random = new Random();
-    private Texture[] brickTextures = new Texture[4];
+    private final Texture[] brickTextures = new Texture[4];
 
     private class BrickActor extends Actor {
         private TextureRegion textureRegion;
@@ -74,19 +73,12 @@ public class BrickStage extends Stage {
 
     public BrickStage() {
         super(new ScreenViewport());
-        backgroundTexture = new Texture(BRICK_BACKGROUND_PATH);
         addActor(new BackgroundActor());
 
-        brickTextures[0] = new Texture(BRICK_TEXTURE_BLUE_PATH);
-        brickTextures[1] = new Texture(BRICK_TEXTURE_GREEN_PATH);
-        brickTextures[2] = new Texture(BRICK_TEXTURE_ORANGE_PATH);
-        brickTextures[3] = new Texture(BRICK_TEXTURE_RED_PATH);
-
-        Texture barTexture = new Texture(BAR_TEXTURE_PATH);
-        Texture ballTexture = new Texture(BALL_NORMAL_TEXTURE_PATH);
-
-        bar = new Bar(barTexture, (SCREEN_WIDTH - BAR_WIDTH) / 2f, 60);
-        ball = new Ball(ballTexture, SCREEN_WIDTH / 2f, 120);
+        brickTextures[0] = new Texture("brick/" + "red" + ".png");
+        brickTextures[1] = new Texture("brick/" + "blue" + ".png");
+        brickTextures[2] = new Texture("brick/" + "green" + ".png");
+        brickTextures[3] = new Texture("brick/" + "orange" + ".png");
 
         addActor(bar);
         addActor(ball);
@@ -98,10 +90,10 @@ public class BrickStage extends Stage {
     private void createBricks() {
         for (int i = 0; i < BRICK_ROWS; i++) {
             for (int j = 0; j < BRICK_COLS; j++) {
-                float x = START_X + j * BRICK_SPACING_X;
-                float y = START_Y - i * BRICK_SPACING_Y;
+                float x = LEFT_BOUNDARY + j * BRICK_WIDTH;
+                float y = UP_BOUNDARY - i * BRICK_HEIGHT;
 
-                Texture brickTexture = brickTextures[random.nextInt(4)];
+                Texture brickTexture = brickTextures[new Random().nextInt(brickTextures.length)];
                 BrickActor brick = new BrickActor(brickTexture, x, y);
 
                 bricks.add(brick);
@@ -182,6 +174,8 @@ public class BrickStage extends Stage {
         if (backgroundTexture != null) {
             backgroundTexture.dispose();
         }
+        bar.remove();
+        ball.remove();
         for (Texture texture : brickTextures) {
             texture.dispose();
         }

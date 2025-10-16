@@ -17,6 +17,7 @@ public class Bar_Stage1_Skill2 {
 
     Bar_Stage1_Skill2(Bar owner) {
         this.owner = owner;
+        this.currentPhase = Phase.DONE;
     }
 
     public void enter(Bar bar) {

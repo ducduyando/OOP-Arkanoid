@@ -60,25 +60,8 @@ public class Constants {
     /** Brick. */
     public static final int BRICK_ROWS = 4;
     public static final int BRICK_COLS = 10;
-    public static final int BRICK_PADDING = 8;
-    public static final float BRICK_START_X = 80f;
-    public static final float BRICK_START_Y = SCREEN_HEIGHT - 150f;
-    public static final int BRICK_WIDTH = (int) ((SCREEN_WIDTH - 2 * BRICK_START_X - (BRICK_COLS - 1) * BRICK_PADDING) / BRICK_COLS);
-    public static final int BRICK_HEIGHT = (int) (BRICK_WIDTH / 2.5f);
-    public static final float BRICK_SPACING_X = BRICK_WIDTH + BRICK_PADDING;
-    public static final float BRICK_SPACING_Y = BRICK_HEIGHT + BRICK_PADDING;
-    public static final float START_X = BRICK_START_X;
-    public static final float START_Y = BRICK_START_Y;
-
-    /** Asset paths used by BrickStage. */
-    public static final String BRICK_BACKGROUND_PATH = "menu/layer0.png";
-    public static final String BAR_TEXTURE_PATH = "Bar.png";
-    public static final String BALL_NORMAL_TEXTURE_PATH = "ball/normal.png";
-    public static final String BRICK_TEXTURE_BLUE_PATH = "brick/blue.png";
-    public static final String BRICK_TEXTURE_GREEN_PATH = "brick/green.png";
-    public static final String BRICK_TEXTURE_ORANGE_PATH = "brick/orange.png";
-    public static final String BRICK_TEXTURE_RED_PATH = "brick/red.png";
-
+    public static final int BRICK_WIDTH = 192;
+    public static final int BRICK_HEIGHT = 96;
 }
 
 
