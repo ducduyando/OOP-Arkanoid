@@ -92,7 +92,8 @@ public class GameLogic {
 
         if (ballRect.overlaps(bossRect)) {
             if (bossRef instanceof Boss1) {
-                bossRef.takeDamage(10);
+                int newDamage = ballRef.getDamage();
+                bossRef.takeDamage(newDamage);
                 if (bossRef.isDead()) {
                     ballRef.resetLaunch();
                 }

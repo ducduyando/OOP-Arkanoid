@@ -12,21 +12,31 @@ import com.badlogic.gdx.math.Rectangle;
 import static io.github.arkanoid.Constants.*;
 
 public class Bar extends Actor {
+
+    Texture barLaserEffect;
+
     TextureRegion textureRegion;
     Rectangle hitBox;
     private float stopTimer = 0f;
     private boolean isInvincible = false;
     private int state = 0;
     private float blinkTimer = 0f;
+    private float laserTime = 0f;
+    private boolean laserActive = false;
     private boolean isVisible = true;
 
     Bar(Texture texture, float x, float y) {
+        barLaserEffect = new Texture(""); // Sau them vao.
         this.textureRegion = new TextureRegion(texture, 0, 0, BAR_WIDTH, BAR_HEIGHT);
         this.hitBox = new Rectangle(x, y, BAR_WIDTH, BAR_HEIGHT);
         setPosition(x, y);
         setSize(BAR_WIDTH, BAR_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
 
+    }
+
+    public Texture getBarLaserEffect() {
+        return barLaserEffect;
     }
 
     public boolean isInvincible() {

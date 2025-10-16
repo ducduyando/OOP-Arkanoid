@@ -13,6 +13,10 @@ import com.badlogic.gdx.math.Rectangle;
 import static io.github.arkanoid.Constants.*;
 
 public class Ball extends Actor {
+
+
+    private int damage = 10;
+
     TextureRegion textureRegion;
     Vector2 velocityVector;
     Rectangle hitBox;
@@ -20,11 +24,19 @@ public class Ball extends Actor {
 
     Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
-        this.velocityVector = BALL_VELOCITY;
+        this.velocityVector = new Vector2(BALL_VELOCITY);
         this.hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);
         setPosition(x, y);
         setSize(BALL_WIDTH, BALL_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     public Rectangle getHitBox() {

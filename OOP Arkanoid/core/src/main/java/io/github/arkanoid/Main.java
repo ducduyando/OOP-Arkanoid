@@ -20,7 +20,7 @@ public class Main extends ApplicationAdapter {
     Ball ball;
     HealthBar bossHealthBar;
     Button button;
-    LoadingStage loadingStage1;
+    LoadingStage loadingStage;
     int stageNumber = 0; // Tạo số đếm chỉ phần tử trong mảng Stages, thay đổi khi qua màn.
     Boss1 boss1;
     GameLogic gameLogic;
@@ -29,8 +29,10 @@ public class Main extends ApplicationAdapter {
     ParallaxBackground parallaxBackground;
     PauseMenu pauseMenu;
 
-    Texture[] Stages = new Texture[1]; // Tạo mảng lưu stage textures.
+    PowerUpMenu powerUpMenu;
 
+    Texture[] Stages = new Texture[1]; // Tạo mảng lưu stage textures.
+    Texture[] powerUpMenuList = new Texture[1];
     Stage stage;
 
     double gameState = 0;
@@ -61,6 +63,7 @@ public class Main extends ApplicationAdapter {
 
         pauseMenu = new PauseMenu();
 
+
         barImage = new Texture("Bar.png");
         ballImage = new Texture("Ball.png");
         bossHealthBarImage = new Texture("HealthBar.png");
@@ -69,7 +72,9 @@ public class Main extends ApplicationAdapter {
         ball = new Ball(ballImage, 0, 0);
 
         for (int i = 0; i < Stages.length; i++) {
-            Stages[i] = new Texture("stages/stage" + (i + 1) + ".png"); // Thêm các textures vào mảng Stages.
+            Stages[i] = new Texture("stages/stage" + (i + 1) + ".png");// Thêm các textures vào mảng Stages.
+            powerUpMenuList[i] = new Texture("brick/" + "blue.png"); // Truyen tam thoi hihi.
+
         }
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
@@ -92,20 +97,22 @@ public class Main extends ApplicationAdapter {
             if (button.isGameModeChosen() && button.getMode() == Button.Mode.PLAY) {
                 gameState = 0.5;
 
-                loadingStage1 = new LoadingStage(Stages[stageNumber]);
+                loadingStage = new LoadingStage(Stages[stageNumber]);
 
                 button.remove();
                 menuBackground.remove();
 
-                stage.addActor(loadingStage1);
+                stage.addActor(loadingStage);
+            } else if (button.isGameModeChosen() && button.getMode() == Button.Mode.QUIT)  {
+                Gdx.app.exit();
             }
         }
 
         else if (gameState == 0.5) {
-            loadingStage1.act(delta);
+            loadingStage.act(delta);
             stage.draw();
 
-            if (loadingStage1.getProcess() == LoadingStage.Process.DONE) {
+            if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
                 gameState = 1;
 
                 stage.addActor(parallaxBackground);
@@ -116,12 +123,18 @@ public class Main extends ApplicationAdapter {
 
                 stage.addActor(boss1);
 
-                loadingStage1.remove();
-                loadingStage1.dispose();
+                loadingStage.remove();
+                loadingStage.dispose();
             }
         }
 
         else if (gameState == 1) {
+            if (boss1.isDead() && boss1.isReadyToDeath) {
+                powerUpMenu = new PowerUpMenu(powerUpMenuList[stageNumber]); // thu xem day co duoc khong nha
+                gameState = 3;
+                powerUpMenu.reset();
+                stage.addActor(powerUpMenu);
+            }
             if (Gdx.input.isKeyJustPressed(Input.Keys.P) ||
                 Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 gameState = 2;
@@ -151,13 +164,26 @@ public class Main extends ApplicationAdapter {
                 }
             }
         }
+        else if (gameState == 3) {
+            powerUpMenu.act(delta);
+
+            if (powerUpMenu.isOptionChosen()) {
+                if (powerUpMenu.getOption() == PowerUpMenu.Option.SKILL1) {
+                    ball.setDamage(20);
+                } else {
+
+                }
+                gameState = 0.5;
+                powerUpMenu.remove();
+            }
+        }
 
         if (gameState == 2) {
 
             pauseMenu.act(delta);
 
-
             stage.draw();
+
         } else {
 
             stage.act(delta);
@@ -175,10 +201,11 @@ public class Main extends ApplicationAdapter {
         bossHealthBarImage.dispose();
         menuBackground.dispose();
         button.dispose();
-        loadingStage1.dispose();
+        loadingStage.dispose();
         boss1.dispose();
         parallaxBackground.dispose();
         pauseMenu.dispose();
+        powerUpMenu.dispose();
         stage.dispose();
     }
 }

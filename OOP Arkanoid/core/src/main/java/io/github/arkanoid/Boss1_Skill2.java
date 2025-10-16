@@ -32,7 +32,7 @@ public class Boss1_Skill2 implements BossSkill {
 
         currentPhase = Phase.CHARGING;
 
-        if (new  Random().nextBoolean()) {
+        if (new Random().nextBoolean()) {
             sweepDirection = 1;
         } else {
             sweepDirection = -1;

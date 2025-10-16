@@ -99,4 +99,3 @@ public class Button extends Actor {
         buttonSprite.dispose();
     }
 }
-
