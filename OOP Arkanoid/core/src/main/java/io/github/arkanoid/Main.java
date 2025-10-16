@@ -38,10 +38,12 @@ public class Main extends ApplicationAdapter {
     Stage stage;
 
     double gameState = 0;
+    boolean paused = false;
 
     @Override
     public void create() {
         stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
 
         Texture[] menuTextures = new Texture[4];
 
@@ -99,106 +101,99 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
-        ScreenUtils.clear(0, 0, 0, 1);
+
+        ScreenUtils.clear(0, 0, 1, 1);
         float delta = Gdx.graphics.getDeltaTime();
         if (gameState == 0) {
-            if (button.isGameModeChosen() && button.getMode() == Button.Mode.PLAY) {
-                gameState = 0.5;
-
-                loadingStage = new LoadingStage(stageTextures[stageNumber]);
-
-                button.remove();
-                menuBackground.remove();
-
-                stage.addActor(loadingStage);
+            if (button.isGameModeChosen()) {
+                if (button.getMode() == Button.Mode.PLAY) {
+                    gameState = 0.5;
+                    loadingStage = new LoadingStage(stageTextures[stageNumber]);
+                    button.remove();
+                    menuBackground.remove();
+                    stage.addActor(loadingStage);
+                } else if (button.getMode() == Button.Mode.QUIT) {
+                    Gdx.app.exit();
+                } else {
+                    button.resetChoice();
+                }
             }
         }
 
-        if (gameState == 0.5) {
-            loadingStage.act(delta);
-            stage.draw();
+        if (gameState == 0.5) { // Loading to brick stage
+            if (loadingStage != null) {
+                loadingStage.act(delta);
+                stage.draw();
 
-            if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
-                loadingStage.remove();
-                loadingStage.dispose();
+                if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
+                    loadingStage.remove();
+                    loadingStage.dispose();
+                    loadingStage = null;
 
-                brickStage = new BrickStage();
-
-                brickStage.act(delta);
-                brickStage.draw();
-
-                if (brickStage.isFinished()) {
-                    gameState = 1; // Move to boss stage
-                    brickStage.dispose();
-                    brickStage = null;
-
-                    stageNumber++;
-
-                    loadingStage = new LoadingStage(stageTextures[stageNumber]);
+                    brickStage = new BrickStage();
+                    gameState = 1; // enter brick stage
+                }
+            }
+        }
+        else if (gameState == 1) { // Brick gameplay
+            if (!paused) {
+                if (brickStage != null) {
+                    brickStage.act(delta);
+                    brickStage.draw();
+                    if (brickStage.isFinished()) {
+                        gameState = 1.5; // prepare to boss
+                        brickStage.dispose();
+                        brickStage = null;
+                        stageNumber++;
+                        loadingStage = new LoadingStage(stageTextures[stageNumber]);
+                        stage.addActor(loadingStage);
+                    }
+                }
+            }
+            // pause
+            if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                paused = !paused;
+                if (paused) { pauseMenu.reset(); stage.addActor(pauseMenu); } else { pauseMenu.remove(); }
+            }
+        }
+        else if (gameState == 1.5) { // Loading to boss stage
+            if (loadingStage != null) {
+                loadingStage.act(delta);
+                stage.draw();
+                if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
+                    loadingStage.remove();
+                    loadingStage.dispose();
+                    loadingStage = null;
 
                     stage.addActor(parallaxBackground);
                     stage.addActor(ball);
                     stage.addActor(bar);
                     stage.addActor(bossHealthBar);
                     stage.addActor(boss1);
+                    gameState = 2; // enter boss
+                }
             }
         }
-        else if (gameState == 1) {
-                loadingStage.act(delta);
-                stage.draw();
-            if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
-                loadingStage.remove();
-                loadingStage.dispose();
-
-                if (boss1.isDead() && boss1.isReadyToDeath) {
-                    gameState = 3;
-                    powerUpMenu.reset();
-                    stage.addActor(powerUpMenu);
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.P) ||
-                    Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                    gameState = 2;
-                    pauseMenu.reset();
-                    stage.addActor(pauseMenu);
-                }
-                /** Đang tìm lỗi đoạn này.
-                 if (barStage1Skill2 != null) {
-                 if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
-                 && bar.isSkill2Ready()
-                 && barStage1Skill2.isDone()) {
-
-                 barStage1Skill2.enter(bar);
-                 bar.startSkill2Cooldown();
-                 }
-
-                 if (!barStage1Skill2.isDone()) {
-                 barStage1Skill2.update(bar, delta);
-                 }
-                 }
-                 */
-
+        else if (gameState == 2) { // Boss gameplay
+            if (!paused) {
                 gameLogic.launch();
                 gameLogic.barCollision();
-                gameLogic.boundaryCollision(delta);
+                gameLogic.boundaryCollision(delta, UP_BOUNDARY);
                 gameLogic.bossCollision();
                 gameLogic.skillCollision(stage);
-            }
-        }
-        else if (gameState == 2) {
-            // Unpause
-            if (Gdx.input.isKeyJustPressed(Input.Keys.P) ||
-                Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                gameState = 1;
-                pauseMenu.remove();
-            }
 
-            if (pauseMenu.isOptionChosen()) {
-                if (pauseMenu.getOption() == PauseMenu.Option.RESUME) {
-                    gameState = 1;
-                    pauseMenu.remove();
-                } else {
-                    Gdx.app.exit();
+                if (boss1.isDead() && boss1.isReadyToDeath) {
+                    paused = false;
+                    powerUpMenu.reset();
+                    stage.addActor(powerUpMenu);
+                    gameState = 3;
                 }
+            }
+            // pause toggle
+            // pause toggle
+            if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                paused = !paused;
+                if (paused) { pauseMenu.reset(); stage.addActor(pauseMenu); } else { pauseMenu.remove(); }
             }
         }
         else if (gameState == 3) {
@@ -215,14 +210,21 @@ public class Main extends ApplicationAdapter {
             }
         }
 
-        if (gameState == 2) {
-
-            pauseMenu.act(delta);
-
-            stage.draw();
-        } else if (gameState == 3) {
+        if (gameState == 3) {
             powerUpMenu.act(delta);
 
+            stage.draw();
+        } else if (paused) {
+            pauseMenu.act(delta);
+            // handle pause menu input
+            if (pauseMenu.isOptionChosen()) {
+                if (pauseMenu.getOption() == PauseMenu.Option.RESUME) {
+                    paused = false;
+                    pauseMenu.remove();
+                } else {
+                    Gdx.app.exit();
+                }
+            }
             stage.draw();
         } else {
 
@@ -230,7 +232,11 @@ public class Main extends ApplicationAdapter {
             stage.draw();
         }
         }
+
+    public boolean isPaused() {
+        return paused;
     }
+
 
     @Override
     public void dispose() {

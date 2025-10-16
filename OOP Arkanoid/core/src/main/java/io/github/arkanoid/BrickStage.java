@@ -108,7 +108,7 @@ public class BrickStage extends Stage {
         if (!finished) {
             gameLogic.launch();
             gameLogic.barCollision();
-            gameLogic.boundaryCollision(delta);
+            gameLogic.boundaryCollision(delta, SCREEN_HEIGHT);
             checkBrickCollisions();
 
             if (bricks.isEmpty()) {

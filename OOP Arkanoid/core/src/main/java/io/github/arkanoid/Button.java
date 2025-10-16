@@ -66,6 +66,10 @@ public class Button extends Actor {
         return mode;
     }
 
+    public void resetChoice() {
+        isGameModeChosen = false;
+    }
+
     @Override
     public void act(float delta) {
         stateTime += delta;
@@ -94,6 +98,7 @@ public class Button extends Actor {
             } else if (mode == Mode.QUIT) {
                 mode = Mode.LOAD;
             }
+            isGameModeChosen = false;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -107,6 +112,7 @@ public class Button extends Actor {
             } else if (mode == Mode.QUIT) {
                 mode = Mode.PLAY;
             }
+            isGameModeChosen = false;
         }
     }
 

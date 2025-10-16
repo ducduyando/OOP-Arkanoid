@@ -72,7 +72,7 @@ public class GameLogic {
         }
     }
 
-    public void boundaryCollision(float delta) {
+    public void boundaryCollision(float delta, int topBoundary) {
         if (ballRef.getY() <= DOWN_BOUNDARY) {
             barRef.takeDamage();
             ballRef.resetLaunch();
@@ -80,7 +80,7 @@ public class GameLogic {
         if (ballRef.getX() + ballRef.velocityVector.x * delta <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH + ballRef.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
             ballRef.velocityVector.x =  -ballRef.velocityVector.x;
         }
-        if (ballRef.getY() + BALL_HEIGHT + ballRef.velocityVector.y * delta >= UP_BOUNDARY) {
+        if (ballRef.getY() + BALL_HEIGHT + ballRef.velocityVector.y * delta >= topBoundary) {
             ballRef.velocityVector.y =  -ballRef.velocityVector.y;
         }
     }
