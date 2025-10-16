@@ -6,9 +6,9 @@ public class Constants {
     /** Screen. */
     public static final int SCREEN_WIDTH = 1920;
     public static final int SCREEN_HEIGHT = 1080;
-    public static final int PLAY_BUTTON_WIDTH = 880;
+    public static final int PLAY_BUTTON_WIDTH = 1328;
     public static final int PLAY_BUTTON_HEIGHT = 272;
-    public static final int PAUSE_BUTTON_WIDTH = 1008;
+    public static final int PAUSE_BUTTON_WIDTH = 1488;
     public static final int PAUSE_BUTTON_HEIGHT = 272;
     public static final int HP_WIDTH = 1920;
     public static final int HP_HEIGHT = 144;
@@ -29,6 +29,11 @@ public class Constants {
     public static final int BAR_HEIGHT = 56;
     public static final Vector2 BAR_VELOCITY = new Vector2(900f, 900f);
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
+
+    public static final int POWER_UP_WIDTH = 1920;
+    public static final int POWER_UP_HEIGHT = 1080;
+
+    public static final float SKILL2_COOLDOWN = 20f;
 
     /** Ball. */
     public static final int BALL_WIDTH = 64;

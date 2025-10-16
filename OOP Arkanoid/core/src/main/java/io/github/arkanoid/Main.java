@@ -20,7 +20,7 @@ public class Main extends ApplicationAdapter {
     Ball ball;
     HealthBar bossHealthBar;
     Button button;
-    LoadingStage loadingStage1;
+    LoadingStage loadingStage;
     int stageNumber = 0; // Tạo số đếm chỉ phần tử trong mảng Stages, thay đổi khi qua màn.
     Boss1 boss1;
     GameLogic gameLogic;
@@ -28,9 +28,12 @@ public class Main extends ApplicationAdapter {
     ParallaxBackground menuBackground;
     ParallaxBackground parallaxBackground;
     PauseMenu pauseMenu;
+    PowerUpMenu powerUpMenu;
 
-    Texture[] Stages = new Texture[1]; // Tạo mảng lưu stage textures.
+    Bar_Stage1_Skill2 barStage1Skill2;
 
+    Texture[] stageTextures = new Texture[1]; // Tạo mảng lưu stage textures.
+    Texture[] chooseSkill = new Texture[1];
     Stage stage;
 
     double gameState = 0;
@@ -61,16 +64,21 @@ public class Main extends ApplicationAdapter {
 
         pauseMenu = new PauseMenu();
 
+
+
         barImage = new Texture("Bar.png");
-        ballImage = new Texture("Ball.png");
+        ballImage = new Texture("ball/" + "normal.png");
         bossHealthBarImage = new Texture("HealthBar.png");
 
         bar = new Bar(barImage, 0, 0);
         ball = new Ball(ballImage, 0, 0);
 
-        for (int i = 0; i < Stages.length; i++) {
-            Stages[i] = new Texture("stages/stage" + (i + 1) + ".png"); // Thêm các textures vào mảng Stages.
+        for (int i = 0; i < stageTextures.length; i++) {
+            stageTextures[i] = new Texture("stages/" + "stage" + (i + 1) + ".png"); // Thêm các textures vào mảng Stages.
+            chooseSkill[i] = new Texture("powerUp/" + "layer" + i + ".png");
         }
+
+        powerUpMenu = new PowerUpMenu(chooseSkill[stageNumber]);
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
         float bossInitialY = SCREEN_HEIGHT * 0.6f;
@@ -82,6 +90,8 @@ public class Main extends ApplicationAdapter {
         stage.addActor(menuBackground);
         stage.addActor(button);
 
+        barStage1Skill2 = new Bar_Stage1_Skill2(bar);
+
     }
 
     @Override
@@ -92,20 +102,20 @@ public class Main extends ApplicationAdapter {
             if (button.isGameModeChosen() && button.getMode() == Button.Mode.PLAY) {
                 gameState = 0.5;
 
-                loadingStage1 = new LoadingStage(Stages[stageNumber]);
+                loadingStage = new LoadingStage(stageTextures[stageNumber]);
 
                 button.remove();
                 menuBackground.remove();
 
-                stage.addActor(loadingStage1);
+                stage.addActor(loadingStage);
             }
         }
 
         else if (gameState == 0.5) {
-            loadingStage1.act(delta);
+            loadingStage.act(delta);
             stage.draw();
 
-            if (loadingStage1.getProcess() == LoadingStage.Process.DONE) {
+            if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
                 gameState = 1;
 
                 stage.addActor(parallaxBackground);
@@ -116,18 +126,38 @@ public class Main extends ApplicationAdapter {
 
                 stage.addActor(boss1);
 
-                loadingStage1.remove();
-                loadingStage1.dispose();
+                loadingStage.remove();
+                loadingStage.dispose();
             }
         }
 
         else if (gameState == 1) {
+            if (boss1.isDead() && boss1.isReadyToDeath) {
+                gameState = 3;
+                powerUpMenu.reset();
+                stage.addActor(powerUpMenu);
+            }
             if (Gdx.input.isKeyJustPressed(Input.Keys.P) ||
                 Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 gameState = 2;
                 pauseMenu.reset();
                 stage.addActor(pauseMenu);
             }
+            /** Đang tìm lỗi đoạn này.
+            if (barStage1Skill2 != null) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
+                    && bar.isSkill2Ready()
+                    && barStage1Skill2.isDone()) {
+
+                    barStage1Skill2.enter(bar);
+                    bar.startSkill2Cooldown();
+                }
+
+                if (!barStage1Skill2.isDone()) {
+                    barStage1Skill2.update(bar, delta);
+                }
+            }
+             */
             gameLogic.launch();
             gameLogic.barCollision();
             gameLogic.boundaryCollision(delta);
@@ -151,11 +181,27 @@ public class Main extends ApplicationAdapter {
                 }
             }
         }
+        else if (gameState == 3) {
+
+            if (powerUpMenu.isOptionChosen()) {
+                if (powerUpMenu.getOption() == PowerUpMenu.Option.SKILL1) {
+                    ball.setDamage(20);
+                } else {
+                    barStage1Skill2 = new Bar_Stage1_Skill2(bar);
+
+                }
+                gameState = 0.5;
+                powerUpMenu.remove();
+            }
+        }
 
         if (gameState == 2) {
 
             pauseMenu.act(delta);
 
+            stage.draw();
+        } else if (gameState == 3) {
+            powerUpMenu.act(delta);
 
             stage.draw();
         } else {
@@ -163,9 +209,6 @@ public class Main extends ApplicationAdapter {
             stage.act(delta);
             stage.draw();
         }
-
-
-
     }
 
     @Override
@@ -175,10 +218,11 @@ public class Main extends ApplicationAdapter {
         bossHealthBarImage.dispose();
         menuBackground.dispose();
         button.dispose();
-        loadingStage1.dispose();
+        loadingStage.dispose();
         boss1.dispose();
         parallaxBackground.dispose();
         pauseMenu.dispose();
+        powerUpMenu.dispose();
         stage.dispose();
     }
 }

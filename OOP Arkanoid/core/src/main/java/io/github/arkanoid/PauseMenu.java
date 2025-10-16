@@ -12,22 +12,28 @@ import static io.github.arkanoid.Constants.*;
 
 public class PauseMenu extends Actor {
 
-    private final Texture pauseBackground = new Texture("pause/layer0.png");
-    private final Texture buttonSprite = new Texture("pause/layer1.png");
+    private final Texture pauseBackground = new Texture("pause/" + "layer0.png");
+    private final Texture buttonSprite = new Texture("pause/" + "layer1.png");
 
     private TextureRegion currentFrame;
     private float stateTime = 0f;
 
-    protected enum Option { RESUME, QUIT }
+    protected enum Option {
+        RESUME,
+        SAVE,
+        QUIT
+    }
 
     private Option option = Option.RESUME;
     private boolean isOptionChosen = false;
 
     private final Animation<TextureRegion> resumeAnimation;
+    private final Animation<TextureRegion> saveAnimation;
     private final Animation<TextureRegion> quitAnimation;
 
     public PauseMenu() {
         TextureRegion[] resumeFrames = new TextureRegion[2];
+        TextureRegion[] saveFrames = new TextureRegion[2];
         TextureRegion[] quitFrames = new TextureRegion[2];
 
         for (int i = 0; i < 2; i++) {
@@ -41,7 +47,7 @@ public class PauseMenu extends Actor {
         }
 
         for (int i = 0; i < 2; i++) {
-            quitFrames[i] = new TextureRegion(
+            saveFrames[i] = new TextureRegion(
                 buttonSprite,
                 i * PAUSE_BUTTON_WIDTH,
                 PAUSE_BUTTON_HEIGHT,
@@ -50,7 +56,18 @@ public class PauseMenu extends Actor {
             );
         }
 
+        for (int i = 0; i < 2; i++) {
+            quitFrames[i] = new TextureRegion(
+                buttonSprite,
+                i * PAUSE_BUTTON_WIDTH,
+                2 * PAUSE_BUTTON_HEIGHT,
+                PAUSE_BUTTON_WIDTH,
+                PAUSE_BUTTON_HEIGHT
+            );
+        }
+
         this.resumeAnimation = new Animation<>(FRAME_DURATION * 3, resumeFrames);
+        this.saveAnimation = new Animation<>(FRAME_DURATION * 3, saveFrames);
         this.quitAnimation = new Animation<>(FRAME_DURATION * 3, quitFrames);
 
         this.currentFrame = resumeFrames[0];
@@ -77,6 +94,8 @@ public class PauseMenu extends Actor {
 
         if (option == Option.RESUME) {
             currentFrame = resumeAnimation.getKeyFrame(stateTime, true);
+        }else if (option == Option.SAVE) {
+            currentFrame = saveAnimation.getKeyFrame(stateTime, true);
         } else if (option == Option.QUIT) {
             currentFrame = quitAnimation.getKeyFrame(stateTime, true);
         }
@@ -86,15 +105,30 @@ public class PauseMenu extends Actor {
             isOptionChosen = true;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)
             || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)
-            || Gdx.input.isKeyJustPressed(Input.Keys.W)
             || Gdx.input.isKeyJustPressed(Input.Keys.S)
-            || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)
-            || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
-            || Gdx.input.isKeyJustPressed(Input.Keys.A)
+            || Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            if (option == Option.RESUME) {
+                option = Option.QUIT;
+            } else if (option == Option.SAVE) {
+                option = Option.RESUME;
+            } else if (option == Option.QUIT) {
+                option = Option.SAVE;
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
+            || Gdx.input.isKeyJustPressed(Input.Keys.UP)
+            || Gdx.input.isKeyJustPressed(Input.Keys.W)
             || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            option = (option == Option.RESUME) ? Option.QUIT : Option.RESUME;
+
+            if (option == Option.RESUME) {
+                option = Option.SAVE;
+            } else if (option == Option.SAVE) {
+                option = Option.QUIT;
+            } else if (option == Option.QUIT) {
+                option = Option.RESUME;
+            }
         }
     }
 

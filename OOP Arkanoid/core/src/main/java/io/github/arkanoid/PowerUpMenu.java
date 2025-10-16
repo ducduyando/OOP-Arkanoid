@@ -12,8 +12,8 @@ import static io.github.arkanoid.Constants.*;
 
 
 public class PowerUpMenu extends Actor {
-    private final Texture powerupBackground = new Texture("background/" + "layer0.png"); // Truyen tam thoi.
-    private final Texture powerupButton;
+    private final Texture powerUpBackground = new Texture("background/" + "layer0.png");
+    private final Texture powerUpButton;
 
     private TextureRegion currentFrame;
     private float stateTime = 0f;
@@ -25,26 +25,22 @@ public class PowerUpMenu extends Actor {
     private final Animation<TextureRegion> skill1Animation;
     private final Animation<TextureRegion> skill2Animation;
 
-    public PowerUpMenu(Texture powerupButton) {
-        this.powerupButton = powerupButton;
+    public PowerUpMenu(Texture powerUpButton) {
+        this.powerUpButton = powerUpButton;
 
         TextureRegion[] skill1Frames = new TextureRegion[2];
         TextureRegion[] skill2Frames = new TextureRegion[2];
 
         for(int i = 0; i < 2; i++) {
-            skill1Frames[i] = new TextureRegion(
-                powerupButton,
-                i * PAUSE_BUTTON_WIDTH, 0, PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_HEIGHT);
+            skill1Frames[i] = new TextureRegion(powerUpButton, i * POWER_UP_WIDTH, 0,
+                POWER_UP_WIDTH, POWER_UP_HEIGHT);
 
         }
         for (int i = 0; i < 2; i++) {
             skill2Frames[i] = new TextureRegion(
-                powerupButton,
-                i * PAUSE_BUTTON_WIDTH,
-                PAUSE_BUTTON_HEIGHT,
-                PAUSE_BUTTON_WIDTH,
-                PAUSE_BUTTON_HEIGHT
-            );
+                powerUpButton,
+                i * POWER_UP_WIDTH, POWER_UP_HEIGHT,
+                POWER_UP_WIDTH, POWER_UP_HEIGHT);
         }
 
         this.skill1Animation = new Animation<>(FRAME_DURATION * 3, skill1Frames);
@@ -53,11 +49,11 @@ public class PowerUpMenu extends Actor {
         this.currentFrame = skill1Frames[0];
 
         setPosition(
-            (SCREEN_WIDTH - PAUSE_BUTTON_WIDTH) / 2f,
-            (SCREEN_HEIGHT - PAUSE_BUTTON_HEIGHT) / 2f
+            (SCREEN_WIDTH - POWER_UP_WIDTH) / 2f,
+            (SCREEN_HEIGHT - POWER_UP_HEIGHT) / 2f
         );
 
-        setSize(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_HEIGHT);
+        setSize(POWER_UP_WIDTH, POWER_UP_HEIGHT);
 
 
     }
@@ -73,7 +69,7 @@ public class PowerUpMenu extends Actor {
     public void act(float delta) {
         stateTime += delta;
 
-        if (option == PowerUpMenu.Option.SKILL1) {
+        if (option == Option.SKILL1) {
             currentFrame = skill1Animation.getKeyFrame(stateTime, true);
         } else if (option == Option.SKILL2) {
             currentFrame = skill2Animation.getKeyFrame(stateTime, true);
@@ -96,7 +92,7 @@ public class PowerUpMenu extends Actor {
         }
     }
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(powerupBackground, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        batch.draw(powerUpBackground, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
     }
 
@@ -107,7 +103,7 @@ public class PowerUpMenu extends Actor {
     }
 
     public void dispose() {
-        powerupBackground.dispose();
-        powerupButton.dispose();
+        powerUpBackground.dispose();
+        powerUpButton.dispose();
     }
 }

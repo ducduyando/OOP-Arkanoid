@@ -19,16 +19,19 @@ public class Button extends Actor {
     private final Texture buttonSprite = new Texture("menu/" + "layer" + 4 + ".png");
     protected enum Mode {
         PLAY,
+        LOAD,
         QUIT
     }
     private boolean isGameModeChosen = false;
 
     private final Animation<TextureRegion> playAnimation;
+    private final Animation<TextureRegion> loadAnimation;
     private final Animation<TextureRegion> quitAnimation;
     private Mode mode = Mode.PLAY;
 
     Button () {
         TextureRegion[] playFrames = new TextureRegion[2];
+        TextureRegion[] loadFrames = new TextureRegion[2];
         TextureRegion[] quitFrames = new TextureRegion[2];
 
         for (int i = 0; i < 2; i++) {
@@ -36,10 +39,15 @@ public class Button extends Actor {
         }
 
         for (int i = 0; i < 2; i++) {
-            quitFrames[i] = new TextureRegion(buttonSprite, i * PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+            loadFrames[i] = new TextureRegion(buttonSprite, i * PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+        }
+
+        for (int i = 0; i < 2; i++) {
+            quitFrames[i] = new TextureRegion(buttonSprite, i * PLAY_BUTTON_WIDTH, 2 * PLAY_BUTTON_HEIGHT, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
 
         this.playAnimation = new Animation<>(FRAME_DURATION * 3, playFrames);
+        this.loadAnimation = new Animation<>(FRAME_DURATION * 3, loadFrames);
         this.quitAnimation = new Animation<>(FRAME_DURATION * 3, quitFrames);
 
         this.currentFrame = playFrames[0];
@@ -64,6 +72,9 @@ public class Button extends Actor {
         if (mode == Mode.PLAY) {
             currentFrame = playAnimation.getKeyFrame(stateTime, true);
         }
+        else if (mode == Mode.LOAD) {
+            currentFrame = loadAnimation.getKeyFrame(stateTime, true);
+        }
         else if (mode == Mode.QUIT) {
             currentFrame = quitAnimation.getKeyFrame(stateTime, true);
         }
@@ -73,18 +84,27 @@ public class Button extends Actor {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)
-            || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
-            || Gdx.input.isKeyJustPressed(Input.Keys.UP)
             || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)
-            || Gdx.input.isKeyJustPressed(Input.Keys.W)
             || Gdx.input.isKeyJustPressed(Input.Keys.S)
-            || Gdx.input.isKeyJustPressed(Input.Keys.A)
+            || Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            if (mode == Mode.PLAY) {
+                mode = Mode.QUIT;
+            } else if (mode == Mode.LOAD) {
+                mode = Mode.PLAY;
+            } else if (mode == Mode.QUIT) {
+                mode = Mode.LOAD;
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
+            || Gdx.input.isKeyJustPressed(Input.Keys.UP)
+            || Gdx.input.isKeyJustPressed(Input.Keys.W)
             || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
 
             if (mode == Mode.PLAY) {
+                mode = Mode.LOAD;
+            } else if (mode == Mode.LOAD) {
                 mode = Mode.QUIT;
-            }
-            else if (mode == Mode.QUIT) {
+            } else if (mode == Mode.QUIT) {
                 mode = Mode.PLAY;
             }
         }

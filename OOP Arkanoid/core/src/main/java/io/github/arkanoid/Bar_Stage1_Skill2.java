@@ -7,6 +7,7 @@ import static io.github.arkanoid.Constants.*;
 public class Bar_Stage1_Skill2 {
     private enum Phase {
         CHARGING,
+        FIRING,
         DONE
     }
     private float barLaserTime = 0f;
@@ -27,12 +28,29 @@ public class Bar_Stage1_Skill2 {
     }
 
     public void update(Bar bar, float delta) {
+        float x = bar.getX() + BAR_WIDTH / 2f - LASER_WIDTH / 2f;
+        barLaserEffect.setX(x);
         if (currentPhase == Phase.CHARGING) {
             if (barLaserEffect.isAnimationDone()) {
+                currentPhase = Phase.FIRING;
+                barLaserTime = 0f;
+            }
+
+        } else {
+            barLaserTime += delta;
+            if (barLaserTime >= 4f) {
+                barLaserEffect.remove();
+                barLaserEffect = null;
                 currentPhase = Phase.DONE;
             }
-        } else {
-
         }
+    }
+
+    public boolean isDone() {
+        return currentPhase == Phase.DONE;
+    }
+
+    public BarLaserEffect getBarLaserEffect() { // Thêm phương thức getter cho va chạm.
+        return barLaserEffect;
     }
 }

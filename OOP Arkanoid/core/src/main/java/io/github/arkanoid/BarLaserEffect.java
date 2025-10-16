@@ -11,7 +11,6 @@ import static io.github.arkanoid.Constants.*;
 
 public class BarLaserEffect extends Actor {
 
-    String s = "check"; // check tam.
 
     private Animation<TextureRegion> barLaserAnimation;
     private float stateTime = 0f;
