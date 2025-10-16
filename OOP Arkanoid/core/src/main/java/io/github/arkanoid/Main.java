@@ -29,6 +29,7 @@ public class Main extends ApplicationAdapter {
     ParallaxBackground parallaxBackground;
     PauseMenu pauseMenu;
     PowerUpMenu powerUpMenu;
+    BrickStage brickStage;
 
     Bar_Stage1_Skill2 barStage1Skill2;
 
@@ -66,8 +67,8 @@ public class Main extends ApplicationAdapter {
 
 
 
-        barImage = new Texture("Bar.png");
-        ballImage = new Texture("ball/" + "normal.png");
+        barImage = new Texture("Bar" + ".png");
+        ballImage = new Texture("ball/" + "normal" + ".png");
         bossHealthBarImage = new Texture("HealthBar.png");
 
         bar = new Bar(barImage, 0, 0);
@@ -116,21 +117,33 @@ public class Main extends ApplicationAdapter {
             stage.draw();
 
             if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
-                gameState = 1;
-
-                stage.addActor(parallaxBackground);
-
-                stage.addActor(ball);
-                stage.addActor(bar);
-                stage.addActor(bossHealthBar);
-
-                stage.addActor(boss1);
+                gameState = 0.7;
 
                 loadingStage.remove();
                 loadingStage.dispose();
             }
         }
+        else if (gameState == 0.7) {
+            // Brick stage
+            if (brickStage == null) {
+                brickStage = new BrickStage();
+            }
 
+            brickStage.act(delta);
+            brickStage.draw();
+
+            if (brickStage.isFinished()) {
+                gameState = 1; // Move to boss stage
+                brickStage.dispose();
+                brickStage = null;
+
+                stage.addActor(parallaxBackground);
+                stage.addActor(ball);
+                stage.addActor(bar);
+                stage.addActor(bossHealthBar);
+                stage.addActor(boss1);
+            }
+        }
         else if (gameState == 1) {
             if (boss1.isDead() && boss1.isReadyToDeath) {
                 gameState = 3;

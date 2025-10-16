@@ -12,8 +12,8 @@ import static io.github.arkanoid.Constants.*;
 
 public class PauseMenu extends Actor {
 
-    private final Texture pauseBackground = new Texture("pause/" + "layer0.png");
-    private final Texture buttonSprite = new Texture("pause/" + "layer1.png");
+    private final Texture pauseBackground = new Texture("pause/" + "layer" + 0 + ".png");
+    private final Texture buttonSprite = new Texture("pause/" + "layer" + 1 +".png");
 
     private TextureRegion currentFrame;
     private float stateTime = 0f;
