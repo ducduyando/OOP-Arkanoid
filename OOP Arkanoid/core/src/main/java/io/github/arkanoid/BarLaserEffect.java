@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import static io.github.arkanoid.Constants.*;
 
 public class BarLaserEffect extends Actor {
+
+    String s = "check"; // check tam.
+
     private Animation<TextureRegion> barLaserAnimation;
     private float stateTime = 0f;
     private Rectangle hitbox;
