@@ -132,6 +132,9 @@ public class Main extends ApplicationAdapter {
                 case MENU:
                     if (button.isGameModeChosen()) {
                         if (button.getMode() == Button.Mode.PLAY) {
+                            button.remove();
+                            menuBackground.remove();
+
                             gameState = GameState.LOADING_TO_TUTORIAL;
                             loadingStage = new LoadingStage(stageTextures[stageNumber]);
                             stage.addActor(loadingStage);
@@ -144,15 +147,11 @@ public class Main extends ApplicationAdapter {
                     break;
 
                 case LOADING_TO_TUTORIAL:
-                    if (loadingStage.getState() == LoadingStage.State.LOADING) {
-                        button.remove();
-                        menuBackground.remove();
-                    }
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
-                        tutorial = new Tutorial();
-                        gameState = GameState.TUTORIAL;
                         loadingStage.remove();
                         loadingStage = null;
+                        tutorial = new Tutorial();
+                        gameState = GameState.TUTORIAL;
                     }
                     break;
 
@@ -161,9 +160,8 @@ public class Main extends ApplicationAdapter {
                         tutorial.act(delta);
                         tutorial.draw();
                         if (tutorial.isFinished()) {
-                            gameState = GameState.LOADING_TO_STAGE_1;
                             stageNumber++;
-
+                            gameState = GameState.LOADING_TO_STAGE_1;
                             loadingStage = new LoadingStage(stageTextures[stageNumber]);
                             stage.addActor(loadingStage);
                         }
@@ -171,19 +169,15 @@ public class Main extends ApplicationAdapter {
                     break;
 
                 case LOADING_TO_STAGE_1:
-                    if (loadingStage.getState() == LoadingStage.State.LOADING) {
-                        tutorial.dispose(); //Tutorial có thể dispose ngay sau khi chơi tại nó là màn riêng biệt.
-                        tutorial = null;
-                    }
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
                         stage.addActor(parallaxBackground);
                         stage.addActor(ball);
                         stage.addActor(bar);
                         stage.addActor(bossHealthBar);
                         stage.addActor(boss1);
-                        gameState = GameState.STAGE_1;
                         loadingStage.remove();
                         loadingStage = null;
+                        gameState = GameState.STAGE_1;
                     }
                     break;
 
@@ -236,7 +230,6 @@ public class Main extends ApplicationAdapter {
         }
 
         // --- Cập nhật và vẽ toàn bộ Stage ---
-        // CẢI THIỆN: Luôn gọi act() và draw() cho stage ở cuối render() để đảm bảo tất cả actor đều được cập nhật
         stage.act(delta);
 
         stage.draw();
@@ -249,8 +242,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        // SỬA: Dọn dẹp tất cả tài nguyên ở đây, luôn kiểm tra null trước khi dispose
-        // để tránh NullPointerException.
+
 
         if (stage != null) stage.dispose();
 
