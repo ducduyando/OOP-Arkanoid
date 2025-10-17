@@ -12,91 +12,100 @@ import static io.github.arkanoid.Constants.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-    Texture barImage;
-    Texture ballImage;
-    Texture bossHealthBarImage;
+    enum GameState {
+        MENU,
+        LOADING_TO_TUTORIAL,
+        TUTORIAL,
+        LOADING_TO_STAGE_1,
+        STAGE_1,
+        POWER_UP_MENU
+    }
 
-    Bar bar;
-    Ball ball;
-    HealthBar bossHealthBar;
-    Button button;
-    LoadingStage loadingStage;
-    int stageNumber = 0; // Tạo số đếm chỉ phần tử trong mảng Stages, thay đổi khi qua màn.
-    Boss1 boss1;
-    GameLogic gameLogic;
+    private GameState gameState = GameState.MENU;
+    private boolean isPaused = false;
 
-    ParallaxBackground menuBackground;
-    ParallaxBackground parallaxBackground;
-    PauseMenu pauseMenu;
-    PowerUpMenu powerUpMenu;
-    BrickStage brickStage;
+    private Stage stage;
 
-    Bar_Stage1_Skill2 barStage1Skill2;
+    /** Textures. */
+    private Texture barImage;
+    private Texture ballImage;
+    private Texture bossHealthBarImage;
+    private final Texture[] stageTextures = new Texture[2]; // Tạo mảng lưu stage textures.
+    private final Texture[] chooseSkill = new Texture[stageTextures.length - 1];
 
-    Texture[] stageTextures = new Texture[2]; // Tạo mảng lưu stage textures.
-    Texture[] chooseSkill = new Texture[1];
-    Stage stage;
+    /** Game Object. */
+    private Bar bar;
+    private Ball ball;
+    private Boss1 boss1;
+    private GameLogic gameLogic;
 
-    double gameState = 0;
-    boolean paused = false;
+    /** UI & Stages. */
+    private HealthBar bossHealthBar;
+    private Button button;
+    private LoadingStage loadingStage;
+    private ParallaxBackground menuBackground;
+    private ParallaxBackground parallaxBackground;
+    private PauseMenu pauseMenu;
+    private PowerUpMenu powerUpMenu;
+    private Tutorial tutorial;
+
+    /** Skills and stages. */
+    private Bar_Stage1_Skill2 barStage1Skill2;
+    private int stageNumber = 0;
 
     @Override
     public void create() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        // --Assets loading--
         Texture[] menuTextures = new Texture[4];
-
         for (int i = 0; i < 4; i++) {
             menuTextures[i] = new Texture( "menu/" + "layer" + i + ".png");
         }
-
-        float[] menuSpeeds = new float[] {0f, 100f, 0f, 0f};
-
-        menuBackground = new ParallaxBackground(menuTextures, menuSpeeds);
+        menuBackground = new ParallaxBackground(menuTextures, new float[] {0f, 100f, 0f, 0f});
 
         Texture[] bgTextures = new Texture[5];
-
         for (int i = 0; i < 5; i++) {
             bgTextures[i] = new Texture(  "background/" + "layer" + i + ".png");
         }
+        parallaxBackground =  new ParallaxBackground(bgTextures,new float[] {0f, 50f, 40f, 30f, 20f});
 
-        float[] bgSpeeds = new float[] {0f, 50f, 40f, 30f, 20f};
-
-        parallaxBackground =  new ParallaxBackground(bgTextures,bgSpeeds);
-
-        pauseMenu = new PauseMenu();
-
-
-
-        barImage = new Texture("Bar" + ".png");
-        ballImage = new Texture("ball/" + "normal" + ".png");
+        barImage = new Texture("Bar.png");
+        ballImage = new Texture("ball/normal.png");
         bossHealthBarImage = new Texture("HealthBar.png");
-
-        bar = new Bar(barImage, 0, 0);
-        ball = new Ball(ballImage, 0, 0);
 
         stageTextures[0] = new Texture("stages/" + "stage" + 0 + ".png");
         for (int i = 1; i < stageTextures.length; i++) {
-            stageTextures[i] = new Texture("stages/" + "stage" + i + ".png"); // Thêm các textures vào mảng Stages.
-            chooseSkill[i - 1] = new Texture("powerUp/" + "layer" + (i - 1) + ".png");
+            stageTextures[i] = new Texture("stages/" + "stage" + i + ".png");
+            if (i - 1 < chooseSkill.length) {
+                chooseSkill[i - 1] = new Texture("powerUp/" + "layer" + (i - 1) + ".png");
+            }
         }
 
-        powerUpMenu = new PowerUpMenu(chooseSkill[stageNumber]);
+        // --Object initialization--
+        bar = new Bar(barImage, 0, 0);
+        ball = new Ball(ballImage, 0, 0);
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
         float bossInitialY = SCREEN_HEIGHT * 0.6f;
-
         boss1 = new Boss1(1,bossInitialX, bossInitialY, 100);
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
 
-        button = new Button();
+        barStage1Skill2 = new Bar_Stage1_Skill2(bar);
         gameLogic = new GameLogic(ball, bar, boss1);
+
+        // --UI initialization--
+        pauseMenu = new PauseMenu();
+        if (stageNumber < chooseSkill.length) {
+            powerUpMenu = new PowerUpMenu(chooseSkill[stageNumber]);
+        }
+        button = new Button();
+
+        // --First stage initialization--
         stage.addActor(menuBackground);
         stage.addActor(button);
-
-        barStage1Skill2 = new Bar_Stage1_Skill2(bar);
-
+        gameState = GameState.MENU;
     }
 
     @Override
@@ -104,152 +113,174 @@ public class Main extends ApplicationAdapter {
 
         ScreenUtils.clear(0, 0, 1, 1);
         float delta = Gdx.graphics.getDeltaTime();
-        if (gameState == 0) {
-            if (button.isGameModeChosen()) {
-                if (button.getMode() == Button.Mode.PLAY) {
-                    gameState = 0.5;
-                    loadingStage = new LoadingStage(stageTextures[stageNumber]);
-                    button.remove();
-                    menuBackground.remove();
-                    stage.addActor(loadingStage);
-                } else if (button.getMode() == Button.Mode.QUIT) {
-                    Gdx.app.exit();
+
+        // --Menu handle--
+        if (gameState == GameState.TUTORIAL || gameState == GameState.STAGE_1) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                isPaused = !isPaused;
+                if (isPaused) {
+                    pauseMenu.reset();
+                    stage.addActor(pauseMenu);
                 } else {
-                    button.resetChoice();
+                    pauseMenu.remove();
                 }
             }
         }
 
-        if (gameState == 0.5) { // Loading to brick stage
-            if (loadingStage != null) {
-                loadingStage.act(delta);
-                stage.draw();
+        if (!isPaused) {
+            switch (gameState) {
+                case MENU:
+                    if (button.isGameModeChosen()) {
+                        if (button.getMode() == Button.Mode.PLAY) {
+                            gameState = GameState.LOADING_TO_TUTORIAL;
+                            loadingStage = new LoadingStage(stageTextures[stageNumber]);
+                            stage.addActor(loadingStage);
+                        } else if (button.getMode() == Button.Mode.QUIT) {
+                            Gdx.app.exit();
+                        } else {
+                            button.resetChoice();
+                        }
+                    }
+                    break;
 
-                if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
-                    loadingStage.remove();
-                    loadingStage.dispose();
-                    loadingStage = null;
+                case LOADING_TO_TUTORIAL:
+                    if (loadingStage.getState() == LoadingStage.State.LOADING) {
+                        button.remove();
+                        menuBackground.remove();
+                    }
+                    if (loadingStage.getState() == LoadingStage.State.DONE) {
+                        tutorial = new Tutorial();
+                        gameState = GameState.TUTORIAL;
+                        loadingStage.remove();
+                        loadingStage = null;
+                    }
+                    break;
 
-                    brickStage = new BrickStage();
-                    gameState = 1; // enter brick stage
-                }
-            }
-        }
-        else if (gameState == 1) { // Brick gameplay
-            if (!paused) {
-                if (brickStage != null) {
-                    brickStage.act(delta);
-                    brickStage.draw();
-                    if (brickStage.isFinished()) {
-                        gameState = 1.5; // prepare to boss
-                        brickStage.dispose();
-                        brickStage = null;
-                        stageNumber++;
+                case TUTORIAL:
+                    if (tutorial != null) {
+                        tutorial.act(delta);
+                        tutorial.draw();
+                        if (tutorial.isFinished()) {
+                            gameState = GameState.LOADING_TO_STAGE_1;
+                            stageNumber++;
+
+                            loadingStage = new LoadingStage(stageTextures[stageNumber]);
+                            stage.addActor(loadingStage);
+                        }
+                    }
+                    break;
+
+                case LOADING_TO_STAGE_1:
+                    if (loadingStage.getState() == LoadingStage.State.LOADING) {
+                        tutorial.dispose(); //Tutorial có thể dispose ngay sau khi chơi tại nó là màn riêng biệt.
+                        tutorial = null;
+                    }
+                    if (loadingStage.getState() == LoadingStage.State.DONE) {
+                        stage.addActor(parallaxBackground);
+                        stage.addActor(ball);
+                        stage.addActor(bar);
+                        stage.addActor(bossHealthBar);
+                        stage.addActor(boss1);
+                        gameState = GameState.STAGE_1;
+                        loadingStage.remove();
+                        loadingStage = null;
+                    }
+                    break;
+
+                case STAGE_1:
+                    gameLogic.launch();
+                    gameLogic.barCollision();
+                    gameLogic.boundaryCollision(delta, UP_BOUNDARY);
+                    gameLogic.bossCollision();
+                    gameLogic.skillCollision(stage);
+
+                    if (boss1.isDead() && boss1.isReadyToDeath) {
+                        gameState = GameState.POWER_UP_MENU;
+                        powerUpMenu.reset();
+                        stage.addActor(powerUpMenu);
+                    }
+                    break;
+
+                case POWER_UP_MENU:
+                    if (powerUpMenu.isOptionChosen()) {
+                        if (powerUpMenu.getOption() == PowerUpMenu.Option.SKILL1) {
+                            ball.setDamage(15);
+                        } else {
+                            barStage1Skill2 = new Bar_Stage1_Skill2(bar);
+                        }
+
+                        // CẢI THIỆN LOGIC: Sau khi chọn skill, nên chuyển sang màn gạch tiếp theo
+                        gameState = GameState.MENU;
                         loadingStage = new LoadingStage(stageTextures[stageNumber]);
                         stage.addActor(loadingStage);
+
+                        // Xóa các actor của màn boss cũ
+                        parallaxBackground.remove();
+                        ball.remove();
+                        bar.remove();
+                        bossHealthBar.remove();
+                        boss1.remove();
+                        powerUpMenu.remove();
                     }
-                }
+                    break;
             }
-            // pause
-            if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                paused = !paused;
-                if (paused) { pauseMenu.reset(); stage.addActor(pauseMenu); } else { pauseMenu.remove(); }
-            }
-        }
-        else if (gameState == 1.5) { // Loading to boss stage
-            if (loadingStage != null) {
-                loadingStage.act(delta);
-                stage.draw();
-                if (loadingStage.getProcess() == LoadingStage.Process.DONE) {
-                    loadingStage.remove();
-                    loadingStage.dispose();
-                    loadingStage = null;
-
-                    stage.addActor(parallaxBackground);
-                    stage.addActor(ball);
-                    stage.addActor(bar);
-                    stage.addActor(bossHealthBar);
-                    stage.addActor(boss1);
-                    gameState = 2; // enter boss
-                }
-            }
-        }
-        else if (gameState == 2) { // Boss gameplay
-            if (!paused) {
-                gameLogic.launch();
-                gameLogic.barCollision();
-                gameLogic.boundaryCollision(delta, UP_BOUNDARY);
-                gameLogic.bossCollision();
-                gameLogic.skillCollision(stage);
-
-                if (boss1.isDead() && boss1.isReadyToDeath) {
-                    paused = false;
-                    powerUpMenu.reset();
-                    stage.addActor(powerUpMenu);
-                    gameState = 3;
-                }
-            }
-            // pause toggle
-            // pause toggle
-            if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                paused = !paused;
-                if (paused) { pauseMenu.reset(); stage.addActor(pauseMenu); } else { pauseMenu.remove(); }
-            }
-        }
-        else if (gameState == 3) {
-
-            if (powerUpMenu.isOptionChosen()) {
-                if (powerUpMenu.getOption() == PowerUpMenu.Option.SKILL1) {
-                    ball.setDamage(20);
-                } else {
-                    barStage1Skill2 = new Bar_Stage1_Skill2(bar);
-
-                }
-                gameState = 0.5;
-                powerUpMenu.remove();
-            }
-        }
-
-        if (gameState == 3) {
-            powerUpMenu.act(delta);
-
-            stage.draw();
-        } else if (paused) {
-            pauseMenu.act(delta);
-            // handle pause menu input
+        } else {
             if (pauseMenu.isOptionChosen()) {
                 if (pauseMenu.getOption() == PauseMenu.Option.RESUME) {
-                    paused = false;
+                    isPaused = false;
                     pauseMenu.remove();
                 } else {
                     Gdx.app.exit();
                 }
             }
-            stage.draw();
-        } else {
+        }
 
-            stage.act(delta);
-            stage.draw();
-        }
-        }
+        // --- Cập nhật và vẽ toàn bộ Stage ---
+        // CẢI THIỆN: Luôn gọi act() và draw() cho stage ở cuối render() để đảm bảo tất cả actor đều được cập nhật
+        stage.act(delta);
+
+        stage.draw();
+    }
 
     public boolean isPaused() {
-        return paused;
+        return isPaused;
     }
 
 
     @Override
     public void dispose() {
-        barImage.dispose();
-        ballImage.dispose();
-        bossHealthBarImage.dispose();
-        menuBackground.dispose();
-        button.dispose();
-        loadingStage.dispose();
-        boss1.dispose();
-        parallaxBackground.dispose();
-        pauseMenu.dispose();
-        powerUpMenu.dispose();
-        stage.dispose();
+        // SỬA: Dọn dẹp tất cả tài nguyên ở đây, luôn kiểm tra null trước khi dispose
+        // để tránh NullPointerException.
+
+        if (stage != null) stage.dispose();
+
+        if (barImage != null) barImage.dispose();
+        if (ballImage != null) ballImage.dispose();
+        if (bossHealthBarImage != null) bossHealthBarImage.dispose();
+
+        if (menuBackground != null) menuBackground.dispose();
+        if (parallaxBackground != null) parallaxBackground.dispose();
+
+        if (button != null) button.dispose();
+        if (pauseMenu != null) pauseMenu.dispose();
+        if (powerUpMenu != null) powerUpMenu.dispose();
+
+        // SỬA: Thêm dispose cho brickStage nếu nó chưa được dispose
+        if (tutorial != null) tutorial.dispose();
+        if (loadingStage != null) loadingStage.dispose();
+
+        if (boss1 != null) boss1.dispose();
+
+        // SỬA: Duyệt qua mảng để dispose từng texture, tránh memory leak
+        if (stageTextures != null) {
+            for (Texture texture : stageTextures) {
+                if (texture != null) texture.dispose();
+            }
+        }
+        if (chooseSkill != null) {
+            for (Texture texture : chooseSkill) {
+                if (texture != null) texture.dispose();
+            }
+        }
     }
 }

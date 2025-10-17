@@ -77,10 +77,16 @@ public class GameLogic {
             barRef.takeDamage();
             ballRef.resetLaunch();
         }
-        if (ballRef.getX() + ballRef.velocityVector.x * delta <= LEFT_BOUNDARY || ballRef.getX() + BALL_WIDTH + ballRef.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
+        if (ballRef.getX() + ballRef.velocityVector.x * delta <= LEFT_BOUNDARY) {
+            ballRef.setPosition(LEFT_BOUNDARY, ballRef.getY());
+            ballRef.velocityVector.x =  -ballRef.velocityVector.x;
+        }
+        if (ballRef.getX() + BALL_WIDTH + ballRef.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
+            ballRef.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ballRef.getY());
             ballRef.velocityVector.x =  -ballRef.velocityVector.x;
         }
         if (ballRef.getY() + BALL_HEIGHT + ballRef.velocityVector.y * delta >= topBoundary) {
+            ballRef.setPosition(ballRef.getX(),  topBoundary - BALL_HEIGHT);
             ballRef.velocityVector.y =  -ballRef.velocityVector.y;
         }
     }
@@ -138,15 +144,13 @@ public class GameLogic {
     public void skillCollision(Stage stage) {
         Rectangle barHitbox = barRef.getHitBox();
         for (Actor actor : stage.getActors()) {
-            if (actor instanceof BombProjectile) {
-                BombProjectile bomb = (BombProjectile) actor;
+            if (actor instanceof BombProjectile bomb) {
                 if (bomb.getHitbox().overlaps(barHitbox)) {
                     barRef.takeDamage();
                     bomb.remove();
                 }
             }
-            else if (actor instanceof LaserEffect) {
-                LaserEffect laser = (LaserEffect) actor;
+            else if (actor instanceof LaserEffect laser) {
                 if (laser.getHitbox().overlaps(barHitbox)) {
                     barRef.takeDamage();
                 }

@@ -14,9 +14,12 @@ import java.util.Random;
 
 import static io.github.arkanoid.Constants.*;
 
-public class BrickStage extends Stage {
-    private final Bar bar = new Bar(new Texture("Bar.png"), (SCREEN_WIDTH - BAR_WIDTH) / 2f, 60);
-    private final Ball ball = new Ball(new Texture("ball/" + "normal" + ".png"), SCREEN_WIDTH / 2f, 120);
+public class Tutorial extends Stage {
+    private final Texture barTexture;
+    private final Texture ballTexture;
+
+    private final Bar bar;
+    private final Ball ball;
     private ArrayList<BrickActor> bricks = new ArrayList<>();
     private GameLogic gameLogic;
     private final Texture backgroundTexture = new Texture("brick/" + "background" + ".png");
@@ -71,7 +74,7 @@ public class BrickStage extends Stage {
         }
     }
 
-    public BrickStage() {
+    public Tutorial() {
         super(new ScreenViewport());
         addActor(new BackgroundActor());
 
@@ -79,6 +82,12 @@ public class BrickStage extends Stage {
         brickTextures[1] = new Texture("brick/" + "blue" + ".png");
         brickTextures[2] = new Texture("brick/" + "green" + ".png");
         brickTextures[3] = new Texture("brick/" + "orange" + ".png");
+
+        barTexture = new Texture("Bar.png");
+        ballTexture = new Texture("ball/" + "normal" + ".png");
+
+        bar = new Bar(barTexture, (SCREEN_WIDTH - BAR_WIDTH) / 2f, 0);
+        ball = new Ball(ballTexture, (SCREEN_WIDTH - BALL_WIDTH) / 2f, BAR_HEIGHT);
 
         addActor(bar);
         addActor(ball);
@@ -91,7 +100,7 @@ public class BrickStage extends Stage {
         for (int i = 0; i < BRICK_ROWS; i++) {
             for (int j = 0; j < BRICK_COLS; j++) {
                 float x = LEFT_BOUNDARY + j * BRICK_WIDTH;
-                float y = UP_BOUNDARY - i * BRICK_HEIGHT;
+                float y = SCREEN_HEIGHT - BRICK_HEIGHT - i * BRICK_HEIGHT;
 
                 Texture brickTexture = brickTextures[new Random().nextInt(brickTextures.length)];
                 BrickActor brick = new BrickActor(brickTexture, x, y);
@@ -171,9 +180,7 @@ public class BrickStage extends Stage {
 
     @Override
     public void dispose() {
-        if (backgroundTexture != null) {
-            backgroundTexture.dispose();
-        }
+        backgroundTexture.dispose();
         bar.remove();
         ball.remove();
         for (Texture texture : brickTextures) {
