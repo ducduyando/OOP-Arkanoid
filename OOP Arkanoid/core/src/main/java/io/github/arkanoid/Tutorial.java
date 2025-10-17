@@ -92,7 +92,7 @@ public class Tutorial extends Stage {
         addActor(bar);
         addActor(ball);
 
-        gameLogic = new GameLogic(ball, bar, null);
+        gameLogic = new GameLogic(bar, null);
         createBricks();
     }
 
@@ -115,9 +115,9 @@ public class Tutorial extends Stage {
     public void act(float delta) {
         super.act(delta);
         if (!finished) {
-            gameLogic.launch();
-            gameLogic.barCollision();
-            gameLogic.boundaryCollision(delta, SCREEN_HEIGHT);
+            gameLogic.launch(ball);
+            gameLogic.barCollision(ball);
+            gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
             checkBrickCollisions();
 
             if (bricks.isEmpty()) {

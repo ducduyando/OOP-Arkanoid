@@ -13,12 +13,10 @@ import static io.github.arkanoid.Constants.*;
 
 public class GameLogic {
 
-    Ball ballRef;
     Bar barRef;
     Boss bossRef;
 
-    GameLogic (Ball ballRef, Bar barRef, Boss bossRef) {
-        this.ballRef = ballRef;
+    GameLogic (Bar barRef, Boss bossRef) {
         this.barRef = barRef;
         this.bossRef = bossRef;
     }
@@ -44,64 +42,71 @@ public class GameLogic {
     }
 
 
-    public void launch() {
-        if (!ballRef.isLaunched()) {
+    public void launch(Ball ball) {
+        if (!ball.isLaunched()) {
             float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
             float ballX = barCenterX - BALL_WIDTH / 2f;
             float ballY = barRef.getY() + barRef.getHeight();
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                ballRef.setLaunched(true);
-                ballRef.velocityVector.set(0f, BALL_VELOCITY.y);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !(ball instanceof Bar_Stage1_Skill1)) {
+                ball.setLaunched(true);
+                ball.velocityVector.set(0f, BALL_VELOCITY.y);
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && ball instanceof Bar_Stage1_Skill1) {
+                ball.velocityVector.set(0f, BALL_VELOCITY.y);
             }
-            ballRef.setPosition(ballX, ballY);
+            ball.setPosition(ballX, ballY);
         }
     }
 
-    public void barCollision() {
-        Rectangle ballRect = ballRef.getHitBox();
+    public void barCollision(Ball ball) {
+        Rectangle ballRect = ball.getHitBox();
         Rectangle barRect = barRef.getHitBox();
         if (ballRect.overlaps(barRect)) {
-            if (ballRef.velocityVector.y < 0) {
+            if (ball.velocityVector.y < 0) {
 
-                ballRef.setY(barRef.getY() + barRef.getHeight());
+                ball.setY(barRef.getY() + barRef.getHeight());
 
-                float speed = ballRef.velocityVector.len();
-                ballRef.velocityVector.set(speed * (float) Math.sin(bounceAngle(ballRect, barRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, barRect))));
+                float speed = ball.velocityVector.len();
+                ball.velocityVector.set(speed * (float) Math.sin(bounceAngle(ballRect, barRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, barRect))));
             }
         }
     }
 
-    public void boundaryCollision(float delta, int topBoundary) {
-        if (ballRef.getY() <= DOWN_BOUNDARY) {
-            barRef.takeDamage();
-            ballRef.resetLaunch();
+    public void boundaryCollision(Ball ball, float delta, int topBoundary) {
+        if (ball.getY() <= DOWN_BOUNDARY) {
+            if (ball instanceof Bar_Stage1_Skill1) {
+                ball.remove();
+                ((Bar_Stage1_Skill1) ball).startSkill1Cooldown();
+            } else {
+                barRef.takeDamage();
+                ball.resetLaunch();
+            }
         }
-        if (ballRef.getX() + ballRef.velocityVector.x * delta <= LEFT_BOUNDARY) {
-            ballRef.setPosition(LEFT_BOUNDARY, ballRef.getY());
-            ballRef.velocityVector.x =  -ballRef.velocityVector.x;
+        if (ball.getX() + ball.velocityVector.x * delta <= LEFT_BOUNDARY) {
+            ball.setPosition(LEFT_BOUNDARY, ball.getY());
+            ball.velocityVector.x =  -ball.velocityVector.x;
         }
-        if (ballRef.getX() + BALL_WIDTH + ballRef.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
-            ballRef.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ballRef.getY());
-            ballRef.velocityVector.x =  -ballRef.velocityVector.x;
+        if (ball.getX() + BALL_WIDTH + ball.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
+            ball.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ball.getY());
+            ball.velocityVector.x =  -ball.velocityVector.x;
         }
-        if (ballRef.getY() + BALL_HEIGHT + ballRef.velocityVector.y * delta >= topBoundary) {
-            ballRef.setPosition(ballRef.getX(),  topBoundary - BALL_HEIGHT);
-            ballRef.velocityVector.y =  -ballRef.velocityVector.y;
+        if (ball.getY() + BALL_HEIGHT + ball.velocityVector.y * delta >= topBoundary) {
+            ball.setPosition(ball.getX(),  topBoundary - BALL_HEIGHT);
+            ball.velocityVector.y =  -ball.velocityVector.y;
         }
     }
 
-    public void bossCollision() {
+    public void bossCollision(Ball ball) {
         Rectangle barRect = barRef.getHitBox();
-        Rectangle ballRect = ballRef.getHitBox();
+        Rectangle ballRect = ball.getHitBox();
         Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
             if (bossRef instanceof Boss1) {
-                int newDamage = ballRef.getDamage();
+                int newDamage = ball.getDamage();
                 bossRef.takeDamage(newDamage);
                 if (bossRef.isDead()) {
-                    ballRef.resetLaunch();
+                    ball.resetLaunch();
                 }
             }
 
@@ -118,22 +123,22 @@ public class GameLogic {
             if (overlapX < overlapY) {
                 if (ballCenterX < bossCenterX) {
                     normal.set(-1, 0);
-                    ballRef.setX(bossRect.x - ballRect.width);
+                    ball.setX(bossRect.x - ballRect.width);
                 } else {
                     normal.set(1, 0);
-                    ballRef.setX(bossRect.x + bossRect.width);
+                    ball.setX(bossRect.x + bossRect.width);
                 }
             } else {
                 if (ballCenterY < bossCenterY) {
                     normal.set(0, -1);
-                    ballRef.setY(bossRect.y - ballRect.height);
+                    ball.setY(bossRect.y - ballRect.height);
                 } else {
                     normal.set(0, 1);
-                    ballRef.setY(bossRect.y + bossRect.height);
+                    ball.setY(bossRect.y + bossRect.height);
                 }
             }
 
-            ballRef.velocityVector = reflect(ballRef.velocityVector, normal);
+            ball.velocityVector = reflect(ball.velocityVector, normal);
         }
 
         if (barRect.overlaps(bossRect)) {
@@ -155,6 +160,21 @@ public class GameLogic {
                     barRef.takeDamage();
                 }
             }
+        }
+    }
+
+    public void barLaserCollision(Bar_Stage1_Skill2 barStage1Skill2)  {
+        BarLaserEffect barLaserEffect = barStage1Skill2.getBarLaserEffect();
+
+        if (barLaserEffect == null) {
+            return;
+        }
+
+        Rectangle barLaserRect = barLaserEffect.getHitbox();
+        Rectangle bossRect = bossRef.getHitBox();
+
+        if (barLaserRect.overlaps(bossRect)) {
+            bossRef.takeDamage(BAR_STAGE1_SKILL2_DAMAGE);
         }
     }
 }

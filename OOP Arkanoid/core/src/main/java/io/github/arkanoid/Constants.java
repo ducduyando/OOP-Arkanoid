@@ -1,7 +1,6 @@
 package io.github.arkanoid;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Constants {
     /** Screen. */
@@ -31,10 +30,12 @@ public class Constants {
     public static final Vector2 BAR_VELOCITY = new Vector2(900f, 900f);
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
 
+    public static final int BAR_STAGE1_SKILL2_DAMAGE = 10;
+
     public static final int POWER_UP_WIDTH = 1920;
     public static final int POWER_UP_HEIGHT = 1080;
 
-    public static final float SKILL2_COOLDOWN = 20f;
+    public static final float SKILL_COOLDOWN = 20f;
 
     /** Ball. */
     public static final int BALL_WIDTH = 64;

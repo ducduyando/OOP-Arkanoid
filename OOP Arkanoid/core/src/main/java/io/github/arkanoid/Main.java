@@ -18,6 +18,8 @@ public class Main extends ApplicationAdapter {
         TUTORIAL,
         LOADING_TO_STAGE_1,
         STAGE_1,
+        LOADING_TO_STAGE_2,
+        STAGE_2,
         POWER_UP_MENU
     }
 
@@ -30,6 +32,7 @@ public class Main extends ApplicationAdapter {
     private Texture barImage;
     private Texture ballImage;
     private Texture bossHealthBarImage;
+    private Texture barStage1Skill1Image;
     private final Texture[] stageTextures = new Texture[2]; // Tạo mảng lưu stage textures.
     private final Texture[] chooseSkill = new Texture[stageTextures.length - 1];
 
@@ -50,6 +53,7 @@ public class Main extends ApplicationAdapter {
     private Tutorial tutorial;
 
     /** Skills and stages. */
+    private Bar_Stage1_Skill1 barStage1Skill1;
     private Bar_Stage1_Skill2 barStage1Skill2;
     private int stageNumber = 0;
 
@@ -74,6 +78,7 @@ public class Main extends ApplicationAdapter {
         barImage = new Texture("Bar.png");
         ballImage = new Texture("ball/normal.png");
         bossHealthBarImage = new Texture("HealthBar.png");
+        barStage1Skill1Image = new Texture("ball/" + "upgrade" + ".png");
 
         stageTextures[0] = new Texture("stages/" + "stage" + 0 + ".png");
         for (int i = 1; i < stageTextures.length; i++) {
@@ -92,8 +97,7 @@ public class Main extends ApplicationAdapter {
         boss1 = new Boss1(1,bossInitialX, bossInitialY, 100);
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
 
-        barStage1Skill2 = new Bar_Stage1_Skill2(bar);
-        gameLogic = new GameLogic(ball, bar, boss1);
+        gameLogic = new GameLogic(bar, boss1);
 
         // --UI initialization--
         pauseMenu = new PauseMenu();
@@ -182,10 +186,10 @@ public class Main extends ApplicationAdapter {
                     break;
 
                 case STAGE_1:
-                    gameLogic.launch();
-                    gameLogic.barCollision();
-                    gameLogic.boundaryCollision(delta, UP_BOUNDARY);
-                    gameLogic.bossCollision();
+                    gameLogic.launch(ball);
+                    gameLogic.barCollision(ball);
+                    gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
+                    gameLogic.bossCollision(ball);
                     gameLogic.skillCollision(stage);
 
                     if (boss1.isDead() && boss1.isReadyToDeath) {
@@ -195,10 +199,48 @@ public class Main extends ApplicationAdapter {
                     }
                     break;
 
+                case LOADING_TO_STAGE_2:
+                    break;
+
+                case STAGE_2:
+                    if (barStage1Skill1 != null) {
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
+                            && !barStage1Skill1.isLaunched()
+                            && barStage1Skill1.isSkill1Ready()) {
+
+                            gameLogic.launch(barStage1Skill1);
+                            gameLogic.barCollision(barStage1Skill1);
+                            gameLogic.boundaryCollision(barStage1Skill1, delta, UP_BOUNDARY);
+                            gameLogic.bossCollision(barStage1Skill1);
+
+                        }
+                    }
+                    else if (barStage1Skill2 != null) {
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
+                            && barStage1Skill2.isSkill2Ready()) {
+                            barStage1Skill2.enter(bar);
+                        }
+
+                        if (barStage1Skill2.isFiring()) {
+
+                        }
+
+                        if (!barStage1Skill2.isDone()) {
+                            barStage1Skill2.update(bar, delta);
+                        }
+                    }
+                    gameLogic.launch(ball);
+                    gameLogic.barCollision(ball);
+                    gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
+                    gameLogic.bossCollision(ball);
+                    gameLogic.skillCollision(stage);
+                    break;
+
                 case POWER_UP_MENU:
                     if (powerUpMenu.isOptionChosen()) {
                         if (powerUpMenu.getOption() == PowerUpMenu.Option.SKILL1) {
-                            ball.setDamage(15);
+                            barStage1Skill1 = new Bar_Stage1_Skill1(barStage1Skill1Image,
+                                bar.getX(), bar.getY());
                         } else {
                             barStage1Skill2 = new Bar_Stage1_Skill2(bar);
                         }
@@ -231,7 +273,6 @@ public class Main extends ApplicationAdapter {
 
         // --- Cập nhật và vẽ toàn bộ Stage ---
         stage.act(delta);
-
         stage.draw();
     }
 
@@ -249,6 +290,7 @@ public class Main extends ApplicationAdapter {
         if (barImage != null) barImage.dispose();
         if (ballImage != null) ballImage.dispose();
         if (bossHealthBarImage != null) bossHealthBarImage.dispose();
+        if (barStage1Skill1Image != null) barStage1Skill1Image.dispose();
 
         if (menuBackground != null) menuBackground.dispose();
         if (parallaxBackground != null) parallaxBackground.dispose();

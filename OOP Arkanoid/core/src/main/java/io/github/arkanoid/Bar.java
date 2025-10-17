@@ -5,15 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
 import static io.github.arkanoid.Constants.*;
 
 public class Bar extends Actor {
-
-    Texture barLaserEffect;
 
     TextureRegion textureRegion;
     Rectangle hitBox;
@@ -23,21 +20,13 @@ public class Bar extends Actor {
     private float blinkTimer = 0f;
     private boolean isVisible = true;
 
-    private float skill2CooldownTimer = 0f;
-    private boolean isSkill2Ready = true;
-
     Bar(Texture texture, float x, float y) {
-        barLaserEffect = new Texture("boss1/" + "skill2.png");
         this.textureRegion = new TextureRegion(texture, 0, 0, BAR_WIDTH, BAR_HEIGHT);
         this.hitBox = new Rectangle(x, y, BAR_WIDTH, BAR_HEIGHT);
         setPosition(x, y);
         setSize(BAR_WIDTH, BAR_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
 
-    }
-
-    public Texture getBarLaserEffect() {
-        return barLaserEffect;
     }
 
     public boolean isInvincible() {
@@ -77,19 +66,6 @@ public class Bar extends Actor {
         }
     }
 
-    public boolean isSkill2Ready() {
-        return isSkill2Ready;
-    }
-
-    public float getSkill2CooldownTime() {
-        return skill2CooldownTimer;
-    }
-
-    public void startSkill2Cooldown() {
-        isSkill2Ready = false;
-        skill2CooldownTimer = SKILL2_COOLDOWN;
-    }
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isVisible) {
@@ -125,14 +101,6 @@ public class Bar extends Actor {
                 stopTimer = 0f;
                 blinkTimer = 0f;
                 isVisible = true;
-            }
-        }
-
-        if (!isSkill2Ready) {
-            skill2CooldownTimer -= delta;
-            if (skill2CooldownTimer <= 0) {
-                isSkill2Ready = true;
-                skill2CooldownTimer = 0f;
             }
         }
 

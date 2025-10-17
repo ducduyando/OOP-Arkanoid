@@ -12,7 +12,7 @@ import static io.github.arkanoid.Constants.*;
 
 
 public class PowerUpMenu extends Actor {
-    private final Texture powerUpBackground = new Texture("background/" + "layer0.png");
+    private final Texture powerUpBackground = new Texture("background/" + "layer0" + ".png");
     private final Texture powerUpButton;
 
     private TextureRegion currentFrame;
