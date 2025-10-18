@@ -65,7 +65,15 @@ public class Bar extends Actor {
             stopTimer = 0f;
         }
     }
+    public int getHealth() {
+        return 3 - state; // Health = 3, 2, 1, 0 tương ứng với state = 0, 1, 2, 3
+    }
 
+    public void setHealth(int health) {
+        if (health >= 0 && health <= 3) {
+            setState(3 - health); // Chuyển đổi health thành state
+        }
+    }
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isVisible) {

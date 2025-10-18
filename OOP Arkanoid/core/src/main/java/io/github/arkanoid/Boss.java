@@ -108,6 +108,17 @@ public class Boss extends Actor {
         return hp;
     }
 
+    public void setHp(int newHp) {
+        if (newHp >= 0 && newHp <= maxHp) {
+            this.hp = newHp;
+            if (hp <= 0) {
+                state = State.DYING;
+            } else if (state == State.DYING) {
+                state = State.NORMAL;
+            }
+        }
+    }
+
     public int getMaxHp() {
         return maxHp;
     }

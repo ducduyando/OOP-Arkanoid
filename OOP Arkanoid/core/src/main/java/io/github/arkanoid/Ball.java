@@ -62,7 +62,9 @@ public class Ball extends Actor {
             hitBox.setPosition(getX(), getY());
         }
     }
-
+    public void resetVelocity() {
+        velocityVector.set(0, 0);// reset lai vi tri qua bong
+    }
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());

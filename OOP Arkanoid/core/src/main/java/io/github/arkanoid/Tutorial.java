@@ -30,10 +30,16 @@ public class Tutorial extends Stage {
         private TextureRegion textureRegion;
         private Rectangle hitBox;
         private boolean destroyed = false;
+        private int textureIndex;
 
         public BrickActor(Texture texture, float x, float y) {
+            this(texture, x, y, 0);
+        }
+
+        public BrickActor(Texture texture, float x, float y, int textureIndex) {
             this.textureRegion = new TextureRegion(texture);
             this.hitBox = new Rectangle(x, y, BRICK_WIDTH, BRICK_HEIGHT);
+            this.textureIndex = textureIndex;
             setPosition(x, y);
             setSize(BRICK_WIDTH, BRICK_HEIGHT);
         }
@@ -49,6 +55,10 @@ public class Tutorial extends Stage {
         public void destroy() {
             destroyed = true;
             remove();
+        }
+
+        public int getTextureIndex() {
+            return textureIndex;
         }
 
         @Override
@@ -74,7 +84,7 @@ public class Tutorial extends Stage {
         }
     }
 
-    public Tutorial() {
+    public Tutorial(Bar bar, Ball ball) {
         super(new ScreenViewport());
         addActor(new BackgroundActor());
 
@@ -86,8 +96,11 @@ public class Tutorial extends Stage {
         barTexture = new Texture("Bar.png");
         ballTexture = new Texture("ball/" + "normal" + ".png");
 
-        bar = new Bar(barTexture, (SCREEN_WIDTH - BAR_WIDTH) / 2f, 0);
-        ball = new Ball(ballTexture, (SCREEN_WIDTH - BALL_WIDTH) / 2f, BAR_HEIGHT);
+        this.bar = bar;
+        this.ball = ball;
+
+        bar.setPosition((SCREEN_WIDTH - BAR_WIDTH) / 2f, 0);
+        ball.setPosition((SCREEN_WIDTH - BALL_WIDTH) / 2f, BAR_HEIGHT);
 
         addActor(bar);
         addActor(ball);
@@ -101,9 +114,9 @@ public class Tutorial extends Stage {
             for (int j = 0; j < BRICK_COLS; j++) {
                 float x = LEFT_BOUNDARY + j * BRICK_WIDTH;
                 float y = SCREEN_HEIGHT - BRICK_HEIGHT - i * BRICK_HEIGHT;
-
-                Texture brickTexture = brickTextures[new Random().nextInt(brickTextures.length)];
-                BrickActor brick = new BrickActor(brickTexture, x, y);
+                int textureIndex = new Random().nextInt(brickTextures.length);
+                Texture brickTexture = brickTextures[textureIndex];
+                BrickActor brick = new BrickActor(brickTexture, x, y, textureIndex);
 
                 bricks.add(brick);
                 addActor(brick);
@@ -125,6 +138,8 @@ public class Tutorial extends Stage {
             }
         }
     }
+
+
 
     private void checkBrickCollisions() {
         Rectangle ballRect = ball.getHitBox();
@@ -177,6 +192,69 @@ public class Tutorial extends Stage {
     public Ball getBall() {
         return ball;
     }
+
+    public void resetBricksWithPositions(java.util.List<Save.BrickPosition> brickPositions) {
+        // Xóa tất cả gạch hiện tại
+        for (BrickActor brick : bricks) brick.remove();
+        bricks.clear();
+
+        if (brickPositions == null || brickPositions.isEmpty()) {
+            finished = true;
+            return;
+        }
+
+        finished = false;
+
+        // Tạo lại gạch theo vị trí đã lưu
+        for (Save.BrickPosition pos : brickPositions) {
+            int textureIndex = Math.max(0, Math.min(pos.textureIndex, brickTextures.length - 1));
+            Texture tex = brickTextures[textureIndex];
+            BrickActor brick = new BrickActor(tex, pos.x, pos.y, textureIndex);
+            bricks.add(brick);
+            addActor(brick);
+        }
+    }
+
+    public void resetBricks(int remainingBricks) {
+        // Xóa tất cả gạch hiện tại
+        for (BrickActor brick : bricks) brick.remove();
+        bricks.clear();
+
+        if (remainingBricks <= 0) {
+            finished = true;
+            return;
+        }
+
+        finished = false;
+
+        // Tạo lại số lượng gạch theo remainingBricks
+        int totalBricks = BRICK_ROWS * BRICK_COLS;
+        int bricksToCreate = Math.min(remainingBricks, totalBricks);
+        
+        for (int count = 0; count < bricksToCreate; count++) {
+            int i = count / BRICK_COLS;
+            int j = count % BRICK_COLS;
+            
+            float x = LEFT_BOUNDARY + j * BRICK_WIDTH;
+            float y = SCREEN_HEIGHT - BRICK_HEIGHT - i * BRICK_HEIGHT;
+            int textureIndex = new Random().nextInt(brickTextures.length);
+            Texture tex = brickTextures[textureIndex];
+            BrickActor brick = new BrickActor(tex, x, y, textureIndex);
+            bricks.add(brick);
+            addActor(brick);
+        }
+    }
+
+    public java.util.List<Save.BrickPosition> getBrickPositions() {
+        java.util.List<Save.BrickPosition> positions = new ArrayList<>();
+        for (BrickActor brick : bricks) {
+            if (!brick.isDestroyed()) {
+                positions.add(new Save.BrickPosition(brick.getX(), brick.getY(), brick.getTextureIndex()));
+            }
+        }
+        return positions;
+    }
+
 
     @Override
     public void dispose() {

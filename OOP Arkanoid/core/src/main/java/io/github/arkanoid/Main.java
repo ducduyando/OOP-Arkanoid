@@ -18,8 +18,6 @@ public class Main extends ApplicationAdapter {
         TUTORIAL,
         LOADING_TO_STAGE_1,
         STAGE_1,
-        LOADING_TO_STAGE_2,
-        STAGE_2,
         POWER_UP_MENU
     }
 
@@ -53,9 +51,12 @@ public class Main extends ApplicationAdapter {
     private Tutorial tutorial;
 
     /** Skills and stages. */
-    private Bar_Stage1_Skill1 barStage1Skill1;
-    private Bar_Stage1_Skill2 barStage1Skill2;
     private int stageNumber = 0;
+
+    /**Save. */
+    private int loadedBricksRemaining = -1;
+    private boolean isLoadedFromSave = false;
+    private boolean delayTutorialCheck = false;
 
     @Override
     public void create() {
@@ -125,8 +126,10 @@ public class Main extends ApplicationAdapter {
                 if (isPaused) {
                     pauseMenu.reset();
                     stage.addActor(pauseMenu);
+                    Gdx.input.setInputProcessor(stage);
                 } else {
                     pauseMenu.remove();
+                    Gdx.input.setInputProcessor(stage);
                 }
             }
         }
@@ -142,10 +145,35 @@ public class Main extends ApplicationAdapter {
                             gameState = GameState.LOADING_TO_TUTORIAL;
                             loadingStage = new LoadingStage(stageTextures[stageNumber]);
                             stage.addActor(loadingStage);
-                        } else if (button.getMode() == Button.Mode.QUIT) {
+                        }
+                        else if(button.getMode() == Button.Mode.LOAD){
+                            if (Save.hasSave()) {
+                                Save.SaveData data = Save.loadGame();
+                                stageNumber = data.stageNumber;
+                                boss1.setHp(data.bossHP);
+                                bar.setHealth(data.barHP);
+                                loadedBricksRemaining = data.bricksRemaining;
+                                isLoadedFromSave = true;
+                                button.remove();
+                                menuBackground.remove();
+                                if (stageNumber == 0 && data.bricksRemaining > 0) {
+                                    gameState = GameState.LOADING_TO_TUTORIAL;
+                                } else {
+                                    // Đảm bảo stage number ít nhất là 1 khi vào boss fight
+                                    if (stageNumber == 0) stageNumber = 1;
+                                    gameState = GameState.LOADING_TO_STAGE_1;
+                                }
+                                loadingStage = new LoadingStage(stageTextures[stageNumber]);
+                                stage.addActor(loadingStage);
+                            }
+
+                            else {
+                                Gdx.app.log("Save", "No save found!");
+                                button.resetChoice();
+                            }
+                        }
+                        else if (button.getMode() == Button.Mode.QUIT) {
                             Gdx.app.exit();
-                        } else {
-                            button.resetChoice();
                         }
                     }
                     break;
@@ -154,7 +182,19 @@ public class Main extends ApplicationAdapter {
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
                         loadingStage.remove();
                         loadingStage = null;
-                        tutorial = new Tutorial();
+                        tutorial = new Tutorial(bar, ball);
+                        // luu lai so gach duoc luu tu save
+                        if (isLoadedFromSave && loadedBricksRemaining >= 0) {
+                            Save.SaveData saveData = Save.loadGame();
+                            if (saveData != null && saveData.brickPositions != null && !saveData.brickPositions.isEmpty()) {
+                                tutorial.resetBricksWithPositions(saveData.brickPositions);
+                            } else {
+                                tutorial.resetBricks(loadedBricksRemaining);
+                            }
+                            delayTutorialCheck = true;
+                            loadedBricksRemaining = -1;
+                            isLoadedFromSave = false;
+                        }
                         gameState = GameState.TUTORIAL;
                     }
                     break;
@@ -163,6 +203,20 @@ public class Main extends ApplicationAdapter {
                     if (tutorial != null) {
                         tutorial.act(delta);
                         tutorial.draw();
+
+                        // Nếu được load từ save và tutorial đã hoàn thành, không tự động chuyển stage
+                        if (delayTutorialCheck) {
+                            delayTutorialCheck = false;
+                            if (tutorial.isFinished()) {
+                                // Nếu tutorial đã hoàn thành từ save, chuyển sang stage 1
+                                stageNumber++;
+                                gameState = GameState.LOADING_TO_STAGE_1;
+                                loadingStage = new LoadingStage(stageTextures[stageNumber]);
+                                stage.addActor(loadingStage);
+                            }
+                            break;
+                        }
+
                         if (tutorial.isFinished()) {
                             stageNumber++;
                             gameState = GameState.LOADING_TO_STAGE_1;
@@ -174,6 +228,13 @@ public class Main extends ApplicationAdapter {
 
                 case LOADING_TO_STAGE_1:
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
+                        if (!isLoadedFromSave) {
+                            bar.setHealth(3);
+                        }
+                        isLoadedFromSave = false;
+                        bar.setPosition(0, 0);
+                        ball.setPosition(0, 0);
+                        ball.resetLaunch();
                         stage.addActor(parallaxBackground);
                         stage.addActor(ball);
                         stage.addActor(bar);
@@ -199,50 +260,15 @@ public class Main extends ApplicationAdapter {
                     }
                     break;
 
-                case LOADING_TO_STAGE_2:
-                    break;
-
-                case STAGE_2:
-                    if (barStage1Skill1 != null) {
-                        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
-                            && !barStage1Skill1.isLaunched()
-                            && barStage1Skill1.isSkill1Ready()) {
-
-                            gameLogic.launch(barStage1Skill1);
-                            gameLogic.barCollision(barStage1Skill1);
-                            gameLogic.boundaryCollision(barStage1Skill1, delta, UP_BOUNDARY);
-                            gameLogic.bossCollision(barStage1Skill1);
-
-                        }
-                    }
-                    else if (barStage1Skill2 != null) {
-                        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
-                            && barStage1Skill2.isSkill2Ready()) {
-                            barStage1Skill2.enter(bar);
-                        }
-
-                        if (barStage1Skill2.isFiring()) {
-
-                        }
-
-                        if (!barStage1Skill2.isDone()) {
-                            barStage1Skill2.update(bar, delta);
-                        }
-                    }
-                    gameLogic.launch(ball);
-                    gameLogic.barCollision(ball);
-                    gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
-                    gameLogic.bossCollision(ball);
-                    gameLogic.skillCollision(stage);
-                    break;
 
                 case POWER_UP_MENU:
                     if (powerUpMenu.isOptionChosen()) {
                         if (powerUpMenu.getOption() == PowerUpMenu.Option.SKILL1) {
-                            barStage1Skill1 = new Bar_Stage1_Skill1(barStage1Skill1Image,
-                                bar.getX(), bar.getY());
+                            // Apply skill 1 effect
+                            Gdx.app.log("PowerUp", "Skill 1 selected");
                         } else {
-                            barStage1Skill2 = new Bar_Stage1_Skill2(bar);
+                            // Apply skill 2 effect
+                            Gdx.app.log("PowerUp", "Skill 2 selected");
                         }
 
                         // CẢI THIỆN LOGIC: Sau khi chọn skill, nên chuyển sang màn gạch tiếp theo
@@ -260,19 +286,44 @@ public class Main extends ApplicationAdapter {
                     }
                     break;
             }
+            stage.act(delta);
         } else {
+            if (pauseMenu != null) pauseMenu.act(delta);
+
             if (pauseMenu.isOptionChosen()) {
-                if (pauseMenu.getOption() == PauseMenu.Option.RESUME) {
-                    isPaused = false;
-                    pauseMenu.remove();
-                } else {
-                    Gdx.app.exit();
+                switch (pauseMenu.getOption()) {
+                    case SAVE :
+                        int bricksRemaining = 0;
+                        int saveStageNumber = stageNumber;
+
+                        if (tutorial != null) {
+                            java.util.List<Save.BrickPosition> brickPositions = tutorial.getBrickPositions();
+                            bricksRemaining = brickPositions.size();
+                            if (bricksRemaining == 0) {
+                                saveStageNumber = 1;
+                            }
+                            Save.saveGameWithBrickPositions(saveStageNumber, boss1.getHp(), bar.getHealth(), brickPositions);
+                        } else {
+                            Save.saveGame(saveStageNumber, boss1.getHp(), bar.getHealth(), bricksRemaining);
+                        }
+
+                        isPaused = false;
+                        pauseMenu.remove();
+                        break;
+
+                    case RESUME:
+                        isPaused = false;
+                        pauseMenu.remove();
+                        break;
+
+                    case QUIT:
+                        Gdx.app.exit();
+                        break;
                 }
             }
         }
 
-        // --- Cập nhật và vẽ toàn bộ Stage ---
-        stage.act(delta);
+
         stage.draw();
     }
 
@@ -284,28 +335,19 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
 
-
-        if (stage != null) stage.dispose();
-
-        if (barImage != null) barImage.dispose();
-        if (ballImage != null) ballImage.dispose();
-        if (bossHealthBarImage != null) bossHealthBarImage.dispose();
-        if (barStage1Skill1Image != null) barStage1Skill1Image.dispose();
-
-        if (menuBackground != null) menuBackground.dispose();
-        if (parallaxBackground != null) parallaxBackground.dispose();
-
-        if (button != null) button.dispose();
-        if (pauseMenu != null) pauseMenu.dispose();
-        if (powerUpMenu != null) powerUpMenu.dispose();
-
-        // SỬA: Thêm dispose cho brickStage nếu nó chưa được dispose
-        if (tutorial != null) tutorial.dispose();
-        if (loadingStage != null) loadingStage.dispose();
-
-        if (boss1 != null) boss1.dispose();
-
-        // SỬA: Duyệt qua mảng để dispose từng texture, tránh memory leak
+ stage.dispose();
+ barImage.dispose();
+ ballImage.dispose();
+ bossHealthBarImage.dispose();
+ barStage1Skill1Image.dispose();
+ menuBackground.dispose();
+  parallaxBackground.dispose();
+  button.dispose();
+ pauseMenu.dispose();
+ powerUpMenu.dispose();
+ tutorial.dispose();
+ loadingStage.dispose();
+ boss1.dispose();
         if (stageTextures != null) {
             for (Texture texture : stageTextures) {
                 if (texture != null) texture.dispose();
