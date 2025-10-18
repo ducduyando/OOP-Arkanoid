@@ -2,11 +2,11 @@ package io.github.arkanoid;
 
 import com.badlogic.gdx.graphics.Texture;
 
+import static io.github.arkanoid.Constants.BAR_STAGE1_DAMAGE;
 import static io.github.arkanoid.Constants.SKILL_COOLDOWN;
 
 public class Bar_Stage1_Skill1 extends Ball {
 
-    private final int extraDamage = 5;
     private boolean isSkill1Ready = true;
 
     private float skill1CooldownTimer = SKILL_COOLDOWN;
@@ -22,7 +22,7 @@ public class Bar_Stage1_Skill1 extends Ball {
 
     Bar_Stage1_Skill1(Texture texture, float x, float y) {
         super(texture, x, y);
-        setDamage(getDamage() + extraDamage);
+        setDamage(BAR_STAGE1_DAMAGE);
     }
 
     @Override

@@ -174,7 +174,7 @@ public class GameLogic {
         Rectangle bossRect = bossRef.getHitBox();
 
         if (barLaserRect.overlaps(bossRect)) {
-            bossRef.takeDamage(BAR_STAGE1_SKILL2_DAMAGE);
+            bossRef.takeDamage(BAR_STAGE1_DAMAGE);
         }
     }
 }

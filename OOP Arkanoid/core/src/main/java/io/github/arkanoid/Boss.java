@@ -16,6 +16,7 @@ public class Boss extends Actor {
         NORMAL,
         TAKING_DAMAGE,
         DYING,
+        TRANSITION
     }
 
     public final Texture skill1Texture;
@@ -37,7 +38,11 @@ public class Boss extends Actor {
 
     protected final Animation<TextureRegion> deathAnimation;
     protected float deathTimer = 0f;
-    protected boolean isReadyToDeath = false;
+
+    protected final Animation<TextureRegion> transitionAnimation;
+    protected float transitionTimer = 0f;
+
+    protected boolean isTransitionDone = false;
 
 
     Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
@@ -45,6 +50,7 @@ public class Boss extends Actor {
         Texture normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
         Texture takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");
         Texture deathSprite = new Texture("boss" + number + "/" + "death" + ".png");
+        Texture transitionSprite = new Texture("powerUp/" + "transition" + ".png");
         this.skill1Texture = new Texture("boss" + number + "/" + "skill1" + ".png");
         this.skill2Texture = new Texture("boss" + number + "/" + "skill2" + ".png");
 
@@ -74,6 +80,14 @@ public class Boss extends Actor {
         }
 
         this.deathAnimation = new Animation<TextureRegion>(FRAME_DURATION, deathFrames);
+
+        int transitionFrameCount = transitionSprite.getWidth() / TRANSITION_WIDTH;
+        TextureRegion[] transitionFrames = new TextureRegion[transitionFrameCount];
+        for (int i = 0; i < transitionFrameCount; i++) {
+            transitionFrames[i] = new TextureRegion(transitionSprite ,0, TRANSITION_WIDTH * i, TRANSITION_WIDTH, TRANSITION_HEIGHT);
+        }
+
+        this.transitionAnimation = new Animation<TextureRegion>(FRAME_DURATION * 1.5f, transitionFrames);
 
         setPosition(x, y);
         setSize(bossWidth, bossHeight);
@@ -141,13 +155,12 @@ public class Boss extends Actor {
             currentFrame = deathAnimation.getKeyFrame(deathTimer, false);
 
             if (deathAnimation.isAnimationFinished(deathTimer)) {
-                isReadyToDeath = true;
-                this.remove();
+                state = State.TRANSITION;
             }
             return;
         }
 
-        if (isDead()) {
+        if (isDead() && state != State.TRANSITION && state != State.DYING) {
             state = State.DYING;
             hitBox.setSize(0,0);
 
@@ -155,6 +168,17 @@ public class Boss extends Actor {
                 currentSkill.cleanup();
             }
 
+            return;
+        }
+
+        if (state == State.TRANSITION) {
+            transitionTimer += delta;
+            currentFrame = transitionAnimation.getKeyFrame(transitionTimer, false);
+
+            if (transitionAnimation.isAnimationFinished(transitionTimer)) {
+                isTransitionDone = true;
+                this.remove();
+            }
             return;
         }
 
@@ -185,6 +209,21 @@ public class Boss extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        float drawX;
+        float drawY;
+        float drawWidth;
+        float drawHeight;
+        if (state == State.TRANSITION) {
+            drawX = 0;
+            drawY = 0;
+            drawWidth = SCREEN_WIDTH;
+            drawHeight = SCREEN_HEIGHT;
+        } else {
+            drawX = getX();
+            drawY = getY();
+            drawWidth = getWidth();
+            drawHeight = getHeight();
+        }
+        batch.draw(currentFrame, drawX, drawY, getOriginX(), getOriginY(), drawWidth, drawHeight, getScaleX(), getScaleY(), getRotation());
     }
 }

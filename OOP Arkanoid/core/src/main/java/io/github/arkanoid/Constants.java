@@ -30,12 +30,13 @@ public class Constants {
     public static final Vector2 BAR_VELOCITY = new Vector2(900f, 900f);
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
 
-    public static final int BAR_STAGE1_SKILL2_DAMAGE = 10;
+    public static final int BAR_STAGE1_DAMAGE = 15;
 
     public static final int POWER_UP_WIDTH = 1920;
     public static final int POWER_UP_HEIGHT = 1080;
 
     public static final float SKILL_COOLDOWN = 20f;
+
 
     /** Ball. */
     public static final int BALL_WIDTH = 64;
@@ -63,6 +64,8 @@ public class Constants {
     public static final int BRICK_COLS = 10;
     public static final int BRICK_WIDTH = 192;
     public static final int BRICK_HEIGHT = 96;
+
+    /** Transition. */
+    public static final int TRANSITION_WIDTH = 1920;
+    public static final int TRANSITION_HEIGHT = 1080;
 }
-
-
