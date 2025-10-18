@@ -17,20 +17,48 @@ public class Save {
     private static final String SAVE_FILE = "game_save";
     private static final Preferences pref = Gdx.app.getPreferences(SAVE_FILE);
 
-    public static void saveGame(int stageNumber, int bossHP, int barHP, int bricksRemaining) {
+    public static void saveGame(int stageNumber, int bossHP, int barHP, int bricksRemaining,
+                                float barX, float barY, float ballX, float ballY,
+                                float ballVelX, float ballVelY, boolean ballLaunched,
+                                float bossX, float bossY) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
         pref.putInteger("barHP", barHP);
         pref.putInteger("bricksRemaining", bricksRemaining);
+
+        pref.putFloat("barX", barX);
+        pref.putFloat("barY", barY);
+        pref.putFloat("ballX", ballX);
+        pref.putFloat("ballY", ballY);
+        pref.putFloat("ballVelX", ballVelX);
+        pref.putFloat("ballVelY", ballVelY);
+        pref.putBoolean("ballLaunched", ballLaunched);
+        pref.putFloat("bossX", bossX);
+        pref.putFloat("bossY", bossY);
+
         pref.flush();
         Gdx.app.log("SAVE", "Saved bricks remaining = " + bricksRemaining);
     }
 
-    public static void saveGameWithBrickPositions(int stageNumber, int bossHP, int barHP, List<BrickPosition> brickPositions) {
+    public static void saveGameWithBrickPositions(int stageNumber, int bossHP, int barHP, List<BrickPosition> brickPositions,
+                                                  float barX, float barY, float ballX, float ballY,
+                                                  float ballVelX, float ballVelY, boolean ballLaunched,
+                                                  float bossX, float bossY) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
         pref.putInteger("barHP", barHP);
         pref.putInteger("bricksRemaining", brickPositions.size());
+
+        // ADDED: Save positions and ball state
+        pref.putFloat("barX", barX);
+        pref.putFloat("barY", barY);
+        pref.putFloat("ballX", ballX);
+        pref.putFloat("ballY", ballY);
+        pref.putFloat("ballVelX", ballVelX);
+        pref.putFloat("ballVelY", ballVelY);
+        pref.putBoolean("ballLaunched", ballLaunched);
+        pref.putFloat("bossX", bossX);
+        pref.putFloat("bossY", bossY);
 
         // Lưu vị trí từng viên gạch
         for (int i = 0; i < brickPositions.size(); i++) {
@@ -59,6 +87,18 @@ public class Save {
         data.barHP = pref.getInteger("barHP", 3);
         data.bricksRemaining = pref.getInteger("bricksRemaining", 0);
 
+        data.barX = pref.getFloat("barX");
+        data.barY = pref.getFloat("barY");
+        data.ballX = pref.getFloat("ballX");
+        data.ballY = pref.getFloat("ballY");
+        data.ballVelX = pref.getFloat("ballVelX");
+        data.ballVelY = pref.getFloat("ballVelY");
+        data.ballLaunched = pref.getBoolean("ballLaunched", false);
+
+        data.bossX = pref.getFloat("bossX", (SCREEN_WIDTH - BOSS1_WIDTH) / 2f);
+        data.bossY = pref.getFloat("bossY", SCREEN_HEIGHT * 0.6f);
+
+
         // Load vị trí gạch nếu có
         data.brickPositions = new ArrayList<>();
         for (int i = 0; i < data.bricksRemaining; i++) {
@@ -85,6 +125,12 @@ public class Save {
         public int barHP;
         public int bricksRemaining;
         public List<BrickPosition> brickPositions;
+
+        public float barX, barY;
+        public float ballX, ballY;
+        public float ballVelX, ballVelY;
+        public boolean ballLaunched;
+        public float bossX, bossY;
     }
 
     public static class BrickPosition {

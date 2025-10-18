@@ -151,7 +151,13 @@ public class Main extends ApplicationAdapter {
                                 Save.SaveData data = Save.loadGame();
                                 stageNumber = data.stageNumber;
                                 boss1.setHp(data.bossHP);
+                                boss1.setPosition(data.bossX, data.bossY);
+
                                 bar.setHealth(data.barHP);
+                                bar.setPosition(data.barX, data.barY);
+                                ball.setPosition(data.ballX, data.ballY);
+                                ball.setVelocity(data.ballVelX, data.ballVelY);
+                                ball.setLaunched(data.ballLaunched);
                                 loadedBricksRemaining = data.bricksRemaining;
                                 isLoadedFromSave = true;
                                 button.remove();
@@ -230,11 +236,11 @@ public class Main extends ApplicationAdapter {
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
                         if (!isLoadedFromSave) {
                             bar.setHealth(3);
+                            bar.setPosition(0, 0);
+                            ball.setPosition(0, 0);
+                            ball.resetLaunch();
                         }
                         isLoadedFromSave = false;
-                        bar.setPosition(0, 0);
-                        ball.setPosition(0, 0);
-                        ball.resetLaunch();
                         stage.addActor(parallaxBackground);
                         stage.addActor(ball);
                         stage.addActor(bar);
@@ -302,9 +308,15 @@ public class Main extends ApplicationAdapter {
                             if (bricksRemaining == 0) {
                                 saveStageNumber = 1;
                             }
-                            Save.saveGameWithBrickPositions(saveStageNumber, boss1.getHp(), bar.getHealth(), brickPositions);
+                            Save.saveGameWithBrickPositions(saveStageNumber, boss1.getHp(), bar.getHealth(), brickPositions,
+                                bar.getX(), bar.getY(), ball.getX(), ball.getY(),
+                                ball.velocityVector.x, ball.velocityVector.y, ball.isLaunched(),
+                                boss1.getX(), boss1.getY());
                         } else {
-                            Save.saveGame(saveStageNumber, boss1.getHp(), bar.getHealth(), bricksRemaining);
+                            Save.saveGame(saveStageNumber, boss1.getHp(), bar.getHealth(), bricksRemaining,
+                                bar.getX(), bar.getY(), ball.getX(), ball.getY(),
+                                ball.velocityVector.x, ball.velocityVector.y, ball.isLaunched(),
+                                boss1.getX(), boss1.getY());
                         }
 
                         isPaused = false;
