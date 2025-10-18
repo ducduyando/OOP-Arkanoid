@@ -44,7 +44,7 @@ public class PowerUpMenu extends Actor {
         TextureRegion[] transitionFrames = new TextureRegion[transitionFrameCount];
 
         for (int i = 0; i < transitionFrameCount; i++) {
-            transitionFrames[i] = new TextureRegion(transitionSprite ,0, TRANSITION_WIDTH * i, TRANSITION_WIDTH, TRANSITION_HEIGHT);
+            transitionFrames[i] = new TextureRegion(transitionSprite ,TRANSITION_WIDTH * i, 0, TRANSITION_WIDTH, TRANSITION_HEIGHT);
         }
 
         this.transitionAnimation = new Animation<TextureRegion>(FRAME_DURATION * 1.5f, transitionFrames);
