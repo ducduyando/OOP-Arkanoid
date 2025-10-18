@@ -12,10 +12,20 @@ import static io.github.arkanoid.Constants.*;
 
 
 public class PowerUpMenu extends Actor {
+
+    protected enum State {
+        TRANSITION,
+        POWERUPMENU
+    }
+
+    protected State state = State.TRANSITION;
+
     private final Texture powerUpBackground = new Texture("background/" + "layer0" + ".png");
+    private final Texture transitionSprite = new Texture("powerUp/" + "transition" + ".png");
     private final Texture powerUpButton;
 
     private TextureRegion currentFrame;
+
     private float stateTime = 0f;
 
     protected enum Option { SKILL1, SKILL2 }
@@ -24,9 +34,20 @@ public class PowerUpMenu extends Actor {
 
     private final Animation<TextureRegion> skill1Animation;
     private final Animation<TextureRegion> skill2Animation;
+    public final Animation<TextureRegion> transitionAnimation;
+
 
     public PowerUpMenu(Texture powerUpButton) {
         this.powerUpButton = powerUpButton;
+
+        int transitionFrameCount = transitionSprite.getWidth() / TRANSITION_WIDTH;
+        TextureRegion[] transitionFrames = new TextureRegion[transitionFrameCount];
+
+        for (int i = 0; i < transitionFrameCount; i++) {
+            transitionFrames[i] = new TextureRegion(transitionSprite ,0, TRANSITION_WIDTH * i, TRANSITION_WIDTH, TRANSITION_HEIGHT);
+        }
+
+        this.transitionAnimation = new Animation<TextureRegion>(FRAME_DURATION * 1.5f, transitionFrames);
 
         TextureRegion[] skill1Frames = new TextureRegion[2];
         TextureRegion[] skill2Frames = new TextureRegion[2];
@@ -69,41 +90,53 @@ public class PowerUpMenu extends Actor {
     public void act(float delta) {
         stateTime += delta;
 
-        if (option == Option.SKILL1) {
-            currentFrame = skill1Animation.getKeyFrame(stateTime, true);
-        } else if (option == Option.SKILL2) {
-            currentFrame = skill2Animation.getKeyFrame(stateTime, true);
-        }
+        if (state == State.POWERUPMENU) {
+            if (option == Option.SKILL1) {
+                currentFrame = skill1Animation.getKeyFrame(stateTime, true);
+            } else if (option == Option.SKILL2) {
+                currentFrame = skill2Animation.getKeyFrame(stateTime, true);
+            }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)
-            || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            isOptionChosen = true;
-        }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)
+                || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                isOptionChosen = true;
+            }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)
-            || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)
-            || Gdx.input.isKeyJustPressed(Input.Keys.W)
-            || Gdx.input.isKeyJustPressed(Input.Keys.S)
-            || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)
-            || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
-            || Gdx.input.isKeyJustPressed(Input.Keys.A)
-            || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            option = (option == PowerUpMenu.Option.SKILL1) ? PowerUpMenu.Option.SKILL2 : PowerUpMenu.Option.SKILL1;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)
+                || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)
+                || Gdx.input.isKeyJustPressed(Input.Keys.W)
+                || Gdx.input.isKeyJustPressed(Input.Keys.S)
+                || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)
+                || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
+                || Gdx.input.isKeyJustPressed(Input.Keys.A)
+                || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+                option = (option == PowerUpMenu.Option.SKILL1) ? PowerUpMenu.Option.SKILL2 : PowerUpMenu.Option.SKILL1;
+            }
+        }
+        else {
+            currentFrame = transitionAnimation.getKeyFrame(stateTime, false);
+            if (transitionAnimation.isAnimationFinished(stateTime)) {
+                state = State.POWERUPMENU;
+            }
         }
     }
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(powerUpBackground, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
+        if (state == State.TRANSITION) {
+            batch.draw(currentFrame, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        } else {
+            batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
+        }
     }
 
     public void reset() {
         isOptionChosen = false;
-        option = PowerUpMenu.Option.SKILL1;
+        option = Option.SKILL1;
+        state = State.TRANSITION;
         stateTime = 0f;
     }
 
     public void dispose() {
-        powerUpBackground.dispose();
+        transitionSprite.dispose();
         powerUpButton.dispose();
     }
 }

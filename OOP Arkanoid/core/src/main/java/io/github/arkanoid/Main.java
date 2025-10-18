@@ -263,7 +263,7 @@ public class Main extends ApplicationAdapter {
                     gameLogic.bossCollision(ball);
                     gameLogic.skillCollision(stage);
 
-                    if (boss1.isDead() && boss1.isTransitionDone) {
+                    if (boss1.isDead() && boss1.isReadyToDeath) {
                         gameState = GameState.POWER_UP_MENU;
                         powerUpMenu.reset();
                         stage.addActor(powerUpMenu);

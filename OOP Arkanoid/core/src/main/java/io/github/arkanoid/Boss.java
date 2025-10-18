@@ -15,8 +15,7 @@ public class Boss extends Actor {
     protected enum State {
         NORMAL,
         TAKING_DAMAGE,
-        DYING,
-        TRANSITION
+        DYING
     }
 
     public final Texture skill1Texture;
@@ -39,10 +38,7 @@ public class Boss extends Actor {
     protected final Animation<TextureRegion> deathAnimation;
     protected float deathTimer = 0f;
 
-    protected final Animation<TextureRegion> transitionAnimation;
-    protected float transitionTimer = 0f;
-
-    protected boolean isTransitionDone = false;
+    protected boolean isReadyToDeath = false;
 
 
     Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
@@ -50,7 +46,6 @@ public class Boss extends Actor {
         Texture normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
         Texture takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");
         Texture deathSprite = new Texture("boss" + number + "/" + "death" + ".png");
-        Texture transitionSprite = new Texture("powerUp/" + "transition" + ".png");
         this.skill1Texture = new Texture("boss" + number + "/" + "skill1" + ".png");
         this.skill2Texture = new Texture("boss" + number + "/" + "skill2" + ".png");
 
@@ -81,14 +76,6 @@ public class Boss extends Actor {
 
         this.deathAnimation = new Animation<TextureRegion>(FRAME_DURATION, deathFrames);
 
-        int transitionFrameCount = transitionSprite.getWidth() / TRANSITION_WIDTH;
-        TextureRegion[] transitionFrames = new TextureRegion[transitionFrameCount];
-        for (int i = 0; i < transitionFrameCount; i++) {
-            transitionFrames[i] = new TextureRegion(transitionSprite ,0, TRANSITION_WIDTH * i, TRANSITION_WIDTH, TRANSITION_HEIGHT);
-        }
-
-        this.transitionAnimation = new Animation<TextureRegion>(FRAME_DURATION * 1.5f, transitionFrames);
-
         setPosition(x, y);
         setSize(bossWidth, bossHeight);
         setOrigin(bossWidth / 2f, bossHeight / 2f);
@@ -113,12 +100,12 @@ public class Boss extends Actor {
                 this.hp = 0;
             }
 
-            this.state =  State.TAKING_DAMAGE;
+            this.state = State.TAKING_DAMAGE;
             this.takeDamageTimer = 0f;
         }
     }
 
-    public int  getHp() {
+    public int getHp() {
         return hp;
     }
 
@@ -155,30 +142,20 @@ public class Boss extends Actor {
             currentFrame = deathAnimation.getKeyFrame(deathTimer, false);
 
             if (deathAnimation.isAnimationFinished(deathTimer)) {
-                state = State.TRANSITION;
+                isReadyToDeath = true;
+                this.remove();
             }
             return;
         }
 
-        if (isDead() && state != State.TRANSITION && state != State.DYING) {
+        if (isDead()) {
             state = State.DYING;
-            hitBox.setSize(0,0);
+            hitBox.setSize(0, 0);
 
             if (currentSkill != null) {
                 currentSkill.cleanup();
             }
 
-            return;
-        }
-
-        if (state == State.TRANSITION) {
-            transitionTimer += delta;
-            currentFrame = transitionAnimation.getKeyFrame(transitionTimer, false);
-
-            if (transitionAnimation.isAnimationFinished(transitionTimer)) {
-                isTransitionDone = true;
-                this.remove();
-            }
             return;
         }
 
@@ -191,9 +168,7 @@ public class Boss extends Actor {
                 setOrigin(getWidth() / 2f, getHeight() / 2f);
                 state = State.NORMAL;
             }
-        }
-
-        else if (state == State.NORMAL) {
+        } else if (state == State.NORMAL) {
             stateTime += delta;
             currentFrame = animation.getKeyFrame(stateTime, true);
         }
@@ -209,21 +184,7 @@ public class Boss extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        float drawX;
-        float drawY;
-        float drawWidth;
-        float drawHeight;
-        if (state == State.TRANSITION) {
-            drawX = 0;
-            drawY = 0;
-            drawWidth = SCREEN_WIDTH;
-            drawHeight = SCREEN_HEIGHT;
-        } else {
-            drawX = getX();
-            drawY = getY();
-            drawWidth = getWidth();
-            drawHeight = getHeight();
-        }
-        batch.draw(currentFrame, drawX, drawY, getOriginX(), getOriginY(), drawWidth, drawHeight, getScaleX(), getScaleY(), getRotation());
+        batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }
+
