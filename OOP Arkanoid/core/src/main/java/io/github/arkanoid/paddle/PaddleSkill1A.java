@@ -6,7 +6,7 @@ import io.github.arkanoid.universal.Ball;
 
 import static io.github.arkanoid.universal.Constants.*;
 
-public class Paddle_Stage1_Skill1 extends Ball {
+public class PaddleSkill1A extends Ball {
 
     private boolean isSkill1Ready = true;
 
@@ -21,9 +21,9 @@ public class Paddle_Stage1_Skill1 extends Ball {
         return isSkill1Ready;
     }
 
-    Paddle_Stage1_Skill1(Texture texture, float x, float y) {
+    public PaddleSkill1A(Texture texture, float x, float y) {
         super(texture, x, y);
-        setDamage(BALL_STAGE1_DAMAGE);
+        setDamage(BALL_UPGRADED_DAMAGE);
     }
 
     @Override

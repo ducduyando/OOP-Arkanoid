@@ -114,8 +114,6 @@ public class Boss extends Actor {
             this.hp = newHp;
             if (hp <= 0) {
                 state = State.DYING;
-            } else if (state == State.DYING) {
-                state = State.NORMAL;
             }
         }
     }

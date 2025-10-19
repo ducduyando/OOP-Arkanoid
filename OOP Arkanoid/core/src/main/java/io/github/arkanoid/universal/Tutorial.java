@@ -16,8 +16,6 @@ import java.util.Random;
 import static io.github.arkanoid.universal.Constants.*;
 
 public class Tutorial extends Stage {
-    private final Texture paddleTexture;
-    private final Texture ballTexture;
 
     private final Paddle paddle;
     private final Ball ball;
@@ -89,9 +87,6 @@ public class Tutorial extends Stage {
         brickTextures[1] = new Texture("brick/" + "blue" + ".png");
         brickTextures[2] = new Texture("brick/" + "green" + ".png");
         brickTextures[3] = new Texture("brick/" + "orange" + ".png");
-
-        paddleTexture = new Texture("universal/" + "paddle" + ".png");
-        ballTexture = new Texture("ball/" + "normal" + ".png");
 
         this.paddle = paddle;
         this.ball = ball;
@@ -253,8 +248,6 @@ public class Tutorial extends Stage {
 
     @Override
     public void dispose() {
-        ballTexture.dispose();
-        paddleTexture.dispose();
         backgroundTexture.dispose();
         paddle.remove();
         ball.remove();

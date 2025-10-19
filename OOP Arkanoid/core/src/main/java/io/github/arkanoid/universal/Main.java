@@ -9,8 +9,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss1.Boss1;
 import io.github.arkanoid.paddle.Paddle;
-import io.github.arkanoid.paddle.Paddle_Stage1_Skill1;
-import io.github.arkanoid.paddle.Paddle_Stage1_Skill2;
+import io.github.arkanoid.paddle.PaddleSkill1A;
+import io.github.arkanoid.paddle.PaddleSkill1B;
 
 import static io.github.arkanoid.universal.Constants.*;
 
@@ -36,7 +36,7 @@ public class Main extends ApplicationAdapter {
     private Texture paddleImage;
     private Texture ballImage;
     private Texture bossHealthBarImage;
-    private Texture paddleStage1Skill1Image;
+    private Texture paddleSkill1AImage;
     private final Texture[] stageTextures = new Texture[2]; // Tạo mảng lưu stage textures.
     private final Texture[] chooseSkill = new Texture[stageTextures.length - 1];
 
@@ -57,8 +57,8 @@ public class Main extends ApplicationAdapter {
     private Tutorial tutorial;
 
     /** Skills and stages. */
-    private Paddle_Stage1_Skill1 paddleStage1Skill1;
-    private Paddle_Stage1_Skill2 paddleStage1Skill2;
+    private PaddleSkill1A paddleSkill1A;
+    private PaddleSkill1B paddleSkill1B;
     private int stageNumber = 0;
 
     /**Save. */
@@ -87,7 +87,7 @@ public class Main extends ApplicationAdapter {
         paddleImage = new Texture("universal/" + "paddle" + ".png");
         ballImage = new Texture("ball/" + "normal" + ".png");
         bossHealthBarImage = new Texture("universal/" + "health_bar" + ".png");
-        paddleStage1Skill1Image = new Texture("ball/" + "upgrade" + ".png");
+        paddleSkill1AImage = new Texture("ball/" + "upgrade" + ".png");
 
         stageTextures[0] = new Texture("stages/" + "stage" + 0 + ".png");
         for (int i = 1; i < stageTextures.length; i++) {
@@ -278,34 +278,34 @@ public class Main extends ApplicationAdapter {
                     break;
 
                 case STAGE_2:
-                    if (paddleStage1Skill1 != null) {
+                    if (paddleSkill1A != null) {
                         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
-                            && !paddleStage1Skill1.isLaunched()
-                            && paddleStage1Skill1.isSkill1Ready()) {
+                            && !paddleSkill1A.isLaunched()
+                            && paddleSkill1A.isSkill1Ready()) {
 
-                            gameLogic.launch(paddleStage1Skill1);
-                            gameLogic.paddleCollision(paddleStage1Skill1);
-                            gameLogic.boundaryCollision(paddleStage1Skill1, delta, UP_BOUNDARY);
-                            gameLogic.bossCollision(paddleStage1Skill1);
+                            gameLogic.launch(paddleSkill1A);
+                            gameLogic.paddleCollision(paddleSkill1A);
+                            gameLogic.boundaryCollision(paddleSkill1A, delta, UP_BOUNDARY);
+                            gameLogic.bossCollision(paddleSkill1A);
 
                         }
                     }
-                    else if (paddleStage1Skill2 != null) {
+                    else if (paddleSkill1B != null) {
                         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
-                            && paddleStage1Skill2.isSkill2Ready()) {
-                            paddleStage1Skill2.enter(paddle);
+                            && paddleSkill1B.isSkill2Ready()) {
+                            paddleSkill1B.enter(paddle);
                         }
 
-                        if (paddleStage1Skill2.isFiring()) {
-                            gameLogic.paddleLaserCollision(paddleStage1Skill2);
+                        if (paddleSkill1B.isFiring()) {
+                            gameLogic.paddleLaserCollision(paddleSkill1B);
                         }
 
-                        if (!paddleStage1Skill2.isDone()) {
-                            paddleStage1Skill2.update(paddle, delta);
+                        if (!paddleSkill1B.isDone()) {
+                            paddleSkill1B.update(paddle, delta);
                         }
 
-                        if (paddleStage1Skill2.isDone()) {
-                            paddleStage1Skill2.cleanup();
+                        if (paddleSkill1B.isDone()) {
+                            paddleSkill1B.cleanup();
                         }
                     }
                     gameLogic.launch(ball);
@@ -318,10 +318,12 @@ public class Main extends ApplicationAdapter {
                 case POWER_UP_MENU:
                     if (powerUpMenu.isOptionChosen()) {
                         if (powerUpMenu.getOption() == PowerUpMenu.Option.SKILL1) {
-                            // Apply skill 1 effect
+                            paddleSkill1A = new PaddleSkill1A(paddleSkill1AImage, 0, 0);
+                            paddleSkill1B = null;
                             Gdx.app.log("PowerUp", "Skill 1 selected");
                         } else {
-                            // Apply skill 2 effect
+                            paddleSkill1B = new PaddleSkill1B(paddle);
+                            paddleSkill1A = null;
                             Gdx.app.log("PowerUp", "Skill 2 selected");
                         }
 
@@ -396,7 +398,7 @@ public class Main extends ApplicationAdapter {
         paddleImage.dispose();
         ballImage.dispose();
         bossHealthBarImage.dispose();
-        paddleStage1Skill1Image.dispose();
+        paddleSkill1AImage.dispose();
         menuBackground.dispose();
         parallaxBackground.dispose();
         button.dispose();

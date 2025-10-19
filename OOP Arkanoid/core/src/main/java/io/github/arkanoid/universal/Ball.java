@@ -10,8 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import static io.github.arkanoid.universal.Constants.*;
 
 public class Ball extends Actor {
-
-
     private int damage = 10;
 
     TextureRegion textureRegion;

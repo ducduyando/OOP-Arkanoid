@@ -137,6 +137,5 @@ public class PowerUpMenu extends Actor {
 
     public void dispose() {
         transitionSprite.dispose();
-        powerUpButton.dispose();
     }
 }

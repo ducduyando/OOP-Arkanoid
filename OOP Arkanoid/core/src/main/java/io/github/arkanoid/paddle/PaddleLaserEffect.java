@@ -12,7 +12,7 @@ import static io.github.arkanoid.universal.Constants.*;
 public class PaddleLaserEffect extends Actor {
 
 
-    private Animation<TextureRegion> paddleLaserAnimation;
+    private final Animation<TextureRegion> paddleLaserAnimation;
     private float stateTime = 0f;
     private Rectangle hitbox;
 
@@ -24,7 +24,7 @@ public class PaddleLaserEffect extends Actor {
         for (int i = 0; i < maxFrames; i++) {
             frames[i] = new TextureRegion(texture, LASER_WIDTH * i, 0, LASER_WIDTH, LASER_HEIGHT);
         }
-        paddleLaserAnimation = new Animation<>(stateTime, frames);
+        paddleLaserAnimation = new Animation<>(FRAME_DURATION, frames);
         paddleLaserAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 
         float x = paddleX + PADDLE_WIDTH / 2f - LASER_WIDTH / 2f;

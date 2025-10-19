@@ -11,8 +11,8 @@ import io.github.arkanoid.boss1.Boss1;
 import io.github.arkanoid.boss1.LaserEffect;
 import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.paddle.PaddleLaserEffect;
-import io.github.arkanoid.paddle.Paddle_Stage1_Skill1;
-import io.github.arkanoid.paddle.Paddle_Stage1_Skill2;
+import io.github.arkanoid.paddle.PaddleSkill1A;
+import io.github.arkanoid.paddle.PaddleSkill1B;
 
 import static io.github.arkanoid.universal.Constants.*;
 
@@ -55,10 +55,10 @@ public class GameLogic {
             float ballX = paddleCenterX - BALL_WIDTH / 2f;
             float ballY = paddleRef.getY() + paddleRef.getHeight();
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !(ball instanceof Paddle_Stage1_Skill1)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !(ball instanceof PaddleSkill1A)) {
                 ball.setLaunched(true);
                 ball.velocityVector.set(0f, BALL_VELOCITY.y);
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && ball instanceof Paddle_Stage1_Skill1) {
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && ball instanceof PaddleSkill1A) {
                 ball.velocityVector.set(0f, BALL_VELOCITY.y);
             }
             ball.setPosition(ballX, ballY);
@@ -81,9 +81,9 @@ public class GameLogic {
 
     public void boundaryCollision(Ball ball, float delta, int topBoundary) {
         if (ball.getY() <= DOWN_BOUNDARY) {
-            if (ball instanceof Paddle_Stage1_Skill1) {
+            if (ball instanceof PaddleSkill1A) {
                 ball.remove();
-                ((Paddle_Stage1_Skill1) ball).startSkill1Cooldown();
+                ((PaddleSkill1A) ball).startSkill1Cooldown();
             } else {
                 paddleRef.takeDamage();
                 ball.resetLaunch();
@@ -170,7 +170,7 @@ public class GameLogic {
         }
     }
 
-    public void paddleLaserCollision(Paddle_Stage1_Skill2 paddleStage1Skill2)  {
+    public void paddleLaserCollision(PaddleSkill1B paddleStage1Skill2)  {
         PaddleLaserEffect paddleLaserEffect = paddleStage1Skill2.getPaddleLaserEffect();
 
         if (paddleLaserEffect == null) {
@@ -181,7 +181,7 @@ public class GameLogic {
         Rectangle bossRect = bossRef.getHitBox();
 
         if (paddleLaserRect.overlaps(bossRect)) {
-            bossRef.takeDamage(BALL_STAGE1_DAMAGE);
+            bossRef.takeDamage(BALL_UPGRADED_DAMAGE);
         }
     }
 }

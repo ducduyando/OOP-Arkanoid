@@ -30,7 +30,6 @@ public class Constants {
     public static final Vector2 PADDLE_VELOCITY = new Vector2(900f, 900f);
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
 
-    public static final int BALL_STAGE1_DAMAGE = 15;
 
     public static final int POWER_UP_WIDTH = 1920;
     public static final int POWER_UP_HEIGHT = 1080;
@@ -42,6 +41,8 @@ public class Constants {
     public static final int BALL_WIDTH = 64;
     public static final int BALL_HEIGHT = 64;
     public static final Vector2 BALL_VELOCITY = new Vector2(900f, 900f);
+    public static final int BALL_UPGRADED_DAMAGE = 15;
+
 
     /** Boss1. */
     public static final int BOSS1_WIDTH = 272;

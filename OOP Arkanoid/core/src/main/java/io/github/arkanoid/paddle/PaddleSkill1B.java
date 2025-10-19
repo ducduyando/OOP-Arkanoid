@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import static io.github.arkanoid.universal.Constants.*;
 
-public class Paddle_Stage1_Skill2 implements PaddleSkill {
+public class PaddleSkill1B implements PaddleSkill {
     private enum Phase {
         CHARGING,
         FIRING,
@@ -30,7 +30,7 @@ public class Paddle_Stage1_Skill2 implements PaddleSkill {
         return isSkill2Ready;
     }
 
-    Paddle_Stage1_Skill2(Paddle owner) {
+    public PaddleSkill1B(Paddle owner) {
         laserEffect = new Texture("boss1/" + "skill2" + ".png");
 
         this.owner = owner;
