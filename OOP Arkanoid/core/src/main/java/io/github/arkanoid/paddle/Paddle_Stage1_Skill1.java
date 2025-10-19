@@ -1,11 +1,12 @@
-package io.github.arkanoid;
+package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import io.github.arkanoid.universal.Ball;
 
-import static io.github.arkanoid.Constants.BAR_STAGE1_DAMAGE;
-import static io.github.arkanoid.Constants.SKILL_COOLDOWN;
+import static io.github.arkanoid.universal.Constants.*;
 
-public class Bar_Stage1_Skill1 extends Ball {
+public class Paddle_Stage1_Skill1 extends Ball {
 
     private boolean isSkill1Ready = true;
 
@@ -20,16 +21,17 @@ public class Bar_Stage1_Skill1 extends Ball {
         return isSkill1Ready;
     }
 
-    Bar_Stage1_Skill1(Texture texture, float x, float y) {
+    Paddle_Stage1_Skill1(Texture texture, float x, float y) {
         super(texture, x, y);
-        setDamage(BAR_STAGE1_DAMAGE);
+        setDamage(BALL_STAGE1_DAMAGE);
     }
 
     @Override
     public void act(float delta) {
         if (super.isLaunched()) {
-            moveBy(velocityVector.x * delta, velocityVector.y * delta);
-            hitBox.setPosition(getX(), getY());
+            Vector2 velocity = getVelocity();
+            moveBy(velocity.x * delta, velocity.y * delta);
+            setHitBox(getX(), getY());
         }
         if (!isSkill1Ready) {
             skill1CooldownTimer -= delta;

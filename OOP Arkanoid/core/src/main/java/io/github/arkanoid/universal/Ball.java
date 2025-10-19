@@ -1,8 +1,5 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 public class Ball extends Actor {
 
@@ -22,13 +19,17 @@ public class Ball extends Actor {
     Rectangle hitBox;
     private boolean isLaunched = false;
 
-    Ball(Texture texture, float x, float y) {
+    public Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
         this.velocityVector = new Vector2(BALL_VELOCITY);
         this.hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);
         setPosition(x, y);
         setSize(BALL_WIDTH, BALL_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
+    }
+
+    public Vector2 getVelocity() {
+        return velocityVector;
     }
 
     public int getDamage() {
@@ -41,6 +42,10 @@ public class Ball extends Actor {
 
     public Rectangle getHitBox() {
         return hitBox;
+    }
+
+    public void setHitBox(float x, float y) {
+        this.hitBox.setPosition(x, y);
     }
 
     public void resetLaunch() {

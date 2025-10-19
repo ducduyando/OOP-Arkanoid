@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 
 public class Boss extends Actor {
@@ -41,7 +41,7 @@ public class Boss extends Actor {
     protected boolean isReadyToDeath = false;
 
 
-    Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
+    public Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
 
         Texture normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
         Texture takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");

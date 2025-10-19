@@ -1,14 +1,15 @@
-package io.github.arkanoid;
+package io.github.arkanoid.boss1;
 
 import com.badlogic.gdx.graphics.Texture;
+import io.github.arkanoid.universal.Boss;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 public class Boss1 extends Boss {
 
 
 
-    Boss1(int number, float x, float y, int maxHp) {
+    public Boss1(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY, maxHp);
 
         BossCentering centering = new BossCentering(this);

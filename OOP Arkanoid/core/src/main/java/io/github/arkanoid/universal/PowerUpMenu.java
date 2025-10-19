@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 
 public class PowerUpMenu extends Actor {
@@ -47,7 +47,7 @@ public class PowerUpMenu extends Actor {
             transitionFrames[i] = new TextureRegion(transitionSprite ,TRANSITION_WIDTH * i, 0, TRANSITION_WIDTH, TRANSITION_HEIGHT);
         }
 
-        this.transitionAnimation = new Animation<TextureRegion>(FRAME_DURATION * 1.5f, transitionFrames);
+        this.transitionAnimation = new Animation<TextureRegion>(FRAME_DURATION * 3f, transitionFrames);
 
         TextureRegion[] skill1Frames = new TextureRegion[2];
         TextureRegion[] skill2Frames = new TextureRegion[2];

@@ -1,33 +1,27 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 public class Save {
     private static final String SAVE_FILE = "game_save";
     private static final Preferences pref = Gdx.app.getPreferences(SAVE_FILE);
 
-    public static void saveGame(int stageNumber, int bossHP, int barHP, int bricksRemaining,
-                                float barX, float barY, float ballX, float ballY,
+    public static void saveGame(int stageNumber, int bossHP, int paddleHP, int bricksRemaining,
+                                float paddleX, float paddleY, float ballX, float ballY,
                                 float ballVelX, float ballVelY, boolean ballLaunched,
                                 float bossX, float bossY) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
-        pref.putInteger("barHP", barHP);
+        pref.putInteger("paddleHP", paddleHP);
         pref.putInteger("bricksRemaining", bricksRemaining);
 
-        pref.putFloat("barX", barX);
-        pref.putFloat("barY", barY);
+        pref.putFloat("paddleX", paddleX);
+        pref.putFloat("paddleY", paddleY);
         pref.putFloat("ballX", ballX);
         pref.putFloat("ballY", ballY);
         pref.putFloat("ballVelX", ballVelX);
@@ -40,18 +34,18 @@ public class Save {
         Gdx.app.log("SAVE", "Saved bricks remaining = " + bricksRemaining);
     }
 
-    public static void saveGameWithBrickPositions(int stageNumber, int bossHP, int barHP, List<BrickPosition> brickPositions,
-                                                  float barX, float barY, float ballX, float ballY,
+    public static void saveGameWithBrickPositions(int stageNumber, int bossHP, int paddleHP, List<BrickPosition> brickPositions,
+                                                  float paddleX, float paddleY, float ballX, float ballY,
                                                   float ballVelX, float ballVelY, boolean ballLaunched,
                                                   float bossX, float bossY) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
-        pref.putInteger("barHP", barHP);
+        pref.putInteger("paddleHP", paddleHP);
         pref.putInteger("bricksRemaining", brickPositions.size());
 
         // ADDED: Save positions and ball state
-        pref.putFloat("barX", barX);
-        pref.putFloat("barY", barY);
+        pref.putFloat("paddleX", paddleX);
+        pref.putFloat("paddleY", paddleY);
         pref.putFloat("ballX", ballX);
         pref.putFloat("ballY", ballY);
         pref.putFloat("ballVelX", ballVelX);
@@ -84,11 +78,11 @@ public class Save {
         SaveData data = new SaveData();
         data.stageNumber = pref.getInteger("stageNumber", 0);
         data.bossHP = pref.getInteger("bossHP", 100);
-        data.barHP = pref.getInteger("barHP", 3);
+        data.paddleHP = pref.getInteger("paddleHP", 3);
         data.bricksRemaining = pref.getInteger("bricksRemaining", 0);
 
-        data.barX = pref.getFloat("barX");
-        data.barY = pref.getFloat("barY");
+        data.paddleX = pref.getFloat("paddleX");
+        data.paddleY = pref.getFloat("paddleY");
         data.ballX = pref.getFloat("ballX");
         data.ballY = pref.getFloat("ballY");
         data.ballVelX = pref.getFloat("ballVelX");
@@ -122,11 +116,11 @@ public class Save {
     public static class SaveData {
         public int stageNumber;
         public int bossHP;
-        public int barHP;
+        public int paddleHP;
         public int bricksRemaining;
         public List<BrickPosition> brickPositions;
 
-        public float barX, barY;
+        public float paddleX, paddleY;
         public float ballX, ballY;
         public float ballVelX, ballVelY;
         public boolean ballLaunched;

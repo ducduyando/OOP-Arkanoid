@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,18 +6,25 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import io.github.arkanoid.boss1.BombProjectile;
+import io.github.arkanoid.boss1.Boss1;
+import io.github.arkanoid.boss1.LaserEffect;
+import io.github.arkanoid.paddle.Paddle;
+import io.github.arkanoid.paddle.PaddleLaserEffect;
+import io.github.arkanoid.paddle.Paddle_Stage1_Skill1;
+import io.github.arkanoid.paddle.Paddle_Stage1_Skill2;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 
 
 public class GameLogic {
 
-    Bar barRef;
+    Paddle paddleRef;
     Boss bossRef;
 
-    GameLogic (Bar barRef, Boss bossRef) {
-        this.barRef = barRef;
+    GameLogic (Paddle paddleRef, Boss bossRef) {
+        this.paddleRef = paddleRef;
         this.bossRef = bossRef;
     }
 
@@ -44,41 +51,41 @@ public class GameLogic {
 
     public void launch(Ball ball) {
         if (!ball.isLaunched()) {
-            float barCenterX = barRef.getX() + barRef.getWidth() / 2f;
-            float ballX = barCenterX - BALL_WIDTH / 2f;
-            float ballY = barRef.getY() + barRef.getHeight();
+            float paddleCenterX = paddleRef.getX() + paddleRef.getWidth() / 2f;
+            float ballX = paddleCenterX - BALL_WIDTH / 2f;
+            float ballY = paddleRef.getY() + paddleRef.getHeight();
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !(ball instanceof Bar_Stage1_Skill1)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !(ball instanceof Paddle_Stage1_Skill1)) {
                 ball.setLaunched(true);
                 ball.velocityVector.set(0f, BALL_VELOCITY.y);
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && ball instanceof Bar_Stage1_Skill1) {
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && ball instanceof Paddle_Stage1_Skill1) {
                 ball.velocityVector.set(0f, BALL_VELOCITY.y);
             }
             ball.setPosition(ballX, ballY);
         }
     }
 
-    public void barCollision(Ball ball) {
+    public void paddleCollision(Ball ball) {
         Rectangle ballRect = ball.getHitBox();
-        Rectangle barRect = barRef.getHitBox();
-        if (ballRect.overlaps(barRect)) {
+        Rectangle paddleRect = paddleRef.getHitBox();
+        if (ballRect.overlaps(paddleRect)) {
             if (ball.velocityVector.y < 0) {
 
-                ball.setY(barRef.getY() + barRef.getHeight());
+                ball.setY(paddleRef.getY() + paddleRef.getHeight());
 
                 float speed = ball.velocityVector.len();
-                ball.velocityVector.set(speed * (float) Math.sin(bounceAngle(ballRect, barRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, barRect))));
+                ball.velocityVector.set(speed * (float) Math.sin(bounceAngle(ballRect, paddleRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, paddleRect))));
             }
         }
     }
 
     public void boundaryCollision(Ball ball, float delta, int topBoundary) {
         if (ball.getY() <= DOWN_BOUNDARY) {
-            if (ball instanceof Bar_Stage1_Skill1) {
+            if (ball instanceof Paddle_Stage1_Skill1) {
                 ball.remove();
-                ((Bar_Stage1_Skill1) ball).startSkill1Cooldown();
+                ((Paddle_Stage1_Skill1) ball).startSkill1Cooldown();
             } else {
-                barRef.takeDamage();
+                paddleRef.takeDamage();
                 ball.resetLaunch();
             }
         }
@@ -97,7 +104,7 @@ public class GameLogic {
     }
 
     public void bossCollision(Ball ball) {
-        Rectangle barRect = barRef.getHitBox();
+        Rectangle paddleRect = paddleRef.getHitBox();
         Rectangle ballRect = ball.getHitBox();
         Rectangle bossRect = bossRef.getHitBox();
 
@@ -141,40 +148,40 @@ public class GameLogic {
             ball.velocityVector = reflect(ball.velocityVector, normal);
         }
 
-        if (barRect.overlaps(bossRect)) {
-            barRef.takeDamage();
+        if (paddleRect.overlaps(bossRect)) {
+            paddleRef.takeDamage();
         }
     }
 
     public void skillCollision(Stage stage) {
-        Rectangle barHitbox = barRef.getHitBox();
+        Rectangle paddleHitbox = paddleRef.getHitBox();
         for (Actor actor : stage.getActors()) {
             if (actor instanceof BombProjectile bomb) {
-                if (bomb.getHitbox().overlaps(barHitbox)) {
-                    barRef.takeDamage();
+                if (bomb.getHitbox().overlaps(paddleHitbox)) {
+                    paddleRef.takeDamage();
                     bomb.remove();
                 }
             }
             else if (actor instanceof LaserEffect laser) {
-                if (laser.getHitbox().overlaps(barHitbox)) {
-                    barRef.takeDamage();
+                if (laser.getHitbox().overlaps(paddleHitbox)) {
+                    paddleRef.takeDamage();
                 }
             }
         }
     }
 
-    public void barLaserCollision(Bar_Stage1_Skill2 barStage1Skill2)  {
-        BarLaserEffect barLaserEffect = barStage1Skill2.getBarLaserEffect();
+    public void paddleLaserCollision(Paddle_Stage1_Skill2 paddleStage1Skill2)  {
+        PaddleLaserEffect paddleLaserEffect = paddleStage1Skill2.getPaddleLaserEffect();
 
-        if (barLaserEffect == null) {
+        if (paddleLaserEffect == null) {
             return;
         }
 
-        Rectangle barLaserRect = barLaserEffect.getHitbox();
+        Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
         Rectangle bossRect = bossRef.getHitBox();
 
-        if (barLaserRect.overlaps(bossRect)) {
-            bossRef.takeDamage(BAR_STAGE1_DAMAGE);
+        if (paddleLaserRect.overlaps(bossRect)) {
+            bossRef.takeDamage(BALL_STAGE1_DAMAGE);
         }
     }
 }

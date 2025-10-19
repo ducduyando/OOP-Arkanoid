@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
-public class Bar extends Actor {
+public class Paddle extends Actor {
 
     TextureRegion textureRegion;
     Rectangle hitBox;
@@ -20,11 +20,11 @@ public class Bar extends Actor {
     private float blinkTimer = 0f;
     private boolean isVisible = true;
 
-    Bar(Texture texture, float x, float y) {
-        this.textureRegion = new TextureRegion(texture, 0, 0, BAR_WIDTH, BAR_HEIGHT);
-        this.hitBox = new Rectangle(x, y, BAR_WIDTH, BAR_HEIGHT);
+    public Paddle(Texture texture, float x, float y) {
+        this.textureRegion = new TextureRegion(texture, 0, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
+        this.hitBox = new Rectangle(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
         setPosition(x, y);
-        setSize(BAR_WIDTH, BAR_HEIGHT);
+        setSize(PADDLE_WIDTH, PADDLE_HEIGHT);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
 
     }
@@ -43,9 +43,9 @@ public class Bar extends Actor {
 
     public void setState(int newState) {
         this.state = newState;
-        this.textureRegion.setRegion(BAR_WIDTH * newState, 0, BAR_WIDTH, BAR_HEIGHT);
+        this.textureRegion.setRegion(PADDLE_WIDTH * newState, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
 
-        float newWidth = BAR_WIDTH - (64 * newState);
+        float newWidth = PADDLE_WIDTH - (64 * newState);
         float newXOffset = 32 * newState;
 
         this.hitBox.setWidth(newWidth);
@@ -84,16 +84,16 @@ public class Bar extends Actor {
     @Override
     public void act(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() + 32 * state > LEFT_BOUNDARY) {
-            moveBy(-BAR_VELOCITY.x * delta, 0);
+            moveBy(-PADDLE_VELOCITY.x * delta, 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + BAR_WIDTH - 32 * state < RIGHT_BOUNDARY) {
-            moveBy(BAR_VELOCITY.x * delta, 0);
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && getX() + PADDLE_WIDTH - 32 * state < RIGHT_BOUNDARY) {
+            moveBy(PADDLE_VELOCITY.x * delta, 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > DOWN_BOUNDARY) {
-            moveBy(0, -BAR_VELOCITY.y * delta);
+            moveBy(0, -PADDLE_VELOCITY.y * delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + BAR_HEIGHT + BALL_HEIGHT < UP_BOUNDARY) {
-            moveBy(0, BAR_VELOCITY.y * delta);
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + PADDLE_HEIGHT + BALL_HEIGHT < UP_BOUNDARY) {
+            moveBy(0, PADDLE_VELOCITY.y * delta);
         }
 
         if (isInvincible) {

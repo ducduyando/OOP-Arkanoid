@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -24,13 +24,13 @@ public class Constants {
     public static final int UP_BOUNDARY = SCREEN_HEIGHT - HP_HEIGHT;
     public static final int DOWN_BOUNDARY = 0;
 
-    /** Bar. */
-    public static final int BAR_WIDTH = 464;
-    public static final int BAR_HEIGHT = 56;
-    public static final Vector2 BAR_VELOCITY = new Vector2(900f, 900f);
+    /** Paddle. */
+    public static final int PADDLE_WIDTH = 464;
+    public static final int PADDLE_HEIGHT = 56;
+    public static final Vector2 PADDLE_VELOCITY = new Vector2(900f, 900f);
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
 
-    public static final int BAR_STAGE1_DAMAGE = 15;
+    public static final int BALL_STAGE1_DAMAGE = 15;
 
     public static final int POWER_UP_WIDTH = 1920;
     public static final int POWER_UP_HEIGHT = 1080;

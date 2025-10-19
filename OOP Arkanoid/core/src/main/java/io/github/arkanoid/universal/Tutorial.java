@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,34 +7,31 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.arkanoid.paddle.Paddle;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 public class Tutorial extends Stage {
-    private final Texture barTexture;
+    private final Texture paddleTexture;
     private final Texture ballTexture;
 
-    private final Bar bar;
+    private final Paddle paddle;
     private final Ball ball;
-    private ArrayList<BrickActor> bricks = new ArrayList<>();
-    private GameLogic gameLogic;
+    private final ArrayList<BrickActor> bricks = new ArrayList<>();
+    private final GameLogic gameLogic;
     private final Texture backgroundTexture = new Texture("brick/" + "background" + ".png");
     private boolean finished = false;
     private final Texture[] brickTextures = new Texture[4];
 
-    private class BrickActor extends Actor {
-        private TextureRegion textureRegion;
-        private Rectangle hitBox;
-        private boolean destroyed = false;
-        private int textureIndex;
-
-        public BrickActor(Texture texture, float x, float y) {
-            this(texture, x, y, 0);
-        }
+    private static class BrickActor extends Actor {
+        private final TextureRegion textureRegion;
+        private final Rectangle hitBox;
+        private boolean isDestroyed = false;
+        private final int textureIndex;
 
         public BrickActor(Texture texture, float x, float y, int textureIndex) {
             this.textureRegion = new TextureRegion(texture);
@@ -49,11 +46,11 @@ public class Tutorial extends Stage {
         }
 
         public boolean isDestroyed() {
-            return destroyed;
+            return isDestroyed;
         }
 
         public void destroy() {
-            destroyed = true;
+            isDestroyed = true;
             remove();
         }
 
@@ -63,14 +60,14 @@ public class Tutorial extends Stage {
 
         @Override
         public void act(float delta) {
-            if (!destroyed) {
+            if (!isDestroyed) {
                 hitBox.setPosition(getX(), getY());
             }
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            if (!destroyed) {
+            if (!isDestroyed) {
                 batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
@@ -84,7 +81,7 @@ public class Tutorial extends Stage {
         }
     }
 
-    public Tutorial(Bar bar, Ball ball) {
+    public Tutorial(Paddle paddle, Ball ball) {
         super(new ScreenViewport());
         addActor(new BackgroundActor());
 
@@ -93,19 +90,19 @@ public class Tutorial extends Stage {
         brickTextures[2] = new Texture("brick/" + "green" + ".png");
         brickTextures[3] = new Texture("brick/" + "orange" + ".png");
 
-        barTexture = new Texture("Bar.png");
+        paddleTexture = new Texture("universal/" + "paddle" + ".png");
         ballTexture = new Texture("ball/" + "normal" + ".png");
 
-        this.bar = bar;
+        this.paddle = paddle;
         this.ball = ball;
 
-        bar.setPosition((SCREEN_WIDTH - BAR_WIDTH) / 2f, 0);
-        ball.setPosition((SCREEN_WIDTH - BALL_WIDTH) / 2f, BAR_HEIGHT);
+        paddle.setPosition((SCREEN_WIDTH - PADDLE_WIDTH) / 2f, 150);
+        ball.setPosition((SCREEN_WIDTH - BALL_WIDTH) / 2f, PADDLE_HEIGHT);
 
-        addActor(bar);
+        addActor(paddle);
         addActor(ball);
 
-        gameLogic = new GameLogic(bar, null);
+        gameLogic = new GameLogic(paddle, null);
         createBricks();
     }
 
@@ -129,7 +126,7 @@ public class Tutorial extends Stage {
         super.act(delta);
         if (!finished) {
             gameLogic.launch(ball);
-            gameLogic.barCollision(ball);
+            gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
             checkBrickCollisions();
 
@@ -138,8 +135,6 @@ public class Tutorial extends Stage {
             }
         }
     }
-
-
 
     private void checkBrickCollisions() {
         Rectangle ballRect = ball.getHitBox();
@@ -185,8 +180,8 @@ public class Tutorial extends Stage {
         return finished;
     }
 
-    public Bar getBar() {
-        return bar;
+    public Paddle getPaddle() {
+        return paddle;
     }
 
     public Ball getBall() {
@@ -230,11 +225,11 @@ public class Tutorial extends Stage {
         // Tạo lại số lượng gạch theo remainingBricks
         int totalBricks = BRICK_ROWS * BRICK_COLS;
         int bricksToCreate = Math.min(remainingBricks, totalBricks);
-        
+
         for (int count = 0; count < bricksToCreate; count++) {
             int i = count / BRICK_COLS;
             int j = count % BRICK_COLS;
-            
+
             float x = LEFT_BOUNDARY + j * BRICK_WIDTH;
             float y = SCREEN_HEIGHT - BRICK_HEIGHT - i * BRICK_HEIGHT;
             int textureIndex = new Random().nextInt(brickTextures.length);
@@ -258,8 +253,10 @@ public class Tutorial extends Stage {
 
     @Override
     public void dispose() {
+        ballTexture.dispose();
+        paddleTexture.dispose();
         backgroundTexture.dispose();
-        bar.remove();
+        paddle.remove();
         ball.remove();
         for (Texture texture : brickTextures) {
             texture.dispose();

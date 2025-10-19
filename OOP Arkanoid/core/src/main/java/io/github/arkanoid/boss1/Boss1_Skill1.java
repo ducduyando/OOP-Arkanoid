@@ -1,10 +1,12 @@
-package io.github.arkanoid;
+package io.github.arkanoid.boss1;
 
 import com.badlogic.gdx.math.Vector2;
+import io.github.arkanoid.universal.Boss;
+import io.github.arkanoid.universal.BossSkill;
 
 import java.util.Random;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 public class Boss1_Skill1 implements BossSkill {
     private final Boss1 owner;

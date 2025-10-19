@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.universal;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -7,8 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.arkanoid.boss1.Boss1;
+import io.github.arkanoid.paddle.Paddle;
+import io.github.arkanoid.paddle.Paddle_Stage1_Skill1;
+import io.github.arkanoid.paddle.Paddle_Stage1_Skill2;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -29,15 +33,15 @@ public class Main extends ApplicationAdapter {
     private Stage stage;
 
     /** Textures. */
-    private Texture barImage;
+    private Texture paddleImage;
     private Texture ballImage;
     private Texture bossHealthBarImage;
-    private Texture barStage1Skill1Image;
+    private Texture paddleStage1Skill1Image;
     private final Texture[] stageTextures = new Texture[2]; // Tạo mảng lưu stage textures.
     private final Texture[] chooseSkill = new Texture[stageTextures.length - 1];
 
     /** Game Object. */
-    private Bar bar;
+    private Paddle paddle;
     private Ball ball;
     private Boss1 boss1;
     private GameLogic gameLogic;
@@ -53,8 +57,8 @@ public class Main extends ApplicationAdapter {
     private Tutorial tutorial;
 
     /** Skills and stages. */
-    private Bar_Stage1_Skill1 barStage1Skill1;
-    private Bar_Stage1_Skill2 barStage1Skill2;
+    private Paddle_Stage1_Skill1 paddleStage1Skill1;
+    private Paddle_Stage1_Skill2 paddleStage1Skill2;
     private int stageNumber = 0;
 
     /**Save. */
@@ -80,10 +84,10 @@ public class Main extends ApplicationAdapter {
         }
         parallaxBackground =  new ParallaxBackground(bgTextures,new float[] {0f, 50f, 40f, 30f, 20f});
 
-        barImage = new Texture("Bar.png");
-        ballImage = new Texture("ball/normal.png");
-        bossHealthBarImage = new Texture("HealthBar.png");
-        barStage1Skill1Image = new Texture("ball/" + "upgrade" + ".png");
+        paddleImage = new Texture("universal/" + "paddle" + ".png");
+        ballImage = new Texture("ball/" + "normal" + ".png");
+        bossHealthBarImage = new Texture("universal/" + "health_bar" + ".png");
+        paddleStage1Skill1Image = new Texture("ball/" + "upgrade" + ".png");
 
         stageTextures[0] = new Texture("stages/" + "stage" + 0 + ".png");
         for (int i = 1; i < stageTextures.length; i++) {
@@ -94,7 +98,7 @@ public class Main extends ApplicationAdapter {
         }
 
         // --Object initialization--
-        bar = new Bar(barImage, 0, 0);
+        paddle = new Paddle(paddleImage, (SCREEN_WIDTH - PADDLE_WIDTH) / 2f, 150);
         ball = new Ball(ballImage, 0, 0);
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
@@ -102,7 +106,7 @@ public class Main extends ApplicationAdapter {
         boss1 = new Boss1(1,bossInitialX, bossInitialY, 100);
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
 
-        gameLogic = new GameLogic(bar, boss1);
+        gameLogic = new GameLogic(paddle, boss1);
 
         // --UI initialization--
         pauseMenu = new PauseMenu();
@@ -157,8 +161,8 @@ public class Main extends ApplicationAdapter {
                                 boss1.setHp(data.bossHP);
                                 boss1.setPosition(data.bossX, data.bossY);
 
-                                bar.setHealth(data.barHP);
-                                bar.setPosition(data.barX, data.barY);
+                                paddle.setHealth(data.paddleHP);
+                                paddle.setPosition(data.paddleX, data.paddleY);
                                 ball.setPosition(data.ballX, data.ballY);
                                 ball.setVelocity(data.ballVelX, data.ballVelY);
                                 ball.setLaunched(data.ballLaunched);
@@ -192,7 +196,7 @@ public class Main extends ApplicationAdapter {
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
                         loadingStage.remove();
                         loadingStage = null;
-                        tutorial = new Tutorial(bar, ball);
+                        tutorial = new Tutorial(paddle, ball);
                         // luu lai so gach duoc luu tu save
                         if (isLoadedFromSave && loadedBricksRemaining >= 0) {
                             Save.SaveData saveData = Save.loadGame();
@@ -239,15 +243,15 @@ public class Main extends ApplicationAdapter {
                 case LOADING_TO_STAGE_1:
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
                         if (!isLoadedFromSave) {
-                            bar.setHealth(3);
-                            bar.setPosition(0, 0);
+                            paddle.setHealth(3);
+                            paddle.setPosition(0, 0);
                             ball.setPosition(0, 0);
                             ball.resetLaunch();
                         }
                         isLoadedFromSave = false;
                         stage.addActor(parallaxBackground);
                         stage.addActor(ball);
-                        stage.addActor(bar);
+                        stage.addActor(paddle);
                         stage.addActor(bossHealthBar);
                         stage.addActor(boss1);
                         loadingStage.remove();
@@ -258,7 +262,7 @@ public class Main extends ApplicationAdapter {
 
                 case STAGE_1:
                     gameLogic.launch(ball);
-                    gameLogic.barCollision(ball);
+                    gameLogic.paddleCollision(ball);
                     gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
                     gameLogic.bossCollision(ball);
                     gameLogic.skillCollision(stage);
@@ -274,38 +278,38 @@ public class Main extends ApplicationAdapter {
                     break;
 
                 case STAGE_2:
-                    if (barStage1Skill1 != null) {
+                    if (paddleStage1Skill1 != null) {
                         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
-                            && !barStage1Skill1.isLaunched()
-                            && barStage1Skill1.isSkill1Ready()) {
+                            && !paddleStage1Skill1.isLaunched()
+                            && paddleStage1Skill1.isSkill1Ready()) {
 
-                            gameLogic.launch(barStage1Skill1);
-                            gameLogic.barCollision(barStage1Skill1);
-                            gameLogic.boundaryCollision(barStage1Skill1, delta, UP_BOUNDARY);
-                            gameLogic.bossCollision(barStage1Skill1);
+                            gameLogic.launch(paddleStage1Skill1);
+                            gameLogic.paddleCollision(paddleStage1Skill1);
+                            gameLogic.boundaryCollision(paddleStage1Skill1, delta, UP_BOUNDARY);
+                            gameLogic.bossCollision(paddleStage1Skill1);
 
                         }
                     }
-                    else if (barStage1Skill2 != null) {
+                    else if (paddleStage1Skill2 != null) {
                         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)
-                            && barStage1Skill2.isSkill2Ready()) {
-                            barStage1Skill2.enter(bar);
+                            && paddleStage1Skill2.isSkill2Ready()) {
+                            paddleStage1Skill2.enter(paddle);
                         }
 
-                        if (barStage1Skill2.isFiring()) {
-                            gameLogic.barLaserCollision(barStage1Skill2);
+                        if (paddleStage1Skill2.isFiring()) {
+                            gameLogic.paddleLaserCollision(paddleStage1Skill2);
                         }
 
-                        if (!barStage1Skill2.isDone()) {
-                            barStage1Skill2.update(bar, delta);
+                        if (!paddleStage1Skill2.isDone()) {
+                            paddleStage1Skill2.update(paddle, delta);
                         }
 
-                        if (barStage1Skill2.isDone()) {
-                            barStage1Skill2.cleanup();
+                        if (paddleStage1Skill2.isDone()) {
+                            paddleStage1Skill2.cleanup();
                         }
                     }
                     gameLogic.launch(ball);
-                    gameLogic.barCollision(ball);
+                    gameLogic.paddleCollision(ball);
                     gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
                     gameLogic.bossCollision(ball);
                     gameLogic.skillCollision(stage);
@@ -329,7 +333,7 @@ public class Main extends ApplicationAdapter {
                         // Xóa các actor của màn boss cũ
                         parallaxBackground.remove();
                         ball.remove();
-                        bar.remove();
+                        paddle.remove();
                         bossHealthBar.remove();
                         boss1.remove();
                         powerUpMenu.remove();
@@ -352,13 +356,13 @@ public class Main extends ApplicationAdapter {
                             if (bricksRemaining == 0) {
                                 saveStageNumber = 1;
                             }
-                            Save.saveGameWithBrickPositions(saveStageNumber, boss1.getHp(), bar.getHealth(), brickPositions,
-                                bar.getX(), bar.getY(), ball.getX(), ball.getY(),
+                            Save.saveGameWithBrickPositions(saveStageNumber, boss1.getHp(), paddle.getHealth(), brickPositions,
+                                paddle.getX(), paddle.getY(), ball.getX(), ball.getY(),
                                 ball.velocityVector.x, ball.velocityVector.y, ball.isLaunched(),
                                 boss1.getX(), boss1.getY());
                         } else {
-                            Save.saveGame(saveStageNumber, boss1.getHp(), bar.getHealth(), bricksRemaining,
-                                bar.getX(), bar.getY(), ball.getX(), ball.getY(),
+                            Save.saveGame(saveStageNumber, boss1.getHp(), paddle.getHealth(), bricksRemaining,
+                                paddle.getX(), paddle.getY(), ball.getX(), ball.getY(),
                                 ball.velocityVector.x, ball.velocityVector.y, ball.isLaunched(),
                                 boss1.getX(), boss1.getY());
                         }
@@ -389,10 +393,10 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        barImage.dispose();
+        paddleImage.dispose();
         ballImage.dispose();
         bossHealthBarImage.dispose();
-        barStage1Skill1Image.dispose();
+        paddleStage1Skill1Image.dispose();
         menuBackground.dispose();
         parallaxBackground.dispose();
         button.dispose();

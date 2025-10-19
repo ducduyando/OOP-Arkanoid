@@ -1,10 +1,10 @@
-package io.github.arkanoid;
+package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.graphics.Texture;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
-public class Bar_Stage1_Skill2 implements BarSkill {
+public class Paddle_Stage1_Skill2 implements PaddleSkill {
     private enum Phase {
         CHARGING,
         FIRING,
@@ -13,10 +13,10 @@ public class Bar_Stage1_Skill2 implements BarSkill {
 
     Texture laserEffect;
 
-    private float barLaserTime = 0f;
-    private final Bar owner;
+    private float paddleLaserTime = 0f;
+    private final Paddle owner;
     private Phase currentPhase;
-    private BarLaserEffect barLaserEffect;
+    private PaddleLaserEffect paddleLaserEffect;
 
     private float skill2CooldownTimer = SKILL_COOLDOWN;
     private boolean isSkill2Ready = true;
@@ -30,33 +30,33 @@ public class Bar_Stage1_Skill2 implements BarSkill {
         return isSkill2Ready;
     }
 
-    Bar_Stage1_Skill2(Bar owner) {
+    Paddle_Stage1_Skill2(Paddle owner) {
         laserEffect = new Texture("boss1/" + "skill2" + ".png");
 
         this.owner = owner;
         this.currentPhase = Phase.DONE;
     }
 
-    public void enter(Bar bar) {
-        this.barLaserEffect = new BarLaserEffect(laserEffect, bar.getX(), bar.getY());
-        owner.getStage().addActor(this.barLaserEffect);
+    public void enter(Paddle paddle) {
+        this.paddleLaserEffect = new PaddleLaserEffect(laserEffect, paddle.getX(), paddle.getY());
+        owner.getStage().addActor(this.paddleLaserEffect);
         currentPhase = Phase.CHARGING;
     }
 
-    public void update(Bar bar, float delta) {
-        float x = bar.getX() + BAR_WIDTH / 2f - LASER_WIDTH / 2f;
-        barLaserEffect.setX(x);
+    public void update(Paddle paddle, float delta) {
+        float x = paddle.getX() + PADDLE_WIDTH / 2f - LASER_WIDTH / 2f;
+        paddleLaserEffect.setX(x);
         if (currentPhase == Phase.CHARGING) {
-            if (barLaserEffect.isAnimationDone()) {
+            if (paddleLaserEffect.isAnimationDone()) {
                 currentPhase = Phase.FIRING;
-                barLaserTime = 0f;
+                paddleLaserTime = 0f;
             }
 
         } else {
-            barLaserTime += delta;
-            if (barLaserTime >= 4f) {
-                barLaserEffect.remove();
-                barLaserEffect = null;
+            paddleLaserTime += delta;
+            if (paddleLaserTime >= 4f) {
+                paddleLaserEffect.remove();
+                paddleLaserEffect = null;
                 currentPhase = Phase.DONE;
                 startSkill2Cooldown();
             }
@@ -71,9 +71,9 @@ public class Bar_Stage1_Skill2 implements BarSkill {
     }
 
     public void cleanup() {
-        if (barLaserEffect != null) {
-            barLaserEffect.remove();
-            barLaserEffect = null;
+        if (paddleLaserEffect != null) {
+            paddleLaserEffect.remove();
+            paddleLaserEffect = null;
         }
     }
 
@@ -84,7 +84,7 @@ public class Bar_Stage1_Skill2 implements BarSkill {
         return currentPhase == Phase.DONE;
     }
 
-    public BarLaserEffect getBarLaserEffect() { // Thêm phương thức getter cho va chạm.
-        return barLaserEffect;
+    public PaddleLaserEffect getPaddleLaserEffect() { // Thêm phương thức getter cho va chạm.
+        return paddleLaserEffect;
     }
 }

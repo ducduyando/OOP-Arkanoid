@@ -1,4 +1,4 @@
-package io.github.arkanoid;
+package io.github.arkanoid.boss1;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -7,31 +7,30 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import static io.github.arkanoid.Constants.*;
+import static io.github.arkanoid.universal.Constants.*;
 
-public class BarLaserEffect extends Actor {
-
-
-    private Animation<TextureRegion> barLaserAnimation;
+public class LaserEffect extends Actor {
+    private Animation<TextureRegion> laserAnimation;
     private float stateTime = 0f;
     private Rectangle hitbox;
 
     private boolean isAnimationFinished = false;
 
-    public BarLaserEffect(Texture texture, float barX, float barY) {
-        int maxFrames = texture.getWidth() / LASER_WIDTH;
-        TextureRegion[] frames = new TextureRegion[maxFrames];
-        for (int i = 0; i < maxFrames; i++) {
+    public LaserEffect(Texture texture, float bossX, float bossY) {
+        int maxFrame = texture.getWidth() / LASER_WIDTH;
+        TextureRegion[] frames = new TextureRegion[maxFrame];
+        for (int i = 0; i < maxFrame; i++) {
             frames[i] = new TextureRegion(texture, LASER_WIDTH * i, 0, LASER_WIDTH, LASER_HEIGHT);
         }
-        barLaserAnimation = new Animation<>(stateTime, frames);
-        barLaserAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 
-        float x = barX + BAR_WIDTH / 2f - LASER_WIDTH / 2f;
-        float y = barY + BAR_HEIGHT;
+        laserAnimation = new Animation<>(FRAME_DURATION, frames);
+        laserAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        float x = bossX + BOSS1_WIDTH / 2f - LASER_WIDTH / 2f;
+        float y = bossY - LASER_HEIGHT;
+
         setPosition(x, y);
         setSize(LASER_WIDTH, LASER_HEIGHT);
-
         hitbox = new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
@@ -45,7 +44,7 @@ public class BarLaserEffect extends Actor {
 
         if (!isAnimationFinished) {
             stateTime += delta;
-            if (barLaserAnimation.isAnimationFinished(stateTime)) {
+            if (laserAnimation.isAnimationFinished(stateTime)) {
                 isAnimationFinished = true;
             }
         }
@@ -53,7 +52,7 @@ public class BarLaserEffect extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        TextureRegion currentFrame = barLaserAnimation.getKeyFrame(stateTime, false);
+        TextureRegion currentFrame = laserAnimation.getKeyFrame(stateTime, false);
         batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
     }
 
