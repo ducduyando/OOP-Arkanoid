@@ -124,7 +124,6 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
 
-        ScreenUtils.clear(0, 0, 1, 1);
         float delta = Gdx.graphics.getDeltaTime();
 
         // --Menu handle--
@@ -154,7 +153,7 @@ public class Main extends ApplicationAdapter {
                             loadingStage = new LoadingStage(stageTextures[stageNumber]);
                             stage.addActor(loadingStage);
                         }
-                        else if(button.getMode() == Button.Mode.LOAD){
+                        else if(button.getMode() == Button.Mode.LOAD) {
                             if (Save.hasSave()) {
                                 Save.SaveData data = Save.loadGame();
                                 stageNumber = data.stageNumber;
