@@ -1,9 +1,9 @@
 package io.github.arkanoid.boss1;
 
 import com.badlogic.gdx.graphics.Texture;
-import io.github.arkanoid.universal.Boss;
+import io.github.arkanoid.entities.Boss;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class Boss1 extends Boss {
 
@@ -13,8 +13,8 @@ public class Boss1 extends Boss {
         super(number, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY, maxHp);
 
         BossCentering centering = new BossCentering(this);
-        Boss1_Skill1 bombingSkill = new Boss1_Skill1(this);
-        Boss1_Skill2 laserSkill = new Boss1_Skill2(this);
+        Boss1Skill1 bombingSkill = new Boss1Skill1(this);
+        Boss1Skill2 laserSkill = new Boss1Skill2(this);
 
         centering.setNextSkills(bombingSkill, laserSkill);
         bombingSkill.setNextSkill(centering);

@@ -1,4 +1,4 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class Ball extends Actor {
     private int damage = 10;

@@ -1,4 +1,4 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,8 +13,10 @@ import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.paddle.PaddleLaserEffect;
 import io.github.arkanoid.paddle.PaddleSkill1A;
 import io.github.arkanoid.paddle.PaddleSkill1B;
+import io.github.arkanoid.entities.Ball;
+import io.github.arkanoid.entities.Boss;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 
 
@@ -23,7 +25,7 @@ public class GameLogic {
     Paddle paddleRef;
     Boss bossRef;
 
-    GameLogic (Paddle paddleRef, Boss bossRef) {
+    public GameLogic(Paddle paddleRef, Boss bossRef) {
         this.paddleRef = paddleRef;
         this.bossRef = bossRef;
     }
@@ -57,9 +59,9 @@ public class GameLogic {
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !(ball instanceof PaddleSkill1A)) {
                 ball.setLaunched(true);
-                ball.velocityVector.set(0f, BALL_VELOCITY.y);
+                ball.setVelocity(0f, BALL_VELOCITY.y);
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && ball instanceof PaddleSkill1A) {
-                ball.velocityVector.set(0f, BALL_VELOCITY.y);
+                ball.setVelocity(0f, BALL_VELOCITY.y);
             }
             ball.setPosition(ballX, ballY);
         }
@@ -69,12 +71,12 @@ public class GameLogic {
         Rectangle ballRect = ball.getHitBox();
         Rectangle paddleRect = paddleRef.getHitBox();
         if (ballRect.overlaps(paddleRect)) {
-            if (ball.velocityVector.y < 0) {
+            if (ball.getVelocity().y < 0) {
 
                 ball.setY(paddleRef.getY() + paddleRef.getHeight());
 
-                float speed = ball.velocityVector.len();
-                ball.velocityVector.set(speed * (float) Math.sin(bounceAngle(ballRect, paddleRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, paddleRect))));
+                float speed = ball.getVelocity().len();
+                ball.setVelocity(speed * (float) Math.sin(bounceAngle(ballRect, paddleRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, paddleRect))));
             }
         }
     }
@@ -89,17 +91,17 @@ public class GameLogic {
                 ball.resetLaunch();
             }
         }
-        if (ball.getX() + ball.velocityVector.x * delta <= LEFT_BOUNDARY) {
+        if (ball.getX() + ball.getVelocity().x * delta <= LEFT_BOUNDARY) {
             ball.setPosition(LEFT_BOUNDARY, ball.getY());
-            ball.velocityVector.x =  -ball.velocityVector.x;
+            ball.setVelocity(-ball.getVelocity().x, 0f);
         }
-        if (ball.getX() + BALL_WIDTH + ball.velocityVector.x * delta  >= RIGHT_BOUNDARY) {
+        if (ball.getX() + BALL_WIDTH + ball.getVelocity().x * delta  >= RIGHT_BOUNDARY) {
             ball.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ball.getY());
-            ball.velocityVector.x =  -ball.velocityVector.x;
+            ball.setVelocity(-ball.getVelocity().x, 0f);
         }
-        if (ball.getY() + BALL_HEIGHT + ball.velocityVector.y * delta >= topBoundary) {
+        if (ball.getY() + BALL_HEIGHT + ball.getVelocity().y * delta >= topBoundary) {
             ball.setPosition(ball.getX(),  topBoundary - BALL_HEIGHT);
-            ball.velocityVector.y =  -ball.velocityVector.y;
+            ball.setVelocity(0f, -ball.getVelocity().y);
         }
     }
 
@@ -145,7 +147,8 @@ public class GameLogic {
                 }
             }
 
-            ball.velocityVector = reflect(ball.velocityVector, normal);
+            Vector2 reflectVector = reflect(ball.getVelocity(), normal);
+            ball.setVelocity(reflectVector.x, reflectVector.y);
         }
 
         if (paddleRect.overlaps(bossRect)) {

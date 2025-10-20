@@ -1,11 +1,12 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.ui;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import io.github.arkanoid.entities.Boss;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class HealthBar extends Actor {
     private final Boss owner;

@@ -1,4 +1,4 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.entities;
 
 public interface BossSkill {
     void update(Boss boss, float delta);

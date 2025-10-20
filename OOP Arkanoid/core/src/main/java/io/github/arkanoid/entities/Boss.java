@@ -1,4 +1,4 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 
 public class Boss extends Actor {
@@ -18,6 +18,9 @@ public class Boss extends Actor {
         DYING
     }
 
+    private final Texture normalSprite;
+    private final Texture takeDamageSprite;
+    private final Texture deathSprite;
     public final Texture skill1Texture;
     public final Texture skill2Texture;
 
@@ -43,9 +46,9 @@ public class Boss extends Actor {
 
     public Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
 
-        Texture normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
-        Texture takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");
-        Texture deathSprite = new Texture("boss" + number + "/" + "death" + ".png");
+        this.normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
+        this.takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");
+        this.deathSprite = new Texture("boss" + number + "/" + "death" + ".png");
         this.skill1Texture = new Texture("boss" + number + "/" + "skill1" + ".png");
         this.skill2Texture = new Texture("boss" + number + "/" + "skill2" + ".png");
 
@@ -130,6 +133,10 @@ public class Boss extends Actor {
         return hitBox;
     }
 
+    public boolean isReadyToDeath() {
+        return isReadyToDeath;
+    }
+
     @Override
     public void act(float delta) {
         hitBox.setPosition(getX(), getY());
@@ -176,6 +183,9 @@ public class Boss extends Actor {
 
 
     public void dispose() {
+        normalSprite.dispose();
+        deathSprite.dispose();
+        takeDamageSprite.dispose();
         skill1Texture.dispose();
         skill2Texture.dispose();
     }

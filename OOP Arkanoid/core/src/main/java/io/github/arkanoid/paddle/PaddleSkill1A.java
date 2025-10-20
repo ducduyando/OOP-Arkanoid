@@ -2,9 +2,9 @@ package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import io.github.arkanoid.universal.Ball;
+import io.github.arkanoid.entities.Ball;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleSkill1A extends Ball {
 

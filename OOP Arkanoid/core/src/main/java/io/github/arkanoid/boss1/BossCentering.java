@@ -1,12 +1,12 @@
 package io.github.arkanoid.boss1;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.arkanoid.universal.Boss;
-import io.github.arkanoid.universal.BossSkill;
+import io.github.arkanoid.entities.Boss;
+import io.github.arkanoid.entities.BossSkill;
 
 import java.util.Random;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class BossCentering implements BossSkill {
     private final Boss owner;

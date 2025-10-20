@@ -2,9 +2,9 @@ package io.github.arkanoid.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import io.github.arkanoid.universal.Main;
+import io.github.arkanoid.core.Main;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

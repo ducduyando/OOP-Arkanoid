@@ -1,4 +1,4 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.core;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -50,6 +50,8 @@ public class Constants {
     public static final int BOSS1_WIDTH = 272;
     public static final int BOSS1_HEIGHT = 224;
     public static final Vector2 BOSS1_VELOCITY = new Vector2(900f, 900f);
+    public static final float BOSS1_INITIAL_X = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
+    public static final float BOSS1_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
     /** Boss1 Skill1. */
     public static final int BOSS1_SKILL1_WIDTH = 80;

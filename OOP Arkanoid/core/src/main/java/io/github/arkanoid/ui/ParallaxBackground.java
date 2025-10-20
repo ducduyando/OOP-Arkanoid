@@ -1,10 +1,10 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.ui;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class ParallaxBackground extends Actor {
     private static class ParallaxLayer {

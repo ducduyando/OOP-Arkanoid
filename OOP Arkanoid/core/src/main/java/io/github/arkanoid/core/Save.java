@@ -1,4 +1,4 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.Preferences;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 public class Save {
     private static final String SAVE_FILE = "game_save";
     private static final Preferences pref = Gdx.app.getPreferences(SAVE_FILE);

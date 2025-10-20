@@ -2,7 +2,7 @@ package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.graphics.Texture;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleSkill1B implements PaddleSkill {
     private enum Phase {

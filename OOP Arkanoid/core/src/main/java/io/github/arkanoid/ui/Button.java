@@ -1,4 +1,4 @@
-package io.github.arkanoid.universal;
+package io.github.arkanoid.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
 public class Button extends Actor {
     private TextureRegion currentFrame;
     private float stateTime = 0f;
     private final Texture buttonSprite = new Texture("menu/" + "layer" + 4 + ".png");
-    protected enum Mode {
+    public enum Mode {
         PLAY,
         LOAD,
         QUIT
@@ -26,7 +26,7 @@ public class Button extends Actor {
     private final Animation<TextureRegion> quitAnimation;
     private Mode mode = Mode.PLAY;
 
-    Button () {
+    public Button() {
         TextureRegion[] playFrames = new TextureRegion[2];
         TextureRegion[] loadFrames = new TextureRegion[2];
         TextureRegion[] quitFrames = new TextureRegion[2];

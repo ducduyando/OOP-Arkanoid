@@ -1,14 +1,14 @@
 package io.github.arkanoid.boss1;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.arkanoid.universal.Boss;
-import io.github.arkanoid.universal.BossSkill;
+import io.github.arkanoid.entities.Boss;
+import io.github.arkanoid.entities.BossSkill;
 
 import java.util.Random;
 
-import static io.github.arkanoid.universal.Constants.*;
+import static io.github.arkanoid.core.Constants.*;
 
-public class Boss1_Skill1 implements BossSkill {
+public class Boss1Skill1 implements BossSkill {
     private final Boss1 owner;
     private BossSkill nextSkill;
     private final int REPEAT_COUNT = 3;
@@ -21,7 +21,7 @@ public class Boss1_Skill1 implements BossSkill {
     private final float[][] positionGridX = new float [ROWS][COLS];
     private final float[][] positionGridY = new float [ROWS][COLS];
 
-    public Boss1_Skill1(Boss1 owner) {
+    public Boss1Skill1(Boss1 owner) {
         this.owner = owner;
 
         float cellXSize = (SCREEN_WIDTH - BOSS1_WIDTH) / (float) (COLS);
