@@ -8,7 +8,7 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class Boss2 extends Boss {
 
-    public Boss2(float x, float y, int maxHp) {
+    public Boss2(int number ,float x, float y, int maxHp) {
 
         super(2, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, new Vector2(BOSS2_VELOCITY), maxHp);
 

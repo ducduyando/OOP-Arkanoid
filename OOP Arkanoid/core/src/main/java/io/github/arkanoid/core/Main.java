@@ -87,35 +87,39 @@ public class Main extends ApplicationAdapter {
                     Gdx.app.exit();
                     break;
             }
-        }
-        else if (currentStage instanceof TutorialStage) {
-            // Normal completion, go to Boss1
+        } else if (currentStage instanceof TutorialStage) {
             nextStage = new Boss1Stage();
             loadingScreen = new LoadingScreen(stageTextures[1]);
             currentFlow = GameFlow.LOADING;
-        }
-        else if (currentStage instanceof Boss1Stage) {
-            // Normal completion, go to PowerUp menu
+        } else if (currentStage instanceof Boss1Stage) {
             nextStage = new PowerUpMenuStage();
             loadingScreen = new LoadingScreen(stageTextures[2]);
             currentFlow = GameFlow.LOADING;
-        }
-        else if (currentStage instanceof PowerUpMenuStage) {
-            // Show loading screen for stage 2, then exit
+        } else if (currentStage instanceof PowerUpMenuStage) {
+            loadingScreen = new LoadingScreen(stageTextures[2]);
+            currentFlow = GameFlow.LOADING;
+            nextStage = new Boss2Stage();
+        } else if (currentStage instanceof Boss2Stage) {
             loadingScreen = new LoadingScreen(stageTextures[2]);
             currentFlow = GameFlow.LOADING;
             nextStage = null;
         }
     }
-
     private void loadSavedGame() {
         if (!Save.hasSave()) {
+
             changeStage(new TutorialStage());
             return;
         }
 
         Save.SaveData saveData = Save.loadGame();
+        if (saveData == null) {
+            // Failed to load, start new game
+            changeStage(new TutorialStage());
+            return;
+        }
 
+        // Load appropriate stage based on save data
         switch (saveData.stageNumber) {
             case 0: // Tutorial stage
                 nextStage = new TutorialStage(saveData);
@@ -124,6 +128,10 @@ public class Main extends ApplicationAdapter {
             case 1: // Boss1 stage
                 nextStage = new Boss1Stage(saveData);
                 loadingScreen = new LoadingScreen(stageTextures[1]);
+                break;
+            case 2: // Boss2 stage
+                nextStage = new Boss2Stage(saveData);
+                loadingScreen = new LoadingScreen(stageTextures[2]);
                 break;
             default:
                 // Unknown stage, start new game
@@ -136,7 +144,7 @@ public class Main extends ApplicationAdapter {
 
     private void changeStage(GameStage newStage) {
         if (currentStage != null) {
-            currentStage.exit(); // Dọn dẹp stage cũ
+            currentStage.exit();
         }
         currentStage = newStage;
         if (currentStage != null) {
