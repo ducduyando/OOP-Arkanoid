@@ -56,7 +56,7 @@ public class LoadingScreen extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         int x = (SCREEN_WIDTH - LOADING_WIDTH) / 2;
-        int y = (SCREEN_HEIGHT - LOADING_HEIGHT) / 2;
+        int y = SCREEN_HEIGHT / 2 - LOADING_HEIGHT;
         batch.draw(stageBackground, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         batch.draw(currentFrame, x, y, LOADING_WIDTH, LOADING_HEIGHT);
     }

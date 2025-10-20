@@ -79,7 +79,9 @@ public class Main extends ApplicationAdapter {
             Button.Mode choice = menuStage.getSelectedMode();
             switch (choice) {
                 case PLAY:
-                    changeStage(new TutorialStage());
+                    nextStage = new TutorialStage();
+                    loadingScreen = new LoadingScreen(stageTextures[0]);
+                    currentFlow = GameFlow.LOADING;
                     break;
                 case LOAD:
                     loadSavedGame();
