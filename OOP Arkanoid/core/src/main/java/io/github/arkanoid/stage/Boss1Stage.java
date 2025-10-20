@@ -67,10 +67,15 @@ public class Boss1Stage implements GameStage {
         // Create entities with saved positions if available
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
+            paddle.setState(saveData.paddleState); // Restore paddle state
+            
             ball = new Ball(ballImage, saveData.ballX, saveData.ballY);
             ball.setVelocity(saveData.ballVelX, saveData.ballVelY);
             ball.setLaunched(saveData.ballLaunched);
-            boss1 = new Boss1(1, saveData.bossX, saveData.bossY, saveData.bossHP);
+            
+            // Create boss with full HP first, then set current HP
+            boss1 = new Boss1(1, saveData.bossX, saveData.bossY, 100);
+            boss1.setHp(saveData.bossHP); // Set current HP from save data
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
@@ -194,11 +199,11 @@ public class Boss1Stage implements GameStage {
     }
 
     private void saveGame() {
-       Save.saveGame(
-            1,
-            boss1.getHp(),
-            0,
-            0,
+        io.github.arkanoid.core.Save.saveGame(
+            1, // Boss1 stage
+            boss1.getHp(), // Boss HP
+            paddle.getState(), // Paddle state - FIX: save actual paddle state
+            0, // No bricks in boss stage
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,

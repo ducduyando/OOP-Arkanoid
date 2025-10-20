@@ -52,7 +52,6 @@ public class TutorialStage implements GameStage {
     public TutorialStage(Save.SaveData saveData) {
         this.saveData = saveData;
     }
-
     private static class BrickActor extends Actor {
         private final TextureRegion textureRegion;
         private final Rectangle hitBox;
@@ -122,12 +121,16 @@ public class TutorialStage implements GameStage {
 
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
+            paddle.setState(saveData.paddleState); // Restore paddle state
+
             ball = new Ball(ballImage, saveData.ballX, saveData.ballY);
             ball.setVelocity(saveData.ballVelX, saveData.ballVelY);
             ball.setLaunched(saveData.ballLaunched);
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
-            ball = new Ball(ballImage, 0, 0);
+            ball = new Ball(ballImage,
+                paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,
+                paddle.getY() + PADDLE_HEIGHT);
         }
         bricks = new ArrayList<>();
 
@@ -187,13 +190,13 @@ public class TutorialStage implements GameStage {
                         pauseMenu.resetChoice();
                         break;
                     case QUIT:
-                        // Exit game
-                        Gdx.app.exit();
+
+                        quitRequested = true;
                         break;
                 }
             }
 
-            return; // Don't update game logic when paused
+            return;
         }
 
         gameLogic.launch(ball);
@@ -243,13 +246,16 @@ public class TutorialStage implements GameStage {
                     } else {
                         ball.setX(brickRect.x + brickRect.width);
                     }
+                    // Reverse X velocity
                     ball.setVelocity(-ball.getVelocity().x, ball.getVelocity().y);
                 } else {
+                    // Collision on top/bottom
                     if (ballCenterY < brickCenterY) {
                         ball.setY(brickRect.y - ballRect.height);
                     } else {
                         ball.setY(brickRect.y + brickRect.height);
                     }
+                    // Reverse Y velocity
                     ball.setVelocity(ball.getVelocity().x, -ball.getVelocity().y);
                 }
 
@@ -262,15 +268,10 @@ public class TutorialStage implements GameStage {
 
     @Override
     public void exit() {
-        if (backgroundTexture != null) {
+
             backgroundTexture.dispose();
-        }
-        if (paddleImage != null) {
             paddleImage.dispose();
-        }
-        if (ballImage != null) {
             ballImage.dispose();
-        }
         if (brickTextures != null) {
             for (Texture tex : brickTextures) {
                 if (tex != null) {
@@ -278,12 +279,9 @@ public class TutorialStage implements GameStage {
                 }
             }
         }
-        if (pauseMenu != null) {
             pauseMenu.dispose();
-        }
-        if (gdxStage != null) {
             gdxStage.dispose();
-        }
+
     }
 
 
@@ -311,10 +309,10 @@ public class TutorialStage implements GameStage {
             }
         }
 
-     Save.saveGameWithBrickPositions(
+      Save.saveGameWithBrickPositions(
             0,
             0,
-            0,
+            paddle.getState(),
             brickPositions,
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
