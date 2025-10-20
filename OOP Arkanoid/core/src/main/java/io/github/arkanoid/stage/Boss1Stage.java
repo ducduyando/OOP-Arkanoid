@@ -68,11 +68,11 @@ public class Boss1Stage implements GameStage {
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
             paddle.setState(saveData.paddleState); // Restore paddle state
-            
+
             ball = new Ball(ballImage, saveData.ballX, saveData.ballY);
             ball.setVelocity(saveData.ballVelX, saveData.ballVelY);
             ball.setLaunched(saveData.ballLaunched);
-            
+
             // Create boss with full HP first, then set current HP
             boss1 = new Boss1(1, saveData.bossX, saveData.bossY, 100);
             boss1.setHp(saveData.bossHP); // Set current HP from save data
@@ -199,7 +199,7 @@ public class Boss1Stage implements GameStage {
     }
 
     private void saveGame() {
-        io.github.arkanoid.core.Save.saveGame(
+        Save.saveGame(
             1, // Boss1 stage
             boss1.getHp(), // Boss HP
             paddle.getState(), // Paddle state - FIX: save actual paddle state

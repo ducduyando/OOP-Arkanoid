@@ -73,4 +73,12 @@ public class Constants {
     /** Transition. */
     public static final int TRANSITION_WIDTH = 1920;
     public static final int TRANSITION_HEIGHT = 1080;
+
+
+    /** Boss2. */
+    public static final int BOSS2_WIDTH = 448;
+    public static final int BOSS2_HEIGHT = 272;
+    public static final Vector2 BOSS2_VELOCITY = new Vector2(900f, 900f);
+
+
 }
