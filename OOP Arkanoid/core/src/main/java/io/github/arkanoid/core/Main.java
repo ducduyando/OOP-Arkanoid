@@ -2,6 +2,7 @@ package io.github.arkanoid.core;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.arkanoid.stage.*;
@@ -93,8 +94,8 @@ public class Main extends ApplicationAdapter {
             currentFlow = GameFlow.LOADING;
         } else if (currentStage instanceof Boss1Stage) {
             nextStage = new PowerUpMenuStage();
-            loadingScreen = new LoadingScreen(stageTextures[2]);
-            currentFlow = GameFlow.LOADING;
+            changeStage(nextStage);
+
         } else if (currentStage instanceof PowerUpMenuStage) {
             loadingScreen = new LoadingScreen(stageTextures[2]);
             currentFlow = GameFlow.LOADING;

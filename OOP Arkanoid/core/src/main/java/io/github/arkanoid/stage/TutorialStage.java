@@ -40,7 +40,6 @@ public class TutorialStage implements GameStage {
     private boolean isPaused = false;
     private PauseMenu pauseMenu;
     private boolean pKeyPressed = false;
-    private boolean quitRequested = false;
 
     // Save data for loading
     private Save.SaveData saveData;
@@ -190,8 +189,7 @@ public class TutorialStage implements GameStage {
                         pauseMenu.resetChoice();
                         break;
                     case QUIT:
-
-                        quitRequested = true;
+                        Gdx.app.exit();
                         break;
                 }
             }
@@ -293,10 +291,6 @@ public class TutorialStage implements GameStage {
     @Override
     public boolean isFinished() {
         return bricks.isEmpty();
-    }
-
-    public boolean isQuitRequested() {
-        return quitRequested;
     }
 
     private void saveGame() {
