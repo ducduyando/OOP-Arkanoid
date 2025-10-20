@@ -11,13 +11,13 @@ public class Save {
     private static final String SAVE_FILE = "game_save";
     private static final Preferences pref = Gdx.app.getPreferences(SAVE_FILE);
 
-    public static void saveGame(int stageNumber, int bossHP, int paddleHP, int bricksRemaining,
+    public static void saveGame(int stageNumber, int bossHP, int paddleState, int bricksRemaining,
                                 float paddleX, float paddleY, float ballX, float ballY,
                                 float ballVelX, float ballVelY, boolean ballLaunched,
                                 float bossX, float bossY) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
-        pref.putInteger("paddleHP", paddleHP);
+        pref.putInteger("paddleState", paddleState);
         pref.putInteger("bricksRemaining", bricksRemaining);
 
         pref.putFloat("paddleX", paddleX);
@@ -34,13 +34,13 @@ public class Save {
         Gdx.app.log("SAVE", "Saved bricks remaining = " + bricksRemaining);
     }
 
-    public static void saveGameWithBrickPositions(int stageNumber, int bossHP, int paddleHP, List<BrickPosition> brickPositions,
+    public static void saveGameWithBrickPositions(int stageNumber, int bossHP, int paddleState, List<BrickPosition> brickPositions,
                                                   float paddleX, float paddleY, float ballX, float ballY,
                                                   float ballVelX, float ballVelY, boolean ballLaunched,
                                                   float bossX, float bossY) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
-        pref.putInteger("paddleHP", paddleHP);
+        pref.putInteger("paddleState", paddleState);
         pref.putInteger("bricksRemaining", brickPositions.size());
 
         // ADDED: Save positions and ball state
@@ -78,7 +78,7 @@ public class Save {
         SaveData data = new SaveData();
         data.stageNumber = pref.getInteger("stageNumber", 0);
         data.bossHP = pref.getInteger("bossHP", 100);
-        data.paddleHP = pref.getInteger("paddleHP", 3);
+        data.paddleState = pref.getInteger("paddleState", 3);
         data.bricksRemaining = pref.getInteger("bricksRemaining", 0);
 
         data.paddleX = pref.getFloat("paddleX");
@@ -116,7 +116,7 @@ public class Save {
     public static class SaveData {
         public int stageNumber;
         public int bossHP;
-        public int paddleHP;
+        public int paddleState;
         public int bricksRemaining;
         public List<BrickPosition> brickPositions;
 

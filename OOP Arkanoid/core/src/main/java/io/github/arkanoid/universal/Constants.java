@@ -29,6 +29,8 @@ public class Constants {
     public static final int PADDLE_HEIGHT = 56;
     public static final Vector2 PADDLE_VELOCITY = new Vector2(900f, 900f);
     public static final float MAX_BOUNCE_ANGLE = (float) Math.toRadians(60);
+    public static final float PADDLE_INITIAL_X = (SCREEN_WIDTH - PADDLE_WIDTH) / 2f;
+    public static final float PADDLE_INITIAL_Y = 150f;
 
 
     public static final int POWER_UP_WIDTH = 1920;

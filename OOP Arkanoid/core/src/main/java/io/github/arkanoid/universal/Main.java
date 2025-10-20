@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss1.Boss1;
@@ -98,7 +97,7 @@ public class Main extends ApplicationAdapter {
         }
 
         // --Object initialization--
-        paddle = new Paddle(paddleImage, (SCREEN_WIDTH - PADDLE_WIDTH) / 2f, 150);
+        paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
         ball = new Ball(ballImage, 0, 0);
 
         float bossInitialX = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
@@ -160,7 +159,7 @@ public class Main extends ApplicationAdapter {
                                 boss1.setHp(data.bossHP);
                                 boss1.setPosition(data.bossX, data.bossY);
 
-                                paddle.setHealth(data.paddleHP);
+                                paddle.setState(data.paddleState);
                                 paddle.setPosition(data.paddleX, data.paddleY);
                                 ball.setPosition(data.ballX, data.ballY);
                                 ball.setVelocity(data.ballVelX, data.ballVelY);
@@ -198,9 +197,12 @@ public class Main extends ApplicationAdapter {
                         tutorial = new Tutorial(paddle, ball);
                         // luu lai so gach duoc luu tu save
                         if (isLoadedFromSave && loadedBricksRemaining >= 0) {
-                            Save.SaveData saveData = Save.loadGame();
-                            if (saveData != null && saveData.brickPositions != null && !saveData.brickPositions.isEmpty()) {
-                                tutorial.resetBricksWithPositions(saveData.brickPositions);
+                            Save.SaveData data = Save.loadGame();
+                            paddle.setState(data.paddleState);
+                            paddle.setPosition(data.paddleX, data.paddleY);
+                            ball.setPosition(data.ballX, data.ballY);
+                            if (data != null && data.brickPositions != null && !data.brickPositions.isEmpty()) {
+                                tutorial.resetBricksWithPositions(data.brickPositions);
                             } else {
                                 tutorial.resetBricks(loadedBricksRemaining);
                             }
@@ -242,8 +244,8 @@ public class Main extends ApplicationAdapter {
                 case LOADING_TO_STAGE_1:
                     if (loadingStage.getState() == LoadingStage.State.DONE) {
                         if (!isLoadedFromSave) {
-                            paddle.setHealth(3);
-                            paddle.setPosition(0, 0);
+                            paddle.resetState();
+                            paddle.setPosition(PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
                             ball.setPosition(0, 0);
                             ball.resetLaunch();
                         }
@@ -357,12 +359,12 @@ public class Main extends ApplicationAdapter {
                             if (bricksRemaining == 0) {
                                 saveStageNumber = 1;
                             }
-                            Save.saveGameWithBrickPositions(saveStageNumber, boss1.getHp(), paddle.getHealth(), brickPositions,
+                            Save.saveGameWithBrickPositions(saveStageNumber, boss1.getHp(), paddle.getState(), brickPositions,
                                 paddle.getX(), paddle.getY(), ball.getX(), ball.getY(),
                                 ball.velocityVector.x, ball.velocityVector.y, ball.isLaunched(),
                                 boss1.getX(), boss1.getY());
                         } else {
-                            Save.saveGame(saveStageNumber, boss1.getHp(), paddle.getHealth(), bricksRemaining,
+                            Save.saveGame(saveStageNumber, boss1.getHp(), paddle.getState(), bricksRemaining,
                                 paddle.getX(), paddle.getY(), ball.getX(), ball.getY(),
                                 ball.velocityVector.x, ball.velocityVector.y, ball.isLaunched(),
                                 boss1.getX(), boss1.getY());
