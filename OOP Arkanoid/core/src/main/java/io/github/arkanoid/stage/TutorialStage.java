@@ -159,14 +159,14 @@ public class TutorialStage implements GameStage {
                     } else {
                         ball.setX(brickRect.x + brickRect.width);
                     }
-                    ball.getVelocity().x = -ball.getVelocity().x;
+                    ball.setVelocity(-ball.getVelocity().x, ball.getVelocity().y);
                 } else {
                     if (ballCenterY < brickCenterY) {
                         ball.setY(brickRect.y - ballRect.height);
                     } else {
                         ball.setY(brickRect.y + brickRect.height);
                     }
-                    ball.getVelocity().y = -ball.getVelocity().y;
+                    ball.setVelocity(ball.getVelocity().x, -ball.getVelocity().y);
                 }
 
                 brick.destroy();

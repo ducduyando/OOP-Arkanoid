@@ -88,13 +88,13 @@ public class Main extends ApplicationAdapter {
         }
         else if (currentStage instanceof TutorialStage) {
             nextStage = new Boss1Stage();
-            loadingScreen = new LoadingScreen(stageTextures[0]);
+            loadingScreen = new LoadingScreen(stageTextures[1]);
             currentFlow = GameFlow.LOADING;
-            currentStage.exit();
-            currentStage = null;
         }
         else if (currentStage instanceof Boss1Stage) {
-            changeStage(new PowerUpMenuStage());
+            nextStage = new PowerUpMenuStage();
+            loadingScreen = new LoadingScreen(stageTextures[2]);
+            currentFlow = GameFlow.LOADING;
         }
         else if (currentStage instanceof PowerUpMenuStage) {
             PowerUpMenuStage powerUpStage = (PowerUpMenuStage) currentStage;
