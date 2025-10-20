@@ -95,8 +95,8 @@ public class TutorialStage implements GameStage {
         brickTextures[1] = new Texture("brick/" + "blue" + ".png");
         brickTextures[2] = new Texture("brick/" + "green" + ".png");
         brickTextures[3] = new Texture("brick/" + "orange" + ".png");
-        Texture paddleImage = new Texture("universal/" + "paddle" + ".png");
-        Texture ballImage = new Texture("ball/" + "normal" + ".png");
+        paddleImage = new Texture("universal/" + "paddle" + ".png");
+        ballImage = new Texture("ball/" + "normal" + ".png");
 
         paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
         ball = new Ball(ballImage, 0, 0);

@@ -28,7 +28,7 @@ public class ParallaxBackground extends Actor {
                 y1 = y2 + SCREEN_HEIGHT;
             }
 
-            if (y2 + SCREEN_WIDTH <= 0) {
+            if (y2 + SCREEN_HEIGHT <= 0) {
                 y2 = y1  + SCREEN_HEIGHT;
             }
         }
