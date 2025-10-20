@@ -18,7 +18,7 @@ public class PauseMenu extends Actor {
     private TextureRegion currentFrame;
     private float stateTime = 0f;
 
-    protected enum Option {
+    public enum Option {
         RESUME,
         SAVE,
         QUIT
@@ -142,6 +142,10 @@ public class PauseMenu extends Actor {
         isOptionChosen = false;
         option = Option.RESUME;
         stateTime = 0f;
+    }
+
+    public void resetChoice() {
+        isOptionChosen = false;
     }
 
     public void dispose() {

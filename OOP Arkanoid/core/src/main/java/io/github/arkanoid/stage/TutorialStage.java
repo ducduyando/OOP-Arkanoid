@@ -1,5 +1,7 @@
 package io.github.arkanoid.stage;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,11 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.core.GameLogic;
+import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
+import io.github.arkanoid.ui.PauseMenu;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
@@ -30,6 +35,23 @@ public class TutorialStage implements GameStage {
     private Texture[] brickTextures;
     private Texture paddleImage;
     private Texture ballImage;
+
+    // Pause functionality
+    private boolean isPaused = false;
+    private PauseMenu pauseMenu;
+    private boolean pKeyPressed = false;
+    private boolean quitRequested = false;
+
+    // Save data for loading
+    private Save.SaveData saveData;
+
+    public TutorialStage() {
+        this.saveData = null;
+    }
+
+    public TutorialStage(Save.SaveData saveData) {
+        this.saveData = saveData;
+    }
 
     private static class BrickActor extends Actor {
         private final TextureRegion textureRegion;
@@ -98,11 +120,19 @@ public class TutorialStage implements GameStage {
         paddleImage = new Texture("universal/" + "paddle" + ".png");
         ballImage = new Texture("ball/" + "normal" + ".png");
 
-        paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
-        ball = new Ball(ballImage, 0, 0);
+        if (saveData != null) {
+            paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
+            ball = new Ball(ballImage, saveData.ballX, saveData.ballY);
+            ball.setVelocity(saveData.ballVelX, saveData.ballVelY);
+            ball.setLaunched(saveData.ballLaunched);
+        } else {
+            paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
+            ball = new Ball(ballImage, 0, 0);
+        }
         bricks = new ArrayList<>();
 
         this.gameLogic = new GameLogic(paddle, null);
+        pauseMenu = new PauseMenu();
 
         gdxStage.addActor(new BackgroundActor());
         gdxStage.addActor(paddle);
@@ -112,28 +142,82 @@ public class TutorialStage implements GameStage {
     }
 
     private void createBricks() {
-        for (int i = 0; i < BRICK_ROWS; i++) {
-            for (int j = 0; j < BRICK_COLS; j++) {
-                float x = LEFT_BOUNDARY + j * BRICK_WIDTH;
-                float y = SCREEN_HEIGHT - BRICK_HEIGHT - i * BRICK_HEIGHT;
-                int textureIndex = new Random().nextInt(brickTextures.length);
-                Texture brickTexture = brickTextures[textureIndex];
-                BrickActor brick = new BrickActor(brickTexture, x, y, textureIndex);
-
+        if (saveData != null && saveData.brickPositions != null && !saveData.brickPositions.isEmpty()) {
+            // Load bricks from save data
+            for (Save.BrickPosition pos : saveData.brickPositions) {
+                BrickActor brick = new BrickActor(brickTextures[pos.textureIndex], pos.x, pos.y, pos.textureIndex);
                 bricks.add(brick);
                 gdxStage.addActor(brick);
+            }
+        } else {
+            // Create default brick layout
+            for (int i = 0; i < BRICK_ROWS; i++) {
+                for (int j = 0; j < BRICK_COLS; j++) {
+                    float x = LEFT_BOUNDARY + j * BRICK_WIDTH;
+                    float y = SCREEN_HEIGHT - BRICK_HEIGHT - i * BRICK_HEIGHT;
+                    int textureIndex = new Random().nextInt(brickTextures.length);
+                    Texture brickTexture = brickTextures[textureIndex];
+                    BrickActor brick = new BrickActor(brickTexture, x, y, textureIndex);
+
+                    bricks.add(brick);
+                    gdxStage.addActor(brick);
+                }
             }
         }
     }
 
     @Override
     public void update(float delta) {
+        // Handle pause input
+        handlePauseInput();
+
+        if (isPaused) {
+            pauseMenu.act(delta);
+
+            if (pauseMenu.isOptionChosen()) {
+                PauseMenu.Option selectedOption = pauseMenu.getOption();
+                switch (selectedOption) {
+                    case RESUME:
+                        isPaused = false;
+                        pauseMenu.remove();
+                        pauseMenu.reset();
+                        break;
+                    case SAVE:
+                        saveGame();
+                        pauseMenu.resetChoice();
+                        break;
+                    case QUIT:
+                        // Exit game
+                        Gdx.app.exit();
+                        break;
+                }
+            }
+
+            return; // Don't update game logic when paused
+        }
+
         gameLogic.launch(ball);
         gameLogic.paddleCollision(ball);
         gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
         checkBrickCollisions();
 
         gdxStage.act(delta);
+    }
+
+    private void handlePauseInput() {
+        boolean pKeyCurrentlyPressed = Gdx.input.isKeyPressed(Input.Keys.P);
+
+        if (pKeyCurrentlyPressed && !pKeyPressed) {
+            isPaused = !isPaused;
+
+            if (isPaused) {
+                gdxStage.addActor(pauseMenu);
+            } else {
+                pauseMenu.remove();
+            }
+        }
+
+        pKeyPressed = pKeyCurrentlyPressed;
     }
 
     private void checkBrickCollisions() {
@@ -178,14 +262,30 @@ public class TutorialStage implements GameStage {
 
     @Override
     public void exit() {
-        backgroundTexture.dispose();
-        paddleImage.dispose();
-        ballImage.dispose();
-        for (Texture tex : brickTextures) {
-            tex.dispose();
+        if (backgroundTexture != null) {
+            backgroundTexture.dispose();
         }
-        gdxStage.dispose();
+        if (paddleImage != null) {
+            paddleImage.dispose();
+        }
+        if (ballImage != null) {
+            ballImage.dispose();
+        }
+        if (brickTextures != null) {
+            for (Texture tex : brickTextures) {
+                if (tex != null) {
+                    tex.dispose();
+                }
+            }
+        }
+        if (pauseMenu != null) {
+            pauseMenu.dispose();
+        }
+        if (gdxStage != null) {
+            gdxStage.dispose();
+        }
     }
+
 
     @Override
     public Stage getGdxStage() {
@@ -195,5 +295,32 @@ public class TutorialStage implements GameStage {
     @Override
     public boolean isFinished() {
         return bricks.isEmpty();
+    }
+
+    public boolean isQuitRequested() {
+        return quitRequested;
+    }
+
+    private void saveGame() {
+        List<Save.BrickPosition> brickPositions = new ArrayList<>();
+        for (BrickActor brick : bricks) {
+            if (!brick.isDestroyed()) {
+                brickPositions.add(new Save.BrickPosition(
+                    brick.getX(), brick.getY(), brick.getTextureIndex()
+                ));
+            }
+        }
+
+     Save.saveGameWithBrickPositions(
+            0,
+            0,
+            0,
+            brickPositions,
+            paddle.getX(), paddle.getY(),
+            ball.getX(), ball.getY(),
+            ball.getVelocity().x, ball.getVelocity().y,
+            ball.isLaunched(),
+            0, 0
+        );
     }
 }

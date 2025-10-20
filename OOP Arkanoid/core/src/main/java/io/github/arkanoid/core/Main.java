@@ -49,7 +49,13 @@ public class Main extends ApplicationAdapter {
 
             if (loadingScreen.getState() == LoadingScreen.State.DONE) {
                 currentFlow = GameFlow.RUNNING;
-                changeStage(nextStage);
+
+                if (nextStage != null) {
+                    changeStage(nextStage);
+                } else {
+                    Gdx.app.exit();
+                }
+
                 loadingScreen.dispose();
                 loadingScreen = null;
                 nextStage = null;
@@ -72,40 +78,60 @@ public class Main extends ApplicationAdapter {
             Button.Mode choice = menuStage.getSelectedMode();
             switch (choice) {
                 case PLAY:
-                    System.out.println("Starting new game...");
                     changeStage(new TutorialStage());
                     break;
                 case LOAD:
-                    System.out.println("Loading saved game...");
-                    // TODO: Thêm logic tải game và chuyển đến màn chơi đã lưu
-                    // Ví dụ: changeStage(loadGameAndGetStage());
+                    loadSavedGame();
                     break;
                 case QUIT:
-                    System.out.println("Exiting game...");
                     Gdx.app.exit();
                     break;
             }
         }
         else if (currentStage instanceof TutorialStage) {
+            // Normal completion, go to Boss1
             nextStage = new Boss1Stage();
             loadingScreen = new LoadingScreen(stageTextures[1]);
             currentFlow = GameFlow.LOADING;
         }
         else if (currentStage instanceof Boss1Stage) {
+            // Normal completion, go to PowerUp menu
             nextStage = new PowerUpMenuStage();
             loadingScreen = new LoadingScreen(stageTextures[2]);
             currentFlow = GameFlow.LOADING;
         }
         else if (currentStage instanceof PowerUpMenuStage) {
-            PowerUpMenuStage powerUpStage = (PowerUpMenuStage) currentStage;
-            if (powerUpStage.getSelectedOption() == PowerUpMenu.Option.SKILL1) {
-                System.out.println("Skill 1 chosen!");
-            }
-            else  {
-                System.out.println("Skill 2 chosen!");
-            }
-            changeStage(new TutorialStage());
+            // Show loading screen for stage 2, then exit
+            loadingScreen = new LoadingScreen(stageTextures[2]);
+            currentFlow = GameFlow.LOADING;
+            nextStage = null;
         }
+    }
+
+    private void loadSavedGame() {
+        if (!Save.hasSave()) {
+            changeStage(new TutorialStage());
+            return;
+        }
+
+        Save.SaveData saveData = Save.loadGame();
+
+        switch (saveData.stageNumber) {
+            case 0: // Tutorial stage
+                nextStage = new TutorialStage(saveData);
+                loadingScreen = new LoadingScreen(stageTextures[0]);
+                break;
+            case 1: // Boss1 stage
+                nextStage = new Boss1Stage(saveData);
+                loadingScreen = new LoadingScreen(stageTextures[1]);
+                break;
+            default:
+                // Unknown stage, start new game
+                changeStage(new TutorialStage());
+                return;
+        }
+
+        currentFlow = GameFlow.LOADING;
     }
 
     private void changeStage(GameStage newStage) {
@@ -125,7 +151,6 @@ public class Main extends ApplicationAdapter {
             currentStage.exit();
         }
         batch.dispose();
-        // Dọn dẹp các texture đã tải trước
         for (Texture texture : stageTextures) {
             texture.dispose();
         }
