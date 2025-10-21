@@ -200,10 +200,10 @@ public class Boss1Stage implements GameStage {
 
     private void saveGame() {
         Save.saveGame(
-            1, // Boss1 stage
-            boss1.getHp(), // Boss HP
-            paddle.getState(), // Paddle state - FIX: save actual paddle state
-            0, // No bricks in boss stage
+            1,
+            boss1.getHp(),
+            paddle.getState(),
+            0,
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,

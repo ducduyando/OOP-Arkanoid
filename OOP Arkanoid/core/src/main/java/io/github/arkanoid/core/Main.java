@@ -31,7 +31,7 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         stageTextures = new Texture[3];
-        stageTextures[0] = new Texture("stages/" + "stage0" + ".png"); // Tutorial
+        stageTextures[0] = new Texture("stages/" + "stage0" + ".png");
         stageTextures[1] = new Texture("stages/" + "stage1" + ".png"); // Boss 1
         stageTextures[2] = new Texture("stages/" + "stage2" + ".png");
 
@@ -117,27 +117,27 @@ public class Main extends ApplicationAdapter {
 
         Save.SaveData saveData = Save.loadGame();
         if (saveData == null) {
-            // Failed to load, start new game
+
             changeStage(new TutorialStage());
             return;
         }
 
-        // Load appropriate stage based on save data
+
         switch (saveData.stageNumber) {
-            case 0: // Tutorial stage
+            case 0:
                 nextStage = new TutorialStage(saveData);
                 loadingScreen = new LoadingScreen(stageTextures[0]);
                 break;
-            case 1: // Boss1 stage
+            case 1:
                 nextStage = new Boss1Stage(saveData);
                 loadingScreen = new LoadingScreen(stageTextures[1]);
                 break;
-            case 2: // Boss2 stage
+            case 2:
                 nextStage = new Boss2Stage(saveData);
                 loadingScreen = new LoadingScreen(stageTextures[2]);
                 break;
             default:
-                // Unknown stage, start new game
+                // ko save game thi load se la new game
                 changeStage(new TutorialStage());
                 return;
         }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.GameLogic.reflect;
 
 public class TutorialStage implements GameStage {
     private Stage gdxStage;
@@ -241,20 +243,19 @@ public class TutorialStage implements GameStage {
                 if (overlapX < overlapY) {
                     if (ballCenterX < brickCenterX) {
                         ball.setX(brickRect.x - ballRect.width);
+                        reflect(ball.getVelocity(), new Vector2(1, 0));
                     } else {
                         ball.setX(brickRect.x + brickRect.width);
+                        reflect(ball.getVelocity(), new Vector2(-1, 0));
                     }
-                    // Reverse X velocity
-                    ball.setVelocity(-ball.getVelocity().x, ball.getVelocity().y);
                 } else {
-                    // Collision on top/bottom
                     if (ballCenterY < brickCenterY) {
                         ball.setY(brickRect.y - ballRect.height);
+                        reflect(ball.getVelocity(), new Vector2(0, 1));
                     } else {
                         ball.setY(brickRect.y + brickRect.height);
+                        reflect(ball.getVelocity(), new Vector2(0, -1));
                     }
-                    // Reverse Y velocity
-                    ball.setVelocity(ball.getVelocity().x, -ball.getVelocity().y);
                 }
 
                 brick.destroy();
