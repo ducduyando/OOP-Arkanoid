@@ -93,15 +93,15 @@ public class GameLogic {
         }
         if (ball.getX() + ball.getVelocity().x * delta <= LEFT_BOUNDARY) {
             ball.setPosition(LEFT_BOUNDARY, ball.getY());
-            ball.setVelocity(-ball.getVelocity().x, ball.getVelocity().y);
+            reflect(ball.getVelocity(), new Vector2(1,0));
         }
         if (ball.getX() + BALL_WIDTH + ball.getVelocity().x * delta  >= RIGHT_BOUNDARY) {
             ball.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ball.getY());
-            ball.setVelocity(-ball.getVelocity().x, ball.getVelocity().y);
+           reflect(ball.getVelocity(), new Vector2(-1, 0));
         }
         if (ball.getY() + BALL_HEIGHT + ball.getVelocity().y * delta >= topBoundary) {
             ball.setPosition(ball.getX(),  topBoundary - BALL_HEIGHT);
-            ball.setVelocity(ball.getVelocity().x, -ball.getVelocity().y);
+            reflect(ball.getVelocity(), new Vector2(0, -1));
         }
     }
 
