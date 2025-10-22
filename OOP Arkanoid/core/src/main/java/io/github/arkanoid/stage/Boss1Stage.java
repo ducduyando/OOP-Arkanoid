@@ -61,7 +61,7 @@ public class Boss1Stage implements GameStage {
         this.bossHealthBarImage = new Texture("universal/" + "health_bar" + ".png");
         this.bgTextures = new Texture[5];
         for (int i = 0; i < 5; i++) {
-            bgTextures[i] = new Texture("background/" + "layer" + i + ".png");
+            bgTextures[i] = new Texture("background/" + "stage1/" + "layer" + i + ".png");
         }
 
         // Create entities with saved positions if available
@@ -82,7 +82,7 @@ public class Boss1Stage implements GameStage {
             boss1 = new Boss1(1, BOSS1_INITIAL_X, BOSS1_INITIAL_Y, 100);
         }
         bossHealthBar = new HealthBar(bossHealthBarImage, boss1);
-        parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 50f, 40f, 30f, 20f});
+        parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 50f, 40f, 30f, 20f}, false);
 
         gameLogic = new GameLogic(paddle, boss1);
         pauseMenu = new PauseMenu();
@@ -113,7 +113,9 @@ public class Boss1Stage implements GameStage {
                         break;
                     case SAVE:
                         saveGame();
-                        pauseMenu.resetChoice();
+                        isPaused = false;
+                        pauseMenu.remove();
+                        pauseMenu.reset();
                         break;
                     case QUIT:
                         // Exit game
@@ -142,7 +144,7 @@ public class Boss1Stage implements GameStage {
     }
 
     private void handlePauseInput() {
-        boolean pKeyCurrentlyPressed = Gdx.input.isKeyPressed(Input.Keys.P);
+        boolean pKeyCurrentlyPressed = (Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
 
         if (pKeyCurrentlyPressed && !pKeyPressed) {
             isPaused = !isPaused;

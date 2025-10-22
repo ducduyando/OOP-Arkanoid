@@ -59,9 +59,9 @@ public class Boss2Stage implements GameStage {
         this.paddleImage = new Texture("universal/" + "paddle" + ".png");
         this.ballImage = new Texture("ball/" + "normal" + ".png");
         this.bossHealthBarImage = new Texture("universal/" + "health_bar" + ".png");
-        this.bgTextures = new Texture[5];
-        for (int i = 0; i < 5; i++) {
-            bgTextures[i] = new Texture("background/" + "layer" + i + ".png");
+        this.bgTextures = new Texture[6];
+        for (int i = 0; i < 6; i++) {
+            bgTextures[i] = new Texture("background/" + "stage2/" + "layer" + i + ".png");
         }
 
         // Create entities with saved positions if available
@@ -82,7 +82,7 @@ public class Boss2Stage implements GameStage {
             boss2 = new Boss2(1, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
         }
         bossHealthBar = new HealthBar(bossHealthBarImage, boss2);
-        parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 50f, 40f, 30f, 20f});
+        parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 10f, 20f, 30f, 0f, 40f}, true);
 
         gameLogic = new GameLogic(paddle, boss2);
         pauseMenu = new PauseMenu();
@@ -113,7 +113,9 @@ public class Boss2Stage implements GameStage {
                         break;
                     case SAVE:
                         saveGame();
-                        pauseMenu.resetChoice();
+                        isPaused = false;
+                        pauseMenu.remove();
+                        pauseMenu.reset();
                         break;
                     case QUIT:
                         // Exit game
@@ -142,7 +144,7 @@ public class Boss2Stage implements GameStage {
     }
 
     private void handlePauseInput() {
-        boolean pKeyCurrentlyPressed = Gdx.input.isKeyPressed(Input.Keys.P);
+        boolean pKeyCurrentlyPressed = (Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
 
         if (pKeyCurrentlyPressed && !pKeyPressed) {
             isPaused = !isPaused;

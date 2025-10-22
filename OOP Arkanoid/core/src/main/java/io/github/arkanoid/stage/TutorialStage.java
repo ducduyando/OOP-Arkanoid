@@ -188,7 +188,9 @@ public class TutorialStage implements GameStage {
                         break;
                     case SAVE:
                         saveGame();
-                        pauseMenu.resetChoice();
+                        isPaused = false;
+                        pauseMenu.remove();
+                        pauseMenu.reset();
                         break;
                     case QUIT:
                         Gdx.app.exit();
@@ -208,7 +210,7 @@ public class TutorialStage implements GameStage {
     }
 
     private void handlePauseInput() {
-        boolean pKeyCurrentlyPressed = Gdx.input.isKeyPressed(Input.Keys.P);
+        boolean pKeyCurrentlyPressed = (Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
 
         if (pKeyCurrentlyPressed && !pKeyPressed) {
             isPaused = !isPaused;

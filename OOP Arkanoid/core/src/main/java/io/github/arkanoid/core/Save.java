@@ -78,7 +78,7 @@ public class Save {
         SaveData data = new SaveData();
         data.stageNumber = pref.getInteger("stageNumber", 0);
         data.bossHP = pref.getInteger("bossHP", 100);
-        data.paddleState = pref.getInteger("paddleState", 3);
+        data.paddleState = pref.getInteger("paddleState ", 3);
         data.bricksRemaining = pref.getInteger("bricksRemaining", 0);
 
         data.paddleX = pref.getFloat("paddleX");

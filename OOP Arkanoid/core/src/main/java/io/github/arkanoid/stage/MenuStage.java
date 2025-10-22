@@ -24,7 +24,7 @@ public class MenuStage implements GameStage {
         for (int i = 0; i < 4; i++) {
             menuTextures[i] = new Texture("menu/" + "layer" + i + ".png");
         }
-        this.menuBackground = new ParallaxBackground(menuTextures, new float[] {0f, 100f, 0f, 0f});
+        this.menuBackground = new ParallaxBackground(menuTextures, new float[] {0f, 100f, 0f, 0f}, false);
 
         this.menuButton = new Button();
 
