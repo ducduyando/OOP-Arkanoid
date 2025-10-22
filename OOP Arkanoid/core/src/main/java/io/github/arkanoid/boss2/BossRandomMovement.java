@@ -7,7 +7,7 @@ import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
 
-public class Boss2Centering implements BossSkill {
+public class BossRandomMovement implements BossSkill {
     private final Boss owner;
     private boolean hasArrived = false;
     private float cooldownTimer = 0f;
@@ -20,11 +20,11 @@ public class Boss2Centering implements BossSkill {
     private Vector2 targetPosition;
     private final Random random = new Random();
 
-    public Boss2Centering(Boss2 owner) {
+    public BossRandomMovement(Boss2 owner) {
         this.owner = owner;
 
-        float cellXSize = (SCREEN_WIDTH - BOSS1_WIDTH) / (float) (COLS);
-        float cellYSize = (SCREEN_HEIGHT / 2f - BOSS1_HEIGHT - HP_HEIGHT) / (float) (ROWS);
+        float cellXSize = (SCREEN_WIDTH - BOSS2_WIDTH) / (float) (COLS);
+        float cellYSize = (SCREEN_HEIGHT / 2f - BOSS2_HEIGHT - HP_HEIGHT) / (float) (ROWS);
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {

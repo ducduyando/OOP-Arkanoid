@@ -99,9 +99,9 @@ public class Main extends ApplicationAdapter {
             changeStage(nextStage);
 
         } else if (currentStage instanceof PowerUpMenuStage) {
+            nextStage = new Boss2Stage();
             loadingScreen = new LoadingScreen(stageTextures[2]);
             currentFlow = GameFlow.LOADING;
-            nextStage = new Boss2Stage();
         } else if (currentStage instanceof Boss2Stage) {
             loadingScreen = new LoadingScreen(stageTextures[2]);
             currentFlow = GameFlow.LOADING;

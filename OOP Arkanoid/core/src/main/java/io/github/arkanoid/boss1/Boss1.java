@@ -7,8 +7,6 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class Boss1 extends Boss {
 
-
-
     public Boss1(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY, maxHp);
 

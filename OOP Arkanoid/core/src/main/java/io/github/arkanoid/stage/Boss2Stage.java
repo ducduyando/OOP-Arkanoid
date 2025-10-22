@@ -74,12 +74,12 @@ public class Boss2Stage implements GameStage {
             ball.setLaunched(saveData.ballLaunched);
 
             // Create boss with full HP first, then set current HP
-            boss2 = new Boss2(2, saveData.bossX, saveData.bossY, 150);
+            boss2 = new Boss2(2, saveData.bossX, saveData.bossY, 100);
             boss2.setHp(saveData.bossHP); // Set current HP from save data
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
-            boss2 = new Boss2(1, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
+            boss2 = new Boss2(2, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
         }
         bossHealthBar = new HealthBar(bossHealthBarImage, boss2);
         parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 10f, 20f, 30f, 0f, 40f}, true);
@@ -202,7 +202,7 @@ public class Boss2Stage implements GameStage {
 
     private void saveGame() {
         Save.saveGame(
-            1, // Boss1 stage
+            2, // Boss1 stage
             boss2.getHp(), // Boss HP
             paddle.getState(), // Paddle state - FIX: save actual paddle state
             0, // No bricks in boss stage
