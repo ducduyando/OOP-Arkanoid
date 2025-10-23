@@ -92,6 +92,16 @@ public class Boss2Stage implements GameStage {
         stage.addActor(paddle);
         stage.addActor(ball);
         stage.addActor(boss2);
+
+        // Restore bees if loading from save
+        if (saveData != null && saveData.beePositions != null) {
+            for (Save.BeePosition beePos : saveData.beePositions) {
+                io.github.arkanoid.boss2.BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
+                    beePos.x, beePos.y, "boss2/" + "skill" + "1" +".png"
+                );
+                stage.addActor(bee);
+            }
+        }
     }
 
     @Override
@@ -113,9 +123,7 @@ public class Boss2Stage implements GameStage {
                         break;
                     case SAVE:
                         saveGame();
-                        isPaused = false;
-                        pauseMenu.remove();
-                        pauseMenu.reset();
+                        pauseMenu.resetChoice();
                         break;
                     case QUIT:
                         // Exit game
@@ -186,6 +194,14 @@ public class Boss2Stage implements GameStage {
 
 
 
+    // Custom draw method to handle pause menu
+    public void drawEffects(com.badlogic.gdx.graphics.g2d.SpriteBatch batch) {
+        // Draw pause menu if paused
+        if (isPaused) {
+            pauseMenu.draw(batch, 1f);
+        }
+    }
+
     @Override
     public Stage getGdxStage() {
         return this.stage;
@@ -201,11 +217,20 @@ public class Boss2Stage implements GameStage {
     }
 
     private void saveGame() {
-        Save.saveGame(
-            2, // Boss1 stage
-            boss2.getHp(), // Boss HP
-            paddle.getState(), // Paddle state - FIX: save actual paddle state
-            0, // No bricks in boss stage
+        java.util.List<Save.BeePosition> beePositions = new java.util.ArrayList<>();
+        if (stage != null) {
+            for (com.badlogic.gdx.scenes.scene2d.Actor actor : stage.getActors()) {
+                if (actor instanceof io.github.arkanoid.boss2.BeeEnemy bee) {
+                    beePositions.add(new Save.BeePosition(bee.getX(), bee.getY()));
+                }
+            }
+        }
+
+        Save.saveGameWithBees(
+            2,
+            boss2.getHp(),
+            paddle.getState(),
+            beePositions,
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,

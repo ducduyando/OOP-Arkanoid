@@ -66,6 +66,34 @@ public class Save {
         Gdx.app.log("SAVE", "Saved " + brickPositions.size() + " bricks with positions");
     }
 
+    public static void saveGameWithBees(int stageNumber, int bossHP, int paddleState, List<BeePosition> beePositions,
+                                        float paddleX, float paddleY, float ballX, float ballY,
+                                        float ballVelX, float ballVelY, boolean ballLaunched,
+                                        float bossX, float bossY) {
+        pref.putInteger("stageNumber", stageNumber);
+        pref.putInteger("bossHP", bossHP);
+        pref.putInteger("paddleState", paddleState);
+        pref.putInteger("bricksRemaining", 0);
+        pref.putInteger("beesCount", beePositions.size());
+        pref.putFloat("paddleX", paddleX);
+        pref.putFloat("paddleY", paddleY);
+        pref.putFloat("ballX", ballX);
+        pref.putFloat("ballY", ballY);
+        pref.putFloat("ballVelX", ballVelX);
+        pref.putFloat("ballVelY", ballVelY);
+        pref.putBoolean("ballLaunched", ballLaunched);
+        pref.putFloat("bossX", bossX);
+        pref.putFloat("bossY", bossY);
+
+        for (int i = 0; i < beePositions.size(); i++) {
+            BeePosition pos = beePositions.get(i);
+            pref.putFloat("bee_" + i + "_x", pos.x);
+            pref.putFloat("bee_" + i + "_y", pos.y);
+        }
+
+        pref.flush();
+    }
+
     public static boolean hasSave() {
         return pref.contains("stageNumber");
     }
@@ -105,6 +133,18 @@ public class Save {
             }
         }
 
+        // Load bee positions if available
+        data.beePositions = new ArrayList<>();
+        int beesCount = pref.getInteger("beesCount", 0);
+        for (int i = 0; i < beesCount; i++) {
+            if (pref.contains("bee_" + i + "_x")) {
+                BeePosition pos = new BeePosition();
+                pos.x = pref.getFloat("bee_" + i + "_x");
+                pos.y = pref.getFloat("bee_" + i + "_y");
+                data.beePositions.add(pos);
+            }
+        }
+
         return data;
     }
 
@@ -119,6 +159,7 @@ public class Save {
         public int paddleState;
         public int bricksRemaining;
         public List<BrickPosition> brickPositions;
+        public List<BeePosition> beePositions;
 
         public float paddleX, paddleY;
         public float ballX, ballY;
@@ -138,6 +179,18 @@ public class Save {
             this.x = x;
             this.y = y;
             this.textureIndex = textureIndex;
+        }
+    }
+
+    public static class BeePosition {
+        public float x;
+        public float y;
+
+        public BeePosition() {}
+
+        public BeePosition(float x, float y) {
+            this.x = x;
+            this.y = y;
         }
     }
 }

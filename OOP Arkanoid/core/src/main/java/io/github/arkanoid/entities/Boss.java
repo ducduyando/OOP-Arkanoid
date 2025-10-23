@@ -21,7 +21,7 @@ public class Boss extends Actor {
     private final Texture normalSprite;
     private final Texture takeDamageSprite;
     private final Texture deathSprite;
-    public final Texture skill1Texture;
+    public Texture skill1Texture;
     public final Texture skill2Texture;
 
     public TextureRegion currentFrame;
@@ -94,6 +94,10 @@ public class Boss extends Actor {
         if (this.currentSkill != null) {
             this.currentSkill.enter(this);
         }
+    }
+
+    public BossSkill getSkill() {
+        return currentSkill;
     }
 
     public void takeDamage(int damage) {
