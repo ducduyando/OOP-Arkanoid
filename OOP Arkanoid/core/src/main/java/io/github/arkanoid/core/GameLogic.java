@@ -57,11 +57,17 @@ public class GameLogic {
             float ballX = paddleCenterX - BALL_WIDTH / 2f;
             float ballY = paddleRef.getY() + paddleRef.getHeight();
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !(ball instanceof PaddleSkill1A)) {
-                ball.setLaunched(true);
-                ball.setVelocity(0f, BALL_VELOCITY.y);
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && ball instanceof PaddleSkill1A) {
-                ball.setVelocity(0f, BALL_VELOCITY.y);
+            if (!(ball instanceof PaddleSkill1A)) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    ball.setLaunched(true);
+                    ball.setVelocity(0f, BALL_VELOCITY.y);
+                }
+
+            } else {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) && ((PaddleSkill1A) ball).isSkill1AReady()) {
+                    ball.setLaunched(true);
+                    ball.setVelocity(0f, BALL_VELOCITY.y);
+                }
             }
             ball.setPosition(ballX, ballY);
         }
@@ -84,12 +90,13 @@ public class GameLogic {
     public void boundaryCollision(Ball ball, float delta, int topBoundary) {
         if (ball.getY() <= DOWN_BOUNDARY) {
             if (ball instanceof PaddleSkill1A) {
-                ball.remove();
                 ((PaddleSkill1A) ball).startSkill1Cooldown();
+
             } else {
                 paddleRef.takeDamage();
-                ball.resetLaunch();
+
             }
+            ball.resetLaunch();
         }
         if (ball.getX() + ball.getVelocity().x * delta <= LEFT_BOUNDARY) {
             ball.setPosition(LEFT_BOUNDARY, ball.getY());

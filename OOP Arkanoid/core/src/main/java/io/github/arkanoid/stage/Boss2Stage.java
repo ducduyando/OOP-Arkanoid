@@ -10,6 +10,8 @@ import io.github.arkanoid.core.GameLogic;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
+import io.github.arkanoid.paddle.PaddleSkill1A;
+import io.github.arkanoid.paddle.PaddleSkill1B;
 import io.github.arkanoid.ui.HealthBar;
 import io.github.arkanoid.ui.ParallaxBackground;
 import io.github.arkanoid.ui.PauseMenu;
@@ -31,6 +33,13 @@ public class Boss2Stage implements GameStage {
     private Texture bossHealthBarImage;
     private Texture[] bgTextures;
 
+    private Texture ballUpgrade = new Texture("ball/" + "upgrade" + ".png");
+
+    private PaddleSkill1A paddleSkill1A;
+    private PaddleSkill1B paddleSkill1B;
+
+    private boolean isSkillASelected;
+
     // Pause functionality
     private boolean isPaused = false;
     private PauseMenu pauseMenu;
@@ -51,6 +60,11 @@ public class Boss2Stage implements GameStage {
     public Boss2Stage(Save.SaveData saveData) {
         this.saveData = saveData;
     }
+
+    public void setSkillASelected(boolean skillASelected) {
+        isSkillASelected = skillASelected;
+    }
+
 
     @Override
     public void enter() {
@@ -80,6 +94,13 @@ public class Boss2Stage implements GameStage {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
             boss2 = new Boss2(2, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
+
+            if (isSkillASelected) {
+                paddleSkill1A = new PaddleSkill1A(ballUpgrade, 0, 0);
+            } else {
+                paddleSkill1B = new PaddleSkill1B(paddle);
+            }
+
         }
         bossHealthBar = new HealthBar(bossHealthBarImage, boss2);
         parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 10f, 20f, 30f, 0f, 40f}, true);
@@ -90,8 +111,14 @@ public class Boss2Stage implements GameStage {
         stage.addActor(parallaxBackground);
         stage.addActor(bossHealthBar);
         stage.addActor(paddle);
+        if (isSkillASelected) {
+            stage.addActor(paddleSkill1A);
+        }
         stage.addActor(ball);
         stage.addActor(boss2);
+
+
+
 
         // Restore bees if loading from save
         if (saveData != null && saveData.beePositions != null) {
@@ -141,6 +168,23 @@ public class Boss2Stage implements GameStage {
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.bossCollision(ball);
             gameLogic.skillCollision(stage);
+
+            if (isSkillASelected) {
+
+                gameLogic.launch(paddleSkill1A);
+                gameLogic.paddleCollision(paddleSkill1A);
+                gameLogic.boundaryCollision(paddleSkill1A, delta, UP_BOUNDARY);
+                gameLogic.bossCollision(paddleSkill1A);
+                paddleSkill1A.updateSkill1ACoolDown(delta);
+
+            } else if (paddleSkill1B != null) {
+                if (paddleSkill1B.isDone() && Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) && paddleSkill1B.isSkill1BReady()) {
+                    paddleSkill1B.enter(paddle);
+                } if (!(paddleSkill1B.isDone())) {
+                    paddleSkill1B.update(paddle, delta);
+                    gameLogic.paddleLaserCollision(paddleSkill1B);
+                }
+            }
 
             if (boss2.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
