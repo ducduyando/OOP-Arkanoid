@@ -61,13 +61,13 @@ public class Constants {
     public static final Vector2 BOSS1_VELOCITY = new Vector2(900f, 900f);
     public static final float BOSS1_INITIAL_X = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
     public static final float BOSS1_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
+    public static final float BOSS_STOP_TIME = 1f;
 
     /** Boss1 Skill 1. */
     public static final int BOSS1_SKILL1_WIDTH = 80;
     public static final int BOSS1_SKILL1_HEIGHT = 144;
 
     public static final float BOMB_SPEED_Y = 400f;
-    public static final float BOSS_STOP_TIME = 1f;
 
     /** Boss1 Skill 2. */
     public static final int LASER_WIDTH = 80;
@@ -80,4 +80,9 @@ public class Constants {
     public static final float BOSS2_INITIAL_X = (SCREEN_WIDTH - BOSS2_WIDTH) / 2f;
     public static final float BOSS2_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
+    /** Boss2 Skill 1. */
+    public static final int BOSS2_SKILL1_WIDTH = 96;
+    public static final int BOSS2_SKILL1_HEIGHT = 96;
+
+    public static final float BEE_SPEED_Y = 300f;
 }
