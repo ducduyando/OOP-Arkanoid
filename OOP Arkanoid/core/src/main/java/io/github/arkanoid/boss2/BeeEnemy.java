@@ -7,47 +7,28 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
 
+import static io.github.arkanoid.core.Constants.*;
+
 public class BeeEnemy extends Actor {
     private final Texture texture;
-    private float speed = 250f;
     private Rectangle hitBox;
 
-    public BeeEnemy(float x, float y, String texturePath) {
-        this.texture = new Texture(texturePath);
-        setBounds(x, y, 96, 96);
-        this.hitBox = new Rectangle(x, y, 96, 96);
+    public BeeEnemy(Texture texture, float x, float y) {
+        this.texture = texture;
+
+        setPosition(x - BOSS2_SKILL1_WIDTH / 2f, y);
+        setSize(BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
+        this.hitBox = new Rectangle(getX(), getY(), BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        moveBy(0, -speed * delta);
+        moveBy(0, -BEE_SPEED_Y * delta);
         hitBox.setPosition(getX(), getY());
 
         if (getY() + getHeight() < 0) {
-            remove();
-            return;
-        }
-
-        if (getStage() != null) {
-            for (Actor actor : getStage().getActors()) {
-                if (actor instanceof Paddle paddle) {
-                    Rectangle paddleRect = paddle.getHitBox();
-                    if (hitBox.overlaps(paddleRect)) {
-                        paddle.takeDamage();
-                        remove();
-                        return;
-                    }
-                }
-
-                if (actor instanceof Ball ball) {
-                    Rectangle ballRect = ball.getHitBox();
-                    if (hitBox.overlaps(ballRect)) {
-                        remove();
-                        return;
-                    }
-                }
-            }
+            this.remove();
         }
     }
 

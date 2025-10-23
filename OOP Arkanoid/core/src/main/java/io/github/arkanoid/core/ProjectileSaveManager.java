@@ -93,7 +93,9 @@ public class ProjectileSaveManager {
         }
 
         for (BeeData beeData : data.bees) {
-            BeeEnemy bee = new BeeEnemy(beeData.x, beeData.y, "boss2/" + "skill" + "1" + ".png");
+            BeeEnemy bee = new BeeEnemy(new Texture("boss2/" + "skill" + "1" + ".png"),
+                beeData.x,
+                beeData.y);
             stage.addActor(bee);
         }
 

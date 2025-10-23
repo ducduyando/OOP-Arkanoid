@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.arkanoid.boss1.BombProjectile;
 import io.github.arkanoid.boss1.Boss1;
 import io.github.arkanoid.boss1.LaserEffect;
+import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.paddle.PaddleLaserEffect;
 import io.github.arkanoid.paddle.PaddleSkill1A;
@@ -177,6 +178,12 @@ public class GameLogic {
             else if (actor instanceof LaserEffect laser) {
                 if (laser.getHitbox().overlaps(paddleHitbox)) {
                     paddleRef.takeDamage();
+                }
+            }
+            else if (actor instanceof BeeEnemy bee) {
+                if (bee.getHitBox().overlaps(paddleHitbox)) {
+                    paddleRef.takeDamage();
+                    bee.remove();
                 }
             }
         }

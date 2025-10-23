@@ -97,7 +97,7 @@ public class Boss2Stage implements GameStage {
         if (saveData != null && saveData.beePositions != null) {
             for (Save.BeePosition beePos : saveData.beePositions) {
                 io.github.arkanoid.boss2.BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
-                    beePos.x, beePos.y, "boss2/" + "skill" + "1" +".png"
+                    new Texture("boss2/" + "skill" + "1" +".png"), beePos.x, beePos.y
                 );
                 stage.addActor(bee);
             }

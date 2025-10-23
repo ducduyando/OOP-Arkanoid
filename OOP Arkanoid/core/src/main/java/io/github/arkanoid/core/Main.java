@@ -103,11 +103,13 @@ public class Main extends ApplicationAdapter {
             loadingScreen = new LoadingScreen(stageTextures[2]);
             currentFlow = GameFlow.LOADING;
 
+            /**
             if (((PowerUpMenuStage) currentStage).getSelectedOption() == PowerUpMenu.Option.SKILL1) {
                 ((Boss2Stage) nextStage).setSkillASelected(true);
             } else if (((PowerUpMenuStage) currentStage).getSelectedOption() == PowerUpMenu.Option.SKILL2) {
                 ((Boss2Stage) nextStage).setSkillASelected(false);
             }
+             */
 
         } else if (currentStage instanceof Boss2Stage) {
             loadingScreen = new LoadingScreen(stageTextures[2]);

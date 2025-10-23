@@ -1,5 +1,6 @@
 package io.github.arkanoid.boss2;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.BossSkill;
@@ -10,73 +11,87 @@ import static io.github.arkanoid.core.Constants.*;
 public class Boss2Skill1 implements BossSkill {
     private final Boss2 owner;
     private BossSkill nextSkill;
-    private final BossRandomMovement movementSkill;
-     private float time = 0f;
-     private final float spawn_interval = 5f;
+    private final float SPAWN_INTERVAL = 5f;
+    private int beeCountToSpawn = 0;
 
-     private int beeCountToSpawn = 0;
-     private int spawnBees = 0;
-     private float spawnDelayTimer = 0f;
-     private final float SPAWN_BEE_DELAY = 1f;
-private boolean isSpawning = false;
+    private float stopTimer = 0f;
+    private boolean isStopped = false;
+    private int actionCounter = 0;
+    private float spawnDelayTimer = 0f;
+    private final float SPAWN_BEE_DELAY = 0.5f;
 
-     private final Random random = new Random();
+    private float targetX;
+    private final float[] positionGridX = new float [COLS];
 
-     public Boss2Skill1(Boss2 owner, BossRandomMovement movementSkill) {
-         this.owner = owner;
-         this.movementSkill = movementSkill;
-     }
-     public void setNextSkill(BossSkill nextSkill) {
-         this.nextSkill = nextSkill;
-     }
+    private final Random random = new Random();
 
-     public void cleanup() {}
+    public Boss2Skill1(Boss2 owner) {
+        this.owner = owner;
+
+        float cellXSize = (SCREEN_WIDTH - BOSS2_SKILL1_WIDTH) / (float) (COLS);
+
+        for (int c = 0; c < COLS; c++) {
+            positionGridX[c] = c *  cellXSize;
+        }
+    }
+
+    public void setNextSkill(BossSkill nextSkill) {
+        this.nextSkill = nextSkill;
+    }
+
+    public void chooseNewTarget() {
+        Random random = new Random();
+        int c = random.nextInt(COLS);
+        targetX = positionGridX[c];
+    }
+
+    public void cleanup() {}
+
     public void enter(Boss boss) {
-         time =0f;
-         isSpawning =false;
-        movementSkill.enter(boss);
+        this.actionCounter = 0;
+        this.isStopped = false;
+        chooseNewTarget();
     }
     public void update(Boss boss, float delta) {
-         time += delta;
+        /**     stopTimer += delta;
          // moi 5 giay la bat dau tha ong
-        if(!isSpawning && time >= spawn_interval) {
-            time =0f;
-            isSpawning = true;
+        if(!isStopped && stopTimer >= SPAWN_INTERVAL) {
+            stopTimer = 0f;
+            isStopped = true;
             beeCountToSpawn = random.nextInt(3) + 5;
-            spawnBees =0;
+            actionCounter = 0;
             spawnDelayTimer = 0f;
         }
         // tha tung con ong lan luot
-        if(isSpawning) {
+        if(isStopped) {
             spawnDelayTimer += delta;
-            if(spawnDelayTimer >= SPAWN_BEE_DELAY && spawnBees < beeCountToSpawn) {
+            if(spawnDelayTimer >= SPAWN_BEE_DELAY && actionCounter < beeCountToSpawn) {
                 spawnDelayTimer = 0f;
                 spawnBeeBeLowHp(boss.getStage());
-                spawnBees++;
-                if(spawnBees >= beeCountToSpawn) {
-                    isSpawning = false;
-                    time = 0f;
+                actionCounter++;
+                if(actionCounter >= beeCountToSpawn) {
+                    isStopped = false;
+                    stopTimer = 0f;
                     if (nextSkill != null) {
                         boss.setSkill(nextSkill);
                     }
                 }
             }
         }
-        if (!isSpawning) {
-            movementSkill.update(boss, delta);
+        */
+
+        if (isStopped) {
+            stopTimer += delta;
+            if (stopTimer >= SPAWN_BEE_DELAY) {
+                isStopped = false;
+                stopTimer = 0f;
+                if (actionCounter >= beeCountToSpawn) {
+                    boss.setSkill(nextSkill);
+                }
+            }
+        } else {
+            owner.skill1();
+            actionCounter++;
         }
     }
-    // vi tri cac con ong con
-    private void spawnBeeBeLowHp(Stage stage) {
-        if(stage == null) return;
-        stage.addActor(new BeeEnemy(random.nextFloat() * (SCREEN_WIDTH - 96), SCREEN_HEIGHT -HP_HEIGHT -96, "boss2/" + "skill" + "1" + ".png"));
-    }
-
-    // boss2 bi trung thi tha 1 con ong ngay duoi boss
-    public void spawnBeeOnHit(Stage stage, float bossX, float bossY) {
-        if (stage == null) return;
-        stage.addActor(new BeeEnemy(bossX + BOSS2_WIDTH / 2f - 48, bossY, "boss2/"+ "skill" + "1" + ".png"));
-    }
-
-
 }
