@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss1.Boss1;
 import io.github.arkanoid.core.GameLogic;
+import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
@@ -15,6 +16,7 @@ import io.github.arkanoid.ui.ParallaxBackground;
 import io.github.arkanoid.ui.PauseMenu;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.ProjectileSaveManager.restoreProjectiles;
 
 public class Boss1Stage implements GameStage {
     private Stage stage;
@@ -92,6 +94,11 @@ public class Boss1Stage implements GameStage {
         stage.addActor(paddle);
         stage.addActor(ball);
         stage.addActor(boss1);
+
+        // Restore projectiles if loading from save
+        if (saveData != null && saveData.projectileData != null) {
+          restoreProjectiles(stage, saveData.projectileData);
+        }
     }
 
     @Override
@@ -201,11 +208,14 @@ public class Boss1Stage implements GameStage {
     }
 
     private void saveGame() {
-        Save.saveGame(
-            1,
+      ProjectileSaveManager.ProjectileData projectileData =
+          ProjectileSaveManager.collectProjectiles(stage);
+
+        Save.saveGameWithProjectiles(
+            1, // Boss1 stage
             boss1.getHp(),
             paddle.getState(),
-            0,
+            projectileData,
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,

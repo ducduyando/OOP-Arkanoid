@@ -80,4 +80,7 @@ public class Constants {
     public static final float BOSS2_INITIAL_X = (SCREEN_WIDTH - BOSS2_WIDTH) / 2f;
     public static final float BOSS2_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
+    /** BeeEnemy. */
+    public static final int BEE_ENEMY_HEIGHT =96;
+    public static final int BEE_ENEMY_WIDTH =96;
 }

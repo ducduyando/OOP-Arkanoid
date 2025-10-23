@@ -3,10 +3,14 @@ package io.github.arkanoid.stage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.boss2.Boss2;
 import io.github.arkanoid.core.GameLogic;
+import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
@@ -64,18 +68,16 @@ public class Boss2Stage implements GameStage {
             bgTextures[i] = new Texture("background/" + "stage2/" + "layer" + i + ".png");
         }
 
-        // Create entities with saved positions if available
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
-            paddle.setState(saveData.paddleState); // Restore paddle state
+            paddle.setState(saveData.paddleState);
 
             ball = new Ball(ballImage, saveData.ballX, saveData.ballY);
             ball.setVelocity(saveData.ballVelX, saveData.ballVelY);
             ball.setLaunched(saveData.ballLaunched);
 
-            // Create boss with full HP first, then set current HP
             boss2 = new Boss2(2, saveData.bossX, saveData.bossY, 100);
-            boss2.setHp(saveData.bossHP); // Set current HP from save data
+            boss2.setHp(saveData.bossHP);
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
@@ -93,12 +95,14 @@ public class Boss2Stage implements GameStage {
         stage.addActor(ball);
         stage.addActor(boss2);
 
-        // Restore bees if loading from save
-        if (saveData != null && saveData.beePositions != null) {
+        // Restore projectiles if loading from save
+        if (saveData != null && saveData.projectileData != null) {
+            io.github.arkanoid.core.ProjectileSaveManager.restoreProjectiles(stage, saveData.projectileData);
+        }
+        // Legacy support for old bee saves
+        else if (saveData != null && saveData.beePositions != null) {
             for (Save.BeePosition beePos : saveData.beePositions) {
-                io.github.arkanoid.boss2.BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
-                    beePos.x, beePos.y, "boss2/" + "skill" + "1" +".png"
-                );
+                BeeEnemy bee = new BeeEnemy(beePos.x, beePos.y, "boss2/skill1.png");
                 stage.addActor(bee);
             }
         }
@@ -194,8 +198,8 @@ public class Boss2Stage implements GameStage {
 
 
 
-    // Custom draw method to handle pause menu
-    public void drawEffects(com.badlogic.gdx.graphics.g2d.SpriteBatch batch) {
+
+    public void drawEffects(SpriteBatch batch) {
         // Draw pause menu if paused
         if (isPaused) {
             pauseMenu.draw(batch, 1f);
@@ -217,20 +221,13 @@ public class Boss2Stage implements GameStage {
     }
 
     private void saveGame() {
-        java.util.List<Save.BeePosition> beePositions = new java.util.ArrayList<>();
-        if (stage != null) {
-            for (com.badlogic.gdx.scenes.scene2d.Actor actor : stage.getActors()) {
-                if (actor instanceof io.github.arkanoid.boss2.BeeEnemy bee) {
-                    beePositions.add(new Save.BeePosition(bee.getX(), bee.getY()));
-                }
-            }
-        }
-
-        Save.saveGameWithBees(
-            2,
+      ProjectileSaveManager.ProjectileData projectileData =
+           ProjectileSaveManager.collectProjectiles(stage);
+        Save.saveGameWithProjectiles(
+            2, // Boss2 stage
             boss2.getHp(),
             paddle.getState(),
-            beePositions,
+            projectileData,
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,

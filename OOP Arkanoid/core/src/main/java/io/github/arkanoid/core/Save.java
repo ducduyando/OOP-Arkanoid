@@ -31,7 +31,6 @@ public class Save {
         pref.putFloat("bossY", bossY);
 
         pref.flush();
-        Gdx.app.log("SAVE", "Saved bricks remaining = " + bricksRemaining);
     }
 
     public static void saveGameWithBrickPositions(int stageNumber, int bossHP, int paddleState, List<BrickPosition> brickPositions,
@@ -94,6 +93,62 @@ public class Save {
         pref.flush();
     }
 
+    public static void saveGameWithProjectiles(int stageNumber, int bossHP, int paddleState,
+                                               ProjectileSaveManager.ProjectileData projectileData,
+                                               float paddleX, float paddleY, float ballX, float ballY,
+                                               float ballVelX, float ballVelY, boolean ballLaunched,
+                                               float bossX, float bossY) {
+        pref.putInteger("stageNumber", stageNumber);
+        pref.putInteger("bossHP", bossHP);
+        pref.putInteger("paddleState", paddleState);
+        pref.putInteger("bricksRemaining", 0); // No bricks in boss stages
+
+        // Save positions and ball state
+        pref.putFloat("paddleX", paddleX);
+        pref.putFloat("paddleY", paddleY);
+        pref.putFloat("ballX", ballX);
+        pref.putFloat("ballY", ballY);
+        pref.putFloat("ballVelX", ballVelX);
+        pref.putFloat("ballVelY", ballVelY);
+        pref.putBoolean("ballLaunched", ballLaunched);
+        pref.putFloat("bossX", bossX);
+        pref.putFloat("bossY", bossY);
+
+        // Save projectile data
+        saveProjectileData(projectileData);
+
+        pref.flush();
+        Gdx.app.log("SAVE", "Saved " + projectileData.getTotalCount() + " projectiles");
+    }
+
+    private static void saveProjectileData(ProjectileSaveManager.ProjectileData data) {
+        // Save bees
+        pref.putInteger("beesCount", data.bees.size());
+        for (int i = 0; i < data.bees.size(); i++) {
+            ProjectileSaveManager.BeeData bee = data.bees.get(i);
+            pref.putFloat("bee_" + i + "_x", bee.x);
+            pref.putFloat("bee_" + i + "_y", bee.y);
+        }
+
+        // Save bombs
+        pref.putInteger("bombsCount", data.bombs.size());
+        for (int i = 0; i < data.bombs.size(); i++) {
+            ProjectileSaveManager.BombData bomb = data.bombs.get(i);
+            pref.putFloat("bomb_" + i + "_x", bomb.x);
+            pref.putFloat("bomb_" + i + "_y", bomb.y);
+            pref.putFloat("bomb_" + i + "_stateTime", bomb.stateTime);
+        }
+
+        // Save lasers
+        pref.putInteger("lasersCount", data.lasers.size());
+        for (int i = 0; i < data.lasers.size(); i++) {
+            ProjectileSaveManager.LaserData laser = data.lasers.get(i);
+            pref.putFloat("laser_" + i + "_x", laser.x);
+            pref.putFloat("laser_" + i + "_y", laser.y);
+            pref.putFloat("laser_" + i + "_stateTime", laser.stateTime);
+        }
+    }
+
     public static boolean hasSave() {
         return pref.contains("stageNumber");
     }
@@ -132,8 +187,6 @@ public class Save {
                 data.brickPositions.add(pos);
             }
         }
-
-        // Load bee positions if available
         data.beePositions = new ArrayList<>();
         int beesCount = pref.getInteger("beesCount", 0);
         for (int i = 0; i < beesCount; i++) {
@@ -142,6 +195,46 @@ public class Save {
                 pos.x = pref.getFloat("bee_" + i + "_x");
                 pos.y = pref.getFloat("bee_" + i + "_y");
                 data.beePositions.add(pos);
+            }
+        }
+
+        data.projectileData = loadProjectileData();
+
+        return data;
+    }
+
+    private static ProjectileSaveManager.ProjectileData loadProjectileData() {
+        ProjectileSaveManager.ProjectileData data = new ProjectileSaveManager.ProjectileData();
+
+        // Load bees
+        int beesCount = pref.getInteger("beesCount", 0);
+        for (int i = 0; i < beesCount; i++) {
+            if (pref.contains("bee_" + i + "_x")) {
+                float x = pref.getFloat("bee_" + i + "_x");
+                float y = pref.getFloat("bee_" + i + "_y");
+                data.bees.add(new ProjectileSaveManager.BeeData(x, y));
+            }
+        }
+
+        // Load bombs
+        int bombsCount = pref.getInteger("bombsCount", 0);
+        for (int i = 0; i < bombsCount; i++) {
+            if (pref.contains("bomb_" + i + "_x")) {
+                float x = pref.getFloat("bomb_" + i + "_x");
+                float y = pref.getFloat("bomb_" + i + "_y");
+                float stateTime = pref.getFloat("bomb_" + i + "_stateTime", 0f);
+                data.bombs.add(new ProjectileSaveManager.BombData(x, y, stateTime));
+            }
+        }
+
+        // Load lasers
+        int lasersCount = pref.getInteger("lasersCount", 0);
+        for (int i = 0; i < lasersCount; i++) {
+            if (pref.contains("laser_" + i + "_x")) {
+                float x = pref.getFloat("laser_" + i + "_x");
+                float y = pref.getFloat("laser_" + i + "_y");
+                float stateTime = pref.getFloat("laser_" + i + "_stateTime", 0f);
+                data.lasers.add(new ProjectileSaveManager.LaserData(x, y, stateTime));
             }
         }
 
@@ -159,7 +252,8 @@ public class Save {
         public int paddleState;
         public int bricksRemaining;
         public List<BrickPosition> brickPositions;
-        public List<BeePosition> beePositions;
+        public List<BeePosition> beePositions; // Legacy - will be replaced by projectileData
+        public ProjectileSaveManager.ProjectileData projectileData;
 
         public float paddleX, paddleY;
         public float ballX, ballY;

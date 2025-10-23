@@ -50,4 +50,12 @@ public class BombProjectile extends Actor {
     public Rectangle getHitbox() {
         return hitBox;
     }
+    
+    public float getStateTime() {
+        return stateTime;
+    }
+    
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
 }

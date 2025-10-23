@@ -60,4 +60,12 @@ public class LaserEffect extends Actor {
         return hitbox;
     }
 
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
 }
