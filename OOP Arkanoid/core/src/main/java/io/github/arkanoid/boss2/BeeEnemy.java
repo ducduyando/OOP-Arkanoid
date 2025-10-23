@@ -7,9 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
 
-import static io.github.arkanoid.core.Constants.BEE_ENEMY_HEIGHT;
-import static io.github.arkanoid.core.Constants.BEE_ENEMY_WIDTH;
-
 public class BeeEnemy extends Actor {
     private final Texture texture;
     private float speed = 250f;
@@ -17,8 +14,8 @@ public class BeeEnemy extends Actor {
 
     public BeeEnemy(float x, float y, String texturePath) {
         this.texture = new Texture(texturePath);
-        setBounds(x, y, BEE_ENEMY_WIDTH, BEE_ENEMY_HEIGHT);
-        this.hitBox = new Rectangle(x, y, BEE_ENEMY_WIDTH, BEE_ENEMY_HEIGHT);
+        setBounds(x, y, 96, 96);
+        this.hitBox = new Rectangle(x, y, 96, 96);
     }
 
     @Override

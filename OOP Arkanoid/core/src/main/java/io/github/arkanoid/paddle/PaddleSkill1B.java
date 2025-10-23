@@ -18,21 +18,20 @@ public class PaddleSkill1B implements PaddleSkill {
     private Phase currentPhase;
     private PaddleLaserEffect paddleLaserEffect;
 
-    private float skill2CooldownTimer = SKILL_COOLDOWN;
-    private boolean isSkill2Ready = true;
+    private float skill1BCooldownTimer = SKILL_COOLDOWN;
+    private boolean isSkill1BReady = true;
 
-    public void startSkill2Cooldown() {
-        isSkill2Ready = false;
-        skill2CooldownTimer = SKILL_COOLDOWN;
+    public void startSkill1BCooldown() {
+        isSkill1BReady = false;
+        skill1BCooldownTimer = SKILL_COOLDOWN;
     }
 
-    public boolean isSkill2Ready() {
-        return isSkill2Ready;
+    public boolean isSkill1BReady() {
+        return isSkill1BReady;
     }
 
     public PaddleSkill1B(Paddle owner) {
         laserEffect = new Texture("boss1/" + "skill2" + ".png");
-
         this.owner = owner;
         this.currentPhase = Phase.DONE;
     }
@@ -45,27 +44,28 @@ public class PaddleSkill1B implements PaddleSkill {
 
     public void update(Paddle paddle, float delta) {
         float x = paddle.getX() + PADDLE_WIDTH / 2f - LASER_WIDTH / 2f;
-        paddleLaserEffect.setX(x);
+        float y = paddle.getY() + PADDLE_HEIGHT;
+        paddleLaserEffect.setPosition(x, y);
         if (currentPhase == Phase.CHARGING) {
             if (paddleLaserEffect.isAnimationDone()) {
                 currentPhase = Phase.FIRING;
                 paddleLaserTime = 0f;
             }
 
-        } else {
+        } else if (currentPhase == Phase.FIRING) {
             paddleLaserTime += delta;
-            if (paddleLaserTime >= 4f) {
-                paddleLaserEffect.remove();
-                paddleLaserEffect = null;
+            if (paddleLaserTime >= 3f) {
+                cleanup();
                 currentPhase = Phase.DONE;
-                startSkill2Cooldown();
             }
+        } else {
+            startSkill1BCooldown();
         }
 
-        if (!isSkill2Ready) {
-            skill2CooldownTimer -= delta;
-            if (skill2CooldownTimer <= 0) {
-                isSkill2Ready = true;
+        if (!isSkill1BReady) {
+            skill1BCooldownTimer -= delta;
+            if (skill1BCooldownTimer <= 0) {
+                isSkill1BReady = true;
             }
         }
     }
@@ -75,6 +75,7 @@ public class PaddleSkill1B implements PaddleSkill {
             paddleLaserEffect.remove();
             paddleLaserEffect = null;
         }
+        currentPhase = Phase.DONE;
     }
 
     public boolean isFiring() {

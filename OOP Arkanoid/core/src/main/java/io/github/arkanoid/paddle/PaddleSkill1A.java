@@ -8,22 +8,31 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleSkill1A extends Ball {
 
-    private boolean isSkill1Ready = true;
+    private boolean isSkill1AReady = true;
 
-    private float skill1CooldownTimer = SKILL_COOLDOWN;
+    private float skill1ACooldownTimer = SKILL_COOLDOWN;
 
     public void startSkill1Cooldown() {
-        isSkill1Ready = false;
-        skill1CooldownTimer = SKILL_COOLDOWN;
+        isSkill1AReady = false;
+        skill1ACooldownTimer = SKILL_COOLDOWN;
     }
 
-    public boolean isSkill1Ready() {
-        return isSkill1Ready;
+    public boolean isSkill1AReady() {
+        return isSkill1AReady;
     }
 
     public PaddleSkill1A(Texture texture, float x, float y) {
         super(texture, x, y);
         setDamage(BALL_UPGRADED_DAMAGE);
+    }
+
+    public void updateSkill1ACoolDown(float delta) {
+        if (!isSkill1AReady) {
+            skill1ACooldownTimer -= delta;
+            if (skill1ACooldownTimer <= 0f) {
+                isSkill1AReady = true;
+            }
+        }
     }
 
     @Override
@@ -32,12 +41,6 @@ public class PaddleSkill1A extends Ball {
             Vector2 velocity = getVelocity();
             moveBy(velocity.x * delta, velocity.y * delta);
             setHitBox(getX(), getY());
-        }
-        if (!isSkill1Ready) {
-            skill1CooldownTimer -= delta;
-            if (skill1CooldownTimer <= 0) {
-                isSkill1Ready = true;
-            }
         }
     }
 }
