@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
-
+//
 public class LaserEffect extends Actor {
     private Animation<TextureRegion> laserAnimation;
     private float stateTime = 0f;
