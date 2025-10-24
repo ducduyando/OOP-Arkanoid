@@ -64,11 +64,6 @@ public class GameLogic {
                     ball.setVelocity(0f, BALL_VELOCITY.y);
                 }
 
-            } else {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) && ((PaddleSkill1A) ball).isSkill1AReady()) {
-                    ball.setLaunched(true);
-                    ball.setVelocity(0f, BALL_VELOCITY.y);
-                }
             }
             ball.setPosition(ballX, ballY);
         }
@@ -92,6 +87,7 @@ public class GameLogic {
         if (ball.getY() <= DOWN_BOUNDARY) {
             if (ball instanceof PaddleSkill1A) {
                 ((PaddleSkill1A) ball).startSkill1Cooldown();
+                ((PaddleSkill1A) ball).cleanup();
 
             } else {
                 paddleRef.takeDamage();

@@ -17,6 +17,14 @@ public class Ball extends Actor {
     Rectangle hitBox;
     private boolean isLaunched = false;
 
+    public Ball(float x, float y) {
+        this.velocityVector = new Vector2(BALL_VELOCITY);
+        this.hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);
+        setPosition(x, y);
+        setSize(BALL_WIDTH, BALL_HEIGHT);
+        setOrigin(getWidth() / 2f, getHeight() / 2f);
+    }
+
     public Ball(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture);
         this.velocityVector = new Vector2(BALL_VELOCITY);
