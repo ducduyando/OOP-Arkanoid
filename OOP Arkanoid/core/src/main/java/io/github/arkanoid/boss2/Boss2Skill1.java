@@ -11,6 +11,8 @@ import static io.github.arkanoid.core.Constants.*;
 public class Boss2Skill1 implements BossSkill {
     private final Boss2 owner;
     private BossSkill nextSkill;
+    private final BossRandomMovement movementController;
+
     private final float SPAWN_INTERVAL = 5f;
     private int beeCountToSpawn = 0;
 
@@ -25,14 +27,10 @@ public class Boss2Skill1 implements BossSkill {
 
     private final Random random = new Random();
 
-    public Boss2Skill1(Boss2 owner) {
+    public Boss2Skill1(Boss2 owner, BossRandomMovement movementController) {
         this.owner = owner;
+        this.movementController = movementController;
 
-        float cellXSize = (SCREEN_WIDTH - BOSS2_SKILL1_WIDTH) / (float) (COLS);
-
-        for (int c = 0; c < COLS; c++) {
-            positionGridX[c] = c *  cellXSize;
-        }
     }
 
     public void setNextSkill(BossSkill nextSkill) {
@@ -50,48 +48,48 @@ public class Boss2Skill1 implements BossSkill {
     public void enter(Boss boss) {
         this.actionCounter = 0;
         this.isStopped = false;
-        chooseNewTarget();
+        this.stopTimer = 0f;
+
+        movementController.chooseRandomTarget();
+        movementController.setHasArrived(false);
     }
     public void update(Boss boss, float delta) {
-        /**     stopTimer += delta;
+            stopTimer += delta;
          // moi 5 giay la bat dau tha ong
-        if(!isStopped && stopTimer >= SPAWN_INTERVAL) {
-            stopTimer = 0f;
-            isStopped = true;
-            beeCountToSpawn = random.nextInt(3) + 5;
-            actionCounter = 0;
-            spawnDelayTimer = 0f;
+        if(!isStopped) {
+            if (stopTimer >= SPAWN_INTERVAL) {
+                stopTimer = 0f;
+                isStopped = true; // Chuyen sang che do tha ong
+                beeCountToSpawn = random.nextInt(3) + 5;
+                actionCounter = 0;
+                spawnDelayTimer = 0f;
+
+                // Sau khi kích hoạt thả ong, Boss nên chuyển sang vị trí mới để chuẩn bị cho chuỗi tiếp theo
+                movementController.chooseRandomTarget();
+                movementController.setHasArrived(false);
+            }
         }
         // tha tung con ong lan luot
         if(isStopped) {
             spawnDelayTimer += delta;
+
             if(spawnDelayTimer >= SPAWN_BEE_DELAY && actionCounter < beeCountToSpawn) {
                 spawnDelayTimer = 0f;
-                spawnBeeBeLowHp(boss.getStage());
+                owner.spawnBeeFromTop();
+
                 actionCounter++;
+
                 if(actionCounter >= beeCountToSpawn) {
                     isStopped = false;
                     stopTimer = 0f;
+
+
                     if (nextSkill != null) {
                         boss.setSkill(nextSkill);
                     }
                 }
             }
         }
-        */
 
-        if (isStopped) {
-            stopTimer += delta;
-            if (stopTimer >= SPAWN_BEE_DELAY) {
-                isStopped = false;
-                stopTimer = 0f;
-                if (actionCounter >= beeCountToSpawn) {
-                    boss.setSkill(nextSkill);
-                }
-            }
-        } else {
-            owner.skill1();
-            actionCounter++;
-        }
     }
 }

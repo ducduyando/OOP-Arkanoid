@@ -9,13 +9,9 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class BossRandomMovement implements BossSkill {
     private final Boss owner;
-    private BossSkill nextSkill;
     private boolean hasArrived = false;
     private float cooldownTimer = 0f;
     private final float COOLDOWN_DURATION = 2f;
-
-    private float skillTimer = 0f;
-    private final float SKILL_INTERVAL = 8f;
 
     private float targetX;
     private float targetY;
@@ -38,10 +34,23 @@ public class BossRandomMovement implements BossSkill {
 
             }
         }
+        chooseRandomTarget();
+    }
+
+    public void chooseRandomTarget() {
+        int r = random.nextInt(ROWS);
+        int c = random.nextInt(COLS);
+        targetX = positionGridX[r][c];
+        targetY = positionGridY[r][c];
+        targetPosition = new Vector2(targetX, targetY);
+    }
+
+    public void setHasArrived(boolean hasArrived) {
+        this.hasArrived = hasArrived;
     }
 
     public void setNextSkill(BossSkill nextSkill) {
-        this.nextSkill = nextSkill;
+
     }
 
     @Override
@@ -51,28 +60,13 @@ public class BossRandomMovement implements BossSkill {
     public void enter(Boss boss) {
         this.hasArrived = false;
         this.cooldownTimer = 0f;
-        this.skillTimer = 0f;
         chooseRandomTarget();
     }
 
-    private void chooseRandomTarget() {
 
-        Random random = new Random();
-        int r = random.nextInt(ROWS);
-        int c = random.nextInt(COLS);
-        targetX = positionGridX[r][c];
-        targetY = positionGridY[r][c];
-        targetPosition = new Vector2(targetX, targetY);
-    }
 
     @Override
     public void update(Boss boss, float delta) {
-        skillTimer += delta;
-        if (skillTimer >= SKILL_INTERVAL && nextSkill != null) {
-            boss.setSkill(nextSkill);
-            return;
-        }
-
         if (!hasArrived) {
             Vector2 currentPosition = new Vector2(boss.getX(), boss.getY());
 

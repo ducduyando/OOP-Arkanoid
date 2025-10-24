@@ -3,8 +3,10 @@ package io.github.arkanoid.stage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.boss2.Boss2;
 import io.github.arkanoid.core.GameLogic;
 import io.github.arkanoid.core.Save;
@@ -197,6 +199,14 @@ public class Boss2Stage implements GameStage {
                 isCompleted = true;
             }
         }
+        for (Actor actor : stage.getActors()) {
+            if (actor instanceof BeeEnemy bee) {
+                if (ball.getHitBox().overlaps(bee.getHitBox())) {
+                    bee.remove();
+                    ball.setVelocity(ball.getVelocity().x, -ball.getVelocity().y);
+                }
+            }
+        }
 
         stage.act(delta);
     }
@@ -269,8 +279,8 @@ public class Boss2Stage implements GameStage {
     private void saveGame() {
         java.util.List<Save.BeePosition> beePositions = new java.util.ArrayList<>();
         if (stage != null) {
-            for (com.badlogic.gdx.scenes.scene2d.Actor actor : stage.getActors()) {
-                if (actor instanceof io.github.arkanoid.boss2.BeeEnemy bee) {
+            for (Actor actor : stage.getActors()) {
+                if (actor instanceof BeeEnemy bee) {
                     beePositions.add(new Save.BeePosition(bee.getX(), bee.getY()));
                 }
             }

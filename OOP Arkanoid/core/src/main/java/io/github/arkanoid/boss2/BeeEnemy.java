@@ -13,9 +13,14 @@ public class BeeEnemy extends Actor {
     private final Texture texture;
     private Rectangle hitBox;
 
+    public BeeEnemy(float x, float y, String texturePath) {
+        this.texture = new Texture(texturePath);
+        setPosition(x, y);
+        this.hitBox = new Rectangle(x, y, BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
+    }
+
     public BeeEnemy(Texture texture, float x, float y) {
         this.texture = texture;
-
         setPosition(x - BOSS2_SKILL1_WIDTH / 2f, y);
         setSize(BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
         this.hitBox = new Rectangle(getX(), getY(), BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
@@ -29,6 +34,31 @@ public class BeeEnemy extends Actor {
 
         if (getY() + getHeight() < 0) {
             this.remove();
+            return;
+        }
+
+        if (getStage() != null) {
+            Actor[] actors = getStage().getActors().toArray();
+            for (Actor actor : actors) {
+                if (actor.equals(this) || !actor.hasParent()) continue;
+                if (actor instanceof Paddle paddle) {
+                    Rectangle paddleRect = paddle.getHitBox();
+                    if (hitBox.overlaps(paddleRect)) {
+                        paddle.takeDamage();
+                        this.remove();
+                        return;
+                    }
+                }
+
+
+                if (actor instanceof Ball ball) {
+                    Rectangle ballRect = ball.getHitBox();
+                    if (hitBox.overlaps(ballRect)) {
+                        this.remove();
+                        return;
+                    }
+                }
+            }
         }
     }
 
@@ -40,7 +70,6 @@ public class BeeEnemy extends Actor {
     public Rectangle getHitBox() {
         return hitBox;
     }
-
 
 
 }
