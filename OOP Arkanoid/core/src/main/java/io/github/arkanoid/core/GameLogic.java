@@ -16,6 +16,7 @@ import io.github.arkanoid.paddle.PaddleSkill1A;
 import io.github.arkanoid.paddle.PaddleSkill1B;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.entities.Boss;
+import io.github.arkanoid.ui.PauseMenu;
 
 import static io.github.arkanoid.core.Constants.*;
 

@@ -143,7 +143,9 @@ public class Boss2Stage implements GameStage {
                         break;
                     case SAVE:
                         saveGame();
-                        pauseMenu.resetChoice();
+                        isPaused = false;
+                        pauseMenu.remove();
+                        pauseMenu.reset();
                         break;
                     case QUIT:
                         // Exit game
