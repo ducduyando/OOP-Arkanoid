@@ -41,6 +41,7 @@ public class Boss extends Actor {
     protected final Animation<TextureRegion> deathAnimation;
     protected float deathTimer = 0f;
 
+    protected boolean isShield = false;
     protected boolean isReadyToDeath = false;
 
 
@@ -100,6 +101,14 @@ public class Boss extends Actor {
         return currentSkill;
     }
 
+
+    public void setShield(boolean shield) {
+        isShield = shield;
+        if (shield) {
+            state = State.NORMAL;
+        }
+    }
+
     public void takeDamage(int damage) {
         if (state == State.NORMAL) {
             this.hp -= damage;
@@ -107,8 +116,10 @@ public class Boss extends Actor {
                 this.hp = 0;
             }
 
-            this.state = State.TAKING_DAMAGE;
-            this.takeDamageTimer = 0f;
+            if (!isShield) {
+                this.state = State.TAKING_DAMAGE;
+                this.takeDamageTimer = 0f;
+            }
         }
     }
 
@@ -139,6 +150,10 @@ public class Boss extends Actor {
 
     public boolean isReadyToDeath() {
         return isReadyToDeath;
+    }
+
+    public float getStateTime() {
+        return stateTime;
     }
 
     @Override

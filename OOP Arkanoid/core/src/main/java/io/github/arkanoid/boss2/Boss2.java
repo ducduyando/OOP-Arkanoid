@@ -9,16 +9,27 @@ public class Boss2 extends Boss {
 
     private final BossRandomMovement randomMovement;
     private final Random random = new Random();
+
+    Boss2Skill2 shieldSkill;
+
     public Boss2(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2_VELOCITY, maxHp);
 
         this.randomMovement = new BossRandomMovement(this);
 
 
+        HoneyShield honeyShield = new HoneyShield(this.skill2Texture, getX(), getY());
+
         Boss2Skill1 beeSpawningSkill = new Boss2Skill1(this, randomMovement);
+        shieldSkill = new Boss2Skill2(this, honeyShield);
+
         beeSpawningSkill.setNextSkill(beeSpawningSkill);
 
         setSkill(beeSpawningSkill);
+    }
+
+    public Boss2Skill2 getShieldSkill() {
+        return shieldSkill;
     }
 
     public void act(float delta) {

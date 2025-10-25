@@ -10,6 +10,8 @@ import io.github.arkanoid.boss1.BombProjectile;
 import io.github.arkanoid.boss1.Boss1;
 import io.github.arkanoid.boss1.LaserEffect;
 import io.github.arkanoid.boss2.BeeEnemy;
+import io.github.arkanoid.boss2.Boss2;
+import io.github.arkanoid.boss2.Boss2Skill2;
 import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.paddle.PaddleLaserEffect;
 import io.github.arkanoid.paddle.PaddleSkill1A;
@@ -26,6 +28,9 @@ public class GameLogic {
 
     Paddle paddleRef;
     Boss bossRef;
+
+    private final float COOLDOWN_HEALING = 1.5f;
+    private float cooldownHealingTime = COOLDOWN_HEALING;
 
     public GameLogic(Paddle paddleRef, Boss bossRef) {
         this.paddleRef = paddleRef;
@@ -115,12 +120,35 @@ public class GameLogic {
             return;
         }
 
+        int newDamage;
+        if (bossRef instanceof Boss2 boss2Ref
+            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+
+            cooldownHealingTime += Gdx.graphics.getDeltaTime();
+
+            if (bossRef.getHp() + ball.getDamage() < bossRef.getMaxHp()) {
+                if (cooldownHealingTime >= COOLDOWN_HEALING) {
+                    cooldownHealingTime = 0;
+                    newDamage = -ball.getDamage();
+                } else {
+                    newDamage = 0;
+                }
+            } else {
+                bossRef.setHp(bossRef.getMaxHp());
+                newDamage = 0;
+            }
+
+
+        } else {
+            newDamage = ball.getDamage();
+        }
+
         Rectangle paddleRect = paddleRef.getHitBox();
         Rectangle ballRect = ball.getHitBox();
         Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
-            int newDamage = ball.getDamage();
             bossRef.takeDamage(newDamage);
             if (bossRef.isDead()) {
                 ball.resetLaunch();
@@ -196,8 +224,31 @@ public class GameLogic {
         Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
         Rectangle bossRect = bossRef.getHitBox();
 
+        if (bossRef instanceof Boss2 boss2Ref
+            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+
+            cooldownHealingTime += Gdx.graphics.getDeltaTime();
+        }
+
         if (paddleLaserRect.overlaps(bossRect)) {
-            bossRef.takeDamage(BALL_UPGRADED_DAMAGE);
+            if (bossRef instanceof Boss2 boss2Ref
+                && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+                && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+
+                if (bossRef.getHp() + BALL_UPGRADED_DAMAGE < bossRef.getMaxHp()) {
+                    if (cooldownHealingTime >= COOLDOWN_HEALING) {
+                        bossRef.takeDamage((-1) * BALL_UPGRADED_DAMAGE);
+                        cooldownHealingTime = 0;
+                    }
+
+                } else {
+                    bossRef.setHp(bossRef.getMaxHp());
+                }
+
+            } else {
+                bossRef.takeDamage(BALL_UPGRADED_DAMAGE);
+            }
         }
     }
 }
