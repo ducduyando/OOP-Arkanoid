@@ -78,8 +78,7 @@ public class BossRandomMovement implements BossSkill {
             && owner.getShieldSkill().isSkill2Done()) {
 
             skillTimer = 0;
-            double c = Math.random();
-            if (c > 0.0 && c < 0.5) {
+            if (new Random().nextBoolean()) {
                 nextSkill = owner.getShieldSkill();
             } else {
                 nextSkill = owner.getBeeSpawningSkill();

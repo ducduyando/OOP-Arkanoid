@@ -36,6 +36,9 @@ public class Constants {
     public static final float PADDLE_INITIAL_X = (SCREEN_WIDTH - PADDLE_WIDTH) / 2f;
     public static final float PADDLE_INITIAL_Y = 150f;
 
+    public static final int PADDLE_SKILL1_DAMAGE = 15;
+    public static final int PADDLE_SKILL2_DAMAGE = 10;
+
     /** Brick. */
     public static final int BRICK_ROWS = 4;
     public static final int BRICK_COLS = 10;
@@ -52,7 +55,6 @@ public class Constants {
     public static final int BALL_WIDTH = 64;
     public static final int BALL_HEIGHT = 64;
     public static final Vector2 BALL_VELOCITY = new Vector2(900f, 900f);
-    public static final int BALL_UPGRADED_DAMAGE = 15;
 
 
     /** Boss1. */

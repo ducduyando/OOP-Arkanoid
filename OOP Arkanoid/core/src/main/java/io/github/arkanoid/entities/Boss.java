@@ -12,7 +12,7 @@ import static io.github.arkanoid.core.Constants.*;
 
 
 public class Boss extends Actor {
-    protected enum State {
+    public enum State {
         NORMAL,
         TAKING_DAMAGE,
         DYING
@@ -41,7 +41,6 @@ public class Boss extends Actor {
     protected final Animation<TextureRegion> deathAnimation;
     protected float deathTimer = 0f;
 
-    protected boolean isShield = false;
     protected boolean isReadyToDeath = false;
 
 
@@ -102,24 +101,14 @@ public class Boss extends Actor {
     }
 
 
-    public void setShield(boolean shield) {
-        isShield = shield;
-        if (shield) {
-            state = State.NORMAL;
-        }
-    }
-
     public void takeDamage(int damage) {
         if (state == State.NORMAL) {
             this.hp -= damage;
             if (this.hp <= 0) {
                 this.hp = 0;
             }
-
-            if (!isShield) {
-                this.state = State.TAKING_DAMAGE;
-                this.takeDamageTimer = 0f;
-            }
+            this.state = State.TAKING_DAMAGE;
+            this.takeDamageTimer = 0f;
         }
     }
 
@@ -154,6 +143,10 @@ public class Boss extends Actor {
 
     public float getStateTime() {
         return stateTime;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     @Override

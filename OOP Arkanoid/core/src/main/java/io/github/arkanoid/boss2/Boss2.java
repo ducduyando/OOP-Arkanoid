@@ -9,10 +9,11 @@ import java.util.Random;
 public class Boss2 extends Boss {
 
     private final BossRandomMovement randomMovement;
-    private final Random random = new Random();
 
     Boss2Skill1 beeSpawningSkill;
     Boss2Skill2 shieldSkill;
+
+    protected boolean isShield = false;
 
     public Boss2(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2_VELOCITY, maxHp);
@@ -39,6 +40,10 @@ public class Boss2 extends Boss {
         return beeSpawningSkill;
     }
 
+    public void setShield(boolean shield) {
+        isShield = shield;
+    }
+
     public void act(float delta) {
         randomMovement.update(this, delta);
         super.act(delta);
@@ -58,13 +63,6 @@ public class Boss2 extends Boss {
         }
     }
 
-    /**
-    public void skill2() {
-        if (getStage() != null) {
-            getStage().addActor(new HoneyShield(this.skill2Texture, getX() + getWidth() / 2, getY()));
-        }
-    }
-     */
     public void spawnBeeFromTop() {
         if (getStage() != null) {
             float spawnY = UP_BOUNDARY;
@@ -84,10 +82,12 @@ public class Boss2 extends Boss {
                 this.setHp(0);
             }
 
+
             if (this.getHp() > 0) {
                 this.state = State.TAKING_DAMAGE;
-                this.takeDamageTimer = 0f;
+                this.takeDamageTimer = 0;
             }
+
         }
     }
 }

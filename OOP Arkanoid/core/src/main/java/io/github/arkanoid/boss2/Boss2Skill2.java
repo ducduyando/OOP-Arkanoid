@@ -35,7 +35,7 @@ public class Boss2Skill2 implements BossSkill {
     @Override
     public void update(Boss boss, float delta) {
         if (honeyShield.isHasShield()) {
-            boss.setShield(true);
+            owner.setShield(true);
             shieldTime += delta;
             honeyShield.setPosition(boss.getX(), boss.getY());
             honeyShield.setShieldDuration(boss.getStateTime());
@@ -43,7 +43,7 @@ public class Boss2Skill2 implements BossSkill {
                 shieldTime = 0f;
                 honeyShield.setHasShield(false);
                 boss.setSkill(nextSkill);
-                boss.setShield(false);
+                owner.setShield(false);
                 isSkill2Done = true;
             }
         }
@@ -57,6 +57,7 @@ public class Boss2Skill2 implements BossSkill {
         honeyShield.setPosition(boss.getX(), boss.getY());
         honeyShield.setShieldDuration(boss.getStateTime());
         boss.getStage().addActor(honeyShield);
+        boss.setState(Boss.State.NORMAL);
 
         isSkill2Done = false;
 
