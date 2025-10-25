@@ -12,6 +12,8 @@ public class Boss2Skill2 implements BossSkill {
     private BossSkill nextSkill;
     private float shieldTime = 0;
 
+    private boolean isSkill2Done = true;
+
     public Boss2Skill2(Boss2 owner, HoneyShield honeyShield) {
         this.honeyShield = honeyShield;
         this.owner = owner;
@@ -26,6 +28,10 @@ public class Boss2Skill2 implements BossSkill {
         return honeyShield;
     }
 
+    public boolean isSkill2Done() {
+        return isSkill2Done;
+    }
+
     @Override
     public void update(Boss boss, float delta) {
         if (honeyShield.isHasShield()) {
@@ -38,6 +44,7 @@ public class Boss2Skill2 implements BossSkill {
                 honeyShield.setHasShield(false);
                 boss.setSkill(nextSkill);
                 boss.setShield(false);
+                isSkill2Done = true;
             }
         }
 
@@ -50,6 +57,8 @@ public class Boss2Skill2 implements BossSkill {
         honeyShield.setPosition(boss.getX(), boss.getY());
         honeyShield.setShieldDuration(boss.getStateTime());
         boss.getStage().addActor(honeyShield);
+
+        isSkill2Done = false;
 
     }
 

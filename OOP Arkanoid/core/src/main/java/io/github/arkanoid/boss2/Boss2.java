@@ -1,6 +1,7 @@
 package io.github.arkanoid.boss2;
 
 import com.badlogic.gdx.graphics.Texture;
+import io.github.arkanoid.boss1.Boss1Skill1;
 import io.github.arkanoid.entities.Boss;
 import static io.github.arkanoid.core.Constants.*;
 import java.util.Random;
@@ -10,6 +11,7 @@ public class Boss2 extends Boss {
     private final BossRandomMovement randomMovement;
     private final Random random = new Random();
 
+    Boss2Skill1 beeSpawningSkill;
     Boss2Skill2 shieldSkill;
 
     public Boss2(int number, float x, float y, int maxHp) {
@@ -20,16 +22,21 @@ public class Boss2 extends Boss {
 
         HoneyShield honeyShield = new HoneyShield(this.skill2Texture, getX(), getY());
 
-        Boss2Skill1 beeSpawningSkill = new Boss2Skill1(this, randomMovement);
+        beeSpawningSkill = new Boss2Skill1(this, randomMovement);
         shieldSkill = new Boss2Skill2(this, honeyShield);
 
-        beeSpawningSkill.setNextSkill(beeSpawningSkill);
+        beeSpawningSkill.setNextSkill(randomMovement);
+        shieldSkill.setNextSkill(randomMovement);
 
-        setSkill(beeSpawningSkill);
+        setSkill(randomMovement);
     }
 
     public Boss2Skill2 getShieldSkill() {
         return shieldSkill;
+    }
+
+    public Boss2Skill1 getBeeSpawningSkill() {
+        return beeSpawningSkill;
     }
 
     public void act(float delta) {
@@ -77,8 +84,10 @@ public class Boss2 extends Boss {
                 this.setHp(0);
             }
 
-            this.state = State.TAKING_DAMAGE;
-            this.takeDamageTimer = 0f;
+            if (this.getHp() > 0) {
+                this.state = State.TAKING_DAMAGE;
+                this.takeDamageTimer = 0f;
+            }
         }
     }
 }

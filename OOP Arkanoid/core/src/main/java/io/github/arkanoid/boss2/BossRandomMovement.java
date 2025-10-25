@@ -8,10 +8,14 @@ import java.util.Random;
 import static io.github.arkanoid.core.Constants.*;
 
 public class BossRandomMovement implements BossSkill {
-    private final Boss owner;
+    private final Boss2 owner;
+    private BossSkill nextSkill;
     private boolean hasArrived = false;
     private float cooldownTimer = 0f;
     private final float COOLDOWN_DURATION = 2f;
+
+    private float skillTimer = 0f;
+    private final float SKILL_INTERVAL = 5f;
 
     private float targetX;
     private float targetY;
@@ -67,6 +71,23 @@ public class BossRandomMovement implements BossSkill {
 
     @Override
     public void update(Boss boss, float delta) {
+
+        skillTimer += delta;
+        if (skillTimer >= SKILL_INTERVAL
+            && owner.getBeeSpawningSkill().isSkill1Done()
+            && owner.getShieldSkill().isSkill2Done()) {
+
+            skillTimer = 0;
+            double c = Math.random();
+            if (c > 0.0 && c < 0.5) {
+                nextSkill = owner.getShieldSkill();
+            } else {
+                nextSkill = owner.getBeeSpawningSkill();
+            }
+            boss.setSkill(nextSkill);
+            return;
+        }
+
         if (!hasArrived) {
             Vector2 currentPosition = new Vector2(boss.getX(), boss.getY());
 
@@ -82,9 +103,11 @@ public class BossRandomMovement implements BossSkill {
             cooldownTimer += delta;
 
             if (cooldownTimer >= COOLDOWN_DURATION) {
+
                 chooseRandomTarget();
                 hasArrived = false;
             }
+
         }
     }
 }

@@ -86,6 +86,6 @@ public class Constants {
 
     public static final float BEE_SPEED_Y = 400f;
 
-    public static final int BOSS2_SKILL2_WIDTH = 464;
-    public static final int BOSS2_SKILL2_HEIGHT = 288;
+    public static final int BOSS2_SKILL2_WIDTH = 448;
+    public static final int BOSS2_SKILL2_HEIGHT = 272;
 }

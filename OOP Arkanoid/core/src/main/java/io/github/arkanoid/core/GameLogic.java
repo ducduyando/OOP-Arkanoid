@@ -136,11 +136,24 @@ public class GameLogic {
                 }
             } else {
                 bossRef.setHp(bossRef.getMaxHp());
+                cooldownHealingTime = COOLDOWN_HEALING;
                 newDamage = 0;
             }
 
 
-        } else {
+        }
+        if (bossRef instanceof Boss2 boss2Ref
+            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+
+            cooldownHealingTime += Gdx.graphics.getDeltaTime();
+            if (bossRef.getHp() + ball.getDamage() <= bossRef.getMaxHp()) {
+                newDamage = (-1) * ball.getDamage();
+            } else {
+                newDamage = (-1) * (boss2Ref.getMaxHp() - boss2Ref.getHp());
+            }
+        }
+         else {
             newDamage = ball.getDamage();
         }
 
@@ -149,6 +162,9 @@ public class GameLogic {
         Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
+            if (cooldownHealingTime >= COOLDOWN_HEALING) {
+                cooldownHealingTime = 0;
+            }
             bossRef.takeDamage(newDamage);
             if (bossRef.isDead()) {
                 ball.resetLaunch();
@@ -248,6 +264,7 @@ public class GameLogic {
 
             } else {
                 bossRef.takeDamage(BALL_UPGRADED_DAMAGE);
+                cooldownHealingTime = COOLDOWN_HEALING;
             }
         }
     }

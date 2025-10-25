@@ -13,6 +13,8 @@ public class Boss2Skill1 implements BossSkill {
     private BossSkill nextSkill;
     private final BossRandomMovement movementController;
 
+    private boolean isSkill1Done = true;
+
     private final float SPAWN_INTERVAL = 5f;
     private int beeCountToSpawn = 0;
 
@@ -43,12 +45,17 @@ public class Boss2Skill1 implements BossSkill {
         targetX = positionGridX[c];
     }
 
+    public boolean isSkill1Done() {
+        return isSkill1Done;
+    }
+
     public void cleanup() {}
 
     public void enter(Boss boss) {
         this.actionCounter = 0;
         this.isStopped = false;
         this.stopTimer = 0f;
+        this.isSkill1Done = false;
 
         movementController.chooseRandomTarget();
         movementController.setHasArrived(false);
@@ -83,8 +90,8 @@ public class Boss2Skill1 implements BossSkill {
                     isStopped = false;
                     stopTimer = 0f;
 
-
                     if (nextSkill != null) {
+                        isSkill1Done = true;
                         boss.setSkill(nextSkill);
                     }
                 }
