@@ -26,14 +26,18 @@ public class Main extends ApplicationAdapter {
 
     private Texture[] stageTextures; // Mảng chứa ảnh nền của các màn chơi
 
+    private int powerUpNumber = 0;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
 
-        stageTextures = new Texture[3];
+        stageTextures = new Texture[4];
         stageTextures[0] = new Texture("Stages/" + "stage0" + ".png");
         stageTextures[1] = new Texture("Stages/" + "stage1" + ".png"); // Boss 1
         stageTextures[2] = new Texture("Stages/" + "stage2" + ".png"); // Boss 2
+        stageTextures[3] = new Texture("Stages/" + "stage2" + ".png"); // Boss 3 tam thoi
+
 
         changeStage(new MenuStage());
     }
@@ -96,23 +100,38 @@ public class Main extends ApplicationAdapter {
             currentFlow = GameFlow.LOADING;
         } else if (currentStage instanceof Boss1Stage) {
             nextStage = new PowerUpMenuStage();
+            ((PowerUpMenuStage) nextStage).setLayerNumber(0);
             changeStage(nextStage);
 
-        } else if (currentStage instanceof PowerUpMenuStage) {
-            nextStage = new Boss2Stage();
-            loadingScreen = new LoadingScreen(stageTextures[2]);
-            currentFlow = GameFlow.LOADING;
+        } else if (currentStage instanceof PowerUpMenuStage powerUpMenuStage) {
 
-            if (((PowerUpMenuStage) currentStage).getSelectedOption() == PowerUpMenu.Option.SKILL1) {
-                ((Boss2Stage) nextStage).setSkillASelected(true);
-            } else if (((PowerUpMenuStage) currentStage).getSelectedOption() == PowerUpMenu.Option.SKILL2) {
-                ((Boss2Stage) nextStage).setSkillASelected(false);
+            if (powerUpNumber == 0) {
+
+                nextStage = new Boss2Stage();
+                loadingScreen = new LoadingScreen(stageTextures[2]);
+
+                currentFlow = GameFlow.LOADING;
+                powerUpNumber++;
+
+                if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL1) {
+                    ((Boss2Stage) nextStage).setSkillASelected(true);
+                } else if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL2) {
+                    ((Boss2Stage) nextStage).setSkillASelected(false);
+                }
+
+            } else if (powerUpNumber == 1) {
+                nextStage = new Boss2Stage();
+                loadingScreen = new LoadingScreen(stageTextures[3]);
+
+                currentFlow = GameFlow.LOADING;
+                powerUpNumber++;
+
             }
 
         } else if (currentStage instanceof Boss2Stage) {
-            loadingScreen = new LoadingScreen(stageTextures[2]);
-            currentFlow = GameFlow.LOADING;
-            nextStage = null;
+            nextStage = new PowerUpMenuStage();
+            ((PowerUpMenuStage) nextStage).setLayerNumber(1);
+            changeStage(nextStage);
         }
     }
     private void loadSavedGame() {
