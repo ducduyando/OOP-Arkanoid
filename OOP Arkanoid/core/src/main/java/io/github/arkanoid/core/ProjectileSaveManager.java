@@ -93,7 +93,7 @@ public class ProjectileSaveManager {
         }
 
         for (BeeData beeData : data.bees) {
-            BeeEnemy bee = new BeeEnemy(new Texture("boss2/" + "skill" + "1" + ".png"),
+            BeeEnemy bee = new BeeEnemy(new Texture("Boss2/" + "skill" + "1" + ".png"),
                 beeData.x,
                 beeData.y);
             stage.addActor(bee);
@@ -101,7 +101,7 @@ public class ProjectileSaveManager {
 
         for (BombData bombData : data.bombs) {
             BombProjectile bomb = new BombProjectile(
-                new Texture("boss1/" + "skill" + "1" + ".png"),
+                new Texture("Boss1/" + "skill" + "1" + ".png"),
                 bombData.x,
                 bombData.y
             );
@@ -112,7 +112,7 @@ public class ProjectileSaveManager {
         // Restore lasers
         for (LaserData laserData : data.lasers) {
             LaserEffect laser = new LaserEffect(
-                new Texture("boss1/" + "skill" + "2" + ".png"),
+                new Texture("Boss1/" + "skill" + "2" + ".png"),
                 laserData.x,
                 laserData.y
             );

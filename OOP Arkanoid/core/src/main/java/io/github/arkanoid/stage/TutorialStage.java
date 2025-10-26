@@ -111,14 +111,14 @@ public class TutorialStage implements GameStage {
     public void enter() {
         this.gdxStage = new Stage(new ScreenViewport() {});
 
-        this.backgroundTexture = new Texture("brick/" + "background" + ".png");
+        this.backgroundTexture = new Texture("Brick/" + "background" + ".png");
         this.brickTextures = new Texture[4];
-        brickTextures[0] = new Texture("brick/" + "red" + ".png");
-        brickTextures[1] = new Texture("brick/" + "blue" + ".png");
-        brickTextures[2] = new Texture("brick/" + "green" + ".png");
-        brickTextures[3] = new Texture("brick/" + "orange" + ".png");
-        paddleImage = new Texture("universal/" + "paddle" + ".png");
-        ballImage = new Texture("ball/" + "normal" + ".png");
+        brickTextures[0] = new Texture("Brick/" + "red" + ".png");
+        brickTextures[1] = new Texture("Brick/" + "blue" + ".png");
+        brickTextures[2] = new Texture("Brick/" + "green" + ".png");
+        brickTextures[3] = new Texture("Brick/" + "orange" + ".png");
+        paddleImage = new Texture("Universal/" + "paddle" + ".png");
+        ballImage = new Texture("Ball/" + "normal" + ".png");
 
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);

@@ -46,11 +46,11 @@ public class Boss extends Actor {
 
     public Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
 
-        this.normalSprite = new Texture("boss" + number + "/" + "normal" + ".png");
-        this.takeDamageSprite = new Texture("boss" + number + "/" + "take_damage" + ".png");
-        this.deathSprite = new Texture("boss" + number + "/" + "death" + ".png");
-        this.skill1Texture = new Texture("boss" + number + "/" + "skill1" + ".png");
-        this.skill2Texture = new Texture("boss" + number + "/" + "skill2" + ".png");
+        this.normalSprite = new Texture("Boss" + number + "/" + "normal" + ".png");
+        this.takeDamageSprite = new Texture("Boss" + number + "/" + "take_damage" + ".png");
+        this.deathSprite = new Texture("Boss" + number + "/" + "death" + ".png");
+        this.skill1Texture = new Texture("Boss" + number + "/" + "skill1" + ".png");
+        this.skill2Texture = new Texture("Boss" + number + "/" + "skill2" + ".png");
 
         int frameCount = normalSprite.getWidth() / bossWidth;
 

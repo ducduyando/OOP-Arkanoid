@@ -26,7 +26,7 @@ public class LoadingScreen extends Actor {
         this.stageBackground = stageBackground;
         this.state = State.LOADING;
 
-        loadingBarTexture = new Texture("stages/" + "loading" + ".png");
+        loadingBarTexture = new Texture("Stages/" + "loading" + ".png");
         final int maxLoadingFrames = loadingBarTexture.getHeight() / LOADING_HEIGHT;
         TextureRegion[] loadingFrames = new TextureRegion[maxLoadingFrames];
 

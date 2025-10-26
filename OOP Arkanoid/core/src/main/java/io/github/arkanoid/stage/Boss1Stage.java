@@ -58,12 +58,12 @@ public class Boss1Stage implements GameStage {
     public void enter() {
         stage = new Stage(new ScreenViewport());
 
-        this.paddleImage = new Texture("universal/" + "paddle" + ".png");
-        this.ballImage = new Texture("ball/" + "normal" + ".png");
-        this.bossHealthBarImage = new Texture("universal/" + "health_bar" + ".png");
+        this.paddleImage = new Texture("Universal/" + "paddle" + ".png");
+        this.ballImage = new Texture("Ball/" + "normal" + ".png");
+        this.bossHealthBarImage = new Texture("Universal/" + "health_bar" + ".png");
         this.bgTextures = new Texture[5];
         for (int i = 0; i < 5; i++) {
-            bgTextures[i] = new Texture("background/" + "stage1/" + "layer" + i + ".png");
+            bgTextures[i] = new Texture("Background/" + "Stage1/" + "layer" + i + ".png");
         }
 
         // Create entities with saved positions if available

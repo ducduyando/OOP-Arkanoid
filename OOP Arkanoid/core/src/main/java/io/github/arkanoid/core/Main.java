@@ -31,9 +31,9 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         stageTextures = new Texture[3];
-        stageTextures[0] = new Texture("stages/" + "stage0" + ".png");
-        stageTextures[1] = new Texture("stages/" + "stage1" + ".png"); // Boss 1
-        stageTextures[2] = new Texture("stages/" + "stage2" + ".png"); // Boss 2
+        stageTextures[0] = new Texture("Stages/" + "stage0" + ".png");
+        stageTextures[1] = new Texture("Stages/" + "stage1" + ".png"); // Boss 1
+        stageTextures[2] = new Texture("Stages/" + "stage2" + ".png"); // Boss 2
 
         changeStage(new MenuStage());
     }

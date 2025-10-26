@@ -14,7 +14,7 @@ public class PowerUpMenuStage implements GameStage {
     public void enter() {
         this.gdxStage = new Stage(new ScreenViewport());
 
-        this.powerUpMenuTexture = new Texture("powerUp/" + "layer" + 0 + ".png");
+        this.powerUpMenuTexture = new Texture("PowerUp/" + "layer" + 0 + ".png");
         this.powerUpMenu = new PowerUpMenu(powerUpMenuTexture);
 
         this.gdxStage.addActor(this.powerUpMenu);

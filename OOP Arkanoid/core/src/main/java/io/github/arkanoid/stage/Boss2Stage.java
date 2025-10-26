@@ -35,7 +35,7 @@ public class Boss2Stage implements GameStage {
     private Texture bossHealthBarImage;
     private Texture[] bgTextures;
 
-    private Texture ballUpgrade = new Texture("ball/" + "upgrade" + ".png");
+    private Texture ballUpgrade = new Texture("PaddleSkill/" + "1a" + ".png");
 
     private PaddleSkill1A paddleSkill1A;
     private PaddleSkill1B paddleSkill1B;
@@ -71,12 +71,12 @@ public class Boss2Stage implements GameStage {
     public void enter() {
         stage = new Stage(new ScreenViewport());
 
-        this.paddleImage = new Texture("universal/" + "paddle" + ".png");
-        this.ballImage = new Texture("ball/" + "normal" + ".png");
-        this.bossHealthBarImage = new Texture("universal/" + "health_bar" + ".png");
+        this.paddleImage = new Texture("Universal/" + "paddle" + ".png");
+        this.ballImage = new Texture("Ball/" + "normal" + ".png");
+        this.bossHealthBarImage = new Texture("Universal/" + "health_bar" + ".png");
         this.bgTextures = new Texture[6];
         for (int i = 0; i < 6; i++) {
-            bgTextures[i] = new Texture("background/" + "stage2/" + "layer" + i + ".png");
+            bgTextures[i] = new Texture("Background/" + "Stage2/" + "layer" + i + ".png");
         }
 
         // Create entities with saved positions if available
@@ -117,7 +117,7 @@ public class Boss2Stage implements GameStage {
         if (saveData != null && saveData.beePositions != null) {
             for (Save.BeePosition beePos : saveData.beePositions) {
                 io.github.arkanoid.boss2.BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
-                    new Texture("boss2/" + "skill" + "1" +".png"), beePos.x, beePos.y
+                    new Texture("Boss2/" + "skill" + "1" +".png"), beePos.x, beePos.y
                 );
                 stage.addActor(bee);
             }

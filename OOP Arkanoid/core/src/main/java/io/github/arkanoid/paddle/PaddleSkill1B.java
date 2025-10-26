@@ -31,7 +31,7 @@ public class PaddleSkill1B implements PaddleSkill {
     }
 
     public PaddleSkill1B(Paddle owner) {
-        laserEffect = new Texture("boss1/" + "skill2" + ".png");
+        laserEffect = new Texture("PaddleSkill" + "1b" + ".png");
         this.owner = owner;
         this.currentPhase = Phase.DONE;
     }

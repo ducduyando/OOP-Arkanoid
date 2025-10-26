@@ -13,7 +13,7 @@ import static io.github.arkanoid.core.Constants.*;
 public class Button extends Actor {
     private TextureRegion currentFrame;
     private float stateTime = 0f;
-    private final Texture buttonSprite = new Texture("menu/" + "layer" + 4 + ".png");
+    private final Texture buttonSprite = new Texture("Menu/" + "layer" + 4 + ".png");
     public enum Mode {
         PLAY,
         LOAD,

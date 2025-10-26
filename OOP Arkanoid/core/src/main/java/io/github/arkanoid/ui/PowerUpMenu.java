@@ -20,7 +20,7 @@ public class PowerUpMenu extends Actor {
 
     protected State state = State.TRANSITION;
 
-    private final Texture transitionSprite = new Texture("powerUp/" + "transition" + ".png");
+    private final Texture transitionSprite = new Texture("PowerUp/" + "transition" + ".png");
     private final Texture powerUpButton;
 
     private TextureRegion currentFrame;

@@ -31,7 +31,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
     public PaddleSkill1A(Paddle paddle) {
         super(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
         owner = paddle;
-        ballUpgrade = new Texture("ball/" + "upgrade" + ".png");
+        ballUpgrade = new Texture("PaddleSkill/" + "1a" + ".png");
     }
 
     @Override
