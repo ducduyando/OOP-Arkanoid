@@ -3,12 +3,14 @@ package io.github.arkanoid.stage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.boss2.Boss2;
 import io.github.arkanoid.core.GameLogic;
+import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
@@ -84,6 +86,13 @@ public class Boss2Stage implements GameStage {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
             paddle.setState(saveData.paddleState); // Restore paddle state
 
+            // Restore paddle skills
+            paddle.initializeSkills(
+                saveData.isSkillASelected,
+                saveData.skill1ACooldownTimer,
+                saveData.skill1BCooldownTimer
+            );
+
             ball = new Ball(ballImage, saveData.ballX, saveData.ballY);
             ball.setVelocity(saveData.ballVelX, saveData.ballVelY);
             ball.setLaunched(saveData.ballLaunched);
@@ -91,6 +100,12 @@ public class Boss2Stage implements GameStage {
             // Create boss with full HP first, then set current HP
             boss2 = new Boss2(2, saveData.bossX, saveData.bossY, 100);
             boss2.setHp(saveData.bossHP); // Set current HP from save data
+
+            if (saveData.isSkillASelected) {
+                paddleSkill1A = new PaddleSkill1A(paddle);
+            } else {
+                paddleSkill1B = new PaddleSkill1B(paddle);
+            }
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
@@ -256,8 +271,8 @@ public class Boss2Stage implements GameStage {
 
 
 
-    // Custom draw method to handle pause menu
-    public void drawEffects(com.badlogic.gdx.graphics.g2d.SpriteBatch batch) {
+
+    public void drawEffects(SpriteBatch batch) {
         // Draw pause menu if paused
         if (isPaused) {
             pauseMenu.draw(batch, 1f);
@@ -279,25 +294,22 @@ public class Boss2Stage implements GameStage {
     }
 
     private void saveGame() {
-        java.util.List<Save.BeePosition> beePositions = new java.util.ArrayList<>();
-        if (stage != null) {
-            for (Actor actor : stage.getActors()) {
-                if (actor instanceof BeeEnemy bee) {
-                    beePositions.add(new Save.BeePosition(bee.getX(), bee.getY()));
-                }
-            }
-        }
-
-        Save.saveGameWithBees(
-            2,
+        // Collect all projectiles using ProjectileSaveManager
+      ProjectileSaveManager.ProjectileData projectileData =
+        ProjectileSaveManager.collectProjectiles(stage);
+        Save.saveGameWithProjectiles(
+            2, // Boss2 stage
             boss2.getHp(),
             paddle.getState(),
-            beePositions,
+            projectileData,
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,
             ball.isLaunched(),
-            boss2.getX(), boss2.getY()
+            boss2.getX(), boss2.getY(),
+            paddle.isSkillASelected(),
+            paddle.getSkill1ACooldownTimer(),
+            paddle.getSkill1BCooldownTimer()
         );
     }
 }

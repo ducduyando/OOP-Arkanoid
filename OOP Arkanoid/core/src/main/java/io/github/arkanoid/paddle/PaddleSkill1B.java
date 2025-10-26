@@ -25,13 +25,24 @@ public class PaddleSkill1B implements PaddleSkill {
         isSkill1BReady = false;
         skill1BCooldownTimer = SKILL_COOLDOWN;
     }
+    public float getSkill1BCooldownTimer() {
+        return skill1BCooldownTimer;
+    }
+
+    public void setSkill1BCooldownTimer(float skill1BCooldownTimer) {
+        this.skill1BCooldownTimer = skill1BCooldownTimer;
+    }
+
+    public void setIsSkill1BReady(boolean isSkill1BReady) {
+        this.isSkill1BReady = isSkill1BReady;
+    }
 
     public boolean isSkill1BReady() {
         return isSkill1BReady;
     }
 
     public PaddleSkill1B(Paddle owner) {
-        laserEffect = new Texture("PaddleSkill" + "1b" + ".png");
+        laserEffect = new Texture("PaddleSkill/" + "1b" + ".png");
         this.owner = owner;
         this.currentPhase = Phase.DONE;
     }

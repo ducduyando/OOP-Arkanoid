@@ -14,7 +14,8 @@ public class Save {
     public static void saveGame(int stageNumber, int bossHP, int paddleState, int bricksRemaining,
                                 float paddleX, float paddleY, float ballX, float ballY,
                                 float ballVelX, float ballVelY, boolean ballLaunched,
-                                float bossX, float bossY) {
+                                float bossX, float bossY, boolean isSkillASelected , float skill1ACooldownTimer,
+                                float skill1BCooldownTimer) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
         pref.putInteger("paddleState", paddleState);
@@ -30,6 +31,9 @@ public class Save {
         pref.putFloat("bossX", bossX);
         pref.putFloat("bossY", bossY);
 
+        pref.putBoolean("isSkillASelected", isSkillASelected);
+        pref.putFloat("skill1ACooldownTimer", skill1ACooldownTimer);
+        pref.putFloat("skill1BCooldownTimer", skill1BCooldownTimer);
         pref.flush();
     }
 
@@ -68,7 +72,8 @@ public class Save {
     public static void saveGameWithBees(int stageNumber, int bossHP, int paddleState, List<BeePosition> beePositions,
                                         float paddleX, float paddleY, float ballX, float ballY,
                                         float ballVelX, float ballVelY, boolean ballLaunched,
-                                        float bossX, float bossY) {
+                                        float bossX, float bossY
+                                        ) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
         pref.putInteger("paddleState", paddleState);
@@ -97,7 +102,9 @@ public class Save {
                                                ProjectileSaveManager.ProjectileData projectileData,
                                                float paddleX, float paddleY, float ballX, float ballY,
                                                float ballVelX, float ballVelY, boolean ballLaunched,
-                                               float bossX, float bossY) {
+                                               float bossX, float bossY, boolean isSkillASelected,
+                                               float skill1ACooldownTimer,
+                                               float skill1BCooldownTimer) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
         pref.putInteger("paddleState", paddleState);
@@ -114,11 +121,14 @@ public class Save {
         pref.putFloat("bossX", bossX);
         pref.putFloat("bossY", bossY);
 
+        pref.putBoolean("isSkillASelected", isSkillASelected);
+        pref.putFloat("skill1ACooldownTimer", skill1ACooldownTimer);
+        pref.putFloat("skill1BCooldownTimer", skill1BCooldownTimer);
         // Save projectile data
         saveProjectileData(projectileData);
 
         pref.flush();
-        Gdx.app.log("SAVE", "Saved " + projectileData.getTotalCount() + " projectiles");
+
     }
 
     private static void saveProjectileData(ProjectileSaveManager.ProjectileData data) {
@@ -175,6 +185,9 @@ public class Save {
         data.bossX = pref.getFloat("bossX", (SCREEN_WIDTH - BOSS1_WIDTH) / 2f);
         data.bossY = pref.getFloat("bossY", SCREEN_HEIGHT * 0.6f);
 
+        data.isSkillASelected = pref.getBoolean("isSkillASelected", false);
+        data.skill1ACooldownTimer = pref.getFloat("skill1ACooldownTimer", SKILL_COOLDOWN);
+        data.skill1BCooldownTimer = pref.getFloat("skill1BCooldownTimer", SKILL_COOLDOWN);
 
         // Load vị trí gạch nếu có
         data.brickPositions = new ArrayList<>();
@@ -260,6 +273,10 @@ public class Save {
         public float ballVelX, ballVelY;
         public boolean ballLaunched;
         public float bossX, bossY;
+
+        public boolean isSkillASelected;
+        public float skill1ACooldownTimer;
+        public float skill1BCooldownTimer;
     }
 
     public static class BrickPosition {

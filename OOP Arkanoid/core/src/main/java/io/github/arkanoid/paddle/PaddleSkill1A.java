@@ -15,7 +15,12 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
     private float skill1ACooldownTimer = SKILL_COOLDOWN;
 
     private boolean skill1AReady = true;
-
+    public float getSkill1ACooldownTimer() {
+        return skill1ACooldownTimer;
+    }
+    public void setSkill1ACooldownTimer(float skill1ACooldownTimer) {
+        this.skill1ACooldownTimer = skill1ACooldownTimer;
+    }
     public boolean isSkill1AReady() {
         return skill1AReady;
     }

@@ -20,6 +20,11 @@ public class Paddle extends Actor {
     private float blinkTimer = 0f;
     private boolean isVisible = true;
 
+    private PaddleSkill1A skill1A;
+    private PaddleSkill1B skill1B;
+
+    private boolean isSkillASelected = true;
+    private PaddleSkill activeSkill;
     public Paddle(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, 0, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
         this.hitBox = new Rectangle(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -68,6 +73,46 @@ public class Paddle extends Actor {
             isInvincible = true;
             stopTimer = 0f;
         }
+    }
+
+    public boolean isSkillASelected() {
+        return isSkillASelected;
+    }
+
+    public float getSkill1ACooldownTimer() {
+        if (skill1A != null) {
+            return skill1A.getSkill1ACooldownTimer();
+        }
+        return SKILL_COOLDOWN;
+
+
+    }
+
+    public float getSkill1BCooldownTimer() {
+        if (skill1B != null) {
+            return skill1B.getSkill1BCooldownTimer();
+        }
+        return SKILL_COOLDOWN;
+    }
+
+    public void initializeSkills(boolean isSkillASelected, float skill1ACooldownTimer, float skill1BCooldownTimer) {
+        if (this.skill1A == null) {
+            this.skill1A = new PaddleSkill1A(this);
+        }
+        if (this.skill1B == null) {
+            this.skill1B = new PaddleSkill1B(this);
+        }
+
+        this.isSkillASelected = isSkillASelected;
+
+        this.skill1A.setSkill1ACooldownTimer(skill1ACooldownTimer);
+        this.skill1A.setSkill1AReady(skill1ACooldownTimer <= 0);
+
+        this.skill1B.setSkill1BCooldownTimer(skill1BCooldownTimer);
+        this.skill1B.setIsSkill1BReady(skill1BCooldownTimer <= 0);
+
+
+        this.activeSkill = isSkillASelected ? this.skill1A : this.skill1B;
     }
 
     @Override

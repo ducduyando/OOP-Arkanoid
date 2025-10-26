@@ -71,6 +71,11 @@ public class Boss1Stage implements GameStage {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
             paddle.setState(saveData.paddleState); // Restore paddle state
 
+            paddle.initializeSkills(
+                saveData.isSkillASelected,
+                saveData.skill1ACooldownTimer,
+                saveData.skill1BCooldownTimer
+            );
             ball = new Ball(ballImage, saveData.ballX, saveData.ballY);
             ball.setVelocity(saveData.ballVelX, saveData.ballVelY);
             ball.setLaunched(saveData.ballLaunched);
@@ -211,6 +216,9 @@ public class Boss1Stage implements GameStage {
       ProjectileSaveManager.ProjectileData projectileData =
           ProjectileSaveManager.collectProjectiles(stage);
 
+        boolean isSkillASelected = paddle.isSkillASelected();
+        float skill1ACooldownTimer = paddle.getSkill1ACooldownTimer();
+        float skill1BCooldownTimer = paddle.getSkill1BCooldownTimer();
         Save.saveGameWithProjectiles(
             1, // Boss1 stage
             boss1.getHp(),
@@ -220,7 +228,10 @@ public class Boss1Stage implements GameStage {
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,
             ball.isLaunched(),
-            boss1.getX(), boss1.getY()
+            boss1.getX(), boss1.getY(),
+            isSkillASelected,
+            skill1ACooldownTimer,
+            skill1BCooldownTimer
         );
     }
 }
