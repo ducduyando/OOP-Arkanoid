@@ -22,6 +22,7 @@ public class Paddle extends Actor {
 
     private PaddleSkill1A skill1A;
     private PaddleSkill1B skill1B;
+    private PaddleSkill2A skill2A; // New skill2A
 
     private boolean isSkillASelected = true;
     private PaddleSkill activeSkill;
@@ -111,8 +112,38 @@ public class Paddle extends Actor {
         this.skill1B.setSkill1BCooldownTimer(skill1BCooldownTimer);
         this.skill1B.setIsSkill1BReady(skill1BCooldownTimer <= 0);
 
-
         this.activeSkill = isSkillASelected ? this.skill1A : this.skill1B;
+    }
+
+    public void initializeSkill2A() {
+        if (this.skill2A == null) {
+            this.skill2A = new PaddleSkill2A(this);
+        }
+    }
+
+    public void initializeSkill2A(float skill2ACooldownTimer) {
+        initializeSkill2A();
+        this.skill2A.setSkill2ACooldownTimer(skill2ACooldownTimer);
+        this.skill2A.setIsSkill2AReady(skill2ACooldownTimer <= 0);
+    }
+
+    public PaddleSkill2A getSkill2A() {
+        return skill2A;
+    }
+
+    public float getSkill2ACooldownTimer() {
+        if (skill2A != null) {
+            return skill2A.getSkill2ACooldownTimer();
+        }
+        return SKILL_COOLDOWN;
+    }
+
+    public PaddleSkill getActiveSkill() {
+        return activeSkill;
+    }
+
+    public PaddleSkill1B getSkill1B() {
+        return skill1B;
     }
 
     @Override
@@ -155,5 +186,10 @@ public class Paddle extends Actor {
 
         float currentXOffset = 32 * state;
         hitBox.setPosition(getX() + currentXOffset, getY());
+
+        // Update skill2A if available
+        if (skill2A != null) {
+            skill2A.update(this, delta);
+        }
     }
 }

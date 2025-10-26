@@ -18,12 +18,13 @@ public class PaddleSkill1B implements PaddleSkill {
     private Phase currentPhase;
     private PaddleLaserEffect paddleLaserEffect;
 
-    private float skill1BCooldownTimer = SKILL_COOLDOWN;
+    private static final float SKILL1B_COOLDOWN = 5f; // 5 seconds cooldown
+    private float skill1BCooldownTimer = 0f; // Start ready
     private boolean isSkill1BReady = true;
 
     public void startSkill1BCooldown() {
         isSkill1BReady = false;
-        skill1BCooldownTimer = SKILL_COOLDOWN;
+        skill1BCooldownTimer = SKILL1B_COOLDOWN;
     }
     public float getSkill1BCooldownTimer() {
         return skill1BCooldownTimer;
@@ -54,29 +55,33 @@ public class PaddleSkill1B implements PaddleSkill {
     }
 
     public void update(Paddle paddle, float delta) {
-        float x = paddle.getX() + PADDLE_WIDTH / 2f - LASER_WIDTH / 2f;
-        float y = paddle.getY() + PADDLE_HEIGHT;
-        paddleLaserEffect.setPosition(x, y);
-        if (currentPhase == Phase.CHARGING) {
-            if (paddleLaserEffect.isAnimationDone()) {
-                currentPhase = Phase.FIRING;
-                paddleLaserTime = 0f;
-            }
-
-        } else if (currentPhase == Phase.FIRING) {
-            paddleLaserTime += delta;
-            if (paddleLaserTime >= 3f) {
-                cleanup();
-                currentPhase = Phase.DONE;
-            }
-        } else {
-            startSkill1BCooldown();
-        }
-
+        // Always update cooldown timer
         if (!isSkill1BReady) {
             skill1BCooldownTimer -= delta;
             if (skill1BCooldownTimer <= 0) {
                 isSkill1BReady = true;
+                skill1BCooldownTimer = 0f;
+            }
+        }
+
+        // Only update skill effects if laser is active
+        if (paddleLaserEffect != null) {
+            float x = paddle.getX() + PADDLE_WIDTH / 2f - LASER_WIDTH / 2f;
+            float y = paddle.getY() + PADDLE_HEIGHT;
+            paddleLaserEffect.setPosition(x, y);
+            
+            if (currentPhase == Phase.CHARGING) {
+                if (paddleLaserEffect.isAnimationDone()) {
+                    currentPhase = Phase.FIRING;
+                    paddleLaserTime = 0f;
+                }
+            } else if (currentPhase == Phase.FIRING) {
+                paddleLaserTime += delta;
+                if (paddleLaserTime >= 3f) {
+                    cleanup();
+                    currentPhase = Phase.DONE;
+                    startSkill1BCooldown(); // Start cooldown when skill finishes
+                }
             }
         }
     }

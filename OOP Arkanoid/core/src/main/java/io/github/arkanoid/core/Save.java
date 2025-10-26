@@ -277,6 +277,8 @@ public class Save {
         public boolean isSkillASelected;
         public float skill1ACooldownTimer;
         public float skill1BCooldownTimer;
+        public boolean hasSkill2A;
+        public float skill2ACooldownTimer;
     }
 
     public static class BrickPosition {

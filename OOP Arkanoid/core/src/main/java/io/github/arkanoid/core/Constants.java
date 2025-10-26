@@ -90,4 +90,14 @@ public class Constants {
 
     public static final int BOSS2_SKILL2_WIDTH = 448;
     public static final int BOSS2_SKILL2_HEIGHT = 272;
+
+    /** Paddle Skill 2-A. */
+    public static final float BEE_BULLET_SPEED_Y = 300f;
+    private static final float SKILL_COOLDOWN2 = 1.0f;
+    /** J. */
+    public static final float SKILL_1A_COOLDOWN = 5.0f;
+    public static final int SKILL_ICON_WIDTH = 144;
+    public static final int SKILL_ICON_HEIGHT = 144;
+    public static  final float MAX_COOLDOWN = 5.0f;
+
 }

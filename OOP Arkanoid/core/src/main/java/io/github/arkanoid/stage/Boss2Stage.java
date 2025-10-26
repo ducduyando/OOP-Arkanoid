@@ -19,6 +19,7 @@ import io.github.arkanoid.paddle.PaddleSkill1B;
 import io.github.arkanoid.ui.HealthBar;
 import io.github.arkanoid.ui.ParallaxBackground;
 import io.github.arkanoid.ui.PauseMenu;
+import io.github.arkanoid.ui.SkillIcon;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -36,6 +37,9 @@ public class Boss2Stage implements GameStage {
     private Texture ballImage;
     private Texture bossHealthBarImage;
     private Texture[] bgTextures;
+
+
+    private SkillIcon skillIconJ;
 
     private Texture ballUpgrade = new Texture("PaddleSkill/" + "1a" + ".png");
 
@@ -101,19 +105,27 @@ public class Boss2Stage implements GameStage {
             boss2 = new Boss2(2, saveData.bossX, saveData.bossY, 100);
             boss2.setHp(saveData.bossHP); // Set current HP from save data
 
+            // Sync skill selection
+            isSkillASelected = saveData.isSkillASelected;
             if (saveData.isSkillASelected) {
                 paddleSkill1A = new PaddleSkill1A(paddle);
             } else {
-                paddleSkill1B = new PaddleSkill1B(paddle);
+                // Use the skill1B object from paddle
+                paddleSkill1B = paddle.getSkill1B();
             }
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
             boss2 = new Boss2(2, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
+            
+            // Initialize paddle skills - always initialize both for UI purposes
+            paddle.initializeSkills(isSkillASelected, 0f, 0f);
+            
             if (isSkillASelected) {
                 paddleSkill1A = new PaddleSkill1A(paddle);
             } else {
-                paddleSkill1B = new PaddleSkill1B(paddle);
+                // Use the skill1B object from paddle
+                paddleSkill1B = paddle.getSkill1B();
             }
         }
         bossHealthBar = new HealthBar(bossHealthBarImage, boss2);
@@ -128,7 +140,11 @@ public class Boss2Stage implements GameStage {
         stage.addActor(ball);
         stage.addActor(boss2);
 
-        // Restore bees if loading from save
+        Texture skillIconTexture = new Texture("SkillButton/" + "j" + ".png");
+        skillIconJ = new SkillIcon(paddle, skillIconTexture, "J", 20, 20);
+        stage.addActor(skillIconJ);
+
+
         if (saveData != null && saveData.beePositions != null) {
             for (Save.BeePosition beePos : saveData.beePositions) {
                 io.github.arkanoid.boss2.BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
@@ -199,14 +215,16 @@ public class Boss2Stage implements GameStage {
             }
 
             else if (paddleSkill1B != null) {
+                // Always update skill1B for cooldown timer
+                paddleSkill1B.update(paddle, delta);
+                
                 if (paddleSkill1B.isDone() && Gdx.input.isKeyJustPressed(Input.Keys.J)
                     && paddleSkill1B.isSkill1BReady()) {
 
                     paddleSkill1B.enter(paddle);
-
                 }
-                if (!(paddleSkill1B.isDone())) {
-                    paddleSkill1B.update(paddle, delta);
+                
+                if (paddleSkill1B.isFiring()) {
                     gameLogic.paddleLaserCollision(paddleSkill1B);
                 }
             }
@@ -264,6 +282,7 @@ public class Boss2Stage implements GameStage {
         if (pauseMenu != null) {
             pauseMenu.dispose();
         }
+        // SkillIcon texture will be disposed automatically by LibGDX
         if (stage != null) {
             stage.dispose();
         }
