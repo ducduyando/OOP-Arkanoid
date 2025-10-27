@@ -35,6 +35,7 @@ public class PaddleSkill2B implements PaddleSkill {
         if (isSkill2Start) {
             paddleShieldTime += delta;
             if (paddleShieldTime >= 4f) {
+                owner.setInvincible(false);
                 isSkill2Start = false;
                 cleanup();
             }
@@ -42,6 +43,7 @@ public class PaddleSkill2B implements PaddleSkill {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.K) && isSkill2BReady) {
             owner.getStage().addActor(paddleHoneyShield);
+            owner.setInvincible(true);
             isSkill2Start = true;
             isSkill2BReady = false;
         }
