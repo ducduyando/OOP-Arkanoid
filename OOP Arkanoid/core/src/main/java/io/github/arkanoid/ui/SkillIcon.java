@@ -36,31 +36,22 @@ public class SkillIcon extends Actor {
             PaddleSkill1B skill1B = paddle.getSkill1B();
             if (skill1B.getCurrentPhase() == PaddleSkill1B.Phase.FIRING ||
                 skill1B.getCurrentPhase() == PaddleSkill1B.Phase.CHARGING) {
+            }
+            else {
+                float laserTime = skill1B.getPaddleLaserTime();
+                float maxLaserDuration = PaddleSkill1B.getSKILL1B_LASER_DURATION();
+                float completionRatio = laserTime / maxLaserDuration;
 
-                if (skill1B.getCurrentPhase() == PaddleSkill1B.Phase.CHARGING) {
-                    currentFrame = frames[1];
-                }
+                int[] firingFrames = {1, 2, 3, 4};
+                int numFiringFrames = firingFrames.length;
+                int firingIndex = (int) (completionRatio * numFiringFrames);
+                firingIndex = Math.min(firingIndex, numFiringFrames - 1);
 
-                else {
-                    float laserTime = skill1B.getPaddleLaserTime();
-                    float maxLaserDuration = PaddleSkill1B.getSKILL1B_LASER_DURATION();
-                    float completionRatio = laserTime / maxLaserDuration;
-
-                    int[] firingFrames = {1, 2, 3, 4};
-                    int numFiringFrames = firingFrames.length;
-                    int firingIndex = (int) (completionRatio * numFiringFrames);
-                    firingIndex = Math.min(firingIndex, numFiringFrames - 1);
-
-                    currentFrame = frames[firingFrames[firingIndex]];
-                }
+                currentFrame = frames[firingFrames[firingIndex]];
             }
 
-            else if (skill1B.isSkill1BReady()) {
-                if (paddle.isSkillASelected()) {
-                    currentFrame = frames[1];
-                } else {
-                    currentFrame = frames[0];
-                }
+            if (skill1B.isSkill1BReady()) {
+                currentFrame = frames[0];
             }
 
             else {
@@ -69,11 +60,11 @@ public class SkillIcon extends Actor {
                 float elapsedTime = MAX_COOLDOWN - cooldown;
                 float completionRatio = elapsedTime / MAX_COOLDOWN;
 
-                int[] cooldownFrames = {4, 3, 2, 1};
+                int[] cooldownFrames = {1, 2, 3, 4};
                 int numCooldownFrames = cooldownFrames.length;
 
                 int cooldownIndex = (int) (completionRatio * numCooldownFrames);
-                cooldownIndex = Math.min(cooldownIndex, numCooldownFrames - 1);
+                cooldownIndex = Math.min(cooldownIndex, numCooldownFrames);
 
                 currentFrame = frames[cooldownFrames[cooldownIndex]];
             }
