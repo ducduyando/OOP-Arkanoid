@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.arkanoid.paddle.Paddle;
+import io.github.arkanoid.paddle.PaddleSkill1B;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -26,32 +27,58 @@ public class SkillIcon extends Actor {
         setPosition(x, y);
         setSize(SKILL_ICON_WIDTH, SKILL_ICON_HEIGHT);
     }
+
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         TextureRegion currentFrame = null;
         if(skillKey.equals("J")) {
-            if (paddle.isSkillASelected()) {
-                currentFrame = frames[1]; // PaddleSkill1Av Always frame 2
+            PaddleSkill1B skill1B = paddle.getSkill1B();
+            if (skill1B.getCurrentPhase() == PaddleSkill1B.Phase.FIRING ||
+                skill1B.getCurrentPhase() == PaddleSkill1B.Phase.CHARGING) {
+
+                if (skill1B.getCurrentPhase() == PaddleSkill1B.Phase.CHARGING) {
+                    currentFrame = frames[1];
+                }
+
+                else {
+                    float laserTime = skill1B.getPaddleLaserTime();
+                    float maxLaserDuration = PaddleSkill1B.getSKILL1B_LASER_DURATION();
+                    float completionRatio = laserTime / maxLaserDuration;
+
+                    int[] firingFrames = {1, 2, 3, 4};
+                    int numFiringFrames = firingFrames.length;
+                    int firingIndex = (int) (completionRatio * numFiringFrames);
+                    firingIndex = Math.min(firingIndex, numFiringFrames - 1);
+
+                    currentFrame = frames[firingFrames[firingIndex]];
+                }
             }
+
+            else if (skill1B.isSkill1BReady()) {
+                if (paddle.isSkillASelected()) {
+                    currentFrame = frames[1];
+                } else {
+                    currentFrame = frames[0];
+                }
+            }
+
             else {
                 float cooldown = paddle.getSkill1BCooldownTimer();
 
-                if (cooldown <= 0) {
-                    currentFrame = frames[1];
+                float elapsedTime = MAX_COOLDOWN - cooldown;
+                float completionRatio = elapsedTime / MAX_COOLDOWN;
 
-                }
-                else {
-                    float elapsedTime = MAX_COOLDOWN - cooldown;
-                    float completionRatio = elapsedTime / MAX_COOLDOWN;
-                    int[] cooldownFrames = {0, 4, 3, 2};
-                    int numCooldownFrames = cooldownFrames.length;
+                int[] cooldownFrames = {4, 3, 2, 1};
+                int numCooldownFrames = cooldownFrames.length;
 
-                    int cooldownIndex = (int) (completionRatio * numCooldownFrames);
-                    cooldownIndex = Math.min(cooldownIndex, numCooldownFrames - 1); // Đảm bảo không vượt quá chỉ số cuối (3)
+                int cooldownIndex = (int) (completionRatio * numCooldownFrames);
+                cooldownIndex = Math.min(cooldownIndex, numCooldownFrames - 1);
 
-                    currentFrame = frames[cooldownFrames[cooldownIndex]];
-                }
+                currentFrame = frames[cooldownFrames[cooldownIndex]];
             }
+
+
             if (currentFrame != null) {
                 batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
             }

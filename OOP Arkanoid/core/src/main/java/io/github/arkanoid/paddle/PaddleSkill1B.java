@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleSkill1B implements PaddleSkill {
-    private enum Phase {
+    public enum Phase {
         CHARGING,
         FIRING,
         DONE
@@ -47,6 +47,17 @@ public class PaddleSkill1B implements PaddleSkill {
         this.owner = owner;
         this.currentPhase = Phase.DONE;
     }
+    public float getPaddleLaserTime() {
+        return paddleLaserTime;
+    }
+
+    public static float getSKILL1B_LASER_DURATION() {
+        return 3f;
+    }
+
+    public Phase getCurrentPhase() {
+        return currentPhase;
+    }
 
     public void enter(Paddle paddle) {
         this.paddleLaserEffect = new PaddleLaserEffect(laserEffect, paddle.getX(), paddle.getY());
@@ -69,7 +80,7 @@ public class PaddleSkill1B implements PaddleSkill {
             float x = paddle.getX() + PADDLE_WIDTH / 2f - LASER_WIDTH / 2f;
             float y = paddle.getY() + PADDLE_HEIGHT;
             paddleLaserEffect.setPosition(x, y);
-            
+
             if (currentPhase == Phase.CHARGING) {
                 if (paddleLaserEffect.isAnimationDone()) {
                     currentPhase = Phase.FIRING;
