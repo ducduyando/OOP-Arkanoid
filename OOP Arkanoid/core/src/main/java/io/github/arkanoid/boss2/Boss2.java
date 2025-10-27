@@ -13,6 +13,7 @@ public class Boss2 extends Boss {
     Boss2Skill1 beeSpawningSkill;
     Boss2Skill2 shieldSkill;
 
+    private boolean heal = false;
     protected boolean isShield = false;
 
     public Boss2(int number, float x, float y, int maxHp) {
@@ -42,6 +43,14 @@ public class Boss2 extends Boss {
 
     public void setShield(boolean shield) {
         isShield = shield;
+    }
+
+    public boolean isHeal() {
+        return heal;
+    }
+
+    public void setHeal(boolean heal) {
+        this.heal = heal;
     }
 
     public void act(float delta) {
@@ -76,18 +85,25 @@ public class Boss2 extends Boss {
     @Override
     public void takeDamage(int damage) {
         if (state == State.NORMAL) {
-            this.setHp(this.getHp() - damage);
-            this.skill1();
-            if (this.getHp() <= 0) {
-                this.setHp(0);
+            if (isShield && heal) {
+                if (this.getHp() + damage > this.getMaxHp()) {
+                    this.setHp(this.getMaxHp());
+                } else {
+                    this.setHp(this.getHp() + damage);
+                }
+
+                heal = false;
+            } else if (!isShield) {
+                this.setHp(this.getHp() - damage);
+                this.skill1();
+                if (this.getHp() <= 0) {
+                    this.setHp(0);
+                }
+                if (this.getHp() > 0) {
+                    this.state = State.TAKING_DAMAGE;
+                    this.takeDamageTimer = 0;
+                }
             }
-
-
-            if (this.getHp() > 0) {
-                this.state = State.TAKING_DAMAGE;
-                this.takeDamageTimer = 0;
-            }
-
         }
     }
 }

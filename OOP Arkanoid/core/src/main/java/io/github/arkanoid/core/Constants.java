@@ -39,6 +39,8 @@ public class Constants {
     public static final int PADDLE_SKILL1_DAMAGE = 15;
     public static final int PADDLE_SKILL2_DAMAGE = 10;
 
+    public static final float PADDLE_SKILL_COOLDOWN = 5f;
+
     /** Brick. */
     public static final int BRICK_ROWS = 4;
     public static final int BRICK_COLS = 10;

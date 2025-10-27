@@ -36,7 +36,7 @@ public class Main extends ApplicationAdapter {
         stageTextures[0] = new Texture("Stages/" + "stage0" + ".png");
         stageTextures[1] = new Texture("Stages/" + "stage1" + ".png"); // Boss 1
         stageTextures[2] = new Texture("Stages/" + "stage2" + ".png"); // Boss 2
-        stageTextures[3] = new Texture("Stages/" + "stage2" + ".png"); // Boss 3 tam thoi
+        stageTextures[3] = new Texture("Stages/" + "stage3" + ".png"); // Boss 3 tam thoi
 
 
         changeStage(new MenuStage());

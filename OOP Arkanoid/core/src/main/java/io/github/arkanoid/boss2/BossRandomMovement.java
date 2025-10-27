@@ -72,19 +72,20 @@ public class BossRandomMovement implements BossSkill {
     @Override
     public void update(Boss boss, float delta) {
 
-        skillTimer += delta;
-        if (skillTimer >= SKILL_INTERVAL
-            && owner.getBeeSpawningSkill().isSkill1Done()
+        if (owner.getBeeSpawningSkill().isSkill1Done()
             && owner.getShieldSkill().isSkill2Done()) {
+            skillTimer += delta;
+            if (skillTimer >= SKILL_INTERVAL) {
 
-            skillTimer = 0;
-            if (new Random().nextBoolean()) {
-                nextSkill = owner.getShieldSkill();
-            } else {
-                nextSkill = owner.getBeeSpawningSkill();
+                skillTimer = 0;
+                if (new Random().nextBoolean()) {
+                    nextSkill = owner.getShieldSkill();
+                } else {
+                    nextSkill = owner.getBeeSpawningSkill();
+                }
+                boss.setSkill(nextSkill);
+                return;
             }
-            boss.setSkill(nextSkill);
-            return;
         }
 
         if (!hasArrived) {

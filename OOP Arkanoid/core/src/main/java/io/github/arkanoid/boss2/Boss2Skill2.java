@@ -6,7 +6,9 @@ import io.github.arkanoid.entities.BossSkill;
 
 public class Boss2Skill2 implements BossSkill {
 
-    private Texture shieldStateTexture;
+    private final double COOLDOWN_HEALING = 1.5;
+    private double healingTime = COOLDOWN_HEALING;
+
     private Boss2 owner;
     private HoneyShield honeyShield;
     private BossSkill nextSkill;
@@ -17,7 +19,6 @@ public class Boss2Skill2 implements BossSkill {
     public Boss2Skill2(Boss2 owner, HoneyShield honeyShield) {
         this.honeyShield = honeyShield;
         this.owner = owner;
-        shieldStateTexture = owner.skill2Texture;
     }
 
     public void setNextSkill(BossSkill nextSkill) {
@@ -36,15 +37,24 @@ public class Boss2Skill2 implements BossSkill {
     public void update(Boss boss, float delta) {
         if (honeyShield.isHasShield()) {
             owner.setShield(true);
+
             shieldTime += delta;
             honeyShield.setPosition(boss.getX(), boss.getY());
             honeyShield.setShieldDuration(boss.getStateTime());
-            if (shieldTime >= 3f) {
+            if (shieldTime >= 4f) {
                 shieldTime = 0f;
                 honeyShield.setHasShield(false);
                 boss.setSkill(nextSkill);
                 owner.setShield(false);
                 isSkill2Done = true;
+            }
+            if (!owner.isHeal()) {
+                healingTime += delta;
+                if (healingTime >= COOLDOWN_HEALING) {
+                    healingTime = 0;
+                    owner.setHeal(true);
+                }
+
             }
         }
 

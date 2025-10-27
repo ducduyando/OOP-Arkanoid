@@ -117,35 +117,13 @@ public class GameLogic {
         if (bossRef == null) {
             return;
         }
-
-        int newDamage = ball.getDamage();
-
-        if (bossRef instanceof Boss2 boss2Ref
-            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-
-            cooldownHealingTime += Gdx.graphics.getDeltaTime();
-        }
-
         Rectangle paddleRect = paddleRef.getHitBox();
         Rectangle ballRect = ball.getHitBox();
         Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
-            if (bossRef instanceof Boss2 boss2Ref
-                && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-                && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-                if (cooldownHealingTime >= COOLDOWN_HEALING) {
-                    if (bossRef.getHp() + ball.getDamage() <= bossRef.getMaxHp()) {
-                        bossRef.setHp(bossRef.getHp() + ball.getDamage());
-                    } else {
-                        bossRef.setHp(bossRef.getMaxHp());
-                    }
-                    cooldownHealingTime = 0;
-                }
-            } else {
-                    bossRef.takeDamage(newDamage);
-                }
+            int newDamage = ball.getDamage();
+            bossRef.takeDamage(newDamage);
 
             if (bossRef.isDead()) {
                 ball.resetLaunch();
@@ -182,6 +160,7 @@ public class GameLogic {
             Vector2 reflectVector = reflect(ball.getVelocity(), normal);
             ball.setVelocity(reflectVector.x, reflectVector.y);
         }
+
 
         if (paddleRect.overlaps(bossRect)) {
             paddleRef.takeDamage();
@@ -221,30 +200,8 @@ public class GameLogic {
         Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
         Rectangle bossRect = bossRef.getHitBox();
 
-        if (bossRef instanceof Boss2 boss2Ref
-            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-
-            cooldownHealingTime += Gdx.graphics.getDeltaTime();
-        }
-
         if (paddleLaserRect.overlaps(bossRect)) {
-            if (bossRef instanceof Boss2 boss2Ref
-                && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-                && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-
-                if (cooldownHealingTime >= COOLDOWN_HEALING) {
-                    if (bossRef.getHp() + PADDLE_SKILL2_DAMAGE < bossRef.getMaxHp()) {
-                        bossRef.setHp(bossRef.getHp() + PADDLE_SKILL2_DAMAGE);
-
-                    } else {
-                        bossRef.setHp(bossRef.getMaxHp());
-                    }
-                    cooldownHealingTime = 0;
-                }
-            } else {
-                bossRef.takeDamage(PADDLE_SKILL2_DAMAGE);
-            }
+            bossRef.takeDamage(PADDLE_SKILL2_DAMAGE);
         }
     }
 }

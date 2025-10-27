@@ -18,13 +18,12 @@ public class PaddleSkill1B implements PaddleSkill {
     private Phase currentPhase;
     private PaddleLaserEffect paddleLaserEffect;
 
-    private static final float SKILL1B_COOLDOWN = 5f; // 5 seconds cooldown
     private float skill1BCooldownTimer = 0f; // Start ready
     private boolean isSkill1BReady = true;
 
     public void startSkill1BCooldown() {
         isSkill1BReady = false;
-        skill1BCooldownTimer = SKILL1B_COOLDOWN;
+        skill1BCooldownTimer = PADDLE_SKILL_COOLDOWN;
     }
     public float getSkill1BCooldownTimer() {
         return skill1BCooldownTimer;

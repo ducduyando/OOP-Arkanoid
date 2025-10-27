@@ -15,7 +15,6 @@ import static io.github.arkanoid.core.Constants.*;
 
 
 public class HoneyShield extends Actor {
-    private Texture texture;
     private boolean hasShield = false;
     private float shieldDuration;
     private int shieldFrameCount;
@@ -23,7 +22,7 @@ public class HoneyShield extends Actor {
     private TextureRegion currentFrame;
 
     public HoneyShield(Texture texture, float x, float y) {
-        this.texture = texture;
+
         setPosition(x, y);
         setSize(BOSS2_SKILL2_WIDTH, BOSS2_SKILL2_HEIGHT);
         shieldFrameCount = texture.getWidth() / BOSS2_WIDTH;
