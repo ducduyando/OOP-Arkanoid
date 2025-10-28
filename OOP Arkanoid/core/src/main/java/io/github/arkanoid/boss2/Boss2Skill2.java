@@ -41,12 +41,15 @@ public class Boss2Skill2 implements BossSkill {
             shieldTime += delta;
             honeyShield.setPosition(boss.getX(), boss.getY());
             honeyShield.setShieldDuration(boss.getStateTime());
+
             if (shieldTime >= 4f) {
                 shieldTime = 0f;
                 honeyShield.setHasShield(false);
-                boss.setSkill(nextSkill);
+
                 owner.setShield(false);
                 isSkill2Done = true;
+
+                boss.setSkill(nextSkill);
             }
             if (!owner.isHeal()) {
                 healingTime += delta;

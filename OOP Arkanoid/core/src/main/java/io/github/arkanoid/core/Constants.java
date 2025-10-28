@@ -102,4 +102,8 @@ public class Constants {
     public static final int SKILL_ICON_HEIGHT = 144;
     public static  final float MAX_COOLDOWN = 5.0f;
 
+    /** Cutscene. */
+    public static final int CUTSCENE_WIDTH = 100;
+    public static final int CUTSCENE_HEIGHT = 100;
+
 }

@@ -14,6 +14,7 @@ import io.github.arkanoid.core.GameLogic;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
+import io.github.arkanoid.ui.Cutscene;
 import io.github.arkanoid.ui.PauseMenu;
 
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class TutorialStage implements GameStage {
     private boolean isPaused = false;
     private PauseMenu pauseMenu;
     private boolean pKeyPressed = false;
+
+    private boolean isFinished = false;
 
     // Save data for loading
     private Save.SaveData saveData;
@@ -173,40 +176,50 @@ public class TutorialStage implements GameStage {
     @Override
     public void update(float delta) {
         // Handle pause input
-        handlePauseInput();
+        if (!bricks.isEmpty()) {
+            handlePauseInput();
 
-        if (isPaused) {
-            pauseMenu.act(delta);
+            if (isPaused) {
+                pauseMenu.act(delta);
 
-            if (pauseMenu.isOptionChosen()) {
-                PauseMenu.Option selectedOption = pauseMenu.getOption();
-                switch (selectedOption) {
-                    case RESUME:
-                        isPaused = false;
-                        pauseMenu.remove();
-                        pauseMenu.reset();
-                        break;
-                    case SAVE:
-                        saveGame();
-                        isPaused = false;
-                        pauseMenu.remove();
-                        pauseMenu.reset();
-                        break;
-                    case QUIT:
-                        Gdx.app.exit();
-                        break;
+                if (pauseMenu.isOptionChosen()) {
+                    PauseMenu.Option selectedOption = pauseMenu.getOption();
+                    switch (selectedOption) {
+                        case RESUME:
+                            isPaused = false;
+                            pauseMenu.remove();
+                            pauseMenu.reset();
+                            break;
+                        case SAVE:
+                            saveGame();
+                            isPaused = false;
+                            pauseMenu.remove();
+                            pauseMenu.reset();
+                            break;
+                        case QUIT:
+                            Gdx.app.exit();
+                            break;
+                    }
                 }
+
+                return;
             }
 
-            return;
+            gameLogic.launch(ball);
+            gameLogic.paddleCollision(ball);
+            gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
+            checkBrickCollisions();
+
+            gdxStage.act(delta);
+        } else {
+            Cutscene cutscene = new Cutscene();
+            gdxStage.addActor(cutscene);
+            if (cutscene.getState() == Cutscene.State.DONE) {
+                isFinished = true;
+                cutscene.remove();
+            }
         }
 
-        gameLogic.launch(ball);
-        gameLogic.paddleCollision(ball);
-        gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
-        checkBrickCollisions();
-
-        gdxStage.act(delta);
     }
 
     private void handlePauseInput() {
@@ -293,7 +306,7 @@ public class TutorialStage implements GameStage {
 
     @Override
     public boolean isFinished() {
-        return bricks.isEmpty();
+        return isFinished;
     }
 
     private void saveGame() {

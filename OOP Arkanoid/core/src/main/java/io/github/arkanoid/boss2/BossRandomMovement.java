@@ -64,6 +64,7 @@ public class BossRandomMovement implements BossSkill {
     public void enter(Boss boss) {
         this.hasArrived = false;
         this.cooldownTimer = 0f;
+        skillTimer = 0f;
         chooseRandomTarget();
     }
 
@@ -74,10 +75,10 @@ public class BossRandomMovement implements BossSkill {
 
         if (owner.getBeeSpawningSkill().isSkill1Done()
             && owner.getShieldSkill().isSkill2Done()) {
+
             skillTimer += delta;
             if (skillTimer >= SKILL_INTERVAL) {
-
-                skillTimer = 0;
+                skillTimer = 0f;
                 if (new Random().nextBoolean()) {
                     nextSkill = owner.getShieldSkill();
                 } else {
@@ -87,7 +88,6 @@ public class BossRandomMovement implements BossSkill {
                 return;
             }
         }
-
         if (!hasArrived) {
             Vector2 currentPosition = new Vector2(boss.getX(), boss.getY());
 
