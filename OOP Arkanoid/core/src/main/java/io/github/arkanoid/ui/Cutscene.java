@@ -17,10 +17,10 @@ public class Cutscene extends Actor {
     private float stateTime = 0f;
     private TextureRegion currentFrame;
 
-    private Texture cutscene1;
-    private Texture cutscene2;
-    private Texture cutscene3;
-    private Texture cutscene4;
+    private Texture cutscene1Texture;
+    private Texture cutscene2Texture;
+    private Texture cutscene3Texture;
+    private Texture cutscene4Texture;
 
     private State state;
 
@@ -32,42 +32,42 @@ public class Cutscene extends Actor {
 
     public Cutscene() {
 
-        cutscene1 = new Texture("Cutscene/" + "layer0" + ".png");
-        cutscene2 = new Texture("Cutscene/" + "layer1" + ".png");
-        cutscene3 = new Texture("Cutscene/" + "layer2" + ".png");
-        cutscene4 = new Texture("Cutscene/" + "layer3" + ".png");
+        cutscene1Texture = new Texture("Cutscene/" + "scene0" + ".png");
+        cutscene2Texture = new Texture("Cutscene/" + "scene1" + ".png");
+        cutscene3Texture = new Texture("Cutscene/" + "scene2" + ".png");
+        cutscene4Texture = new Texture("Cutscene/" + "scene3" + ".png");
         state = State.LOADING;
         cutsceneAnimation = new Animation[4];
 
-        int maxFrame1 = cutscene1.getHeight() / SCREEN_HEIGHT;
-        TextureRegion[] frames1 = new TextureRegion[maxFrame1];
+        int maxFrame1 = cutscene1Texture.getHeight() / SCREEN_HEIGHT;
+        TextureRegion[] cutscene1 = new TextureRegion[maxFrame1];
         for (int i = 0; i < maxFrame1; i++) {
-            frames1[i] = new TextureRegion(cutscene1, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+            cutscene1[i] = new TextureRegion(cutscene1Texture, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
         }
-        cutsceneAnimation[0] = new Animation<>(FRAME_DURATION * 1.5f, frames1);
+        cutsceneAnimation[0] = new Animation<>(FRAME_DURATION * 1.5f, cutscene1);
 
-        int maxFrame2 = cutscene2.getHeight() / SCREEN_HEIGHT;
-        TextureRegion[] frames2 = new TextureRegion[maxFrame2];
+        int maxFrame2 = cutscene2Texture.getHeight() / SCREEN_HEIGHT;
+        TextureRegion[] cutscene2 = new TextureRegion[maxFrame2];
         for (int i = 0; i < maxFrame2; i++) {
-            frames2[i] = new TextureRegion(cutscene2, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+            cutscene2[i] = new TextureRegion(cutscene2Texture, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
         }
-        cutsceneAnimation[1] = new Animation<>(FRAME_DURATION * 1.5f, frames2);
+        cutsceneAnimation[1] = new Animation<>(FRAME_DURATION * 1.5f, cutscene2);
 
-        int maxFrame3 = cutscene3.getHeight() / SCREEN_HEIGHT;
-        TextureRegion[] frames3 = new TextureRegion[maxFrame3];
+        int maxFrame3 = cutscene3Texture.getHeight() / SCREEN_HEIGHT;
+        TextureRegion[] cutscene3 = new TextureRegion[maxFrame3];
         for (int i = 0; i < maxFrame3; i++) {
-            frames3[i] = new TextureRegion(cutscene3, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+            cutscene3[i] = new TextureRegion(cutscene3Texture, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
         }
-        cutsceneAnimation[2] = new Animation<>(FRAME_DURATION * 1.5f, frames3);
+        cutsceneAnimation[2] = new Animation<>(FRAME_DURATION * 1.5f, cutscene3);
 
-        int maxFrame4 = cutscene4.getHeight() / SCREEN_HEIGHT;
-        TextureRegion[] frames4 = new TextureRegion[maxFrame4];
+        int maxFrame4 = cutscene4Texture.getHeight() / SCREEN_HEIGHT;
+        TextureRegion[] cutscene4 = new TextureRegion[maxFrame4];
         for (int i = 0; i < maxFrame4; i++) {
-            frames4[i] = new TextureRegion(cutscene4, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+            cutscene4[i] = new TextureRegion(cutscene4Texture, 0, i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
         }
-        cutsceneAnimation[3] = new Animation<>(FRAME_DURATION * 1.5f, frames4);
+        cutsceneAnimation[3] = new Animation<>(FRAME_DURATION * 1.5f, cutscene4);
 
-        currentFrame = frames1[0];
+        currentFrame = cutscene1[0];
     }
 
     public State getState() {
