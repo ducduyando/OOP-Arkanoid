@@ -48,9 +48,6 @@ public class Main extends ApplicationAdapter {
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        // Clear screen before drawing
-        com.badlogic.gdx.utils.ScreenUtils.clear(0, 0, 0, 1);
-
         if (currentFlow == GameFlow.LOADING) {
             loadingScreen.act(delta);
             batch.begin();

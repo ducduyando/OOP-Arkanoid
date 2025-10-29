@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
+import io.github.arkanoid.paddle.PaddleLaserEffect;
+import io.github.arkanoid.paddle.PaddleSkill1B;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -54,6 +56,14 @@ public class BeeEnemy extends Actor {
                 if (actor instanceof Ball ball) {
                     Rectangle ballRect = ball.getHitBox();
                     if (hitBox.overlaps(ballRect)) {
+                        this.remove();
+                        return;
+                    }
+                }
+
+                if (actor instanceof PaddleLaserEffect laser) {
+                    Rectangle laserRect = laser.getHitbox();
+                    if (hitBox.overlaps(laserRect)) {
                         this.remove();
                         return;
                     }

@@ -214,12 +214,14 @@ public class Boss2Stage implements GameStage {
                 }
                 if (paddleSkill1A.isLaunched()) {
 
-                    paddleSkill1A.update(paddle, delta);
-
                     gameLogic.paddleCollision(paddleSkill1A);
                     gameLogic.boundaryCollision(paddleSkill1A, delta, UP_BOUNDARY);
                     gameLogic.bossCollision(paddleSkill1A);
+                } else {
+
+                    gameLogic.launch(paddleSkill1A);
                 }
+                paddleSkill1A.update(paddle, delta);
             }
 
             else if (paddleSkill1B != null) {

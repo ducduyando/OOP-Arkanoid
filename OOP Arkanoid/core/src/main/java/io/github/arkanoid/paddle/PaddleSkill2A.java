@@ -3,8 +3,8 @@ package io.github.arkanoid.paddle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-
 import static io.github.arkanoid.core.Constants.*;
+
 
 public class PaddleSkill2A implements PaddleSkill {
 
@@ -33,7 +33,7 @@ public class PaddleSkill2A implements PaddleSkill {
 
     private void fire(Paddle paddle) {
         isSkill2AReady = false;
-        skill2ACooldownTimer = SKILL_COOLDOWN;
+        skill2ACooldownTimer = PADDLE_SKILL_COOLDOWN;
 
         float spawnX = paddle.getX() + paddle.getWidth() / 2f;
         float spawnY = paddle.getY() + paddle.getHeight();

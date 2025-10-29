@@ -1,7 +1,7 @@
 package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
+import io.github.arkanoid.core.Constants;
 import io.github.arkanoid.entities.Ball;
 
 import static io.github.arkanoid.core.Constants.*;
@@ -12,7 +12,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
 
     private final Paddle owner;
     private PaddleBallUpgrade paddleBallUpgrade;
-    private float skill1ACooldownTimer = SKILL_COOLDOWN;
+    private float skill1ACooldownTimer = PADDLE_SKILL_COOLDOWN;
 
     private boolean skill1AReady = true;
     public float getSkill1ACooldownTimer() {
@@ -30,7 +30,8 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
     }
 
     public void startSkill1Cooldown() {
-        skill1ACooldownTimer = SKILL_COOLDOWN;
+        skill1AReady = false;
+        skill1ACooldownTimer = PADDLE_SKILL_COOLDOWN;
     }
 
     public PaddleSkill1A(Paddle paddle) {

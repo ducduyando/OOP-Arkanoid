@@ -51,7 +51,6 @@ public class Constants {
     public static final int POWER_UP_WIDTH = 1920;
     public static final int POWER_UP_HEIGHT = 1080;
 
-    public static final float SKILL_COOLDOWN = 2f;
 
     /** Ball. */
     public static final int BALL_WIDTH = 64;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.arkanoid.core.Constants;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -107,7 +108,7 @@ public class Paddle extends Actor {
         if (skill1A != null) {
             return skill1A.getSkill1ACooldownTimer();
         }
-        return SKILL_COOLDOWN;
+        return PADDLE_SKILL_COOLDOWN;
 
 
     }
@@ -116,7 +117,7 @@ public class Paddle extends Actor {
         if (skill1B != null) {
             return skill1B.getSkill1BCooldownTimer();
         }
-        return SKILL_COOLDOWN;
+        return PADDLE_SKILL_COOLDOWN;
     }
 
     public void initializeSkills(boolean isSkillASelected, float skill1ACooldownTimer, float skill1BCooldownTimer) {
@@ -158,7 +159,7 @@ public class Paddle extends Actor {
         if (skill2A != null) {
             return skill2A.getSkill2ACooldownTimer();
         }
-        return SKILL_COOLDOWN;
+        return PADDLE_SKILL_COOLDOWN;
     }
 
     public PaddleSkill getActiveSkill() {

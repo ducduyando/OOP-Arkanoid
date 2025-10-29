@@ -68,7 +68,6 @@ public class GameLogic {
                     ball.setLaunched(true);
                     ball.setVelocity(0f, BALL_VELOCITY.y);
                 }
-
             }
             ball.setPosition(ballX, ballY);
         }

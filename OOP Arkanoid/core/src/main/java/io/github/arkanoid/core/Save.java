@@ -186,8 +186,8 @@ public class Save {
         data.bossY = pref.getFloat("bossY", SCREEN_HEIGHT * 0.6f);
 
         data.isSkillASelected = pref.getBoolean("isSkillASelected", false);
-        data.skill1ACooldownTimer = pref.getFloat("skill1ACooldownTimer", SKILL_COOLDOWN);
-        data.skill1BCooldownTimer = pref.getFloat("skill1BCooldownTimer", SKILL_COOLDOWN);
+        data.skill1ACooldownTimer = pref.getFloat("skill1ACooldownTimer", Constants.PADDLE_SKILL_COOLDOWN);
+        data.skill1BCooldownTimer = pref.getFloat("skill1BCooldownTimer", Constants.PADDLE_SKILL_COOLDOWN);
 
         // Load vị trí gạch nếu có
         data.brickPositions = new ArrayList<>();
