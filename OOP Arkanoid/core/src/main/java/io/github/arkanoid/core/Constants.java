@@ -84,7 +84,7 @@ public class Constants {
     public static final float BOSS2_INITIAL_X = (SCREEN_WIDTH - BOSS2_WIDTH) / 2f;
     public static final float BOSS2_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
-    /** Boss1 Skill 1. */
+    /** Boss2 Skill 1. */
     public static final int BOSS2_SKILL1_WIDTH = 96;
     public static final int BOSS2_SKILL1_HEIGHT = 96;
 
@@ -102,4 +102,8 @@ public class Constants {
     public static final int SKILL_ICON_HEIGHT = 144;
     public static  final float MAX_COOLDOWN = 5.0f;
 
+    /** Boss3. */
+    public static final int BOSS3_WIDTH = 448;
+    public static final int BOSS3_HEIGHT = 272;
+    public static final Vector2 BOSS3_VELOCITY = new Vector2(900f, 900f);
 }

@@ -246,7 +246,6 @@ public class Boss2Stage implements GameStage {
             if (actor instanceof BeeEnemy bee) {
                 if (ball.getHitBox().overlaps(bee.getHitBox())) {
                     bee.remove();
-                    ball.setVelocity(ball.getVelocity().x, -ball.getVelocity().y);
                 }
             }
         }

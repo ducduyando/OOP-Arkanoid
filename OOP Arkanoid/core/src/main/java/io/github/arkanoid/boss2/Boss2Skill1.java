@@ -1,7 +1,5 @@
 package io.github.arkanoid.boss2;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.BossSkill;
 import java.util.Random;
@@ -11,7 +9,7 @@ import static io.github.arkanoid.core.Constants.*;
 public class Boss2Skill1 implements BossSkill {
     private final Boss2 owner;
     private BossSkill nextSkill;
-    private final BossRandomMovement movementController;
+    private final Boss2RandomMovement movementController;
 
     private boolean isSkill1Done = true;
 
@@ -29,7 +27,7 @@ public class Boss2Skill1 implements BossSkill {
 
     private final Random random = new Random();
 
-    public Boss2Skill1(Boss2 owner, BossRandomMovement movementController) {
+    public Boss2Skill1(Boss2 owner, Boss2RandomMovement movementController) {
         this.owner = owner;
         this.movementController = movementController;
 

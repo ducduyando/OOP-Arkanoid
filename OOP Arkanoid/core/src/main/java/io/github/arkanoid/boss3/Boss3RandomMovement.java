@@ -1,4 +1,5 @@
-package io.github.arkanoid.boss2;
+package io.github.arkanoid.boss3;
+
 import com.badlogic.gdx.math.Vector2;
 import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.BossSkill;
@@ -6,9 +7,12 @@ import io.github.arkanoid.entities.BossSkill;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.Constants.HP_HEIGHT;
+import static io.github.arkanoid.core.Constants.SCREEN_HEIGHT;
 
-public class BossRandomMovement implements BossSkill {
-    private final Boss2 owner;
+public class Boss3RandomMovement implements BossSkill {
+
+    private final Boss3 owner;
     private BossSkill nextSkill;
     private boolean hasArrived = false;
     private float cooldownTimer = 0f;
@@ -25,11 +29,11 @@ public class BossRandomMovement implements BossSkill {
     private Vector2 targetPosition;
     private final Random random = new Random();
 
-    public BossRandomMovement(Boss2 owner) {
+    public Boss3RandomMovement(Boss3 owner) {
         this.owner = owner;
 
-        float cellXSize = (SCREEN_WIDTH - BOSS2_WIDTH) / (float) (COLS);
-        float cellYSize = (SCREEN_HEIGHT / 2f - BOSS2_HEIGHT - HP_HEIGHT) / (float) (ROWS);
+        float cellXSize = (SCREEN_WIDTH - BOSS3_WIDTH) / (float) (COLS);
+        float cellYSize = (SCREEN_HEIGHT / 2f - BOSS3_HEIGHT - HP_HEIGHT) / (float) (ROWS);
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
@@ -49,45 +53,8 @@ public class BossRandomMovement implements BossSkill {
         targetPosition = new Vector2(targetX, targetY);
     }
 
-    public void setHasArrived(boolean hasArrived) {
-        this.hasArrived = hasArrived;
-    }
-
-    public void setNextSkill(BossSkill nextSkill) {
-
-    }
-
-    @Override
-    public void cleanup() {}
-
-    @Override
-    public void enter(Boss boss) {
-        this.hasArrived = false;
-        this.cooldownTimer = 0f;
-        skillTimer = 0f;
-        chooseRandomTarget();
-    }
-
-
-
     @Override
     public void update(Boss boss, float delta) {
-
-        if (owner.getBeeSpawningSkill().isSkill1Done()
-            && owner.getShieldSkill().isSkill2Done()) {
-
-            skillTimer += delta;
-            if (skillTimer >= SKILL_INTERVAL) {
-                skillTimer = 0f;
-                if (new Random().nextBoolean()) {
-                    nextSkill = owner.getShieldSkill();
-                } else {
-                    nextSkill = owner.getBeeSpawningSkill();
-                }
-                boss.setSkill(nextSkill);
-                return;
-            }
-        }
         if (!hasArrived) {
             Vector2 currentPosition = new Vector2(boss.getX(), boss.getY());
 
@@ -109,5 +76,20 @@ public class BossRandomMovement implements BossSkill {
             }
 
         }
+    }
+
+    @Override
+    public void enter(Boss boss) {
+
+        this.hasArrived = false;
+        this.cooldownTimer = 0f;
+        skillTimer = 0f;
+        chooseRandomTarget();
+
+    }
+
+    @Override
+    public void cleanup() {
+
     }
 }

@@ -1,14 +1,13 @@
 package io.github.arkanoid.boss2;
 
 import com.badlogic.gdx.graphics.Texture;
-import io.github.arkanoid.boss1.Boss1Skill1;
 import io.github.arkanoid.entities.Boss;
 import static io.github.arkanoid.core.Constants.*;
 import java.util.Random;
 
 public class Boss2 extends Boss {
 
-    private final BossRandomMovement randomMovement;
+    private final Boss2RandomMovement randomMovement;
 
     Boss2Skill1 beeSpawningSkill;
     Boss2Skill2 shieldSkill;
@@ -19,7 +18,7 @@ public class Boss2 extends Boss {
     public Boss2(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2_VELOCITY, maxHp);
 
-        this.randomMovement = new BossRandomMovement(this);
+        this.randomMovement = new Boss2RandomMovement(this);
 
 
         HoneyShield honeyShield = new HoneyShield(this.skill2Texture, getX(), getY());
