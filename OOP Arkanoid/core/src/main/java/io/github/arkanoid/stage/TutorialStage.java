@@ -44,10 +44,15 @@ public class TutorialStage implements GameStage {
     private PauseMenu pauseMenu;
     private boolean pKeyPressed = false;
 
+    // Game state
+    private boolean isCompleted = false;
+
     private boolean isFinished = false;
 
     // Save data for loading
     private Save.SaveData saveData;
+
+    Cutscene cutscene;
 
     public TutorialStage() {
         this.saveData = null;
@@ -175,8 +180,8 @@ public class TutorialStage implements GameStage {
 
     @Override
     public void update(float delta) {
-        // Handle pause input
-        if (!bricks.isEmpty()) {
+        if (!bricks.isEmpty() && !isCompleted) {
+            // Handle pause input
             handlePauseInput();
 
             if (isPaused) {
@@ -205,20 +210,30 @@ public class TutorialStage implements GameStage {
                 return;
             }
 
+            // Check game over condition
+            if (paddle.isGameOver()) {
+                isCompleted = true;
+                return;
+            }
+
             gameLogic.launch(ball);
             gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
             checkBrickCollisions();
 
-            gdxStage.act(delta);
-        } else {
-            Cutscene cutscene = new Cutscene();
-            gdxStage.addActor(cutscene);
+
+        } else if (bricks.isEmpty() && !isCompleted) {
+             if (cutscene == null) {
+                 cutscene = new Cutscene();
+                 gdxStage.addActor(cutscene);
+             }
+
             if (cutscene.getState() == Cutscene.State.DONE) {
                 isFinished = true;
                 cutscene.remove();
             }
         }
+        gdxStage.act(delta);
 
     }
 
@@ -283,9 +298,9 @@ public class TutorialStage implements GameStage {
     @Override
     public void exit() {
 
-            backgroundTexture.dispose();
-            paddleImage.dispose();
-            ballImage.dispose();
+        backgroundTexture.dispose();
+        paddleImage.dispose();
+        ballImage.dispose();
         if (brickTextures != null) {
             for (Texture tex : brickTextures) {
                 if (tex != null) {
@@ -293,8 +308,8 @@ public class TutorialStage implements GameStage {
                 }
             }
         }
-            pauseMenu.dispose();
-            gdxStage.dispose();
+        pauseMenu.dispose();
+        gdxStage.dispose();
 
     }
 
@@ -306,7 +321,11 @@ public class TutorialStage implements GameStage {
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return isFinished || isCompleted;
+    }
+
+    public boolean isGameOver() {
+        return paddle != null && paddle.isGameOver();
     }
 
     private void saveGame() {
@@ -319,7 +338,7 @@ public class TutorialStage implements GameStage {
             }
         }
 
-      Save.saveGameWithBrickPositions(
+        Save.saveGameWithBrickPositions(
             0,
             0,
             paddle.getState(),

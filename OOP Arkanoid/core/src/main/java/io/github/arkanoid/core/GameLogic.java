@@ -29,6 +29,7 @@ public class GameLogic {
 
     private final float COOLDOWN_HEALING = 1.5f;
     private float cooldownHealingTime = COOLDOWN_HEALING;
+    private boolean isGameOver = false;
 
     public GameLogic(Paddle paddleRef, Boss bossRef) {
         this.paddleRef = paddleRef;
@@ -74,8 +75,20 @@ public class GameLogic {
     }
 
     public void paddleCollision(Ball ball) {
+        // Force check game over first
+        if (paddleRef.isGameOver()) {
+            System.out.println("GameLogic: paddleCollision skipped - paddle is game over (state: " + paddleRef.getState() + ")");
+            return;
+        }
+
         Rectangle ballRect = ball.getHitBox();
         Rectangle paddleRect = paddleRef.getHitBox();
+
+        // Double check - if paddle rect is empty, skip
+        if (paddleRect.width <= 0 || paddleRect.height <= 0) {
+            return;
+        }
+
         if (ballRect.overlaps(paddleRect)) {
             if (ball.getVelocity().y < 0) {
 
@@ -105,7 +118,7 @@ public class GameLogic {
         }
         if (ball.getX() + BALL_WIDTH + ball.getVelocity().x * delta  >= RIGHT_BOUNDARY) {
             ball.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ball.getY());
-           reflect(ball.getVelocity(), new Vector2(-1, 0));
+            reflect(ball.getVelocity(), new Vector2(-1, 0));
         }
         if (ball.getY() + BALL_HEIGHT + ball.getVelocity().y * delta >= topBoundary) {
             ball.setPosition(ball.getX(),  topBoundary - BALL_HEIGHT);
@@ -117,13 +130,35 @@ public class GameLogic {
         if (bossRef == null) {
             return;
         }
+
+        int newDamage = ball.getDamage();
+
+        if (bossRef instanceof Boss2 boss2Ref
+            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+
+            cooldownHealingTime += Gdx.graphics.getDeltaTime();
+        }
+
         Rectangle paddleRect = paddleRef.getHitBox();
         Rectangle ballRect = ball.getHitBox();
         Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
-            int newDamage = ball.getDamage();
-            bossRef.takeDamage(newDamage);
+            if (bossRef instanceof Boss2 boss2Ref
+                && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+                && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+                if (cooldownHealingTime >= COOLDOWN_HEALING) {
+                    if (bossRef.getHp() + ball.getDamage() <= bossRef.getMaxHp()) {
+                        bossRef.setHp(bossRef.getHp() + ball.getDamage());
+                    } else {
+                        bossRef.setHp(bossRef.getMaxHp());
+                    }
+                    cooldownHealingTime = 0;
+                }
+            } else {
+                bossRef.takeDamage(newDamage);
+            }
 
             if (bossRef.isDead()) {
                 ball.resetLaunch();
@@ -160,7 +195,6 @@ public class GameLogic {
             Vector2 reflectVector = reflect(ball.getVelocity(), normal);
             ball.setVelocity(reflectVector.x, reflectVector.y);
         }
-
 
         if (paddleRect.overlaps(bossRect)) {
             paddleRef.takeDamage();
@@ -200,8 +234,30 @@ public class GameLogic {
         Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
         Rectangle bossRect = bossRef.getHitBox();
 
+        if (bossRef instanceof Boss2 boss2Ref
+            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+
+            cooldownHealingTime += Gdx.graphics.getDeltaTime();
+        }
+
         if (paddleLaserRect.overlaps(bossRect)) {
-            bossRef.takeDamage(PADDLE_SKILL2_DAMAGE);
+            if (bossRef instanceof Boss2 boss2Ref
+                && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
+                && boss2Skill2Ref.getHoneyShield().isHasShield()) {
+
+                if (cooldownHealingTime >= COOLDOWN_HEALING) {
+                    if (bossRef.getHp() + PADDLE_SKILL2_DAMAGE < bossRef.getMaxHp()) {
+                        bossRef.setHp(bossRef.getHp() + PADDLE_SKILL2_DAMAGE);
+
+                    } else {
+                        bossRef.setHp(bossRef.getMaxHp());
+                    }
+                    cooldownHealingTime = 0;
+                }
+            } else {
+                bossRef.takeDamage(PADDLE_SKILL2_DAMAGE);
+            }
         }
     }
 }

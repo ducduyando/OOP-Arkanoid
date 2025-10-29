@@ -54,17 +54,37 @@ public class Paddle extends Actor {
         float newWidth = PADDLE_WIDTH - (64 * newState);
         float newXOffset = 32 * newState;
 
-        this.hitBox.setWidth(newWidth);
-        this.hitBox.setPosition(getX() + newXOffset, getY());
-
+        if (isGameOver()) {
+            this.hitBox.setSize(0, 0);
+        } else {
+            this.hitBox.setWidth(newWidth);
+            this.hitBox.setPosition(getX() + newXOffset, getY());
+        }
     }
 
     public void resetState() {
         this.state = 0;
     }
 
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        if (!isGameOver()) {
+            float newXOffset = 32 * state;
+            this.hitBox.setPosition(x + newXOffset, y);
+        }
+    }
+
     public Rectangle getHitBox(){
+        if (isGameOver()) {
+            Rectangle emptyRect = new Rectangle(-1000, -1000, 0, 0);
+            return emptyRect;
+        }
         return hitBox;
+    }
+
+    public boolean isGameOver() {
+        return state >= 7;
     }
 
     public void takeDamage() {
@@ -73,6 +93,9 @@ public class Paddle extends Actor {
             setState(currentState);
             isInvincible = true;
             stopTimer = 0f;
+
+            float currentWidth = PADDLE_WIDTH - (64 * state);
+
         }
     }
 
@@ -155,6 +178,10 @@ public class Paddle extends Actor {
 
     @Override
     public void act(float delta) {
+        if (isGameOver()) {
+            return;
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.A) && getX() + 32 * state > LEFT_BOUNDARY) {
             moveBy(-PADDLE_VELOCITY.x * delta, 0);
         }

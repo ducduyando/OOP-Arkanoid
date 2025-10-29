@@ -102,7 +102,7 @@ public class Boss1Stage implements GameStage {
 
         // Restore projectiles if loading from save
         if (saveData != null && saveData.projectileData != null) {
-          restoreProjectiles(stage, saveData.projectileData);
+            restoreProjectiles(stage, saveData.projectileData);
         }
     }
 
@@ -136,6 +136,12 @@ public class Boss1Stage implements GameStage {
                 }
             }
 
+            return;
+        }
+
+        // Check game over condition
+        if (paddle.isGameOver()) {
+            isCompleted = true;
             return;
         }
 
@@ -212,9 +218,13 @@ public class Boss1Stage implements GameStage {
         return quitRequested;
     }
 
+    public boolean isGameOver() {
+        return paddle != null && paddle.isGameOver();
+    }
+
     private void saveGame() {
-      ProjectileSaveManager.ProjectileData projectileData =
-          ProjectileSaveManager.collectProjectiles(stage);
+        ProjectileSaveManager.ProjectileData projectileData =
+            ProjectileSaveManager.collectProjectiles(stage);
 
         boolean isSkillASelected = paddle.isSkillASelected();
         float skill1ACooldownTimer = paddle.getSkill1ACooldownTimer();

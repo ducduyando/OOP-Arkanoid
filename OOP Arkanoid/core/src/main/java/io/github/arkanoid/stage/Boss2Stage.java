@@ -61,6 +61,7 @@ public class Boss2Stage implements GameStage {
     private boolean bossDefeated = false;
     private boolean quitRequested = false;
     private boolean isCompleted = false;
+    private boolean gameOver = false;
 
     // Save data for loading
     private Save.SaveData saveData;
@@ -117,10 +118,10 @@ public class Boss2Stage implements GameStage {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
             boss2 = new Boss2(2, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
-            
+
             // Initialize paddle skills - always initialize both for UI purposes
             paddle.initializeSkills(isSkillASelected, 0f, 0f);
-            
+
             if (isSkillASelected) {
                 paddleSkill1A = new PaddleSkill1A(paddle);
             } else {
@@ -188,6 +189,13 @@ public class Boss2Stage implements GameStage {
             return;
         }
 
+        // Check game over condition
+        if (paddle.isGameOver() ) {
+            gameOver = true;
+            isCompleted = true;
+            return;
+        }
+
         if (!isCompleted && !bossDefeated) {
             gameLogic.launch(ball);
             gameLogic.paddleCollision(ball);
@@ -217,13 +225,13 @@ public class Boss2Stage implements GameStage {
             else if (paddleSkill1B != null) {
                 // Always update skill1B for cooldown timer
                 paddleSkill1B.update(paddle, delta);
-                
+
                 if (paddleSkill1B.isDone() && Gdx.input.isKeyJustPressed(Input.Keys.J)
                     && paddleSkill1B.isSkill1BReady()) {
 
                     paddleSkill1B.enter(paddle);
                 }
-                
+
                 if (paddleSkill1B.isFiring()) {
                     gameLogic.paddleLaserCollision(paddleSkill1B);
                 }
@@ -312,10 +320,14 @@ public class Boss2Stage implements GameStage {
         return quitRequested;
     }
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
     private void saveGame() {
         // Collect all projectiles using ProjectileSaveManager
-      ProjectileSaveManager.ProjectileData projectileData =
-        ProjectileSaveManager.collectProjectiles(stage);
+        ProjectileSaveManager.ProjectileData projectileData =
+            ProjectileSaveManager.collectProjectiles(stage);
         Save.saveGameWithProjectiles(
             2, // Boss2 stage
             boss2.getHp(),

@@ -3,6 +3,8 @@ package io.github.arkanoid.core;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.arkanoid.stage.*;
@@ -19,12 +21,12 @@ public class Main extends ApplicationAdapter {
 
     private GameFlow currentFlow = GameFlow.RUNNING;
     private GameStage currentStage;
-    private GameStage nextStage; // Màn chơi sẽ đến sau khi loading xong
+    private GameStage nextStage;
     private LoadingScreen loadingScreen;
 
     private SpriteBatch batch;
 
-    private Texture[] stageTextures; // Mảng chứa ảnh nền của các màn chơi
+    private Texture[] stageTextures;
 
     private int powerUpNumber = 0;
 
@@ -36,7 +38,7 @@ public class Main extends ApplicationAdapter {
         stageTextures[0] = new Texture("Stages/" + "stage0" + ".png");
         stageTextures[1] = new Texture("Stages/" + "stage1" + ".png"); // Boss 1
         stageTextures[2] = new Texture("Stages/" + "stage2" + ".png"); // Boss 2
-        stageTextures[3] = new Texture("Stages/" + "stage3" + ".png"); // Boss 3 tam thoi
+        stageTextures[3] = new Texture("Stages/" + "stage2" + ".png"); // Boss 3 tam thoi
 
 
         changeStage(new MenuStage());
@@ -45,6 +47,9 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
+
+        // Clear screen before drawing
+        com.badlogic.gdx.utils.ScreenUtils.clear(0, 0, 0, 1);
 
         if (currentFlow == GameFlow.LOADING) {
             loadingScreen.act(delta);
@@ -68,7 +73,14 @@ public class Main extends ApplicationAdapter {
         } else {
             if (currentStage != null) {
                 currentStage.update(delta);
-                currentStage.getGdxStage().draw();
+
+                if (currentStage instanceof GameLoseStage) {
+                    batch.begin();
+                    ((GameLoseStage) currentStage).drawDirect(batch);
+                    batch.end();
+                } else {
+                    currentStage.getGdxStage().draw();
+                }
 
                 if (currentStage.isFinished()) {
                     handleStageTransition();
@@ -94,14 +106,28 @@ public class Main extends ApplicationAdapter {
                     Gdx.app.exit();
                     break;
             }
-        } else if (currentStage instanceof TutorialStage) {
-            nextStage = new Boss1Stage();
-            loadingScreen = new LoadingScreen(stageTextures[1]);
-            currentFlow = GameFlow.LOADING;
-        } else if (currentStage instanceof Boss1Stage) {
-            nextStage = new PowerUpMenuStage();
-            ((PowerUpMenuStage) nextStage).setLayerNumber(0);
-            changeStage(nextStage);
+        } else if (currentStage instanceof TutorialStage tutorialStage) {
+            if (tutorialStage.isGameOver()) {
+                nextStage = new GameLoseStage();
+                changeStage(nextStage);
+                return;
+            } else {
+
+                nextStage = new Boss1Stage();
+                loadingScreen = new LoadingScreen(stageTextures[1]);
+                currentFlow = GameFlow.LOADING;
+            }
+        } else if (currentStage instanceof Boss1Stage boss1Stage) {
+            if (boss1Stage.isGameOver()) {
+                nextStage = new GameLoseStage();
+                changeStage(nextStage);
+                return;
+            } else {
+                nextStage = new PowerUpMenuStage();
+                ((PowerUpMenuStage) nextStage).setLayerNumber(0);
+                changeStage(nextStage);
+                return;
+            }
 
         } else if (currentStage instanceof PowerUpMenuStage powerUpMenuStage) {
 
@@ -128,10 +154,22 @@ public class Main extends ApplicationAdapter {
 
             }
 
-        } else if (currentStage instanceof Boss2Stage) {
-            nextStage = new PowerUpMenuStage();
-            ((PowerUpMenuStage) nextStage).setLayerNumber(1);
+        } else if (currentStage instanceof Boss2Stage boss2Stage) {
+            if (boss2Stage.isGameOver()) {
+                nextStage = new GameLoseStage();
+                changeStage(nextStage);
+                return;
+            } else {
+                // Boss defeated - show power up menu
+                nextStage = new PowerUpMenuStage();
+                ((PowerUpMenuStage) nextStage).setLayerNumber(1);
+                changeStage(nextStage);
+                return;
+            }
+        } else if (currentStage instanceof GameLoseStage) {
+            nextStage = new MenuStage();
             changeStage(nextStage);
+            return;
         }
     }
     private void loadSavedGame() {
