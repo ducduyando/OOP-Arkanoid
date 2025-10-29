@@ -102,10 +102,4 @@ public class Constants {
     public static final int SKILL_ICON_HEIGHT = 144;
     public static  final float MAX_COOLDOWN = 5.0f;
 
-    /** Game Lose Stage. */
-    public static final int maxFrame1 = 17;
-    public static final float FRAME_FALL_DURATION = 0.08f;
-
-
-
 }

@@ -100,29 +100,29 @@ public class GameLoseStage implements GameStage {
 
             loseAnimation = new Animation[3];
 
-            int maxFrame1 = lose1Texture.getWidth() / SCREEN_WIDTH;
+            int maxFrame1 = lose1Texture.getHeight() / SCREEN_HEIGHT;
             TextureRegion[] lose1Frames = new TextureRegion[maxFrame1];
             for (int i = 0; i < maxFrame1; i++) {
-                lose1Frames[i] = new TextureRegion(lose1Texture, i * SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                lose1Frames[i] = new TextureRegion(lose1Texture, 0,i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
 
             }
-            loseAnimation[0] = new Animation<>(FRAME_FALL_DURATION, lose1Frames);
+            loseAnimation[0] = new Animation<>(FRAME_DURATION * 1.5f, lose1Frames);
 
-            int maxFrame2 = lose2Texture.getWidth() / SCREEN_WIDTH;
+            int maxFrame2 = lose2Texture.getHeight() / SCREEN_HEIGHT;
             TextureRegion[] lose2Frames = new TextureRegion[maxFrame2];
             for (int i = 0; i < maxFrame2; i++) {
-                lose2Frames[i] = new TextureRegion(lose2Texture, i * SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                lose2Frames[i] = new TextureRegion(lose2Texture, 0,i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
 
             }
-            loseAnimation[1] = new Animation<>(FRAME_FALL_DURATION, lose2Frames);
+            loseAnimation[1] = new Animation<>(FRAME_DURATION * 1.5f, lose2Frames);
 
-            int maxFrame3 = lose3Texture.getWidth() / SCREEN_WIDTH;
+            int maxFrame3 = lose3Texture.getHeight() / SCREEN_HEIGHT;
             TextureRegion[] lose3Frames = new TextureRegion[maxFrame3];
             for (int i = 0; i < maxFrame3; i++) {
-                lose3Frames[i] = new TextureRegion(lose3Texture, i * SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                lose3Frames[i] = new TextureRegion(lose3Texture, 0,i * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
 
             }
-            loseAnimation[2] = new Animation<>(FRAME_FALL_DURATION, lose3Frames);
+            loseAnimation[2] = new Animation<>(FRAME_DURATION * 1.5f, lose3Frames);
 
             this.currentFrame = lose1Frames[0];
 
@@ -139,7 +139,7 @@ public class GameLoseStage implements GameStage {
             super.act(delta);
             if (!animationComplete) {
                 stateTime += delta;
-                currentFrame = loseAnimation[lostNumber].getKeyFrame(FRAME_DURATION * 1.5f, false);
+                currentFrame = loseAnimation[lostNumber].getKeyFrame(stateTime, false);
                 if (loseAnimation[lostNumber].isAnimationFinished(stateTime)) {
                     stateTime = 0;
                     lostNumber++;
