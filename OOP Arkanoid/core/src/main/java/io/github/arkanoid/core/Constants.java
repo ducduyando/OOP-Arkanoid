@@ -103,7 +103,7 @@ public class Constants {
     public static  final float MAX_COOLDOWN = 5.0f;
 
     /** Game Lose Stage. */
-    public static final int LOSE_FRAME_COUNT = 17;
+    public static final int maxFrame1 = 17;
     public static final float FRAME_FALL_DURATION = 0.08f;
 
 

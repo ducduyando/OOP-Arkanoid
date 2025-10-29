@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.arkanoid.core.Constants;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -80,26 +81,50 @@ public class GameLoseStage implements GameStage {
 
 
     private static class LoseEffectActor extends Actor {
-        private final Texture loseTexture;
-        private final Animation<TextureRegion> loseAnimation;
+        private final Texture lose1Texture;
+        private final Texture lose2Texture;
+        private final Texture lose3Texture;
+
+        private Animation<TextureRegion>[] loseAnimation;
+        private int lostNumber = 0;
+
         private TextureRegion currentFrame;
         private float stateTime = 0f;
         private boolean animationComplete = false;
 
         public LoseEffectActor() {
-            loseTexture = new Texture("WinLose/" + "lose" + ".png");
 
+            lose1Texture = new Texture("Lose/" + "scene0" + ".png");
+            lose2Texture = new Texture("Lose/" + "scene1" + ".png");
+            lose3Texture = new Texture("Lose/" + "scene2" + ".png");
 
-            int frameHeight = loseTexture.getHeight() / LOSE_FRAME_COUNT;
-            TextureRegion[] loseFrames = new TextureRegion[LOSE_FRAME_COUNT];
+            loseAnimation = new Animation[3];
 
-            for (int i = 0; i < LOSE_FRAME_COUNT; i++) {
-                loseFrames[i] = new TextureRegion(loseTexture, 0, i * frameHeight, loseTexture.getWidth(), frameHeight);
+            int maxFrame1 = lose1Texture.getWidth() / SCREEN_WIDTH;
+            TextureRegion[] lose1Frames = new TextureRegion[maxFrame1];
+            for (int i = 0; i < maxFrame1; i++) {
+                lose1Frames[i] = new TextureRegion(lose1Texture, i * SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
             }
+            loseAnimation[0] = new Animation<>(FRAME_FALL_DURATION, lose1Frames);
 
-            this.loseAnimation = new Animation<>(FRAME_FALL_DURATION, loseFrames);
-            this.currentFrame = loseFrames[0];
+            int maxFrame2 = lose2Texture.getWidth() / SCREEN_WIDTH;
+            TextureRegion[] lose2Frames = new TextureRegion[maxFrame2];
+            for (int i = 0; i < maxFrame2; i++) {
+                lose2Frames[i] = new TextureRegion(lose2Texture, i * SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+            }
+            loseAnimation[1] = new Animation<>(FRAME_FALL_DURATION, lose2Frames);
+
+            int maxFrame3 = lose3Texture.getWidth() / SCREEN_WIDTH;
+            TextureRegion[] lose3Frames = new TextureRegion[maxFrame3];
+            for (int i = 0; i < maxFrame3; i++) {
+                lose3Frames[i] = new TextureRegion(lose3Texture, i * SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+            }
+            loseAnimation[2] = new Animation<>(FRAME_FALL_DURATION, lose3Frames);
+
+            this.currentFrame = lose1Frames[0];
 
             setPosition(0, 0);
             setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -114,9 +139,13 @@ public class GameLoseStage implements GameStage {
             super.act(delta);
             if (!animationComplete) {
                 stateTime += delta;
-                currentFrame = loseAnimation.getKeyFrame(stateTime, false);
-                if (loseAnimation.isAnimationFinished(stateTime)) {
-                    animationComplete = true;
+                currentFrame = loseAnimation[lostNumber].getKeyFrame(FRAME_DURATION * 1.5f, false);
+                if (loseAnimation[lostNumber].isAnimationFinished(stateTime)) {
+                    stateTime = 0;
+                    lostNumber++;
+                    if (lostNumber >= loseAnimation.length) {
+                        animationComplete = true;
+                    }
                 }
             }
         }
@@ -134,8 +163,14 @@ public class GameLoseStage implements GameStage {
         }
 
         public void dispose() {
-            if (loseTexture != null) {
-                loseTexture.dispose();
+            if (lose1Texture != null) {
+                lose1Texture.dispose();
+            }
+            if (lose2Texture != null) {
+                lose2Texture.dispose();
+            }
+            if (lose3Texture != null) {
+                lose3Texture.dispose();
             }
         }
     }
