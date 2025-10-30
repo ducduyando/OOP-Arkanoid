@@ -105,4 +105,6 @@ public class Constants {
     public static final int BOSS3_WIDTH = 448;
     public static final int BOSS3_HEIGHT = 272;
     public static final Vector2 BOSS3_VELOCITY = new Vector2(900f, 900f);
+    public static final float BOSS3_INITIAL_X = (SCREEN_WIDTH - BOSS3_WIDTH) / 2f;
+    public static final float BOSS3_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 }

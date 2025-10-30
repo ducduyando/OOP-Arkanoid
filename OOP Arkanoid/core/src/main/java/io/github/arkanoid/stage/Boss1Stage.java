@@ -72,7 +72,7 @@ public class Boss1Stage implements GameStage {
             paddle.setState(saveData.paddleState); // Restore paddle state
 
             paddle.initializeSkills(
-                saveData.isSkillASelected,
+                saveData.isSkill1ASelected,
                 saveData.skill1ACooldownTimer,
                 saveData.skill1BCooldownTimer
             );
@@ -226,7 +226,7 @@ public class Boss1Stage implements GameStage {
         ProjectileSaveManager.ProjectileData projectileData =
             ProjectileSaveManager.collectProjectiles(stage);
 
-        boolean isSkillASelected = paddle.isSkillASelected();
+        boolean isSkillASelected = paddle.isSkill1ASelected();
         float skill1ACooldownTimer = paddle.getSkill1ACooldownTimer();
         float skill1BCooldownTimer = paddle.getSkill1BCooldownTimer();
         Save.saveGameWithProjectiles(

@@ -73,6 +73,8 @@ public class SkillIcon extends Actor {
             if (currentFrame != null) {
                 batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
             }
+        } else if (skillKey.equals("K")) {
+
         }
     }
 }

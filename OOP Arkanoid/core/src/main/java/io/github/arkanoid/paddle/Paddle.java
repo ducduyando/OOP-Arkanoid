@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
-import io.github.arkanoid.core.Constants;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -25,7 +24,7 @@ public class Paddle extends Actor {
     private PaddleSkill1B skill1B;
     private PaddleSkill2A skill2A; // New skill2A
 
-    private boolean isSkillASelected = true;
+    private boolean isSkill1ASelected = true;
     private PaddleSkill activeSkill;
     public Paddle(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, 0, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -100,8 +99,8 @@ public class Paddle extends Actor {
         }
     }
 
-    public boolean isSkillASelected() {
-        return isSkillASelected;
+    public boolean isSkill1ASelected() {
+        return isSkill1ASelected;
     }
 
     public float getSkill1ACooldownTimer() {
@@ -128,7 +127,7 @@ public class Paddle extends Actor {
             this.skill1B = new PaddleSkill1B(this);
         }
 
-        this.isSkillASelected = isSkillASelected;
+        this.isSkill1ASelected = isSkillASelected;
 
         this.skill1A.setSkill1ACooldownTimer(skill1ACooldownTimer);
         this.skill1A.setSkill1AReady(skill1ACooldownTimer <= 0);
