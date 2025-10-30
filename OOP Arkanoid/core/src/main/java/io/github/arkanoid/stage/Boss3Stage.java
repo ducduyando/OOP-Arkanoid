@@ -3,19 +3,14 @@ package io.github.arkanoid.stage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import io.github.arkanoid.boss2.BeeEnemy;
-import io.github.arkanoid.boss2.Boss2;
+import io.github.arkanoid.boss3.Boss3;
 import io.github.arkanoid.core.GameLogic;
 import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
-import io.github.arkanoid.paddle.Paddle;
-import io.github.arkanoid.paddle.PaddleSkill1A;
-import io.github.arkanoid.paddle.PaddleSkill1B;
+import io.github.arkanoid.paddle.*;
 import io.github.arkanoid.ui.HealthBar;
 import io.github.arkanoid.ui.ParallaxBackground;
 import io.github.arkanoid.ui.PauseMenu;
@@ -23,13 +18,14 @@ import io.github.arkanoid.ui.SkillIcon;
 
 import static io.github.arkanoid.core.Constants.*;
 
-public class Boss2Stage implements GameStage {
+public class Boss3Stage implements GameStage {
+
     private Stage stage;
     private GameLogic gameLogic;
 
     private Paddle paddle;
     private Ball ball;
-    private Boss2 boss2;
+    private Boss3 boss3;
     private HealthBar bossHealthBar;
     private ParallaxBackground parallaxBackground;
 
@@ -38,17 +34,16 @@ public class Boss2Stage implements GameStage {
     private Texture bossHealthBarImage;
     private Texture[] bgTextures;
 
-
     private SkillIcon skillIconJ;
+    private SkillIcon skillIconK;
 
     private PaddleSkill1A paddleSkill1A;
     private PaddleSkill1B paddleSkill1B;
 
-    private boolean isSkill1ASelected;
+    private PaddleSkill2A paddleSkill2A;
+    private PaddleSkill2B paddleSkill2B;
 
-    public void setSkill1ASelected(boolean skill1ASelected) {
-        isSkill1ASelected = skill1ASelected;
-    }
+    private boolean isSkill2ASelected;
 
     // Pause functionality
     private boolean isPaused = false;
@@ -64,11 +59,11 @@ public class Boss2Stage implements GameStage {
     // Save data for loading
     private Save.SaveData saveData;
 
-    public Boss2Stage() {
+    public Boss3Stage() {
         this.saveData = null;
     }
 
-    public Boss2Stage(Save.SaveData saveData) {
+    public Boss3Stage(Save.SaveData saveData) {
         this.saveData = saveData;
     }
 
@@ -84,7 +79,6 @@ public class Boss2Stage implements GameStage {
             bgTextures[i] = new Texture("Background/" + "Stage2/" + "layer" + i + ".png");
         }
 
-        // Create entities with saved positions if available
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
             paddle.setState(saveData.paddleState); // Restore paddle state
@@ -101,11 +95,11 @@ public class Boss2Stage implements GameStage {
             ball.setLaunched(saveData.ballLaunched);
 
             // Create boss with full HP first, then set current HP
-            boss2 = new Boss2(2, saveData.bossX, saveData.bossY, 100);
-            boss2.setHp(saveData.bossHP); // Set current HP from save data
+            boss3 = new Boss3(3, saveData.bossX, saveData.bossY, 100);
+            boss3.setHp(saveData.bossHP); // Set current HP from save data
 
             // Sync skill selection
-            isSkill1ASelected = saveData.isSkill1ASelected;
+
             if (saveData.isSkill1ASelected) {
                 paddleSkill1A = new PaddleSkill1A(paddle);
             } else {
@@ -115,50 +109,43 @@ public class Boss2Stage implements GameStage {
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
-            boss2 = new Boss2(2, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
+            boss3 = new Boss3(3, BOSS3_INITIAL_X, BOSS3_INITIAL_Y, 100);
 
             // Initialize paddle skills - always initialize both for UI purposes
-            paddle.initializeSkills(isSkill1ASelected, 0f, 0f);
+            paddle.initializeSkills(isSkill2ASelected, 0f, 0f);
 
-            if (isSkill1ASelected) {
-                paddleSkill1A = new PaddleSkill1A(paddle);
+            if (isSkill2ASelected) {
+                paddleSkill2A = new PaddleSkill2A(paddle);
             } else {
                 // Use the skill1B object from paddle
-                paddleSkill1B = paddle.getSkill1B();
+                paddleSkill2B = new PaddleSkill2B(paddle);
             }
         }
-        bossHealthBar = new HealthBar(bossHealthBarImage, boss2);
+        bossHealthBar = new HealthBar(bossHealthBarImage, boss3);
         parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 10f, 20f, 30f, 0f, 40f}, true);
 
-        gameLogic = new GameLogic(paddle, boss2);
+        gameLogic = new GameLogic(paddle, boss3);
         pauseMenu = new PauseMenu();
 
         stage.addActor(parallaxBackground);
         stage.addActor(bossHealthBar);
         stage.addActor(paddle);
         stage.addActor(ball);
-        stage.addActor(boss2);
+        stage.addActor(boss3);
 
-        Texture skillIconTexture = new Texture("SkillButton/" + "j" + ".png");
-        skillIconJ = new SkillIcon(paddle, skillIconTexture, "J", 20, 20);
+        Texture skillIconJTexture = new Texture("SkillButton/" + "j" + ".png");
+        skillIconJ = new SkillIcon(paddle, skillIconJTexture, "J", 20, 20);
         stage.addActor(skillIconJ);
 
-
-        if (saveData != null && saveData.beePositions != null) {
-            for (Save.BeePosition beePos : saveData.beePositions) {
-                io.github.arkanoid.boss2.BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
-                    new Texture("Boss2/" + "skill" + "1" +".png"), beePos.x, beePos.y
-                );
-                stage.addActor(bee);
-            }
-        }
+        Texture skillIconKTexture = new Texture("SkillButton/" + "k" + ".png");
+        skillIconK = new SkillIcon(paddle, skillIconKTexture, "K", 740, 20);
+        stage.addActor(skillIconK);
     }
 
     @Override
     public void update(float delta) {
-        // Handle pause input
-        handlePauseInput();
 
+        handlePauseInput();
         if (isPaused) {
             pauseMenu.act(delta);
 
@@ -187,7 +174,6 @@ public class Boss2Stage implements GameStage {
             return;
         }
 
-        // Check game over condition
         if (paddle.isGameOver() ) {
             gameOver = true;
             isCompleted = true;
@@ -236,21 +222,21 @@ public class Boss2Stage implements GameStage {
                     gameLogic.paddleLaserCollision(paddleSkill1B);
                 }
             }
+            if (paddleSkill2A != null) {
+                paddleSkill2A.update(paddle, delta);
+            }
+            else if (paddleSkill2B != null) {
+                paddleSkill2B.update(paddle, delta);
+            }
 
-            if (boss2.isReadyToDeath() && !bossDefeated) {
+            if (boss3.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;
             }
         }
-        for (Actor actor : stage.getActors()) {
-            if (actor instanceof BeeEnemy bee) {
-                if (ball.getHitBox().overlaps(bee.getHitBox())) {
-                    bee.remove();
-                }
-            }
-        }
 
         stage.act(delta);
+
     }
 
     private void handlePauseInput() {
@@ -271,6 +257,7 @@ public class Boss2Stage implements GameStage {
 
     @Override
     public void exit() {
+
         if (paddleImage != null) {
             paddleImage.dispose();
         }
@@ -283,8 +270,8 @@ public class Boss2Stage implements GameStage {
         if (parallaxBackground != null) {
             parallaxBackground.dispose();
         }
-        if (boss2 != null) {
-            boss2.dispose();
+        if (boss3 != null) {
+            boss3.dispose();
         }
         if (pauseMenu != null) {
             pauseMenu.dispose();
@@ -292,16 +279,6 @@ public class Boss2Stage implements GameStage {
         // SkillIcon texture will be disposed automatically by LibGDX
         if (stage != null) {
             stage.dispose();
-        }
-    }
-
-
-
-
-    public void drawEffects(SpriteBatch batch) {
-        // Draw pause menu if paused
-        if (isPaused) {
-            pauseMenu.draw(batch, 1f);
         }
     }
 
@@ -328,15 +305,15 @@ public class Boss2Stage implements GameStage {
         ProjectileSaveManager.ProjectileData projectileData =
             ProjectileSaveManager.collectProjectiles(stage);
         Save.saveGameWithProjectiles(
-            2, // Boss2 stage
-            boss2.getHp(),
+            3, // Boss2 stage
+            boss3.getHp(),
             paddle.getState(),
             projectileData,
             paddle.getX(), paddle.getY(),
             ball.getX(), ball.getY(),
             ball.getVelocity().x, ball.getVelocity().y,
             ball.isLaunched(),
-            boss2.getX(), boss2.getY(),
+            boss3.getX(), boss3.getY(),
             paddle.isSkill1ASelected(),
             paddle.getSkill1ACooldownTimer(),
             paddle.getSkill1BCooldownTimer()

@@ -2,9 +2,6 @@ package io.github.arkanoid.core;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.arkanoid.stage.*;
@@ -38,7 +35,7 @@ public class Main extends ApplicationAdapter {
         stageTextures[0] = new Texture("Stages/" + "stage0" + ".png");
         stageTextures[1] = new Texture("Stages/" + "stage1" + ".png"); // Boss 1
         stageTextures[2] = new Texture("Stages/" + "stage2" + ".png"); // Boss 2
-        stageTextures[3] = new Texture("Stages/" + "stage2" + ".png"); // Boss 3 tam thoi
+        stageTextures[3] = new Texture("Stages/" + "stage3" + ".png"); // Boss 3
 
 
         changeStage(new MenuStage());
@@ -137,13 +134,13 @@ public class Main extends ApplicationAdapter {
                 powerUpNumber++;
 
                 if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL1) {
-                    ((Boss2Stage) nextStage).setSkillASelected(true);
+                    ((Boss2Stage) nextStage).setSkill1ASelected(true);
                 } else if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL2) {
-                    ((Boss2Stage) nextStage).setSkillASelected(false);
+                    ((Boss2Stage) nextStage).setSkill1ASelected(false);
                 }
 
             } else if (powerUpNumber == 1) {
-                nextStage = new Boss2Stage();
+                nextStage = new Boss3Stage();
                 loadingScreen = new LoadingScreen(stageTextures[3]);
 
                 currentFlow = GameFlow.LOADING;
