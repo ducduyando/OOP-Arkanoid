@@ -78,12 +78,13 @@ public class Boss2RandomMovement implements BossSkill {
 
             skillTimer += delta;
             if (skillTimer >= SKILL_INTERVAL) {
-                skillTimer = 0f;
                 if (new Random().nextBoolean()) {
                     nextSkill = owner.getShieldSkill();
                 } else {
                     nextSkill = owner.getBeeSpawningSkill();
                 }
+
+                skillTimer = 0f;
                 boss.setSkill(nextSkill);
                 return;
             }

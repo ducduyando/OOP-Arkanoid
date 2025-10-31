@@ -11,6 +11,7 @@ import io.github.arkanoid.boss1.LaserEffect;
 import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.boss2.Boss2;
 import io.github.arkanoid.boss2.Boss2Skill2;
+import io.github.arkanoid.boss3.MiniBoss;
 import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.paddle.PaddleLaserEffect;
 import io.github.arkanoid.paddle.PaddleSkill1A;
@@ -26,14 +27,18 @@ public class GameLogic {
 
     Paddle paddleRef;
     Boss bossRef;
+    MiniBoss miniBossRef;
 
-    private final float COOLDOWN_HEALING = 1.5f;
-    private float cooldownHealingTime = COOLDOWN_HEALING;
-    private boolean isGameOver = false;
 
     public GameLogic(Paddle paddleRef, Boss bossRef) {
         this.paddleRef = paddleRef;
         this.bossRef = bossRef;
+    }
+
+    public GameLogic(Paddle paddleRef, Boss bossRef, MiniBoss miniBossRef) {
+        this.paddleRef = paddleRef;
+        this.bossRef = bossRef;
+        this.miniBossRef = miniBossRef;
     }
 
     public float bounceAngle (Rectangle ballRect, Rectangle objectRect) {
@@ -130,34 +135,13 @@ public class GameLogic {
             return;
         }
 
-        int newDamage = ball.getDamage();
-
-        if (bossRef instanceof Boss2 boss2Ref
-            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-
-            cooldownHealingTime += Gdx.graphics.getDeltaTime();
-        }
-
         Rectangle paddleRect = paddleRef.getHitBox();
         Rectangle ballRect = ball.getHitBox();
         Rectangle bossRect = bossRef.getHitBox();
 
         if (ballRect.overlaps(bossRect)) {
-            if (bossRef instanceof Boss2 boss2Ref
-                && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-                && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-                if (cooldownHealingTime >= COOLDOWN_HEALING) {
-                    if (bossRef.getHp() + ball.getDamage() <= bossRef.getMaxHp()) {
-                        bossRef.setHp(bossRef.getHp() + ball.getDamage());
-                    } else {
-                        bossRef.setHp(bossRef.getMaxHp());
-                    }
-                    cooldownHealingTime = 0;
-                }
-            } else {
-                bossRef.takeDamage(newDamage);
-            }
+            int newDamage = ball.getDamage();
+            bossRef.takeDamage(newDamage);
 
             if (bossRef.isDead()) {
                 ball.resetLaunch();
@@ -200,6 +184,52 @@ public class GameLogic {
         }
     }
 
+    public void miniBossCollision(Ball ball) {
+        if (miniBossRef == null) {
+            return;
+        }
+        Rectangle paddleRect = paddleRef.getHitBox();
+        Rectangle ballRect = ball.getHitBox();
+        Rectangle miniBossRect = miniBossRef.getHitbox();
+
+        if (ballRect.overlaps(miniBossRect)) {
+            miniBossRef.takeDamage();
+            float ballCenterX = ballRect.x + ballRect.width / 2;
+            float ballCenterY = ballRect.y + ballRect.height / 2;
+            float miniBossCenterX = miniBossRect.x + miniBossRect.width / 2;
+            float miniBossCenterY = miniBossRect.y + miniBossRect.height / 2;
+
+            float overlapX = (ballRect.width / 2 + miniBossRect.width / 2) - Math.abs(ballCenterX - miniBossCenterX);
+            float overlapY = (ballRect.height / 2 + miniBossRect.height / 2) - Math.abs(ballCenterY - miniBossCenterY);
+
+            Vector2 normal = new Vector2();
+
+            if (overlapX < overlapY) {
+                if (ballCenterX < miniBossCenterX) {
+                    normal.set(-1, 0);
+                    ball.setX(miniBossRect.x - ballRect.width);
+                } else {
+                    normal.set(1, 0);
+                    ball.setX(miniBossRect.x + miniBossRect.width);
+                }
+            } else {
+                if (ballCenterY < miniBossCenterY) {
+                    normal.set(0, -1);
+                    ball.setY(miniBossRect.y - ballRect.height);
+                } else {
+                    normal.set(0, 1);
+                    ball.setY(miniBossRect.y + miniBossRect.height);
+                }
+            }
+
+            Vector2 reflectVector = reflect(ball.getVelocity(), normal);
+            ball.setVelocity(reflectVector.x, reflectVector.y);
+        }
+        if (paddleRect.overlaps(miniBossRect)) {
+            paddleRef.takeDamage();
+        }
+    }
+
     public void skillCollision(Stage stage) {
         Rectangle paddleHitbox = paddleRef.getHitBox();
         for (Actor actor : stage.getActors()) {
@@ -232,31 +262,15 @@ public class GameLogic {
 
         Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
         Rectangle bossRect = bossRef.getHitBox();
-
-        if (bossRef instanceof Boss2 boss2Ref
-            && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-            && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-
-            cooldownHealingTime += Gdx.graphics.getDeltaTime();
+        if (miniBossRef != null) {
+            Rectangle miniBossRect = miniBossRef.getHitbox();
+            if (paddleLaserRect.overlaps(miniBossRect)) {
+                miniBossRef.takeDamage();
+            }
         }
 
         if (paddleLaserRect.overlaps(bossRect)) {
-            if (bossRef instanceof Boss2 boss2Ref
-                && boss2Ref.getSkill() instanceof Boss2Skill2 boss2Skill2Ref
-                && boss2Skill2Ref.getHoneyShield().isHasShield()) {
-
-                if (cooldownHealingTime >= COOLDOWN_HEALING) {
-                    if (bossRef.getHp() + PADDLE_SKILL2_DAMAGE < bossRef.getMaxHp()) {
-                        bossRef.setHp(bossRef.getHp() + PADDLE_SKILL2_DAMAGE);
-
-                    } else {
-                        bossRef.setHp(bossRef.getMaxHp());
-                    }
-                    cooldownHealingTime = 0;
-                }
-            } else {
-                bossRef.takeDamage(PADDLE_SKILL2_DAMAGE);
-            }
+            bossRef.takeDamage(PADDLE_SKILL2_DAMAGE);
         }
     }
 }
