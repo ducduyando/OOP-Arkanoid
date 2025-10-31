@@ -61,6 +61,10 @@ public class Boss2Stage implements GameStage {
     private boolean isCompleted = false;
     private boolean gameOver = false;
 
+// time
+private float stageTime = 0f;
+
+
     // Save data for loading
     private Save.SaveData saveData;
 
@@ -195,6 +199,9 @@ public class Boss2Stage implements GameStage {
         }
 
         if (!isCompleted && !bossDefeated) {
+            stageTime += delta;
+            // Add time to global game time
+            Save.addTime(delta);
             gameLogic.launch(ball);
             gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
@@ -240,6 +247,8 @@ public class Boss2Stage implements GameStage {
             if (boss2.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;
+                saveRank(2);
+
             }
         }
         for (Actor actor : stage.getActors()) {
@@ -251,6 +260,24 @@ public class Boss2Stage implements GameStage {
         }
 
         stage.act(delta);
+    }
+
+    // luu thu muc rank
+    private void saveRank(int stageNumber) {
+        String playerName = Save.loadPlayerName();
+        float totalGameTime = Save.getTotalGameTime();
+
+
+        // Ensure we have a valid name
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Player";
+        }
+
+        // Use total game time instead of stage time
+        Save.addRankEntry(playerName, totalGameTime, stageNumber);
+
+        // Stop game time tracking
+        Save.stopGame();
     }
 
     private void handlePauseInput() {

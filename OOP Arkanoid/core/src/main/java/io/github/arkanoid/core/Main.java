@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.arkanoid.stage.*;
 import io.github.arkanoid.ui.*;
 import io.github.arkanoid.ui.Button;
+import io.github.arkanoid.ui.NameInputStage;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -72,6 +73,10 @@ public class Main extends ApplicationAdapter {
                     batch.begin();
                     ((GameLoseStage) currentStage).drawDirect(batch);
                     batch.end();
+                } else if (currentStage instanceof NameInputStage) {
+                    ((NameInputStage) currentStage).draw();
+                } else if (currentStage instanceof RankStage) {
+                    ((RankStage) currentStage).draw();
                 } else {
                     currentStage.getGdxStage().draw();
                 }
@@ -89,9 +94,9 @@ public class Main extends ApplicationAdapter {
             Button.Mode choice = menuStage.getSelectedMode();
             switch (choice) {
                 case PLAY:
-                    nextStage = new TutorialStage();
-                    loadingScreen = new LoadingScreen(stageTextures[0]);
-                    currentFlow = GameFlow.LOADING;
+                    // Go to NameInputStage first, then TutorialStage
+                    nextStage = new NameInputStage();
+                    changeStage(nextStage);
                     break;
                 case LOAD:
                     loadSavedGame();
@@ -160,7 +165,18 @@ public class Main extends ApplicationAdapter {
                 changeStage(nextStage);
                 return;
             }
+        } else if (currentStage instanceof NameInputStage) {
+            // After name input, go to TutorialStage with loading screen
+            nextStage = new TutorialStage();
+            loadingScreen = new LoadingScreen(stageTextures[0]);
+            currentFlow = GameFlow.LOADING;
         } else if (currentStage instanceof GameLoseStage) {
+            // After lose screen, go to RankStage
+            nextStage = new RankStage();
+            changeStage(nextStage);
+            return;
+        } else if (currentStage instanceof RankStage) {
+            // After rank screen, go back to MenuStage
             nextStage = new MenuStage();
             changeStage(nextStage);
             return;

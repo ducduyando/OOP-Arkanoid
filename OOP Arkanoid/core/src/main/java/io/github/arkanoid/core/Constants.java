@@ -102,8 +102,8 @@ public class Constants {
     public static  final float MAX_COOLDOWN = 5.0f;
 
     /** Boss3. */
-    public static final int BOSS3_WIDTH = 248;
-    public static final int BOSS3_HEIGHT = 336;
+    public static final int BOSS3_WIDTH = 448;
+    public static final int BOSS3_HEIGHT = 272;
     public static final Vector2 BOSS3_VELOCITY = new Vector2(900f, 900f);
     public static final float BOSS3_INITIAL_X = (SCREEN_WIDTH - BOSS3_WIDTH) / 2f;
     public static final float BOSS3_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
@@ -112,4 +112,11 @@ public class Constants {
 
     public static final int BOSS3_LEFT_HAND_WIDTH = 256;
     public static final int BOSS3_LEFT_HAND_HEIGHT = 256;
+    /** Save rank. */
+    public static final int MAX_RANK_ENTRIES = 3;
+    
+    /** Name input field. */
+    public static final int FIELD_WIDTH = 800;
+    public static final int FIELD_HEIGHT = 120;
+
 }

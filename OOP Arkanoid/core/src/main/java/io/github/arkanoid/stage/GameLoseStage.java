@@ -25,12 +25,10 @@ public class GameLoseStage implements GameStage {
 
     @Override
     public void enter() {
-        System.out.println("GameLoseStage: enter() called");
         stage = new Stage(new ScreenViewport());
         loseEffectActor = new LoseEffectActor();
         stage.addActor(loseEffectActor);
         Gdx.input.setInputProcessor(stage);
-        System.out.println("GameLoseStage: setup complete");
     }
 
     @Override
@@ -40,7 +38,7 @@ public class GameLoseStage implements GameStage {
         if (loseEffectActor.isAnimationComplete()) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 isFinished = true;
-                isQuitRequested = true;
+                isQuitRequested = false;
             }
         }
 

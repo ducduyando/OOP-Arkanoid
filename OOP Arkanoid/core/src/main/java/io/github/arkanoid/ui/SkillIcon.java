@@ -8,7 +8,7 @@ import io.github.arkanoid.paddle.PaddleSkill1B;
 
 import static io.github.arkanoid.core.Constants.*;
 
-public class SkillIcon extends Actor {
+public class  SkillIcon extends Actor {
     private final Paddle paddle;
     private final Texture iconTexture;
     private final TextureRegion[] frames;

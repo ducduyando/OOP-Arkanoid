@@ -47,6 +47,17 @@ public class ProjectileSaveManager {
             this.stateTime = stateTime;
         }
     }
+    public static class RankEntry {
+        public String name;
+        public float time;
+        public int stage;
+
+        public RankEntry(String name, float time, int stage) {
+            this.name = name;
+            this.time = time;
+            this.stage = stage;
+        }
+    }
 
     // Container for all projectile data
     public static class ProjectileData {

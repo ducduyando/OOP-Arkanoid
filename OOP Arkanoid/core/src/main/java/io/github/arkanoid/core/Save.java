@@ -9,7 +9,15 @@ import java.util.List;
 import static io.github.arkanoid.core.Constants.*;
 public class Save {
     private static final String SAVE_FILE = "game_save";
+    private static final String RANK_PREFIX = "rank_";
+    private static final String KEY_PLAYER_NAME = "playerName";
+    private static final String KEY_TOTAL_GAME_TIME = "totalGameTime";
+
     private static final Preferences pref = Gdx.app.getPreferences(SAVE_FILE);
+
+    // Global game time tracking
+    private static float totalGameTime = 0f;
+    private static boolean isGameStarted = false;
 
     public static void saveGame(int stageNumber, int bossHP, int paddleState, int bricksRemaining,
                                 float paddleX, float paddleY, float ballX, float ballY,
@@ -34,6 +42,10 @@ public class Save {
         pref.putBoolean("isSkillASelected", isSkillASelected);
         pref.putFloat("skill1ACooldownTimer", skill1ACooldownTimer);
         pref.putFloat("skill1BCooldownTimer", skill1BCooldownTimer);
+
+        // Save total game time
+        pref.putFloat(KEY_TOTAL_GAME_TIME, totalGameTime);
+
         pref.flush();
     }
 
@@ -65,6 +77,9 @@ public class Save {
             pref.putInteger("brick_" + i + "_textureIndex", pos.textureIndex);
         }
 
+        // Save total game time
+        pref.putFloat(KEY_TOTAL_GAME_TIME, totalGameTime);
+
         pref.flush();
         Gdx.app.log("SAVE", "Saved " + brickPositions.size() + " bricks with positions");
     }
@@ -94,6 +109,9 @@ public class Save {
             pref.putFloat("bee_" + i + "_x", pos.x);
             pref.putFloat("bee_" + i + "_y", pos.y);
         }
+
+        // Save total game time
+        pref.putFloat(KEY_TOTAL_GAME_TIME, totalGameTime);
 
         pref.flush();
     }
@@ -127,9 +145,22 @@ public class Save {
         // Save projectile data
         saveProjectileData(projectileData);
 
+        // Save total game time
+        pref.putFloat(KEY_TOTAL_GAME_TIME, totalGameTime);
+
         pref.flush();
 
     }
+
+    public static void savePlayerName(String name) {
+        pref.putString(KEY_PLAYER_NAME, name);
+        pref.flush();
+    }
+// ten mac dinh neu ko luu
+public static String loadPlayerName() {
+    return pref.getString(KEY_PLAYER_NAME, "Player");
+}
+
 
     private static void saveProjectileData(ProjectileSaveManager.ProjectileData data) {
         // Save bees
@@ -158,6 +189,7 @@ public class Save {
             pref.putFloat("laser_" + i + "_stateTime", laser.stateTime);
         }
     }
+
 
     public static boolean hasSave() {
         return pref.contains("stageNumber");
@@ -213,6 +245,11 @@ public class Save {
 
         data.projectileData = loadProjectileData();
 
+        // Load and set total game time
+        totalGameTime = pref.getFloat(KEY_TOTAL_GAME_TIME, 0f);
+        isGameStarted = true;
+        System.out.println("Save.loadGame: Loaded total game time: " + totalGameTime);
+
         return data;
     }
 
@@ -254,9 +291,96 @@ public class Save {
         return data;
     }
 
+// them bang xep hang
+public static void addRankEntry(String name, float time, int stage) {
+    List<ProjectileSaveManager.RankEntry> ranks = loadRanks();
+    ranks.add(new ProjectileSaveManager.RankEntry(name, time, stage));
+
+    ranks.sort((e1, e2) -> {
+        if (e1.stage != e2.stage) {
+            return Integer.compare(e2.stage, e1.stage); // Sắp xếp stage giảm dần (cao nhất trước)
+        } else {
+            return Float.compare(e1.time, e2.time); // Sắp xếp time tăng dần (nhanh nhất trước)
+        }
+    });
+
+
+    // so muc la 3
+    if(ranks.size() > MAX_RANK_ENTRIES) {
+        ranks = ranks.subList(0, MAX_RANK_ENTRIES);
+    }
+
+    // LUU lai cac muc
+    for(int i =0; i <  MAX_RANK_ENTRIES; i++) {
+
+        String prefix = RANK_PREFIX + i + "_";
+
+        if( i < ranks.size() ) {
+            ProjectileSaveManager.RankEntry entry = ranks.get(i);
+            pref.putString(prefix + "name", entry.name);
+            pref.putFloat(prefix + "time", entry.time);
+            pref.putInteger(prefix + "stage", entry.stage);
+        }
+        else {
+            pref.remove(prefix + "name");
+            pref.remove(prefix + "time");
+            pref.remove(prefix + "stage");
+        }
+    }
+
+    pref.flush();
+}
+
+    public static List<ProjectileSaveManager.RankEntry> loadRanks () {
+        List<ProjectileSaveManager.RankEntry> ranks = new ArrayList<>();
+        for(int i=0; i< MAX_RANK_ENTRIES; i++) {
+            String prefix = RANK_PREFIX + i + "_"; // Dòng này đã đúng
+            if(pref.contains(prefix + "name")) {
+                String name = pref.getString(prefix + "name");
+                float time = pref.getFloat(prefix + "time");
+                int stage = pref.getInteger(prefix + "stage");
+                ranks.add(new ProjectileSaveManager.RankEntry(name, time, stage));
+            }
+            else {
+                break;
+            }
+        }
+        return ranks;
+    }
+
     public static void deleteSave() {
         pref.clear();
         pref.flush();
+    }
+
+    // Game time management methods
+    public static void resetGameTime() {
+        totalGameTime = 0f;
+        isGameStarted = true;
+    }
+
+    public static void addTime(float delta) {
+        if (isGameStarted) {
+            totalGameTime += delta;
+        }
+    }
+
+    public static float getTotalGameTime() {
+        return totalGameTime;
+    }
+
+    public static void setTotalGameTime(float time) {
+        totalGameTime = time;
+        isGameStarted = true;
+    }
+
+    public static boolean isGameStarted() {
+        return isGameStarted;
+    }
+
+    public static void stopGame() {
+        isGameStarted = false;
+
     }
 
     public static class SaveData {

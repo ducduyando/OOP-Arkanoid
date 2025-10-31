@@ -46,8 +46,13 @@ public class Boss1Stage implements GameStage {
     // Save data for loading
     private Save.SaveData saveData;
 
+// time
+private float stageTime = 0f;
+
     public Boss1Stage() {
         this.saveData = null;
+        // Reset game time when starting new game
+        Save.resetGameTime();
     }
 
     public Boss1Stage(Save.SaveData saveData) {
@@ -142,10 +147,15 @@ public class Boss1Stage implements GameStage {
         // Check game over condition
         if (paddle.isGameOver()) {
             isCompleted = true;
+            // Don't save rank when dying
+
             return;
         }
 
         if (!isCompleted && !bossDefeated) {
+            stageTime += delta;
+            // Add time to global game time
+            Save.addTime(delta);
             gameLogic.launch(ball);
             gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
@@ -155,10 +165,28 @@ public class Boss1Stage implements GameStage {
             if (boss1.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;
+                // Save rank when winning Boss1
+                saveRank(1);
+
             }
         }
 
         stage.act(delta);
+    }
+    // save bang rank
+    private void saveRank(int stageNumber) {
+        String playerName = Save.loadPlayerName();
+        float totalGameTime = Save.getTotalGameTime();
+
+
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Player";
+        }
+
+        Save.addRankEntry(playerName, totalGameTime, stageNumber);
+
+        // Stop game time tracking
+        Save.stopGame();
     }
 
     private void handlePauseInput() {
