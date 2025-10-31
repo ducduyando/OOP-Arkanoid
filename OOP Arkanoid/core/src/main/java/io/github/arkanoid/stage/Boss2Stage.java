@@ -41,8 +41,13 @@ public class Boss2Stage implements GameStage {
 
     private SkillIcon skillIconJ;
 
-    private PaddleSkill1A paddleSkill1A;
+    private PaddleSkill1A paddleSkill1A1;
+    private PaddleSkill1A paddleSkill1A2;
     private PaddleSkill1B paddleSkill1B;
+
+    private float paddleSkill1A2Timer  = 0;
+    private final double PADDLE_SKILL_1A2_TIMER = 0.5;
+    private boolean keepJBefore = false;
 
     private boolean isSkill1ASelected;
 
@@ -61,8 +66,8 @@ public class Boss2Stage implements GameStage {
     private boolean isCompleted = false;
     private boolean gameOver = false;
 
-// time
-private float stageTime = 0f;
+    // time
+    private float stageTime = 0f;
 
 
     // Save data for loading
@@ -111,7 +116,8 @@ private float stageTime = 0f;
             // Sync skill selection
             isSkill1ASelected = saveData.isSkill1ASelected;
             if (saveData.isSkill1ASelected) {
-                paddleSkill1A = new PaddleSkill1A(paddle);
+                paddleSkill1A1 = new PaddleSkill1A(paddle);
+                paddleSkill1A2 = new PaddleSkill1A(paddle);
             } else {
                 // Use the skill1B object from paddle
                 paddleSkill1B = paddle.getSkill1B();
@@ -125,7 +131,8 @@ private float stageTime = 0f;
             paddle.initializeSkills(isSkill1ASelected, 0f, 0f);
 
             if (isSkill1ASelected) {
-                paddleSkill1A = new PaddleSkill1A(paddle);
+                paddleSkill1A1 = new PaddleSkill1A(paddle);
+                paddleSkill1A2 = new PaddleSkill1A(paddle);
             } else {
                 // Use the skill1B object from paddle
                 paddleSkill1B = paddle.getSkill1B();
@@ -208,25 +215,51 @@ private float stageTime = 0f;
             gameLogic.bossCollision(ball);
             gameLogic.skillCollision(stage);
 
-            if (paddleSkill1A != null) {
+            if (paddleSkill1A1 != null && paddleSkill1A2 != null) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.J)
-                    && paddleSkill1A.isSkill1AReady()
-                    && !paddleSkill1A.isLaunched()) {
+                    && paddleSkill1A1.isSkill1AReady()
+                    && !paddleSkill1A1.isLaunched()
+                    && paddleSkill1A2.isSkill1AReady()
+                    && !paddleSkill1A2.isLaunched()) {
 
-                    paddleSkill1A.enter(paddle);
-                    paddleSkill1A.setLaunched(true);
-                    paddleSkill1A.setVelocity(0, BALL_VELOCITY.y);
+                    paddleSkill1A1.enter(paddle);
+                    paddleSkill1A1.setLaunched(true);
+                    paddleSkill1A1.setVelocity(0, BALL_VELOCITY.y);
+
+                    keepJBefore = true;
+
                 }
-                if (paddleSkill1A.isLaunched()) {
 
-                    gameLogic.paddleCollision(paddleSkill1A);
-                    gameLogic.boundaryCollision(paddleSkill1A, delta, UP_BOUNDARY);
-                    gameLogic.bossCollision(paddleSkill1A);
+                if (keepJBefore) {
+                    paddleSkill1A2Timer += delta;
+                    if (paddleSkill1A2Timer >= PADDLE_SKILL_1A2_TIMER) {
+                        paddleSkill1A2Timer = 0f;
+                        paddleSkill1A2.enter(paddle);
+                        paddleSkill1A2.setLaunched(true);
+                        paddleSkill1A2.setVelocity(0, BALL_VELOCITY.y);
+                        keepJBefore = false;
+                    }
+                }
+                if (paddleSkill1A1.isLaunched()) {
+
+                    gameLogic.paddleCollision(paddleSkill1A1);
+                    gameLogic.boundaryCollision(paddleSkill1A1, delta, UP_BOUNDARY);
+                    gameLogic.bossCollision(paddleSkill1A1);
                 } else {
 
-                    gameLogic.launch(paddleSkill1A);
+                    gameLogic.launch(paddleSkill1A1);
                 }
-                paddleSkill1A.update(paddle, delta);
+                if (paddleSkill1A2.isLaunched()) {
+
+                    gameLogic.paddleCollision(paddleSkill1A2);
+                    gameLogic.boundaryCollision(paddleSkill1A2, delta, UP_BOUNDARY);
+                    gameLogic.bossCollision(paddleSkill1A2);
+                } else {
+
+                    gameLogic.launch(paddleSkill1A2);
+                }
+                paddleSkill1A1.update(paddle, delta);
+                paddleSkill1A2.update(paddle, delta);
             }
 
             else if (paddleSkill1B != null) {
