@@ -53,7 +53,7 @@ public class Boss2 extends Boss {
     }
 
     public void act(float delta) {
-        randomMovement.update(this, delta);
+        randomMovement.updateMovement(this, delta);
         super.act(delta);
     }
 
