@@ -1,4 +1,4 @@
-package io.github.arkanoid.boss3;
+package io.github.arkanoid.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;

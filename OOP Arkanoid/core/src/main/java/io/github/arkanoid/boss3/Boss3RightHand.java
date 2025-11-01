@@ -1,5 +1,7 @@
 package io.github.arkanoid.boss3;
 
+import io.github.arkanoid.entities.MiniBoss;
+
 import static io.github.arkanoid.core.Constants.*;
 
 public class Boss3RightHand extends MiniBoss {
