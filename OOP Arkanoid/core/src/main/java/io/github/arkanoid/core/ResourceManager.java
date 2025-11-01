@@ -12,6 +12,7 @@ import java.util.Map;
  * ResourceManager - Singleton Pattern
  * Quản lý tài nguyên game (textures, fonts, etc.)
  */
+//
 public class ResourceManager {
     // Singleton instance
     private static ResourceManager instance;
