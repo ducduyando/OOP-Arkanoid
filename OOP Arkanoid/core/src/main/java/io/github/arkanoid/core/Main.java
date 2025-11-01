@@ -70,10 +70,7 @@ public class Main extends ApplicationAdapter {
         
         System.out.println("Main: All Singleton managers initialized");
         
-        // Log status of all managers
-        gameManager.logCurrentState();
-        resourceManager.logResourceStatus();
-        sceneManager.logCurrentState();
+        // Singleton managers are ready to use
     }
 
     @Override

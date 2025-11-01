@@ -16,7 +16,7 @@ public class Boss3RightHand extends MiniBoss {
         float x = boss3.getX() - BOSS3_RIGHT_HAND_WIDTH;
         float y = boss3.getHeight();
         setPosition(x, y);
-        hitbox.setPosition(x, y);
+        getHitbox().setPosition(x, y);
         setSize(BOSS3_RIGHT_HAND_WIDTH, BOSS3_RIGHT_HAND_HEIGHT);
         setOrigin(BOSS3_RIGHT_HAND_WIDTH / 2f, BOSS3_RIGHT_HAND_HEIGHT / 2f);
     }

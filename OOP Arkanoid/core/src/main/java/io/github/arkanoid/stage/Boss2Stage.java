@@ -329,8 +329,7 @@ public class Boss2Stage implements GameStage {
         // Stop game time tracking
         Save.stopGame();
         
-        // Log GameManager state
-        gameManager.logCurrentState();
+        // GameManager state updated
     }
 
     private void handlePauseInput() {

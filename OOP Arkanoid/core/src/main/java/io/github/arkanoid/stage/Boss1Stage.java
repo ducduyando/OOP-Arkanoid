@@ -201,8 +201,7 @@ private float stageTime = 0f;
         // Stop game time tracking
         Save.stopGame();
         
-        // Log GameManager state
-        gameManager.logCurrentState();
+        // GameManager state updated
     }
 
     private void handlePauseInput() {
