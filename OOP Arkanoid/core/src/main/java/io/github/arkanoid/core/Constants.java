@@ -114,9 +114,14 @@ public class Constants {
     public static final int BOSS3_LEFT_HAND_HEIGHT = 256;
     /** Save rank. */
     public static final int MAX_RANK_ENTRIES = 3;
-    
-    /** Name input field. */
+
+    /** Name. */
     public static final int FIELD_WIDTH = 800;
     public static final int FIELD_HEIGHT = 120;
+
+    /** Rank. */
+    public static final float COL_WIDTH = 260f;
+    public static final float NAME_WIDTH = 350f;
+    public static final float PAD = 20f;
 
 }

@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.boss2.Boss2;
 import io.github.arkanoid.core.GameLogic;
+import io.github.arkanoid.core.GameManager;
+import io.github.arkanoid.core.InputManager;
 import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
@@ -70,6 +72,12 @@ private float stageTime = 0f;
 
     public Boss2Stage() {
         this.saveData = null;
+        
+        // Update GameManager state
+        GameManager gameManager = GameManager.getInstance();
+        gameManager.setCurrentStage(2);
+        gameManager.setCurrentPlayerName(Save.loadPlayerName());
+        System.out.println("Boss2Stage: Initialized with GameManager");
     }
 
     public Boss2Stage(Save.SaveData saveData) {
@@ -160,6 +168,9 @@ private float stageTime = 0f;
 
     @Override
     public void update(float delta) {
+        // Update InputManager
+        InputManager.getInstance().update();
+        
         // Handle pause input
         handlePauseInput();
 
@@ -264,13 +275,19 @@ private float stageTime = 0f;
 
     // luu thu muc rank
     private void saveRank(int stageNumber) {
-        String playerName = Save.loadPlayerName();
+        GameManager gameManager = GameManager.getInstance();
+        String playerName = gameManager.getCurrentPlayerName();
         float totalGameTime = Save.getTotalGameTime();
 
+        System.out.println("Boss2Stage: saveRank() called via GameManager");
+        System.out.println("Boss2Stage: Player name: '" + playerName + "'");
+        System.out.println("Boss2Stage: Stage number: " + stageNumber);
+        System.out.println("Boss2Stage: Total game time: " + totalGameTime);
 
         // Ensure we have a valid name
         if (playerName == null || playerName.trim().isEmpty()) {
             playerName = "Player";
+            gameManager.setCurrentPlayerName(playerName);
         }
 
         // Use total game time instead of stage time
@@ -278,6 +295,9 @@ private float stageTime = 0f;
 
         // Stop game time tracking
         Save.stopGame();
+        
+        // Log GameManager state
+        gameManager.logCurrentState();
     }
 
     private void handlePauseInput() {

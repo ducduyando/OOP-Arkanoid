@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss1.Boss1;
 import io.github.arkanoid.core.GameLogic;
+import io.github.arkanoid.core.GameManager;
 import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
@@ -53,6 +54,12 @@ private float stageTime = 0f;
         this.saveData = null;
         // Reset game time when starting new game
         Save.resetGameTime();
+        
+        // Update GameManager state
+        GameManager gameManager = GameManager.getInstance();
+        gameManager.setCurrentStage(1);
+        gameManager.setCurrentPlayerName(Save.loadPlayerName());
+        System.out.println("Boss1Stage: Initialized with GameManager");
     }
 
     public Boss1Stage(Save.SaveData saveData) {
@@ -175,18 +182,27 @@ private float stageTime = 0f;
     }
     // save bang rank
     private void saveRank(int stageNumber) {
-        String playerName = Save.loadPlayerName();
+        GameManager gameManager = GameManager.getInstance();
+        String playerName = gameManager.getCurrentPlayerName();
         float totalGameTime = Save.getTotalGameTime();
 
+        System.out.println("Boss1Stage: saveRank() called via GameManager");
+        System.out.println("Boss1Stage: Player name: '" + playerName + "'");
+        System.out.println("Boss1Stage: Stage number: " + stageNumber);
+        System.out.println("Boss1Stage: Total game time: " + totalGameTime);
 
         if (playerName == null || playerName.trim().isEmpty()) {
             playerName = "Player";
+            gameManager.setCurrentPlayerName(playerName);
         }
 
         Save.addRankEntry(playerName, totalGameTime, stageNumber);
 
         // Stop game time tracking
         Save.stopGame();
+        
+        // Log GameManager state
+        gameManager.logCurrentState();
     }
 
     private void handlePauseInput() {
