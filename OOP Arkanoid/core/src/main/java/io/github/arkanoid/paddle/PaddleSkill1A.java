@@ -45,6 +45,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         if (isLaunched()) {
             moveBy(getVelocity().x * delta, getVelocity().y * delta);
             setHitBox(getX(), getY());
+            paddleBallUpgrade.getHitBox().setPosition(getX(), getY());
             paddleBallUpgrade.setPosition(getX(), getY());
         }
         if (!skill1AReady) {

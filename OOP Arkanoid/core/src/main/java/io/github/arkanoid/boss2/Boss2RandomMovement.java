@@ -107,26 +107,5 @@ public class Boss2RandomMovement implements BossSkill {
                 boss.setSkill(nextSkill);
             }
         }
-//        if (!hasArrived) {
-//            Vector2 currentPosition = new Vector2(boss.getX(), boss.getY());
-//
-//            if (currentPosition.dst(targetPosition) < boss.velocity.len() * delta) {
-//                boss.setPosition(targetPosition.x, targetPosition.y);
-//                hasArrived = true;
-//                cooldownTimer = 0f;
-//            } else {
-//                Vector2 direction = targetPosition.cpy().sub(currentPosition).nor();
-//                boss.moveBy(direction.x * boss.velocity.x * delta, direction.y * boss.velocity.y * delta);
-//            }
-//        } else {
-//            cooldownTimer += delta;
-//
-//            if (cooldownTimer >= COOLDOWN_DURATION) {
-//
-//                chooseRandomTarget();
-//                hasArrived = false;
-//            }
-//
-//        }
     }
 }

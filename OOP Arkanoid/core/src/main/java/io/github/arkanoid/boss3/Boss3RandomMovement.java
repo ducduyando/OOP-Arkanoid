@@ -32,12 +32,12 @@ public class Boss3RandomMovement implements BossSkill {
     public Boss3RandomMovement(Boss3 owner) {
         this.owner = owner;
 
-        float cellXSize = (SCREEN_WIDTH - BOSS3_WIDTH) / (float) (COLS);
+        float cellXSize = (SCREEN_WIDTH - BOSS3_WIDTH - BOSS3_RIGHT_HAND_WIDTH - BOSS3_LEFT_HAND_WIDTH) / (float) (COLS);
         float cellYSize = (SCREEN_HEIGHT / 2f - BOSS3_HEIGHT - HP_HEIGHT) / (float) (ROWS);
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
-                positionGridX[r][c] = c * cellXSize;
+                positionGridX[r][c] = c * cellXSize + BOSS3_LEFT_HAND_WIDTH;
                 positionGridY[r][c] = SCREEN_HEIGHT / 2f + r * cellYSize;
 
             }

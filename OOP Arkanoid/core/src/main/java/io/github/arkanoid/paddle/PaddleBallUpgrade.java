@@ -12,12 +12,18 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleBallUpgrade extends Actor {
     private final TextureRegion ballUpgrade;
+    private Rectangle hitBox;
+
+    public Rectangle getHitBox() {
+        return hitBox;
+    }
 
     public PaddleBallUpgrade(Texture ballUpgrade, float paddleX, float paddleY) {
         this.ballUpgrade = new TextureRegion(ballUpgrade);
         float x = paddleX + (PADDLE_WIDTH + BALL_WIDTH) / 2f;
         float y = paddleY + PADDLE_HEIGHT;
         setPosition(x, y);
+        hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);
         setSize(BALL_WIDTH, BALL_HEIGHT);
     }
 
