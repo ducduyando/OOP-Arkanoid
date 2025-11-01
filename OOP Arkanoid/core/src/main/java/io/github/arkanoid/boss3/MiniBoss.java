@@ -16,14 +16,14 @@ public class MiniBoss extends Actor {
         DYING
     }
 
-    private final Boss3 boss3;
-
     private final Texture normalSprite;
     private final Texture takeDamageSprite;
     private final Texture deathSprite;
-    private Rectangle hitbox;
+
+    Rectangle hitbox;
+
     private Texture skillTexture;
-    private String handKey;
+    private Texture targetTexture;
 
     private int hp;
     private final int maxHp;
@@ -58,60 +58,28 @@ public class MiniBoss extends Actor {
             isVisible = true;
             if (hp <= 0) {
                 state = State.DYING;
+                deathTimer = 0f;
                 hp = 0;
             } else {
                 state = State.TAKING_DAMAGE;
-                takeDamageTimer = 0;
+                takeDamageTimer = 0f;
             }
         }
     }
 
-    public MiniBoss(Boss3 boss3, String handKey, int maxHp) {
-        this.boss3 = boss3;
-        this.handKey = handKey;
+    public MiniBoss(String handKey, int miniBossWidth, int miniBossHeight ,int maxHp) {
         this.maxHp = maxHp;
-
         hp = maxHp;
 
-        int normalMaxFrame;
-        int takeDamageMaxFrame;
-        int deathMaxFrame;
+        normalSprite = new Texture("Boss" + handKey + "/" + "normal" + ".png");
+        takeDamageSprite = new Texture("Boss" + handKey + "/" + "take_damage" + ".png");
+        deathSprite = new Texture("Boss" + handKey + "/" + "death" + ".png");
+        skillTexture = new Texture("Boss" + handKey + "/" + "skill" + ".png");
+        targetTexture = new Texture("Boss" + handKey + "/" + "target" + ".png");
 
-        if (handKey.equals("Right")) {
-
-            normalSprite = new Texture("Boss3R/" + "normal" + ".png");
-            takeDamageSprite = new Texture("Boss3R/" + "take_damage" + ".png");
-            deathSprite = new Texture("Boss3R/" + "death" + ".png");
-            skillTexture = new Texture("Boss3R/" + "skill" + ".png");
-
-            normalMaxFrame = normalSprite.getWidth() / BOSS3_RIGHT_HAND_WIDTH;
-            takeDamageMaxFrame = takeDamageSprite.getWidth() / BOSS3_RIGHT_HAND_WIDTH;
-            deathMaxFrame = deathSprite.getWidth() / BOSS3_RIGHT_HAND_WIDTH;
-
-            float x = boss3.getX() - BOSS3_RIGHT_HAND_WIDTH;
-            float y = boss3.getHeight();
-            setPosition(x, y);
-            hitbox.setPosition(x, y);
-            setSize(BOSS3_RIGHT_HAND_WIDTH, BOSS3_RIGHT_HAND_HEIGHT);
-            setOrigin(BOSS3_RIGHT_HAND_WIDTH / 2f, BOSS3_RIGHT_HAND_HEIGHT / 2f);
-        } else {
-
-            normalSprite = new Texture("Boss3L/" + "normal" + ".png");
-            takeDamageSprite = new Texture("Boss3L/" + "take_damage" + ".png");
-            deathSprite = new Texture("Boss3L/" + "death" + ".png");
-            skillTexture = new Texture("Boss3L/" + "skill" + ".png");
-
-            normalMaxFrame = normalSprite.getWidth() / BOSS3_LEFT_HAND_WIDTH;
-            takeDamageMaxFrame = takeDamageSprite.getWidth() / BOSS3_LEFT_HAND_WIDTH;
-            deathMaxFrame = deathSprite.getWidth() / BOSS3_LEFT_HAND_WIDTH;
-
-            float x = boss3.getX() + BOSS3_WIDTH;
-            float y = boss3.getHeight();
-            setPosition(x, y);
-            hitbox.setPosition(x, y);
-            setSize(BOSS3_LEFT_HAND_WIDTH, BOSS3_LEFT_HAND_HEIGHT);
-            setOrigin(BOSS3_LEFT_HAND_WIDTH / 2f, BOSS3_LEFT_HAND_HEIGHT / 2f);
-        }
+        int normalMaxFrame = normalSprite.getWidth() / miniBossWidth;
+        int takeDamageMaxFrame = takeDamageSprite.getWidth() / miniBossWidth;
+        int deathMaxFrame = deathSprite.getWidth() / miniBossWidth;
 
         TextureRegion[] normalFrames = new TextureRegion[normalMaxFrame];
         for (int i = 0; i < normalMaxFrame; i++) {
@@ -134,19 +102,7 @@ public class MiniBoss extends Actor {
 
     @Override
     public void act(float delta) {
-        if (handKey.equals("Right")) {
-            this.rotateBy(ROTATION_SPEED * delta);
-            float x = boss3.getX() - BOSS3_RIGHT_HAND_WIDTH;
-            float y = boss3.getY();
-            setPosition(x, y);
-            hitbox.setPosition(x, y);
-        } else {
-            float x = boss3.getX() + BOSS3_WIDTH;
-            float y = boss3.getY();
-            setPosition(x, y);
-            hitbox.setPosition(x, y);
-        }
-
+        hitbox.setPosition(getX(), getY());
         if (state == State.NORMAL) {
             stateTimer += delta;
             currentFrame = normalAnimation.getKeyFrame(stateTimer, true);
