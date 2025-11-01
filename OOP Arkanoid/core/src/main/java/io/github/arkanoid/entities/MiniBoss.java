@@ -20,10 +20,10 @@ public class MiniBoss extends Actor {
     private final Texture takeDamageSprite;
     private final Texture deathSprite;
 
-    Rectangle hitbox;
+    protected Rectangle hitbox;
 
-    private Texture skillTexture;
-    private Texture targetTexture;
+    protected Texture skillTexture;
+    protected Texture targetTexture;
 
     private int hp;
     private final int maxHp;
@@ -32,6 +32,8 @@ public class MiniBoss extends Actor {
     private float stateTimer = 0f;
     private float takeDamageTimer = 0f;
     private float deathTimer = 0f;
+
+    private MiniBossSkill currentSkill;
 
     private boolean isVisible = false;
     private boolean isReadyToDeath = false;
@@ -52,6 +54,14 @@ public class MiniBoss extends Actor {
         return isReadyToDeath;
     }
 
+
+    public void setSkill(MiniBossSkill newSkill) {
+        this.currentSkill = newSkill;
+        if (this.currentSkill != null) {
+            this.currentSkill.enter(this);
+        }
+    }
+
     public void takeDamage() {
         if (state == State.NORMAL) {
             hp--;
@@ -60,6 +70,10 @@ public class MiniBoss extends Actor {
                 state = State.DYING;
                 deathTimer = 0f;
                 hp = 0;
+                if (currentSkill != null) {
+                    currentSkill.cleanup();
+                    currentSkill = null;
+                }
             } else {
                 state = State.TAKING_DAMAGE;
                 takeDamageTimer = 0f;
@@ -125,8 +139,7 @@ public class MiniBoss extends Actor {
                 remove();
             }
         }
-
-
+        currentSkill.update(this, delta);
     }
 
     @Override

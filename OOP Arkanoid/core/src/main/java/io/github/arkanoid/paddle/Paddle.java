@@ -23,8 +23,11 @@ public class Paddle extends Actor {
     private PaddleSkill1A skill1A;
     private PaddleSkill1B skill1B;
     private PaddleSkill2A skill2A; // New skill2A
+    private PaddleSkill2B skill2B;
 
     private boolean isSkill1ASelected = true;
+    private boolean isSkill2ASelected = true;
+
     private PaddleSkill activeSkill;
     public Paddle(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, 0, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -101,6 +104,10 @@ public class Paddle extends Actor {
 
     public boolean isSkill1ASelected() {
         return isSkill1ASelected;
+    }
+
+    public void setSkill2ASelected(boolean skill2ASelected) {
+        isSkill2ASelected = skill2ASelected;
     }
 
     public float getSkill1ACooldownTimer() {

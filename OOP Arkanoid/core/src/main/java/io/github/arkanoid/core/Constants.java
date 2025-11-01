@@ -112,6 +112,11 @@ public class Constants {
 
     public static final int BOSS3_LEFT_HAND_WIDTH = 256;
     public static final int BOSS3_LEFT_HAND_HEIGHT = 256;
+
+    public static final int BOSS3_SKILL_RIGHT_HAND_WIDTH = 512;
+    public static final int BOSS3_SKILL_RIGHT_HAND_HEIGHT = 512;
+
+    public static final int ROTATION_SPEED = 180;
     /** Save rank. */
     public static final int MAX_RANK_ENTRIES = 3;
 

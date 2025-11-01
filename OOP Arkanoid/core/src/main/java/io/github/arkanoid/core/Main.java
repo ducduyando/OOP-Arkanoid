@@ -43,33 +43,33 @@ public class Main extends ApplicationAdapter {
 
         changeStage(new MenuStage());
     }
-    
+
     /**
      * Initialize all Singleton managers
      */
     private void initializeSingletons() {
         System.out.println("Main: Initializing Singleton managers...");
-        
+
         // Initialize GameManager
         GameManager gameManager = GameManager.getInstance();
         gameManager.reset();
-        
+
         // Initialize InputManager
         InputManager inputManager = InputManager.getInstance();
         inputManager.logKeyBindings();
-        
+
         // AudioManager removed - not being used
-        
+
         // Initialize ResourceManager
         ResourceManager resourceManager = ResourceManager.getInstance();
         resourceManager.preloadGameResources();
         resourceManager.preloadBossResources();
-        
+
         // Initialize SceneManager
         SceneManager sceneManager = SceneManager.getInstance();
-        
+
         System.out.println("Main: All Singleton managers initialized");
-        
+
         // Singleton managers are ready to use
     }
 
@@ -182,6 +182,12 @@ public class Main extends ApplicationAdapter {
                 currentFlow = GameFlow.LOADING;
                 powerUpNumber++;
 
+                if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL1) {
+                    ((Boss2Stage) nextStage).setSkill1ASelected(true);
+                } else if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL2) {
+                    ((Boss2Stage) nextStage).setSkill1ASelected(false);
+                }
+
             }
 
         } else if (currentStage instanceof Boss2Stage boss2Stage) {
@@ -264,39 +270,39 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         System.out.println("Main: Disposing application...");
-        
+
         if (currentStage != null) {
             currentStage.exit();
         }
-        
+
         // Dispose all Singleton managers
         disposeSingletons();
-        
+
         batch.dispose();
         for (Texture texture : stageTextures) {
             texture.dispose();
         }
-        
+
         System.out.println("Main: Application disposed");
     }
-    
+
     /**
      * Dispose all Singleton managers
      */
     private void disposeSingletons() {
         System.out.println("Main: Disposing Singleton managers...");
-        
+
         // Dispose SceneManager
         SceneManager.getInstance().dispose();
-        
+
         // Dispose ResourceManager
         ResourceManager.getInstance().dispose();
-        
+
         // AudioManager removed - not being used
-        
+
         // Note: GameManager and InputManager don't need explicit disposal
         // as they don't hold disposable resources
-        
+
         System.out.println("Main: All Singleton managers disposed");
     }
 }
