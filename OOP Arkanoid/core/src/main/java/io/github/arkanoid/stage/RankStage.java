@@ -67,14 +67,13 @@ public class RankStage implements GameStage {
         rankTable.setFillParent(true);
 
 
-        rankTable.top().padTop(370f).padLeft(200f);
+        rankTable.top().padTop(420f).padLeft(100f);
 
 
 
-        rankTable.add(new Label("RANK", skin)).width(COL_WIDTH).pad(PAD).align(Align.center);
-        rankTable.add(new Label("NAME", skin)).width(NAME_WIDTH).pad(PAD).align(Align.left);
-        rankTable.add(new Label("STAGE", skin)).width(COL_WIDTH).pad(PAD).align(Align.center);
-        rankTable.add(new Label("TIME", skin)).width(COL_WIDTH).pad(PAD).padRight(80f).align(Align.left);
+        rankTable.add(new Label("RANK", skin)).width(COL_WIDTH).pad(VERTICAL_PAD).align(Align.center);
+        rankTable.add(new Label("NAME", skin)).width(NAME_WIDTH).pad(VERTICAL_PAD).align(Align.left);
+        rankTable.add(new Label("TIME(s)", skin)).width(COL_WIDTH).pad(VERTICAL_PAD).padRight(80f).align(Align.left);
         rankTable.row();
 
         List<ProjectileSaveManager.RankEntry> topPlayers = Save.loadRanks();
@@ -86,9 +85,9 @@ public class RankStage implements GameStage {
 
 
         if (topPlayers.isEmpty()) {
-            rankTable.add(new Label("No records yet", skin)).colspan(4).pad(PAD).align(Align.center);
+            rankTable.add(new Label("No records yet", skin)).colspan(4).pad(HORIZONTAL_PAD).align(Align.center);
             rankTable.row();
-            rankTable.add(new Label("Play to set records!", skin)).colspan(4).pad(PAD).align(Align.center);
+            rankTable.add(new Label("Play to set records!", skin)).colspan(4).pad(HORIZONTAL_PAD).align(Align.center);
         } else {
             for (int i = 0; i < Math.min(3, topPlayers.size()); i++) {
                 ProjectileSaveManager.RankEntry entry = topPlayers.get(i);
@@ -99,10 +98,9 @@ public class RankStage implements GameStage {
                 String timeStr = String.format("%.1f", entry.time);
 
 
-                rankTable.add(new Label(rankNum, skin)).pad(PAD).align(Align.center).expandX();
-                rankTable.add(new Label(playerName, skin)).pad(PAD).align(Align.left).expandX();
-                rankTable.add(new Label(stageNum, skin)).pad(PAD).align(Align.center).expandX();
-                rankTable.add(new Label(timeStr, skin)).pad(PAD).align(Align.left).expandX();
+                rankTable.add(new Label(rankNum, skin)).pad(HORIZONTAL_PAD).align(Align.center).expandX();
+                rankTable.add(new Label(playerName, skin)).pad(HORIZONTAL_PAD).align(Align.left).expandX();
+                rankTable.add(new Label(timeStr, skin)).pad(HORIZONTAL_PAD).align(Align.left).expandX();
                 rankTable.row();
             }
         }

@@ -122,6 +122,7 @@ public class Constants {
     /** Rank. */
     public static final float COL_WIDTH = 260f;
     public static final float NAME_WIDTH = 350f;
-    public static final float PAD = 20f;
+    public static final float HORIZONTAL_PAD = 12f;
+    public static final float VERTICAL_PAD = 8f;
 
 }
