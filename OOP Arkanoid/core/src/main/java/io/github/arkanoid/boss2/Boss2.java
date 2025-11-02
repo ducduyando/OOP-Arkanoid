@@ -52,11 +52,6 @@ public class Boss2 extends Boss {
         this.heal = heal;
     }
 
-    public void act(float delta) {
-        randomMovement.updateMovement(this, delta);
-        super.act(delta);
-    }
-
     public Texture getSkill1Texture() {
         return skill1Texture;
     }
@@ -69,6 +64,11 @@ public class Boss2 extends Boss {
         if (getStage() != null) {
             getStage().addActor(new BeeEnemy(this.skill1Texture, getX() + getWidth() / 2 + BOSS2_SKILL1_WIDTH , getY() - BOSS2_SKILL1_HEIGHT ));
         }
+    }
+
+    public void act(float delta) {
+        randomMovement.updateMovement(this, delta);
+        super.act(delta);
     }
 
     public void spawnBeeFromTop() {

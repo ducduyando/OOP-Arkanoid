@@ -14,7 +14,7 @@ public class LaserEffect extends Actor {
     private float stateTime = 0f;
     private Rectangle hitbox;
 
-    private boolean isAnimationFinished = false;
+    private boolean isLaserFinished = false;
 
     public LaserEffect(Texture texture, float bossX, float bossY) {
         int maxFrame = texture.getWidth() / LASER_WIDTH;
@@ -34,28 +34,6 @@ public class LaserEffect extends Actor {
         hitbox = new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
-    public boolean isAnimationDone() {
-        return isAnimationFinished;
-    }
-
-    @Override
-    public void act(float delta) {
-        hitbox.setPosition(getX(), getY());
-
-        if (!isAnimationFinished) {
-            stateTime += delta;
-            if (laserAnimation.isAnimationFinished(stateTime)) {
-                isAnimationFinished = true;
-            }
-        }
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        TextureRegion currentFrame = laserAnimation.getKeyFrame(stateTime, false);
-        batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
-    }
-
     public Rectangle getHitbox() {
         return hitbox;
     }
@@ -68,4 +46,25 @@ public class LaserEffect extends Actor {
         this.stateTime = stateTime;
     }
 
+    public boolean isLaserFinished() {
+        return isLaserFinished;
+    }
+
+    @Override
+    public void act(float delta) {
+        hitbox.setPosition(getX(), getY());
+
+        if (!isLaserFinished) {
+            stateTime += delta;
+            if (laserAnimation.isAnimationFinished(stateTime)) {
+                isLaserFinished = true;
+            }
+        }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        TextureRegion currentFrame = laserAnimation.getKeyFrame(stateTime, false);
+        batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
+    }
 }

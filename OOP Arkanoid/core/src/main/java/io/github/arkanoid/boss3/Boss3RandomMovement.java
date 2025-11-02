@@ -29,6 +29,10 @@ public class Boss3RandomMovement implements BossSkill {
     private Vector2 targetPosition;
     private final Random random = new Random();
 
+    public void setNextSkill(BossSkill nextSkill) {
+        this.nextSkill = nextSkill;
+    }
+
     public Boss3RandomMovement(Boss3 owner) {
         this.owner = owner;
 
@@ -42,10 +46,6 @@ public class Boss3RandomMovement implements BossSkill {
             }
         }
         chooseRandomTarget();
-    }
-
-    public void setNextSkill(BossSkill nextSkill) {
-        this.nextSkill = nextSkill;
     }
 
     public void chooseRandomTarget() {

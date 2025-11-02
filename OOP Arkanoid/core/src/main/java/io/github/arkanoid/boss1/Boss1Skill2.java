@@ -58,7 +58,7 @@ public class Boss1Skill2 implements BossSkill {
         }
 
         if (currentPhase == Phase.CHARGING) {
-            if (laserInstance.isAnimationDone()) {
+            if (laserInstance.isLaserFinished()) {
                 currentPhase = Phase.SWEEPING;
             }
         } else  if (currentPhase == Phase.SWEEPING) {

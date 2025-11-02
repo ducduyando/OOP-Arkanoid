@@ -41,20 +41,18 @@ public class Boss2RandomMovement implements BossSkill {
         chooseRandomTarget();
     }
 
+    public void setHasArrived(boolean hasArrived) {
+        this.hasArrived = hasArrived;
+    }
+
+    public void setNextSkill(BossSkill nextSkill) {}
+
     public void chooseRandomTarget() {
         int r = random.nextInt(ROWS);
         int c = random.nextInt(COLS);
         targetX = positionGridX[r][c];
         targetY = positionGridY[r][c];
         targetPosition = new Vector2(targetX, targetY);
-    }
-
-    public void setHasArrived(boolean hasArrived) {
-        this.hasArrived = hasArrived;
-    }
-
-    public void setNextSkill(BossSkill nextSkill) {
-
     }
 
     @Override

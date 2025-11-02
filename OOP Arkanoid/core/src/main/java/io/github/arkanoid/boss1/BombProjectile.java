@@ -29,6 +29,18 @@ public class BombProjectile extends Actor {
         this.hitBox = new Rectangle(getX(), getY(), BOSS1_SKILL1_WIDTH, BOSS1_SKILL1_HEIGHT);
     }
 
+    public Rectangle getHitbox() {
+        return hitBox;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -45,17 +57,5 @@ public class BombProjectile extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
-    }
-
-    public Rectangle getHitbox() {
-        return hitBox;
-    }
-    
-    public float getStateTime() {
-        return stateTime;
-    }
-    
-    public void setStateTime(float stateTime) {
-        this.stateTime = stateTime;
     }
 }
