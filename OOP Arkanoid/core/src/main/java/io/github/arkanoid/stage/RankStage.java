@@ -85,18 +85,18 @@ public class RankStage implements GameStage {
 
 
         if (topPlayers.isEmpty()) {
-            rankTable.add(new Label("No records yet", skin)).colspan(4).pad(HORIZONTAL_PAD).align(Align.center);
+            rankTable.add(new Label("No records yet", skin)).colspan(3).pad(HORIZONTAL_PAD).align(Align.center);
             rankTable.row();
-            rankTable.add(new Label("Play to set records!", skin)).colspan(4).pad(HORIZONTAL_PAD).align(Align.center);
+            rankTable.add(new Label("Play to set records!", skin)).colspan(3).pad(HORIZONTAL_PAD).align(Align.center);
         } else {
             for (int i = 0; i < Math.min(3, topPlayers.size()); i++) {
                 ProjectileSaveManager.RankEntry entry = topPlayers.get(i);
 
                 String rankNum = (i + 1) + ".";
                 String playerName = entry.name != null && !entry.name.trim().isEmpty() ? entry.name : "Unknown";
-                String stageNum = String.valueOf(entry.stage);
                 String timeStr = String.format("%.1f", entry.time);
 
+                System.out.println("RankStage: Displaying rank " + (i+1) + " - Name: '" + playerName + "', Time: " + timeStr);
 
                 rankTable.add(new Label(rankNum, skin)).pad(HORIZONTAL_PAD).align(Align.center).expandX();
                 rankTable.add(new Label(playerName, skin)).pad(HORIZONTAL_PAD).align(Align.left).expandX();

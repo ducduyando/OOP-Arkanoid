@@ -124,6 +124,7 @@ public class Constants {
     /** Name. */
     public static final int FIELD_WIDTH = 800;
     public static final int FIELD_HEIGHT = 120;
+    public static final int MAX_NAME_LENGTH = 15;
 
     /** Rank. */
     public static final float COL_WIDTH = 260f;

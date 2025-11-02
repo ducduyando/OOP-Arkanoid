@@ -106,6 +106,10 @@ public class Paddle extends Actor {
         return isSkill1ASelected;
     }
 
+    public PaddleSkill1A getSkill1A() {
+        return skill1A;
+    }
+
     public void setSkill2ASelected(boolean skill2ASelected) {
         isSkill2ASelected = skill2ASelected;
     }

@@ -101,6 +101,14 @@ public class NameInputStage implements GameStage  {
 
         nameTextField = new TextField(savedName, skin, "default");
         nameTextField.setMessageText("Enter your name...");
+        // cho nhap lieu ngay lap tuc
+        stage.setKeyboardFocus(nameTextField);
+        nameTextField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return textField.getText().length() < MAX_NAME_LENGTH;
+            }
+        });
 // nhay |
         nameTextField.setBlinkTime(0.5f);
         float fieldX = (SCREEN_WIDTH - FIELD_WIDTH) / 2f;

@@ -77,7 +77,7 @@ public class Boss2Stage implements GameStage {
 
     public Boss2Stage() {
         this.saveData = null;
-        
+
         // Update GameManager state
         GameManager gameManager = GameManager.getInstance();
         gameManager.setCurrentStage(2);
@@ -124,7 +124,7 @@ public class Boss2Stage implements GameStage {
             // Sync skill selection
             isSkill1ASelected = saveData.isSkill1ASelected;
             if (saveData.isSkill1ASelected) {
-                paddleSkill1A1 = new PaddleSkill1A(paddle);
+                paddleSkill1A1 = paddle.getSkill1A();
                 paddleSkill1A2 = new PaddleSkill1A(paddle);
             } else {
                 // Use the skill1B object from paddle
@@ -135,11 +135,10 @@ public class Boss2Stage implements GameStage {
             ball = new Ball(ballImage, 0, 0);
             boss2 = new Boss2(2, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
 
-            // Initialize paddle skills - always initialize both for UI purposes
             paddle.initializeSkills(isSkill1ASelected, 0f, 0f);
 
             if (isSkill1ASelected) {
-                paddleSkill1A1 = new PaddleSkill1A(paddle);
+                paddleSkill1A1 = paddle.getSkill1A();
                 paddleSkill1A2 = new PaddleSkill1A(paddle);
             } else {
                 // Use the skill1B object from paddle
@@ -177,7 +176,7 @@ public class Boss2Stage implements GameStage {
     public void update(float delta) {
         // Update InputManager
         InputManager.getInstance().update();
-        
+
         // Handle pause input
         handlePauseInput();
 
@@ -227,7 +226,8 @@ public class Boss2Stage implements GameStage {
             gameLogic.skillCollision(stage);
 
             if (paddleSkill1A1 != null && paddleSkill1A2 != null) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.J)
+                InputManager inputManager = InputManager.getInstance();
+                if (inputManager.isActionJustPressed(InputManager.ACTION_SKILL_1)
                     && paddleSkill1A1.isSkill1AReady()
                     && !paddleSkill1A1.isLaunched()
                     && paddleSkill1A2.isSkill1AReady()
@@ -277,7 +277,8 @@ public class Boss2Stage implements GameStage {
                 // Always update skill1B for cooldown timer
                 paddleSkill1B.update(paddle, delta);
 
-                if (paddleSkill1B.isDone() && Gdx.input.isKeyJustPressed(Input.Keys.J)
+                InputManager inputManager = InputManager.getInstance();
+                if (paddleSkill1B.isDone() && inputManager.isActionJustPressed(InputManager.ACTION_SKILL_1)
                     && paddleSkill1B.isSkill1BReady()) {
 
                     paddleSkill1B.enter(paddle);
@@ -328,7 +329,7 @@ public class Boss2Stage implements GameStage {
 
         // Stop game time tracking
         Save.stopGame();
-        
+
         // GameManager state updated
     }
 
