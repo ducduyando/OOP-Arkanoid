@@ -50,7 +50,7 @@ public class Boss2Stage implements GameStage {
     private float paddleSkill1A2Timer  = 0;
     private final double PADDLE_SKILL_1A2_TIMER = 0.5;
     private boolean keepJBefore = false;
-
+    private boolean skill1AIsCurrentlyActive = false;
     private boolean isSkill1ASelected;
 
     public void setSkill1ASelected(boolean skill1ASelected) {
@@ -237,9 +237,12 @@ public class Boss2Stage implements GameStage {
                     paddleSkill1A1.setLaunched(true);
                     paddleSkill1A1.setVelocity(0, BALL_VELOCITY.y);
 
+                    skill1AIsCurrentlyActive = true;
                     keepJBefore = true;
 
                 }
+
+                // ... (Logic nhấn phím J ở trên) ...
 
                 if (keepJBefore) {
                     paddleSkill1A2Timer += delta;
@@ -251,26 +254,38 @@ public class Boss2Stage implements GameStage {
                         keepJBefore = false;
                     }
                 }
-                if (paddleSkill1A1.isLaunched()) {
 
-                    gameLogic.paddleCollision(paddleSkill1A1);
-                    gameLogic.boundaryCollision(paddleSkill1A1, delta, UP_BOUNDARY);
-                    gameLogic.bossCollision(paddleSkill1A1);
-                } else {
+                if (skill1AIsCurrentlyActive || !paddleSkill1A1.isSkill1AReady()) {
 
-                    gameLogic.launch(paddleSkill1A1);
+                    if (paddleSkill1A1.isLaunched()) {
+                        gameLogic.paddleCollision(paddleSkill1A1);
+                        gameLogic.boundaryCollision(paddleSkill1A1, delta, UP_BOUNDARY);
+                        gameLogic.bossCollision(paddleSkill1A1);
+                    } else {
+                        gameLogic.launch(paddleSkill1A1);
+                    }
+                    if (paddleSkill1A2.isLaunched()) {
+                        gameLogic.paddleCollision(paddleSkill1A2);
+                        gameLogic.boundaryCollision(paddleSkill1A2, delta, UP_BOUNDARY);
+                        gameLogic.bossCollision(paddleSkill1A2);
+                    } else {
+                        gameLogic.launch(paddleSkill1A2);
+                    }
+
+
+                    paddleSkill1A1.update(paddle, delta);
+                    paddleSkill1A2.update(paddle, delta);
+
+                    if (skill1AIsCurrentlyActive &&
+                        (paddleSkill1A1.getCurrentPhase() == PaddleSkill1A.Phase.DONE) &&
+                        (paddleSkill1A2.getCurrentPhase() == PaddleSkill1A.Phase.DONE))
+                    {
+
+                        paddleSkill1A1.startSkill1Cooldown();
+
+                        skill1AIsCurrentlyActive = false;
+                    }
                 }
-                if (paddleSkill1A2.isLaunched()) {
-
-                    gameLogic.paddleCollision(paddleSkill1A2);
-                    gameLogic.boundaryCollision(paddleSkill1A2, delta, UP_BOUNDARY);
-                    gameLogic.bossCollision(paddleSkill1A2);
-                } else {
-
-                    gameLogic.launch(paddleSkill1A2);
-                }
-                paddleSkill1A1.update(paddle, delta);
-                paddleSkill1A2.update(paddle, delta);
             }
 
             else if (paddleSkill1B != null) {
