@@ -1,6 +1,5 @@
 package io.github.arkanoid.boss2;
 
-import com.badlogic.gdx.graphics.Texture;
 import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.BossSkill;
 
@@ -36,7 +35,7 @@ public class Boss2Skill2 implements BossSkill {
     @Override
     public void update(Boss boss, float delta) {
         if (honeyShield.isHasShield()) {
-            owner.setShield(true);
+            owner.setShielded(true);
 
             shieldTime += delta;
             honeyShield.setPosition(boss.getX(), boss.getY());
@@ -46,7 +45,7 @@ public class Boss2Skill2 implements BossSkill {
                 shieldTime = 0f;
                 honeyShield.setHasShield(false);
 
-                owner.setShield(false);
+                owner.setShielded(false);
                 isSkill2Done = true;
 
                 boss.setSkill(nextSkill);

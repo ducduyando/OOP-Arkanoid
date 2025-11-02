@@ -13,7 +13,7 @@ public class Boss2 extends Boss {
     Boss2Skill2 shieldSkill;
 
     private boolean heal = false;
-    protected boolean isShield = false;
+    protected boolean isShielded = false;
 
     public Boss2(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2_VELOCITY, maxHp);
@@ -40,8 +40,8 @@ public class Boss2 extends Boss {
         return beeSpawningSkill;
     }
 
-    public void setShield(boolean shield) {
-        isShield = shield;
+    public void setShielded(boolean shielded) {
+        isShielded = shielded;
     }
 
     public boolean isHeal() {
@@ -67,7 +67,7 @@ public class Boss2 extends Boss {
 
     public void skill1() {
         if (getStage() != null) {
-            getStage().addActor(new BeeEnemy(this.skill1Texture, getX() + getWidth() / 2 + 90 , getY() -40 ));
+            getStage().addActor(new BeeEnemy(this.skill1Texture, getX() + getWidth() / 2 + BOSS2_SKILL1_WIDTH , getY() - BOSS2_SKILL1_HEIGHT ));
         }
     }
 
@@ -84,7 +84,7 @@ public class Boss2 extends Boss {
     @Override
     public void takeDamage(int damage) {
         if (state == State.NORMAL) {
-            if (isShield && heal) {
+            if (isShielded && heal) {
                 if (this.getHp() + damage > this.getMaxHp()) {
                     this.setHp(this.getMaxHp());
                 } else {
@@ -92,7 +92,7 @@ public class Boss2 extends Boss {
                 }
 
                 heal = false;
-            } else if (!isShield) {
+            } else if (!isShielded) {
                 this.setHp(this.getHp() - damage);
                 this.skill1();
                 if (this.getHp() <= 0) {

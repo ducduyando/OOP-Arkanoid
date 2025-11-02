@@ -9,7 +9,7 @@ import static io.github.arkanoid.core.Constants.*;
 public class Boss2Skill1 implements BossSkill {
     private final Boss2 owner;
     private BossSkill nextSkill;
-    private final Boss2RandomMovement movementController;
+    private final Boss2RandomMovement randomMovement;
 
     private boolean isSkill1Done = true;
 
@@ -29,7 +29,7 @@ public class Boss2Skill1 implements BossSkill {
 
     public Boss2Skill1(Boss2 owner, Boss2RandomMovement movementController) {
         this.owner = owner;
-        this.movementController = movementController;
+        this.randomMovement = movementController;
 
     }
 
@@ -55,8 +55,8 @@ public class Boss2Skill1 implements BossSkill {
         this.stopTimer = 0f;
         this.isSkill1Done = false;
 
-        movementController.chooseRandomTarget();
-        movementController.setHasArrived(false);
+        randomMovement.chooseRandomTarget();
+        randomMovement.setHasArrived(false);
     }
     public void update(Boss boss, float delta) {
             stopTimer += delta;
@@ -70,8 +70,8 @@ public class Boss2Skill1 implements BossSkill {
                 spawnDelayTimer = 0f;
 
                 // Sau khi kích hoạt thả ong, Boss nên chuyển sang vị trí mới để chuẩn bị cho chuỗi tiếp theo
-                movementController.chooseRandomTarget();
-                movementController.setHasArrived(false);
+                randomMovement.chooseRandomTarget();
+                randomMovement.setHasArrived(false);
             }
         }
         // tha tung con ong lan luot

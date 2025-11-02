@@ -36,8 +36,7 @@ public class Constants {
     public static final float PADDLE_INITIAL_X = (SCREEN_WIDTH - PADDLE_WIDTH) / 2f;
     public static final float PADDLE_INITIAL_Y = 150f;
 
-    public static final int PADDLE_SKILL1_DAMAGE = 15;
-    public static final int PADDLE_SKILL2_DAMAGE = 10;
+    public static final int PADDLE_DAMAGE = 10;
 
     public static final float PADDLE_SKILL_COOLDOWN = 5f;
 
@@ -89,14 +88,14 @@ public class Constants {
 
     public static final float BEE_SPEED_Y = 400f;
 
+    /** Boss2 Skill 2. */
     public static final int BOSS2_SKILL2_WIDTH = 448;
     public static final int BOSS2_SKILL2_HEIGHT = 272;
 
     /** Paddle Skill 2-A. */
     public static final float BEE_BULLET_SPEED_Y = 300f;
-    private static final float SKILL_COOLDOWN2 = 1.0f;
+
     /** J. */
-    public static final float SKILL_1A_COOLDOWN = 5.0f;
     public static final int SKILL_ICON_WIDTH = 144;
     public static final int SKILL_ICON_HEIGHT = 144;
     public static  final float MAX_COOLDOWN = 5.0f;
@@ -107,16 +106,18 @@ public class Constants {
     public static final Vector2 BOSS3_VELOCITY = new Vector2(900f, 900f);
     public static final float BOSS3_INITIAL_X = (SCREEN_WIDTH - BOSS3_WIDTH) / 2f;
     public static final float BOSS3_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
-    public static final int BOSS3_RIGHT_HAND_WIDTH = 256;
-    public static final int BOSS3_RIGHT_HAND_HEIGHT = 256;
 
-    public static final int BOSS3_LEFT_HAND_WIDTH = 256;
-    public static final int BOSS3_LEFT_HAND_HEIGHT = 256;
+    public static final int BOSS3_RIGHT_WIDTH = 256;
+    public static final int BOSS3_RIGHT_HEIGHT = 256;
 
-    public static final int BOSS3_SKILL_RIGHT_HAND_WIDTH = 512;
-    public static final int BOSS3_SKILL_RIGHT_HAND_HEIGHT = 512;
+    public static final int BOSS3_LEFT_WIDTH = 256;
+    public static final int BOSS3_LEFT_HEIGHT = 256;
+
+    public static final int BOSS3_SKILL_RIGHT_WIDTH = 512;
+    public static final int BOSS3_SKILL_RIGHT_HEIGHT = 512;
 
     public static final int ROTATION_SPEED = 180;
+
     /** Save rank. */
     public static final int MAX_RANK_ENTRIES = 3;
 

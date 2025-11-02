@@ -10,7 +10,7 @@ public class Boss1 extends Boss {
     public Boss1(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1_VELOCITY, maxHp);
 
-        BossCentering centering = new BossCentering(this);
+        Boss1Centering centering = new Boss1Centering(this);
         Boss1Skill1 bombingSkill = new Boss1Skill1(this);
         Boss1Skill2 laserSkill = new Boss1Skill2(this);
 

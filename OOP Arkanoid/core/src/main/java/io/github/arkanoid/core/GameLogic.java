@@ -268,7 +268,7 @@ public class GameLogic {
         }
 
         if (paddleLaserRect.overlaps(bossRect)) {
-            bossRef.takeDamage(PADDLE_SKILL2_DAMAGE);
+            bossRef.takeDamage(PADDLE_DAMAGE);
         }
     }
 }

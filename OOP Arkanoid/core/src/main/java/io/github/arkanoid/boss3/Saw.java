@@ -13,7 +13,7 @@ public class Saw extends Actor {
 
     private TextureRegion currentFrame;
     private float stateTimer = 0;
-    private Texture sawSkillTexture;
+    private Texture sawTexture;
     private TextureRegion target;
     private int direction;
 
@@ -29,41 +29,41 @@ public class Saw extends Actor {
     private Animation<TextureRegion> sawSkillAnimation;
     private final int SAW_SPEED = 400;
 
-    public Saw(Texture sawSkillTexture, Texture targetTexture, float x, float y) {
-        this.sawSkillTexture = sawSkillTexture;
+    public Saw(Texture sawTexture, Texture targetTexture, float x, float y) {
+        this.sawTexture = sawTexture;
         target(targetTexture, x, y);
         if (x == 0) {
             if (new Random().nextBoolean()) {
                 direction = 1;
-                setPosition(0, y - BOSS3_SKILL_RIGHT_HAND_HEIGHT / 2f);
+                setPosition(0, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
             }
             else {
                 direction = -1;
-                setPosition(SCREEN_WIDTH - BOSS3_SKILL_RIGHT_HAND_WIDTH, y - BOSS3_SKILL_RIGHT_HAND_HEIGHT / 2f);
+                setPosition(SCREEN_WIDTH - BOSS3_SKILL_RIGHT_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
             }
             isSweepX = false;
         } else if (y == 0) {
             if (new Random().nextBoolean()) {
                 direction = 1;
-                setPosition(x - BOSS3_SKILL_RIGHT_HAND_WIDTH / 2f, 0);
+                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, 0);
             }
             else {
                 direction = -1;
-                setPosition(x - BOSS3_SKILL_RIGHT_HAND_WIDTH / 2f, SCREEN_HEIGHT - BOSS3_SKILL_RIGHT_HAND_HEIGHT - HP_HEIGHT);
+                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, SCREEN_HEIGHT - BOSS3_SKILL_RIGHT_HEIGHT - HP_HEIGHT);
             }
             isSweepX = true;
         }
         else {
             return;
         }
-        setSize(BOSS3_SKILL_RIGHT_HAND_WIDTH, BOSS3_SKILL_RIGHT_HAND_HEIGHT);
-        setOrigin(BOSS3_SKILL_RIGHT_HAND_WIDTH / 2f, BOSS3_SKILL_RIGHT_HAND_HEIGHT / 2f);
+        setSize(BOSS3_SKILL_RIGHT_WIDTH, BOSS3_SKILL_RIGHT_HEIGHT);
+        setOrigin(BOSS3_SKILL_RIGHT_WIDTH / 2f, BOSS3_SKILL_RIGHT_HEIGHT / 2f);
 
-        int maxSawFrame = sawSkillTexture.getWidth() / BOSS3_SKILL_RIGHT_HAND_WIDTH;
+        int maxSawFrame = sawTexture.getWidth() / BOSS3_SKILL_RIGHT_WIDTH;
         TextureRegion[] sawSkillFrames = new TextureRegion[maxSawFrame];
         for (int i = 0; i < maxSawFrame; i++) {
-            sawSkillFrames[i] = new TextureRegion(sawSkillTexture, i * BOSS3_SKILL_RIGHT_HAND_WIDTH, 0,
-                BOSS3_SKILL_RIGHT_HAND_WIDTH, BOSS3_SKILL_RIGHT_HAND_HEIGHT);
+            sawSkillFrames[i] = new TextureRegion(sawTexture, i * BOSS3_SKILL_RIGHT_WIDTH, 0,
+                BOSS3_SKILL_RIGHT_WIDTH, BOSS3_SKILL_RIGHT_HEIGHT);
         }
         sawSkillAnimation = new Animation<>(FRAME_DURATION, sawSkillFrames);
     }
@@ -93,8 +93,8 @@ public class Saw extends Actor {
         } else {
             moveBy(0, SAW_SPEED * delta * direction);
         }
-        if (getX() >= SCREEN_WIDTH || getX() <= - BOSS3_SKILL_RIGHT_HAND_WIDTH
-            || getY() >= UP_BOUNDARY || getY() <= - BOSS3_SKILL_RIGHT_HAND_HEIGHT) {
+        if (getX() >= SCREEN_WIDTH || getX() <= -BOSS3_SKILL_RIGHT_WIDTH
+            || getY() >= UP_BOUNDARY || getY() <= -BOSS3_SKILL_RIGHT_HEIGHT) {
             this.remove();
             isSawSkillDone = true;
             return;
