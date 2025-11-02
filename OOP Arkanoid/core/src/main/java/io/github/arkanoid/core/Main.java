@@ -120,6 +120,7 @@ public class Main extends ApplicationAdapter {
     }
 
     private void handleStageTransition() {
+
         if (currentStage instanceof MenuStage) {
             MenuStage menuStage = (MenuStage) currentStage;
             Button.Mode choice = menuStage.getSelectedMode();
