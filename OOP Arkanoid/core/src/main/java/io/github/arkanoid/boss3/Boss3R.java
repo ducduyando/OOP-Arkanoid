@@ -10,13 +10,13 @@ public class Boss3R extends MiniBoss {
 
     private Boss3 boss3;
     private Boss3RSkill boss3SkillRightHand;
-    private Boss3LRRandomSkill boss3NormalRandomSkill;
+    private Boss3RandomSkill boss3NormalRandomSkill;
 
     public Boss3R(Boss3 boss3, int maxHp) {
         super("3R", BOSS3_RIGHT_WIDTH, BOSS3_RIGHT_HEIGHT, maxHp);
         this.boss3 = boss3;
         boss3SkillRightHand = new Boss3RSkill(boss3, this);
-        boss3NormalRandomSkill = new Boss3LRRandomSkill(this);
+        boss3NormalRandomSkill = new Boss3RandomSkill(this);
 
 
         float x = boss3.getX() + BOSS3_WIDTH;

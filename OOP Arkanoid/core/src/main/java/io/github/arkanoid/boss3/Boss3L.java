@@ -3,20 +3,19 @@ package io.github.arkanoid.boss3;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import io.github.arkanoid.entities.MiniBoss;
-import io.github.arkanoid.entities.MiniBossSkill;
 
 import static io.github.arkanoid.core.Constants.*;
 
 public class Boss3L extends MiniBoss {
     private Boss3 boss3;
     private Boss3LSkill boss3LSkill;
-    private Boss3LRRandomSkill boss3LRRandomSkill;
+    private Boss3RandomSkill boss3LRRandomSkill;
 
     public Boss3L(Boss3 boss3, int maxHp) {
         super("3L", BOSS3_LEFT_WIDTH, BOSS3_LEFT_HEIGHT, maxHp);
         this.boss3 = boss3;
         boss3LSkill = new Boss3LSkill(boss3, this);
-        boss3LRRandomSkill = new Boss3LRRandomSkill(this);
+        boss3LRRandomSkill = new Boss3RandomSkill(this);
 
         float x = boss3.getX() - BOSS3_LEFT_WIDTH;
         float y = boss3.getY();

@@ -5,7 +5,7 @@ import io.github.arkanoid.entities.MiniBossSkill;
 
 import java.util.Random;
 
-public class Boss3LRRandomSkill implements MiniBossSkill {
+public class Boss3RandomSkill implements MiniBossSkill {
 
     private final MiniBoss owner;
     private MiniBossSkill nextSkill;
@@ -13,7 +13,7 @@ public class Boss3LRRandomSkill implements MiniBossSkill {
     private float skillTimer = 0f;
     private float skillInterval;
 
-    public Boss3LRRandomSkill(MiniBoss owner) {
+    public Boss3RandomSkill(MiniBoss owner) {
         this.owner = owner;
     }
 

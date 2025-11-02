@@ -21,7 +21,7 @@ public class Boss extends Actor {
     private final Texture normalSprite;
     private final Texture takeDamageSprite;
     private final Texture deathSprite;
-    public Texture skill1Texture;
+    public final Texture skill1Texture;
     public final Texture skill2Texture;
 
     public TextureRegion currentFrame;
