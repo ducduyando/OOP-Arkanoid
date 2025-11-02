@@ -8,11 +8,19 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleSkill1A extends Ball implements PaddleSkill  {
 
+    public enum Phase {
+        CHARGING,
+        FIRING,
+        DONE
+    }
+
     Texture ballUpgrade;
 
     private final Paddle owner;
     private PaddleBallUpgrade paddleBallUpgrade;
     private float skill1ACooldownTimer = PADDLE_SKILL_COOLDOWN;
+    private float skill1AFiringTime = 0f;
+    private Phase currentPhase = Phase.DONE;
 
     private boolean skill1AReady = true;
     public float getSkill1ACooldownTimer() {
@@ -42,16 +50,39 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
 
     @Override
     public void update(Paddle paddle, float delta) {
-        if (isLaunched()) {
-            moveBy(getVelocity().x * delta, getVelocity().y * delta);
-            setHitBox(getX(), getY());
-            paddleBallUpgrade.getHitBox().setPosition(getX(), getY());
-            paddleBallUpgrade.setPosition(getX(), getY());
-        }
+        // Always update cooldown timer
         if (!skill1AReady) {
             skill1ACooldownTimer -= delta;
             if (skill1ACooldownTimer <= 0) {
                 skill1AReady = true;
+            }
+        }
+
+        // Update skill effects if ball is active
+        if (paddleBallUpgrade != null) {
+            if (currentPhase == Phase.CHARGING) {
+                // Short charging phase
+                skill1AFiringTime += delta;
+                if (skill1AFiringTime >= 0.5f) { // 0.5 second charging
+                    currentPhase = Phase.FIRING;
+                    setLaunched(true); // Launch the ball
+                    skill1AFiringTime = 0f;
+                }
+            } else if (currentPhase == Phase.FIRING) {
+                if (isLaunched()) {
+                    moveBy(getVelocity().x * delta, getVelocity().y * delta);
+                    setHitBox(getX(), getY());
+                    paddleBallUpgrade.getHitBox().setPosition(getX(), getY());
+                    paddleBallUpgrade.setPosition(getX(), getY());
+                    
+                    skill1AFiringTime += delta;
+                    // End skill after 5 seconds or if ball goes off screen
+                    if (skill1AFiringTime >= 5f || getY() > UP_BOUNDARY || getY() < DOWN_BOUNDARY) {
+                        cleanup();
+                        currentPhase = Phase.DONE;
+                        startSkill1Cooldown();
+                    }
+                }
             }
         }
     }
@@ -61,6 +92,9 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
         paddleBallUpgrade = new PaddleBallUpgrade(ballUpgrade, paddle.getX(), paddle.getY());
         owner.getStage().addActor(this.paddleBallUpgrade);
+        currentPhase = Phase.CHARGING;
+        skill1AFiringTime = 0f;
+        setLaunched(false); // Reset launch state
     }
 
     @Override
@@ -69,5 +103,19 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
             paddleBallUpgrade.remove();
             paddleBallUpgrade = null;
         }
+        currentPhase = Phase.DONE;
+        setLaunched(false);
+    }
+
+    public Phase getCurrentPhase() {
+        return currentPhase;
+    }
+
+    public float getSkill1AFiringTime() {
+        return skill1AFiringTime;
+    }
+
+    public static float getSKILL1A_FIRING_DURATION() {
+        return 5f;
     }
 }

@@ -203,7 +203,7 @@ public static String loadPlayerName() {
         SaveData data = new SaveData();
         data.stageNumber = pref.getInteger("stageNumber", 0);
         data.bossHP = pref.getInteger("bossHP", 100);
-        data.paddleState = pref.getInteger("paddleState ", 3);
+        data.paddleState = pref.getInteger("paddleState", 3);
         data.bricksRemaining = pref.getInteger("bricksRemaining", 0);
 
         data.paddleX = pref.getFloat("paddleX");
@@ -296,13 +296,8 @@ public static void addRankEntry(String name, float time, int stage) {
     List<ProjectileSaveManager.RankEntry> ranks = loadRanks();
     ranks.add(new ProjectileSaveManager.RankEntry(name, time, stage));
 
-    ranks.sort((e1, e2) -> {
-        if (e1.stage != e2.stage) {
-            return Integer.compare(e2.stage, e1.stage); // Sắp xếp stage giảm dần (cao nhất trước)
-        } else {
-            return Float.compare(e1.time, e2.time); // Sắp xếp time tăng dần (nhanh nhất trước)
-        }
-    });
+    // Chi sort theo thoi gian - thoi gian nhanh nhat len dau
+    ranks.sort((e1, e2) -> Float.compare(e1.time, e2.time));
 
 
     // so muc la 3

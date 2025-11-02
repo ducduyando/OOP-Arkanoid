@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss3.Boss3;
 import io.github.arkanoid.core.GameLogic;
+import io.github.arkanoid.core.InputManager;
 import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
@@ -101,7 +102,7 @@ public class Boss3Stage implements GameStage {
             // Sync skill selection
 
             if (saveData.isSkill1ASelected) {
-                paddleSkill1A = new PaddleSkill1A(paddle);
+                paddleSkill1A = paddle.getSkill1A();
             } else {
                 // Use the skill1B object from paddle
                 paddleSkill1B = paddle.getSkill1B();
@@ -112,7 +113,8 @@ public class Boss3Stage implements GameStage {
             boss3 = new Boss3(3, BOSS3_INITIAL_X, BOSS3_INITIAL_Y, 100);
 
             // Initialize paddle skills - always initialize both for UI purposes
-            paddle.initializeSkills(isSkill2ASelected, 0f, 0f);
+            boolean isSkill1ASelected = paddle.isSkill1ASelected();
+            paddle.initializeSkills(isSkill1ASelected, 0f, 0f);
 
             if (isSkill2ASelected) {
                 paddleSkill2A = new PaddleSkill2A(paddle);
@@ -191,7 +193,8 @@ public class Boss3Stage implements GameStage {
             gameLogic.skillCollision(stage);
 
             if (paddleSkill1A != null) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.J)
+                InputManager inputManager = InputManager.getInstance();
+                if (inputManager.isActionJustPressed(InputManager.ACTION_SKILL_1)
                     && paddleSkill1A.isSkill1AReady()
                     && !paddleSkill1A.isLaunched()) {
 
@@ -215,7 +218,8 @@ public class Boss3Stage implements GameStage {
                 // Always update skill1B for cooldown timer
                 paddleSkill1B.update(paddle, delta);
 
-                if (paddleSkill1B.isDone() && Gdx.input.isKeyJustPressed(Input.Keys.J)
+                InputManager inputManager = InputManager.getInstance();
+                if (paddleSkill1B.isDone() && inputManager.isActionJustPressed(InputManager.ACTION_SKILL_1)
                     && paddleSkill1B.isSkill1BReady()) {
 
                     paddleSkill1B.enter(paddle);
