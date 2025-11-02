@@ -7,7 +7,7 @@ import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
 
-public class Boss3RSkill implements MiniBossSkill {
+public class Boss3RSkill1B implements MiniBossSkill {
 
     Boss3 boss3;
     Boss3R boss3R;
@@ -22,7 +22,7 @@ public class Boss3RSkill implements MiniBossSkill {
     private final float[] positionTargetX = new float[COLS];
     private final float[] positionTargetY = new float[ROWS];
 
-    public Boss3RSkill(Boss3 boss3, Boss3R boss3RightHand) {
+    public Boss3RSkill1B(Boss3 boss3, Boss3R boss3RightHand) {
         this.boss3 = boss3;
         this.boss3R = boss3RightHand;
 

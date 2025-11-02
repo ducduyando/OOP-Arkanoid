@@ -8,13 +8,13 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class Boss3L extends MiniBoss {
     private Boss3 boss3;
-    private Boss3LSkill boss3LSkill;
+    private Boss3Skill1A boss3LSkill;
     private Boss3RandomSkill boss3LRRandomSkill;
 
     public Boss3L(Boss3 boss3, int maxHp) {
         super("3L", BOSS3_LEFT_WIDTH, BOSS3_LEFT_HEIGHT, maxHp);
         this.boss3 = boss3;
-        boss3LSkill = new Boss3LSkill(boss3, this);
+        boss3LSkill = new Boss3Skill1A(boss3, this);
         boss3LRRandomSkill = new Boss3RandomSkill(this);
 
         float x = boss3.getX() - BOSS3_LEFT_WIDTH;
