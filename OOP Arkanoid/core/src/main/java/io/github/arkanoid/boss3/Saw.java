@@ -21,12 +21,14 @@ public class Saw extends Actor {
 
     private int rotationAngle;
 
-    private boolean isSweepX;
+    private boolean isVertical;
     private boolean isSawSkillDone = false;
 
 
     private Animation<TextureRegion> sawSkillAnimation;
-    private final int SAW_SPEED = 300;
+    private final int HORIZONTAL_SAW_SPEED = 447;
+    private final int VERTICAL_SAW_SPEED = 265;
+
 
     public Saw(Texture sawTexture, Texture targetTexture, float x, float y) {
         target(targetTexture, x, y);
@@ -39,7 +41,7 @@ public class Saw extends Actor {
                 direction = -1;
                 setPosition(SCREEN_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
             }
-            isSweepX = false;
+            isVertical = false;
         } else if (y == 0) {
             if (new Random().nextBoolean()) {
                 direction = 1;
@@ -49,7 +51,7 @@ public class Saw extends Actor {
                 direction = -1;
                 setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, SCREEN_HEIGHT - HP_HEIGHT);
             }
-            isSweepX = true;
+            isVertical = true;
         }
         else {
             return;
@@ -87,10 +89,10 @@ public class Saw extends Actor {
     @Override
     public void act(float delta) {
         rotateBy(ROTATION_SPEED * delta);
-        if (!isSweepX) {
-            moveBy(SAW_SPEED * delta * direction, 0);
+        if (!isVertical) {
+            moveBy(HORIZONTAL_SAW_SPEED * delta * direction, 0);
         } else {
-            moveBy(0, SAW_SPEED * delta * direction);
+            moveBy(0, VERTICAL_SAW_SPEED * delta * direction);
         }
         if (getX() >= SCREEN_WIDTH || getX() <= -BOSS3_SKILL_RIGHT_WIDTH
             || getY() >= UP_BOUNDARY || getY() <= -BOSS3_SKILL_RIGHT_HEIGHT) {
