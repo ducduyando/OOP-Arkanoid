@@ -33,12 +33,6 @@ public class Boss3R extends MiniBoss {
 
     }
 
-
-
-    public Boss3RSkill getBoss3SkillRightHand() {
-        return boss3SkillRightHand;
-    }
-
     public Texture getSkillTexture() {
         return skillTexture;
     }

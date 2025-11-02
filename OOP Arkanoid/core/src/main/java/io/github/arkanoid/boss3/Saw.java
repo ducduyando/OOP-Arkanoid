@@ -22,7 +22,7 @@ public class Saw extends Actor {
     private int rotationAngle;
 
     private boolean isVertical;
-    private boolean isSawSkillDone = false;
+    private boolean isSawSkillFinished = false;
 
 
     private Animation<TextureRegion> sawSkillAnimation;
@@ -82,8 +82,8 @@ public class Saw extends Actor {
         }
     }
 
-    public boolean isSawSkillDone() {
-        return isSawSkillDone;
+    public boolean isSawSkillFinished() {
+        return isSawSkillFinished;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Saw extends Actor {
         if (getX() >= SCREEN_WIDTH || getX() <= -BOSS3_SKILL_RIGHT_WIDTH
             || getY() >= UP_BOUNDARY || getY() <= -BOSS3_SKILL_RIGHT_HEIGHT) {
             this.remove();
-            isSawSkillDone = true;
+            isSawSkillFinished = true;
             return;
         }
 

@@ -10,21 +10,21 @@ import static io.github.arkanoid.core.Constants.*;
 public class Boss3RSkill implements MiniBossSkill {
 
     Boss3 boss3;
-    Boss3R boss3RightHand;
+    Boss3R boss3R;
 
     private Saw verticalSaw;
     private Saw horizontalSaw;
 
     private MiniBossSkill nextSkill;
 
-    private boolean isBoss3RSkillDone = false;
+    private boolean isBoss3RSkillFinished = false;
 
     private final float[] positionTargetX = new float[COLS];
     private final float[] positionTargetY = new float[ROWS];
 
     public Boss3RSkill(Boss3 boss3, Boss3R boss3RightHand) {
         this.boss3 = boss3;
-        this.boss3RightHand = boss3RightHand;
+        this.boss3R = boss3RightHand;
 
         float cellXSize = (SCREEN_WIDTH - BOSS3_SKILL_RIGHT_WIDTH) / (float) (COLS);
         float cellYSize = (SCREEN_HEIGHT - BOSS3_SKILL_RIGHT_HEIGHT - HP_HEIGHT) / (float) (ROWS);
@@ -37,8 +37,8 @@ public class Boss3RSkill implements MiniBossSkill {
         }
     }
 
-    public boolean isBoss3RSkillDone() {
-        return isBoss3RSkillDone;
+    public boolean isBoss3RSkillFinished() {
+        return isBoss3RSkillFinished;
     }
 
     public void setNextSkill(MiniBossSkill nextSkill) {
@@ -47,24 +47,24 @@ public class Boss3RSkill implements MiniBossSkill {
 
     @Override
     public void update(MiniBoss miniBoss, float delta) {
-        if (horizontalSaw.isSawSkillDone() && verticalSaw.isSawSkillDone()) {
-            isBoss3RSkillDone = true;
+        if (horizontalSaw.isSawSkillFinished() && verticalSaw.isSawSkillFinished()) {
+            isBoss3RSkillFinished = true;
             miniBoss.setSkill(nextSkill);
         }
     }
 
     @Override
     public void enter(MiniBoss miniBoss) {
-        horizontalSaw = new Saw(boss3RightHand.getSkillTexture(), boss3RightHand.getTargetTexture(),
+        horizontalSaw = new Saw(boss3R.getSkillTexture(), boss3R.getTargetTexture(),
             positionTargetX[new Random().nextInt(COLS)], 0);
 
-        verticalSaw = new Saw(boss3RightHand.getSkillTexture(), boss3RightHand.getTargetTexture(),
+        verticalSaw = new Saw(boss3R.getSkillTexture(), boss3R.getTargetTexture(),
             0, positionTargetY[new Random().nextInt(ROWS)]);
 
         boss3.getStage().addActor(horizontalSaw);
         boss3.getStage().addActor(verticalSaw);
 
-        isBoss3RSkillDone = false;
+        isBoss3RSkillFinished = false;
     }
 
     @Override

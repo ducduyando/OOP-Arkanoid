@@ -110,11 +110,14 @@ public class Constants {
     public static final int BOSS3_RIGHT_WIDTH = 128;
     public static final int BOSS3_RIGHT_HEIGHT = 128;
 
-    public static final int BOSS3_LEFT_WIDTH = 256;
-    public static final int BOSS3_LEFT_HEIGHT = 256;
+    public static final int BOSS3_LEFT_WIDTH = 112;
+    public static final int BOSS3_LEFT_HEIGHT = 176;
 
     public static final int BOSS3_SKILL_RIGHT_WIDTH = 256;
     public static final int BOSS3_SKILL_RIGHT_HEIGHT = 256;
+
+    public static final int BOSS3_SKILL_LEFT_WIDTH = 352;
+    public static final int BOSS3_SKILL_LEFT_HEIGHT = 352;
 
     public static final int ROTATION_SPEED = 720;
 

@@ -21,7 +21,7 @@ public class Boss3 extends Boss {
     public Boss3(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS3_WIDTH, BOSS3_HEIGHT, BOSS3_VELOCITY, maxHp);
         randomMovement = new Boss3RandomMovement(this);
-        //boss3LeftHand = new Boss3L(this, 3);
+        boss3LeftHand = new Boss3L(this, 3);
         boss3RightHand = new Boss3R(this, 3);
 
     }

@@ -135,7 +135,7 @@ public class Boss3Stage implements GameStage {
         stage.addActor(ball);
         stage.addActor(boss3);
 
-        //stage.addActor(boss3.getBoss3LeftHand());
+        stage.addActor(boss3.getBoss3LeftHand());
         stage.addActor(boss3.getBoss3RightHand());
 
         Texture skillIconJTexture = new Texture("SkillButton/" + "j" + ".png");
