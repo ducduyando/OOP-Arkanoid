@@ -63,9 +63,9 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
             if (currentPhase == Phase.CHARGING) {
                 // Short charging phase
                 skill1AFiringTime += delta;
-                if (skill1AFiringTime >= 0.5f) { // 0.5 second charging
+                if (skill1AFiringTime >= 0.5f) {
                     currentPhase = Phase.FIRING;
-                    setLaunched(true); // Launch the ball
+                    setLaunched(true);
                     skill1AFiringTime = 0f;
                 }
             } else if (currentPhase == Phase.FIRING) {
@@ -74,13 +74,12 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
                     setHitBox(getX(), getY());
                     paddleBallUpgrade.getHitBox().setPosition(getX(), getY());
                     paddleBallUpgrade.setPosition(getX(), getY());
-                    
+
                     skill1AFiringTime += delta;
                     // End skill after 5 seconds or if ball goes off screen
                     if (skill1AFiringTime >= 5f || getY() > UP_BOUNDARY || getY() < DOWN_BOUNDARY) {
                         cleanup();
                         currentPhase = Phase.DONE;
-                        startSkill1Cooldown();
                     }
                 }
             }

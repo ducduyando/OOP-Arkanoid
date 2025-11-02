@@ -40,23 +40,13 @@ public class  SkillIcon extends Actor {
             boolean isSkill1ASelected = paddle.isSkill1ASelected();
 
             if (isSkill1ASelected && skill1A != null) {
-                if (skill1A.getCurrentPhase() == PaddleSkill1A.Phase.FIRING ||
+                if (skill1A.isSkill1AReady() ||
+                    skill1A.getCurrentPhase() == PaddleSkill1A.Phase.FIRING ||
                     skill1A.getCurrentPhase() == PaddleSkill1A.Phase.CHARGING) {
-                    
-                    float firingTime = skill1A.getSkill1AFiringTime();
-                    float maxFiringDuration = PaddleSkill1A.getSKILL1A_FIRING_DURATION();
-                    float completionRatio = firingTime / maxFiringDuration;
 
-                    int[] firingFrames = {1, 2, 3, 4};
-                    int numFiringFrames = firingFrames.length;
-                    int firingIndex = (int) (completionRatio * numFiringFrames);
-                    firingIndex = Math.min(firingIndex, numFiringFrames - 1);
-
-                    currentFrame = frames[firingFrames[firingIndex]];
-                } else if (skill1A.isSkill1AReady()) {
-                    currentFrame = frames[0]; // Ready frame
+                    currentFrame = frames[0];
                 } else {
-                    // Show cooldown animation
+
                     float cooldown = paddle.getSkill1ACooldownTimer();
                     float elapsedTime = MAX_COOLDOWN - cooldown;
                     float completionRatio = elapsedTime / MAX_COOLDOWN;
@@ -70,24 +60,12 @@ public class  SkillIcon extends Actor {
                     currentFrame = frames[cooldownFrames[cooldownIndex]];
                 }
             } else if (!isSkill1ASelected && skill1B != null) {
-                // Handle Skill1B (Laser skill)
-                if (skill1B.getCurrentPhase() == PaddleSkill1B.Phase.FIRING ||
+                if (skill1B.isSkill1BReady() ||
+                    skill1B.getCurrentPhase() == PaddleSkill1B.Phase.FIRING ||
                     skill1B.getCurrentPhase() == PaddleSkill1B.Phase.CHARGING) {
 
-                    float laserTime = skill1B.getPaddleLaserTime();
-                    float maxLaserDuration = PaddleSkill1B.getSKILL1B_LASER_DURATION();
-                    float completionRatio = laserTime / maxLaserDuration;
-
-                    int[] firingFrames = {1, 2, 3, 4};
-                    int numFiringFrames = firingFrames.length;
-                    int firingIndex = (int) (completionRatio * numFiringFrames);
-                    firingIndex = Math.min(firingIndex, numFiringFrames - 1);
-
-                    currentFrame = frames[firingFrames[firingIndex]];
-                } else if (skill1B.isSkill1BReady()) {
-                    currentFrame = frames[0]; // Ready frame
+                    currentFrame = frames[0];
                 } else {
-                    // Show cooldown animation
                     float cooldown = paddle.getSkill1BCooldownTimer();
                     float elapsedTime = MAX_COOLDOWN - cooldown;
                     float completionRatio = elapsedTime / MAX_COOLDOWN;
@@ -106,7 +84,7 @@ public class  SkillIcon extends Actor {
                 batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
             }
         } else if (skillKey.equals("K")) {
-            // Handle Skill2 if needed
+
         }
     }
 }
