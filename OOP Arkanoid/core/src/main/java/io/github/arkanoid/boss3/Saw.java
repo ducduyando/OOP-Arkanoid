@@ -31,7 +31,9 @@ public class Saw extends Actor {
 
 
     public Saw(Texture sawTexture, Texture targetTexture, float x, float y, boolean isVertical) {
+        this.isVertical = isVertical;
         target(targetTexture, x, y);
+
         if (!isVertical) {
             if (new Random().nextBoolean()) {
                 direction = 1;
@@ -66,7 +68,7 @@ public class Saw extends Actor {
 
     private void target(Texture targetTexture, float x, float y) {
         target = new TextureRegion(targetTexture);
-        if (isVertical) {
+        if (!isVertical) {
             targetX = x;
             targetY = y - targetTexture.getHeight() / 2f;
             rotationAngle = 0;
@@ -87,7 +89,7 @@ public class Saw extends Actor {
         if (!isVertical) {
             moveBy(HORIZONTAL_SAW_SPEED * delta * direction, 0);
         } else {
-            moveBy(0, VERTICAL_SAW_SPEED * delta * direction);
+            moveBy(0,VERTICAL_SAW_SPEED * delta * direction);
         }
         if (getX() >= SCREEN_WIDTH || getX() <= -BOSS3_SKILL_RIGHT_WIDTH
             || getY() >= UP_BOUNDARY || getY() <= -BOSS3_SKILL_RIGHT_HEIGHT) {

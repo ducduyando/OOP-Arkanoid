@@ -12,7 +12,6 @@ public class Boss3Skill1A implements FinalBossSkill {
     private final int REPEAT_COUNT = 3;
 
     private int actionCounter = 0;
-    private float stopTimer = 0f;
 
     private final float[][] positionTargetX = new float[ROWS][COLS];
     private final float[][] positionTargetY = new float[ROWS][COLS];

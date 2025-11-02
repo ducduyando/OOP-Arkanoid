@@ -15,7 +15,6 @@ public class Boss3Skill1B implements FinalBossSkill {
     private final int REPEAT_COUNT = 2;
 
     private int actionCounter = 0;
-    private float stopTimer = 0f;
 
     private final float[] positionTargetX = new float[COLS];
     private final float[] positionTargetY = new float[ROWS];
@@ -51,10 +50,11 @@ public class Boss3Skill1B implements FinalBossSkill {
         float targetX = positionTargetX[c];
         float targetY = positionTargetY[r];
         if (isVertical) {
-            owner.skill1B(0, targetY, isVertical);
+            owner.skill1B(targetX, 0, isVertical);
         }
         else {
-            owner.skill1B(targetX, 0, isVertical);
+            owner.skill1B(0, targetY, isVertical);
+
         }
     }
 

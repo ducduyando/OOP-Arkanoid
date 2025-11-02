@@ -26,6 +26,14 @@ public class Boss3 extends FinalBoss {
         setSkill(randomMovement);
     }
 
+    public Boss3Skill1A getRocketSkill() {
+        return rocketSkill;
+    }
+
+    public Boss3Skill1B getSawSkill() {
+        return sawSkill;
+    }
+
     public void skill1A(float targetX, float targetY) {
         if (getStage() != null) {
             getStage().addActor(new Rocket(this.skill1ATexture, this.target1ATexture, targetX, targetY));
@@ -40,24 +48,7 @@ public class Boss3 extends FinalBoss {
 
     @Override
     public void act(float delta) {
-        hitBox.setPosition(getX(), getY());
-        if (this.state == State.NORMAL) {
-            randomMovement.updateMovement(this, delta);
-            if (state == State.NORMAL) {
-                stateTime += delta;
-                currentFrame = animation.getKeyFrame(stateTime, true);
-            } else if (state == State.TAKING_DAMAGE) {
-                takeDamageTimer += delta;
-
-                currentFrame = takeDamageAnimation.getKeyFrame(takeDamageTimer, false);
-
-                if (takeDamageAnimation.isAnimationFinished(takeDamageTimer)) {
-                    state = State.NORMAL;
-                }
-            } else if (state == State.DYING) {
-                deathTimer += delta;
-                currentFrame = deathAnimation.getKeyFrame(deathTimer, false);
-            }
-        }
+        randomMovement.updateMovement(this, delta);
+        super.act(delta);
     }
 }
