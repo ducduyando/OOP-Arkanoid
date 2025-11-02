@@ -66,6 +66,7 @@ public class Boss2 extends Boss {
         }
     }
 
+    @Override
     public void act(float delta) {
         randomMovement.updateMovement(this, delta);
         super.act(delta);

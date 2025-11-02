@@ -3,6 +3,8 @@ package io.github.arkanoid.boss3;
 import com.badlogic.gdx.math.Vector2;
 import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.BossSkill;
+import io.github.arkanoid.entities.FinalBoss;
+import io.github.arkanoid.entities.FinalBossSkill;
 
 import java.util.Random;
 
@@ -10,10 +12,10 @@ import static io.github.arkanoid.core.Constants.*;
 import static io.github.arkanoid.core.Constants.HP_HEIGHT;
 import static io.github.arkanoid.core.Constants.SCREEN_HEIGHT;
 
-public class Boss3RandomMovement implements BossSkill {
+public class Boss3RandomMovement implements FinalBossSkill {
 
     private final Boss3 owner;
-    private BossSkill nextSkill;
+    private FinalBossSkill nextSkill;
     private boolean hasArrived = false;
     private float cooldownTimer = 0f;
     private final float COOLDOWN_DURATION = 2f;
@@ -29,7 +31,7 @@ public class Boss3RandomMovement implements BossSkill {
     private Vector2 targetPosition;
     private final Random random = new Random();
 
-    public void setNextSkill(BossSkill nextSkill) {
+    public void setNextSkill(FinalBossSkill nextSkill) {
         this.nextSkill = nextSkill;
     }
 
@@ -56,22 +58,17 @@ public class Boss3RandomMovement implements BossSkill {
         targetPosition = new Vector2(targetX, targetY);
     }
 
-    @Override
-    public void update(Boss boss, float delta) {
-
-    }
-
-    public void updateMovement(Boss boss, float delta) {
+    public void updateMovement(FinalBoss finalBoss, float delta) {
         if (!hasArrived) {
-            Vector2 currentPosition = new Vector2(boss.getX(), boss.getY());
+            Vector2 currentPosition = new Vector2(finalBoss.getX(), finalBoss.getY());
 
-            if (currentPosition.dst(targetPosition) < boss.velocity.len() * delta) {
-                boss.setPosition(targetPosition.x, targetPosition.y);
+            if (currentPosition.dst(targetPosition) < finalBoss.velocity.len() * delta) {
+                finalBoss.setPosition(targetPosition.x, targetPosition.y);
                 hasArrived = true;
                 cooldownTimer = 0f;
             } else {
                 Vector2 direction = targetPosition.cpy().sub(currentPosition).nor();
-                boss.moveBy(direction.x * boss.velocity.x * delta, direction.y * boss.velocity.y * delta);
+                finalBoss.moveBy(direction.x * finalBoss.velocity.x * delta, direction.y * finalBoss.velocity.y * delta);
             }
         } else {
             cooldownTimer += delta;
@@ -85,7 +82,12 @@ public class Boss3RandomMovement implements BossSkill {
 
 
     @Override
-    public void enter(Boss boss) {
+    public void update(FinalBoss finalBoss, float delta) {
+
+    }
+
+    @Override
+    public void enter(FinalBoss finalBoss) {
 
         this.hasArrived = false;
         this.cooldownTimer = 0f;

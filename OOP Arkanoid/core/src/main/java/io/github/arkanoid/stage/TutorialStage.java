@@ -143,7 +143,7 @@ public class TutorialStage implements GameStage {
         }
         bricks = new ArrayList<>();
 
-        this.gameLogic = new GameLogic(paddle, null);
+        this.gameLogic = new GameLogic(paddle);
         pauseMenu = new PauseMenu();
 
         gdxStage.addActor(new BackgroundActor());

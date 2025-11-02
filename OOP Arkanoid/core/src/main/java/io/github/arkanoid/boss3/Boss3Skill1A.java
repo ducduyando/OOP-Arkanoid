@@ -1,6 +1,5 @@
 package io.github.arkanoid.boss3;
 
-import com.badlogic.gdx.graphics.Texture;
 import io.github.arkanoid.entities.*;
 
 import java.util.Random;
@@ -8,7 +7,6 @@ import java.util.Random;
 import static io.github.arkanoid.core.Constants.*;
 
 public class Boss3Skill1A implements FinalBossSkill {
-
     private Boss3 owner;
     private FinalBossSkill nextSkill;
     private final int REPEAT_COUNT = 3;
@@ -19,7 +17,7 @@ public class Boss3Skill1A implements FinalBossSkill {
     private final float[][] positionTargetX = new float[ROWS][COLS];
     private final float[][] positionTargetY = new float[ROWS][COLS];
 
-    private boolean isBoss3LSkillFinished = false;
+    private boolean isBoss3Skill1AFinished = false;
 
     public Boss3Skill1A(Boss3 owner) {
         this.owner = owner;
@@ -36,8 +34,8 @@ public class Boss3Skill1A implements FinalBossSkill {
         }
     }
 
-    public boolean isBoss3LSkillFinished() {
-        return isBoss3LSkillFinished;
+    public boolean isBoss3Skill1AFinished() {
+        return isBoss3Skill1AFinished;
     }
 
     public void setNextSkill(FinalBossSkill nextSkill) {
@@ -60,6 +58,7 @@ public class Boss3Skill1A implements FinalBossSkill {
         }
         else {
             launchNewRocket();
+            actionCounter++;
         }
     }
 

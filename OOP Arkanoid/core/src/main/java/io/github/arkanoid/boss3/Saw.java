@@ -24,15 +24,15 @@ public class Saw extends Actor {
     private boolean isVertical;
     private boolean isSawSkillFinished = false;
 
-
     private Animation<TextureRegion> sawSkillAnimation;
+
     private final int HORIZONTAL_SAW_SPEED = 889;
     private final int VERTICAL_SAW_SPEED = 500;
 
 
-    public Saw(Texture sawTexture, Texture targetTexture, float x, float y) {
+    public Saw(Texture sawTexture, Texture targetTexture, float x, float y, boolean isVertical) {
         target(targetTexture, x, y);
-        if (x == 0) {
+        if (!isVertical) {
             if (new Random().nextBoolean()) {
                 direction = 1;
                 setPosition(- BOSS3_SKILL_RIGHT_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
@@ -41,8 +41,7 @@ public class Saw extends Actor {
                 direction = -1;
                 setPosition(SCREEN_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
             }
-            isVertical = false;
-        } else if (y == 0) {
+        } else {
             if (new Random().nextBoolean()) {
                 direction = 1;
                 setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, - BOSS3_SKILL_RIGHT_HEIGHT);
@@ -51,10 +50,6 @@ public class Saw extends Actor {
                 direction = -1;
                 setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, SCREEN_HEIGHT - HP_HEIGHT);
             }
-            isVertical = true;
-        }
-        else {
-            return;
         }
         setSize(BOSS3_SKILL_RIGHT_WIDTH, BOSS3_SKILL_RIGHT_HEIGHT);
         setOrigin(BOSS3_SKILL_RIGHT_WIDTH / 2f, BOSS3_SKILL_RIGHT_HEIGHT / 2f);
@@ -71,11 +66,11 @@ public class Saw extends Actor {
 
     private void target(Texture targetTexture, float x, float y) {
         target = new TextureRegion(targetTexture);
-        if (x == 0) {
+        if (isVertical) {
             targetX = x;
             targetY = y - targetTexture.getHeight() / 2f;
             rotationAngle = 0;
-        } else if (y == 0) {
+        } else {
             targetX = x + targetTexture.getHeight() / 2f;
             targetY = y;
             rotationAngle = 90;

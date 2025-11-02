@@ -11,11 +11,9 @@ import io.github.arkanoid.core.InputManager;
 import io.github.arkanoid.core.ProjectileSaveManager;
 import io.github.arkanoid.core.Save;
 import io.github.arkanoid.entities.Ball;
+import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.paddle.*;
-import io.github.arkanoid.ui.HealthBar;
-import io.github.arkanoid.ui.ParallaxBackground;
-import io.github.arkanoid.ui.PauseMenu;
-import io.github.arkanoid.ui.SkillIcon;
+import io.github.arkanoid.ui.*;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -27,7 +25,7 @@ public class Boss3Stage implements GameStage {
     private Paddle paddle;
     private Ball ball;
     private Boss3 boss3;
-    private HealthBar bossHealthBar;
+    private FinalBossHealthBar bossHealthBar;
     private ParallaxBackground parallaxBackground;
 
     private Texture paddleImage;
@@ -96,7 +94,7 @@ public class Boss3Stage implements GameStage {
             ball.setLaunched(saveData.ballLaunched);
 
             // Create boss with full HP first, then set current HP
-            boss3 = new Boss3(3, saveData.bossX, saveData.bossY, 100);
+            boss3 = new Boss3(saveData.bossX, saveData.bossY, 100);
             boss3.setHp(saveData.bossHP); // Set current HP from save data
 
             // Sync skill selection
@@ -110,7 +108,7 @@ public class Boss3Stage implements GameStage {
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
-            boss3 = new Boss3(3, BOSS3_INITIAL_X, BOSS3_INITIAL_Y, 100);
+            boss3 = new Boss3(BOSS3_INITIAL_X, BOSS3_INITIAL_Y, 100);
 
             // Initialize paddle skills - always initialize both for UI purposes
             boolean isSkill1ASelected = paddle.isSkill1ASelected();
@@ -123,7 +121,7 @@ public class Boss3Stage implements GameStage {
                 paddleSkill2B = new PaddleSkill2B(paddle);
             }
         }
-        bossHealthBar = new HealthBar(bossHealthBarImage, boss3);
+        bossHealthBar = new FinalBossHealthBar(bossHealthBarImage, boss3);
         parallaxBackground = new ParallaxBackground(bgTextures, new float[]{0f, 10f, 20f, 30f, 0f, 40f}, true);
 
         gameLogic = new GameLogic(paddle, boss3);
@@ -134,9 +132,6 @@ public class Boss3Stage implements GameStage {
         stage.addActor(paddle);
         stage.addActor(ball);
         stage.addActor(boss3);
-
-        stage.addActor(boss3.getBoss3LeftHand());
-        stage.addActor(boss3.getBoss3RightHand());
 
         Texture skillIconJTexture = new Texture("SkillButton/" + "j" + ".png");
         skillIconJ = new SkillIcon(paddle, skillIconJTexture, "J", 20, 20);
