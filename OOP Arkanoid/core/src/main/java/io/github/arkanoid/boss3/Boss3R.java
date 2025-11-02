@@ -1,6 +1,7 @@
 package io.github.arkanoid.boss3;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import io.github.arkanoid.entities.MiniBoss;
 
 import static io.github.arkanoid.core.Constants.*;
@@ -18,10 +19,10 @@ public class Boss3R extends MiniBoss {
         boss3NormalRandomSkill = new Boss3LRRandomSkill(this);
 
 
-        float x = boss3.getX() - BOSS3_RIGHT_WIDTH;
+        float x = boss3.getX() + BOSS3_WIDTH;
         float y = boss3.getHeight();
         setPosition(x, y);
-        hitbox.setPosition(x, y);
+        hitBox = new Rectangle(x, y, getWidth(), getHeight());
         setSize(BOSS3_RIGHT_WIDTH, BOSS3_RIGHT_HEIGHT);
         setOrigin(BOSS3_RIGHT_WIDTH / 2f, BOSS3_RIGHT_HEIGHT / 2f);
 
@@ -49,7 +50,7 @@ public class Boss3R extends MiniBoss {
     @Override
     public void act(float delta) {
         this.rotateBy(ROTATION_SPEED * delta);
-        float x = boss3.getX() - BOSS3_RIGHT_WIDTH;
+        float x = boss3.getX() + BOSS3_WIDTH;
         float y = boss3.getY();
         setPosition(x, y);
         super.act(delta);

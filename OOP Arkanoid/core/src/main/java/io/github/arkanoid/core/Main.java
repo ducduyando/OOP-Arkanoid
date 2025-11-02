@@ -182,12 +182,6 @@ public class Main extends ApplicationAdapter {
                 currentFlow = GameFlow.LOADING;
                 powerUpNumber++;
 
-                if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL1) {
-                    ((Boss2Stage) nextStage).setSkill1ASelected(true);
-                } else if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL2) {
-                    ((Boss2Stage) nextStage).setSkill1ASelected(false);
-                }
-
             }
 
         } else if (currentStage instanceof Boss2Stage boss2Stage) {

@@ -21,11 +21,9 @@ public class Boss3 extends Boss {
     public Boss3(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS3_WIDTH, BOSS3_HEIGHT, BOSS3_VELOCITY, maxHp);
         randomMovement = new Boss3RandomMovement(this);
-        boss3LeftHand = new Boss3L(this, 3);
+        //boss3LeftHand = new Boss3L(this, 3);
         boss3RightHand = new Boss3R(this, 3);
 
-        getStage().addActor(boss3RightHand);
-        getStage().addActor(boss3LeftHand);
     }
 
     public Boss3R getBoss3RightHand() {
@@ -38,9 +36,27 @@ public class Boss3 extends Boss {
 
     @Override
     public void act(float delta) {
+        hitBox.setPosition(getX(), getY());
         if (boss3State == Boss3State.NORMAL) {
             randomMovement.updateMovement(this, delta);
+            if (state == State.NORMAL) {
+                stateTime += delta;
+                currentFrame = animation.getKeyFrame(stateTime, true);
+            } else if (state == State.TAKING_DAMAGE) {
+                takeDamageTimer += delta;
 
+                currentFrame = takeDamageAnimation.getKeyFrame(takeDamageTimer, false);
+
+                if (takeDamageAnimation.isAnimationFinished(takeDamageTimer)) {
+                    state = State.NORMAL;
+                }
+            } else if (state == State.DYING) {
+                deathTimer += delta;
+                currentFrame = deathAnimation.getKeyFrame(deathTimer, false);
+                if (deathAnimation.isAnimationFinished(deathTimer)) {
+                    boss3State = Boss3State.UPGRADE;
+                }
+            }
         }
     }
 }

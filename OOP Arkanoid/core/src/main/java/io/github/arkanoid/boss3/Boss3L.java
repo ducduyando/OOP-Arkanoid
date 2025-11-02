@@ -1,5 +1,6 @@
 package io.github.arkanoid.boss3;
 
+import com.badlogic.gdx.math.Rectangle;
 import io.github.arkanoid.entities.MiniBoss;
 
 import static io.github.arkanoid.core.Constants.*;
@@ -15,8 +16,7 @@ public class Boss3L extends MiniBoss {
         float x = boss3.getX() + BOSS3_WIDTH;
         float y = boss3.getY();
         setPosition(x, y);
-        hitbox.setPosition(x, y);
-        setSize(BOSS3_LEFT_WIDTH, BOSS3_LEFT_HEIGHT);
+        hitBox = new Rectangle(x, y, getWidth(), getHeight());
         setOrigin(BOSS3_LEFT_WIDTH / 2f, BOSS3_LEFT_HEIGHT / 2f);
     }
 

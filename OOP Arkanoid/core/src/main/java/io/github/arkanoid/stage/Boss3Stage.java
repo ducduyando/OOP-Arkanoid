@@ -76,7 +76,7 @@ public class Boss3Stage implements GameStage {
         this.bossHealthBarImage = new Texture("Universal/" + "health_bar" + ".png");
         this.bgTextures = new Texture[6];
         for (int i = 0; i < 6; i++) {
-            bgTextures[i] = new Texture("Background/" + "Stage2/" + "layer" + i + ".png");
+            bgTextures[i] = new Texture("Background/" + "Stage3/" + "layer" + i + ".png");
         }
 
         if (saveData != null) {
@@ -132,6 +132,9 @@ public class Boss3Stage implements GameStage {
         stage.addActor(paddle);
         stage.addActor(ball);
         stage.addActor(boss3);
+
+        //stage.addActor(boss3.getBoss3LeftHand());
+        stage.addActor(boss3.getBoss3RightHand());
 
         Texture skillIconJTexture = new Texture("SkillButton/" + "j" + ".png");
         skillIconJ = new SkillIcon(paddle, skillIconJTexture, "J", 20, 20);

@@ -188,7 +188,7 @@ public class GameLogic {
         }
         Rectangle paddleRect = paddleRef.getHitBox();
         Rectangle ballRect = ball.getHitBox();
-        Rectangle miniBossRect = miniBossRef.getHitbox();
+        Rectangle miniBossRect = miniBossRef.getHitBox();
 
         if (ballRect.overlaps(miniBossRect)) {
             miniBossRef.takeDamage();
@@ -261,7 +261,7 @@ public class GameLogic {
         Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
         Rectangle bossRect = bossRef.getHitBox();
         if (miniBossRef != null) {
-            Rectangle miniBossRect = miniBossRef.getHitbox();
+            Rectangle miniBossRect = miniBossRef.getHitBox();
             if (paddleLaserRect.overlaps(miniBossRect)) {
                 miniBossRef.takeDamage();
             }

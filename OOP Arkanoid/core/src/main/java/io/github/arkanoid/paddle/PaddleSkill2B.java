@@ -25,7 +25,10 @@ public class PaddleSkill2B implements PaddleSkill {
     @Override
     public void update(Paddle paddle, float delta) {
 
-        paddleHoneyShield.setPosition(paddle.getX(), paddle.getY());
+        if (paddleHoneyShield != null) {
+            paddleHoneyShield.setPosition(paddle.getX(), paddle.getY());
+
+        }
         if (!isSkill2BReady) {
             skill2BCooldownTimer += delta;
             if (skill2BCooldownTimer >= PADDLE_SKILL_COOLDOWN) {

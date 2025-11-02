@@ -19,8 +19,8 @@ public class Boss3RSkill implements MiniBossSkill {
 
     private boolean isBoss3RSkillDone = false;
 
-    private final float[] positionTargetX = new float[ROWS];
-    private final float[] positionTargetY = new float[COLS];
+    private final float[] positionTargetX = new float[COLS];
+    private final float[] positionTargetY = new float[ROWS];
 
     public Boss3RSkill(Boss3 boss3, Boss3R boss3RightHand) {
         this.boss3 = boss3;
@@ -29,11 +29,11 @@ public class Boss3RSkill implements MiniBossSkill {
         float cellXSize = (SCREEN_WIDTH - BOSS3_SKILL_RIGHT_WIDTH) / (float) (COLS);
         float cellYSize = (SCREEN_HEIGHT - BOSS3_SKILL_RIGHT_HEIGHT - HP_HEIGHT) / (float) (ROWS);
 
-        for (int r = 0; r < ROWS; r++) {
-            positionTargetX[r] = BOSS3_SKILL_RIGHT_WIDTH / 2f + r * cellXSize;
-        }
         for (int c = 0; c < COLS; c++) {
-            positionTargetY[c] = BOSS3_SKILL_RIGHT_HEIGHT / 2f + c * cellYSize;
+            positionTargetX[c] = BOSS3_SKILL_RIGHT_WIDTH / 2f + c * cellXSize;
+        }
+        for (int r = 0; r < ROWS; r++) {
+            positionTargetY[r] = BOSS3_SKILL_RIGHT_HEIGHT / 2f + r * cellYSize;
         }
     }
 
@@ -56,10 +56,10 @@ public class Boss3RSkill implements MiniBossSkill {
     @Override
     public void enter(MiniBoss miniBoss) {
         horizontalSaw = new Saw(boss3RightHand.getSkillTexture(), boss3RightHand.getTargetTexture(),
-            positionTargetX[new Random().nextInt(ROWS)], 0);
+            positionTargetX[new Random().nextInt(COLS)], 0);
 
         verticalSaw = new Saw(boss3RightHand.getSkillTexture(), boss3RightHand.getTargetTexture(),
-            0, positionTargetY[new Random().nextInt(COLS)]);
+            0, positionTargetY[new Random().nextInt(ROWS)]);
 
         boss3.getStage().addActor(horizontalSaw);
         boss3.getStage().addActor(verticalSaw);

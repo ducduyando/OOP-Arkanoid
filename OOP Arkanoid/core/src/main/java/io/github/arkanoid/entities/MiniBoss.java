@@ -20,7 +20,7 @@ public class MiniBoss extends Actor {
     private final Texture takeDamageSprite;
     private final Texture deathSprite;
 
-    protected Rectangle hitbox;
+    protected Rectangle hitBox;
 
     protected Texture skillTexture;
     protected Texture targetTexture;
@@ -44,10 +44,43 @@ public class MiniBoss extends Actor {
     private Animation<TextureRegion> takeDamageAnimation;
     private Animation<TextureRegion> deathAnimation;
 
-    private final float ROTATION_SPEED = 180f;
 
-    public Rectangle getHitbox() {
-        return hitbox;
+    public MiniBoss(String handKey, int miniBossWidth, int miniBossHeight ,int maxHp) {
+        this.maxHp = maxHp;
+        hp = maxHp;
+        setSize(miniBossWidth, miniBossHeight);
+
+        normalSprite = new Texture("Boss" + handKey + "/" + "normal" + ".png");
+        takeDamageSprite = new Texture("Boss" + handKey + "/" + "take_damage" + ".png");
+        deathSprite = new Texture("Boss" + handKey + "/" + "death" + ".png");
+        skillTexture = new Texture("Boss" + handKey + "/" + "skill" + ".png");
+        targetTexture = new Texture("Boss" + handKey + "/" + "target" + ".png");
+
+        int normalMaxFrame = normalSprite.getWidth() / miniBossWidth;
+        int takeDamageMaxFrame = takeDamageSprite.getWidth() / miniBossWidth;
+        int deathMaxFrame = deathSprite.getWidth() / miniBossWidth;
+
+        TextureRegion[] normalFrames = new TextureRegion[normalMaxFrame];
+        for (int i = 0; i < normalMaxFrame; i++) {
+            normalFrames[i] = new TextureRegion(normalSprite, i * miniBossWidth, 0, miniBossWidth, miniBossHeight);
+        }
+        normalAnimation = new Animation<>(FRAME_DURATION, normalFrames);
+
+        TextureRegion[] takeDamageFrames = new TextureRegion[takeDamageMaxFrame];
+        for (int i = 0; i < takeDamageMaxFrame; i++) {
+            takeDamageFrames[i] = new TextureRegion(takeDamageSprite, i * miniBossWidth, 0, miniBossWidth, miniBossHeight);
+        }
+        takeDamageAnimation = new Animation<>(FRAME_DURATION, takeDamageFrames);
+
+        TextureRegion[] deathFrames = new TextureRegion[deathMaxFrame];
+        for (int i = 0; i < deathMaxFrame; i++) {
+            deathFrames[i] = new TextureRegion(deathSprite, i * miniBossWidth, 0, miniBossWidth, miniBossHeight);
+        }
+        deathAnimation = new Animation<>(FRAME_DURATION, deathFrames);
+    }
+
+    public Rectangle getHitBox() {
+        return hitBox;
     }
 
     public boolean isReadyToDeath() {
@@ -81,42 +114,9 @@ public class MiniBoss extends Actor {
         }
     }
 
-    public MiniBoss(String handKey, int miniBossWidth, int miniBossHeight ,int maxHp) {
-        this.maxHp = maxHp;
-        hp = maxHp;
-
-        normalSprite = new Texture("Boss" + handKey + "/" + "normal" + ".png");
-        takeDamageSprite = new Texture("Boss" + handKey + "/" + "take_damage" + ".png");
-        deathSprite = new Texture("Boss" + handKey + "/" + "death" + ".png");
-        skillTexture = new Texture("Boss" + handKey + "/" + "skill" + ".png");
-        targetTexture = new Texture("Boss" + handKey + "/" + "target" + ".png");
-
-        int normalMaxFrame = normalSprite.getWidth() / miniBossWidth;
-        int takeDamageMaxFrame = takeDamageSprite.getWidth() / miniBossWidth;
-        int deathMaxFrame = deathSprite.getWidth() / miniBossWidth;
-
-        TextureRegion[] normalFrames = new TextureRegion[normalMaxFrame];
-        for (int i = 0; i < normalMaxFrame; i++) {
-            normalFrames[i] = new TextureRegion(normalSprite, i * getWidth(), 0, getWidth(), getHeight());
-        }
-        normalAnimation = new Animation<>(FRAME_DURATION, normalFrames);
-
-        TextureRegion[] takeDamageFrames = new TextureRegion[takeDamageMaxFrame];
-        for (int i = 0; i < takeDamageMaxFrame; i++) {
-            takeDamageFrames[i] = new TextureRegion(takeDamageSprite, i * getWidth(), 0, getWidth(), getHeight());
-        }
-        takeDamageAnimation = new Animation<>(FRAME_DURATION, takeDamageFrames);
-
-        TextureRegion[] deathFrames = new TextureRegion[deathMaxFrame];
-        for (int i = 0; i < deathMaxFrame; i++) {
-            deathFrames[i] = new TextureRegion(deathSprite, i * getWidth(), 0, getWidth(), getHeight());
-        }
-        deathAnimation = new Animation<>(FRAME_DURATION, deathFrames);
-    }
-
     @Override
     public void act(float delta) {
-        hitbox.setPosition(getX(), getY());
+        hitBox.setPosition(getX(), getY());
         if (state == State.NORMAL) {
             stateTimer += delta;
             currentFrame = normalAnimation.getKeyFrame(stateTimer, true);

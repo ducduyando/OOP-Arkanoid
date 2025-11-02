@@ -13,7 +13,6 @@ public class Saw extends Actor {
 
     private TextureRegion currentFrame;
     private float stateTimer = 0;
-    private Texture sawTexture;
     private TextureRegion target;
     private int direction;
 
@@ -27,29 +26,28 @@ public class Saw extends Actor {
 
 
     private Animation<TextureRegion> sawSkillAnimation;
-    private final int SAW_SPEED = 400;
+    private final int SAW_SPEED = 300;
 
     public Saw(Texture sawTexture, Texture targetTexture, float x, float y) {
-        this.sawTexture = sawTexture;
         target(targetTexture, x, y);
         if (x == 0) {
             if (new Random().nextBoolean()) {
                 direction = 1;
-                setPosition(0, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
+                setPosition(- BOSS3_SKILL_RIGHT_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
             }
             else {
                 direction = -1;
-                setPosition(SCREEN_WIDTH - BOSS3_SKILL_RIGHT_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
+                setPosition(SCREEN_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
             }
             isSweepX = false;
         } else if (y == 0) {
             if (new Random().nextBoolean()) {
                 direction = 1;
-                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, 0);
+                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, - BOSS3_SKILL_RIGHT_HEIGHT);
             }
             else {
                 direction = -1;
-                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, SCREEN_HEIGHT - BOSS3_SKILL_RIGHT_HEIGHT - HP_HEIGHT);
+                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, SCREEN_HEIGHT - HP_HEIGHT);
             }
             isSweepX = true;
         }
@@ -66,6 +64,7 @@ public class Saw extends Actor {
                 BOSS3_SKILL_RIGHT_WIDTH, BOSS3_SKILL_RIGHT_HEIGHT);
         }
         sawSkillAnimation = new Animation<>(FRAME_DURATION, sawSkillFrames);
+        currentFrame = sawSkillAnimation.getKeyFrame(0);
     }
 
     private void target(Texture targetTexture, float x, float y) {
