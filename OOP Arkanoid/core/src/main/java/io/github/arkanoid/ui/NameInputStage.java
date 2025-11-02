@@ -94,12 +94,9 @@ public class NameInputStage implements GameStage  {
 
        skin.add("default", textFieldStyle);
 
-        String savedName = "";
-            savedName = Save.loadPlayerName();
+        String savedName = Save.loadPlayerName();
 
-
-
-        nameTextField = new TextField(savedName, skin, "default");
+        nameTextField = new TextField("", skin, "default");
         nameTextField.setMessageText("Enter your name...");
         // cho nhap lieu ngay lap tuc
         stage.setKeyboardFocus(nameTextField);
