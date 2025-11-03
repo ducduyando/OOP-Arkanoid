@@ -70,7 +70,7 @@ public class PaddleSkill1B implements PaddleSkill {
             skill1BCooldownTimer -= delta;
             if (skill1BCooldownTimer <= 0) {
                 isSkill1BReady = true;
-                skill1BCooldownTimer = PADDLE_SKILL_COOLDOWN;
+                skill1BCooldownTimer = 0f; // cooldown complete
             }
         }
 

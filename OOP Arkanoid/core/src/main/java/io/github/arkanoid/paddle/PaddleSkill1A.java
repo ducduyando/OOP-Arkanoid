@@ -112,6 +112,10 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         return currentPhase;
     }
 
+    public void setCurrentPhase(Phase newPhase) {
+        this.currentPhase = newPhase;
+    }
+
     public float getSkill1AFiringTime() {
         return skill1AFiringTime;
     }

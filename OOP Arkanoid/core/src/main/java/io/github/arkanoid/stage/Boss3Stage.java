@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.boss3.Boss3;
-import io.github.arkanoid.core.GameLogic;
-import io.github.arkanoid.core.InputManager;
-import io.github.arkanoid.core.ProjectileSaveManager;
-import io.github.arkanoid.core.Save;
+import io.github.arkanoid.core.*;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.paddle.*;
@@ -97,28 +94,70 @@ public class Boss3Stage implements GameStage {
             boss3 = new Boss3(saveData.bossX, saveData.bossY, 100);
             boss3.setHp(saveData.bossHP); // Set current HP from save data
 
-            // Sync skill selection
+            // Get skill2 selection from GameManager (since save doesn't include skill2 yet)
+            isSkill2ASelected = GameManager.getInstance().hasSkill2A();
 
+            // Initialize skill2
+            paddle.initializeSkill2(isSkill2ASelected, 0f, 0f);
+
+            // Sync skill1 selection
             if (saveData.isSkill1ASelected) {
                 paddleSkill1A = paddle.getSkill1A();
+                paddleSkill1B = null;
+
             } else {
-                // Use the skill1B object from paddle
                 paddleSkill1B = paddle.getSkill1B();
+                paddleSkill1A = null;
+
+            }
+
+            // Sync skill2 selection
+            if (isSkill2ASelected) {
+                paddleSkill2A = paddle.getSkill2A();
+                paddleSkill2B = null;
+
+            } else {
+                paddleSkill2B = paddle.getSkill2B();
+                paddleSkill2A = null;
+
             }
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
             boss3 = new Boss3(BOSS3_INITIAL_X, BOSS3_INITIAL_Y, 100);
 
-            // Initialize paddle skills - always initialize both for UI purposes
-            boolean isSkill1ASelected = paddle.isSkill1ASelected();
+            // Get skill1 selection from GameManager (from Boss1 PowerUpMenu)
+            boolean isSkill1ASelected = GameManager.getInstance().hasSkill1A();
             paddle.initializeSkills(isSkill1ASelected, 0f, 0f);
 
-            if (isSkill2ASelected) {
-                paddleSkill2A = new PaddleSkill2A(paddle);
+            // Get skill2 selection from GameManager (from Boss2 PowerUpMenu)
+            isSkill2ASelected = GameManager.getInstance().hasSkill2A();
+
+
+            // Remove debug defaulting to avoid forcing skill1A/2A unexpectedly
+
+            // Initialize skill2 - always initialize both for UI purposes
+            paddle.initializeSkill2(isSkill2ASelected, 0f, 0f);
+
+            // Initialize skill1 references (from Boss1 selection)
+            if (isSkill1ASelected) {
+                paddleSkill1A = paddle.getSkill1A();
+                paddleSkill1B = null;
             } else {
-                // Use the skill1B object from paddle
-                paddleSkill2B = new PaddleSkill2B(paddle);
+                paddleSkill1B = paddle.getSkill1B();
+                paddleSkill1A = null;
+
+            }
+
+            // Initialize skill2 references (from Boss2 selection)
+            if (isSkill2ASelected) {
+                paddleSkill2A = paddle.getSkill2A();
+                paddleSkill2B = null;
+
+            } else {
+                paddleSkill2B = paddle.getSkill2B();
+                paddleSkill2A = null;
+
             }
         }
         bossHealthBar = new FinalBossHealthBar(bossHealthBarImage, boss3);
@@ -144,6 +183,8 @@ public class Boss3Stage implements GameStage {
 
     @Override
     public void update(float delta) {
+        // Update InputManager để xử lý input states
+        InputManager.getInstance().update();
 
         handlePauseInput();
         if (isPaused) {
@@ -191,11 +232,15 @@ public class Boss3Stage implements GameStage {
                 InputManager inputManager = InputManager.getInstance();
                 if (inputManager.isActionJustPressed(InputManager.ACTION_SKILL_1)
                     && paddleSkill1A.isSkill1AReady()
-                    && !paddleSkill1A.isLaunched()) {
+
+                    && paddleSkill1A.getCurrentPhase() == PaddleSkill1A.Phase.DONE) {
 
                     paddleSkill1A.enter(paddle);
                     paddleSkill1A.setLaunched(true);
                     paddleSkill1A.setVelocity(0, BALL_VELOCITY.y);
+
+
+                    paddleSkill1A.setCurrentPhase(PaddleSkill1A.Phase.FIRING); // Cần thêm setter này vào PaddleSkill1A
                 }
                 if (paddleSkill1A.isLaunched()) {
 
@@ -224,11 +269,29 @@ public class Boss3Stage implements GameStage {
                     gameLogic.paddleLaserCollision(paddleSkill1B);
                 }
             }
+            // Handle Skill2A (Bee Bullet) - K key
             if (paddleSkill2A != null) {
+                // Always update skill2A for cooldown timer
                 paddleSkill2A.update(paddle, delta);
+
+                InputManager inputManager = InputManager.getInstance();
+                if (inputManager.isActionJustPressed(InputManager.ACTION_SKILL_2)
+                    && paddleSkill2A.isSkill2AReady()) {
+
+                    paddleSkill2A.fire(paddle);
+                }
             }
+            // Handle Skill2B (Honey Shield) - K key
             else if (paddleSkill2B != null) {
+                // Always update skill2B for cooldown timer
                 paddleSkill2B.update(paddle, delta);
+
+                InputManager inputManager = InputManager.getInstance();
+                if (paddleSkill2B.isDone() && inputManager.isActionJustPressed(InputManager.ACTION_SKILL_2)
+                    && paddleSkill2B.isSkill2BReady()) {
+
+                    paddleSkill2B.activate(paddle);
+                }
             }
 
             if (boss3.isReadyToDeath() && !bossDefeated) {
@@ -307,7 +370,7 @@ public class Boss3Stage implements GameStage {
         ProjectileSaveManager.ProjectileData projectileData =
             ProjectileSaveManager.collectProjectiles(stage);
         Save.saveGameWithProjectiles(
-            3, // Boss2 stage
+            3, // Boss3 stage
             boss3.getHp(),
             paddle.getState(),
             projectileData,
@@ -318,7 +381,12 @@ public class Boss3Stage implements GameStage {
             boss3.getX(), boss3.getY(),
             paddle.isSkill1ASelected(),
             paddle.getSkill1ACooldownTimer(),
-            paddle.getSkill1BCooldownTimer()
+            paddle.getSkill1BCooldownTimer(),
+            paddle.isSkill2ASelected(),
+            paddle.getSkill2ACooldownTimer(),
+            paddleSkill2A.isSkill2AReady() ,
+            paddle.getSkill2BCooldownTimer(),
+            paddleSkill2B.isSkill2BReady()
         );
     }
 }

@@ -149,6 +149,7 @@ public class Paddle extends Actor {
         this.activeSkill = isSkillASelected ? this.skill1A : this.skill1B;
     }
 
+
     public void initializeSkill2A() {
         if (this.skill2A == null) {
             this.skill2A = new PaddleSkill2A(this);
@@ -161,8 +162,44 @@ public class Paddle extends Actor {
         this.skill2A.setIsSkill2AReady(skill2ACooldownTimer <= 0);
     }
 
+    public void initializeSkill2(boolean isSkill2ASelected, float skill2ACooldownTimer, float skill2BCooldownTimer) {
+        if (this.skill2A == null) {
+            this.skill2A = new PaddleSkill2A(this);
+        }
+        if (this.skill2B == null) {
+            this.skill2B = new PaddleSkill2B(this);
+        }
+        this.isSkill2ASelected = isSkill2ASelected;
+
+        this.skill2A.setSkill2ACooldownTimer(skill2ACooldownTimer);
+        this.skill2A.setIsSkill2AReady(skill2ACooldownTimer <= 0);
+
+        this.skill2B.setSkill2BCooldownTimer(skill2BCooldownTimer);
+        this.skill2B.setIsSkill2BReady(skill2BCooldownTimer <= 0);
+    }
+
     public PaddleSkill2A getSkill2A() {
         return skill2A;
+    }
+
+    public void setSkill2A(PaddleSkill2A skill2A) {
+        this.skill2A = skill2A;
+    }
+
+    public PaddleSkill2B getSkill2B() {
+        return skill2B;
+    }
+
+    public boolean isSkill2ASelected() {
+        return isSkill2ASelected;
+    }
+
+    public void setSkill2B(PaddleSkill2B skill2B) {
+        this.skill2B = skill2B;
+    }
+
+    public void setIsSkill2ASelected(boolean isSkill2ASelected) {
+        this.isSkill2ASelected = isSkill2ASelected;
     }
 
     public float getSkill2ACooldownTimer() {
@@ -172,6 +209,12 @@ public class Paddle extends Actor {
         return PADDLE_SKILL_COOLDOWN;
     }
 
+    public float getSkill2BCooldownTimer() {
+        if (skill2B != null) {
+            return skill2B.getSkill2BCooldownTimer();
+        }
+        return PADDLE_SKILL_COOLDOWN;
+    }
     public PaddleSkill getActiveSkill() {
         return activeSkill;
     }

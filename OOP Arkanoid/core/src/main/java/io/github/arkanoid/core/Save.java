@@ -39,7 +39,7 @@ public class Save {
         pref.putFloat("bossX", bossX);
         pref.putFloat("bossY", bossY);
 
-        pref.putBoolean("isSkillASelected", isSkillASelected);
+        pref.putBoolean("isSkill1ASelected", isSkillASelected);
         pref.putFloat("skill1ACooldownTimer", skill1ACooldownTimer);
         pref.putFloat("skill1BCooldownTimer", skill1BCooldownTimer);
 
@@ -122,7 +122,8 @@ public class Save {
                                                float ballVelX, float ballVelY, boolean ballLaunched,
                                                float bossX, float bossY, boolean isSkillASelected,
                                                float skill1ACooldownTimer,
-                                               float skill1BCooldownTimer) {
+                                               float skill1BCooldownTimer,boolean isSkill2ASelected, float skill2ACooldownTimer, boolean skill2AReady,
+                                               float skill2BCooldownTimer, boolean skill2BReady) {
         pref.putInteger("stageNumber", stageNumber);
         pref.putInteger("bossHP", bossHP);
         pref.putInteger("paddleState", paddleState);
@@ -139,9 +140,15 @@ public class Save {
         pref.putFloat("bossX", bossX);
         pref.putFloat("bossY", bossY);
 
-        pref.putBoolean("isSkillASelected", isSkillASelected);
+        pref.putBoolean("isSkill1ASelected", isSkillASelected);
         pref.putFloat("skill1ACooldownTimer", skill1ACooldownTimer);
         pref.putFloat("skill1BCooldownTimer", skill1BCooldownTimer);
+
+        pref.putBoolean("isSkill2ASelected", isSkill2ASelected);
+        pref.putFloat("skill2ACooldownTimer", skill2ACooldownTimer);
+        pref.putBoolean("skill2AReady", skill2AReady);
+        pref.putFloat("skill2BCooldownTimer", skill2BCooldownTimer);
+        pref.putBoolean("skill2BReady", skill2BReady);
         // Save projectile data
         saveProjectileData(projectileData);
 
@@ -214,13 +221,39 @@ public static String loadPlayerName() {
         data.ballVelY = pref.getFloat("ballVelY");
         data.ballLaunched = pref.getBoolean("ballLaunched", false);
 
-        data.bossX = pref.getFloat("bossX", (SCREEN_WIDTH - BOSS1_WIDTH) / 2f);
-        data.bossY = pref.getFloat("bossY", SCREEN_HEIGHT * 0.6f);
+        // Choose sensible defaults for boss position by stage
+        float defaultBossX;
+        float defaultBossY;
+        switch (data.stageNumber) {
+            case 1:
+                defaultBossX = BOSS1_INITIAL_X;
+                defaultBossY = BOSS1_INITIAL_Y;
+                break;
+            case 2:
+                defaultBossX = BOSS2_INITIAL_X;
+                defaultBossY = BOSS2_INITIAL_Y;
+                break;
+            case 3:
+                defaultBossX = BOSS3_INITIAL_X;
+                defaultBossY = BOSS3_INITIAL_Y;
+                break;
+            default:
+                defaultBossX = BOSS1_INITIAL_X;
+                defaultBossY = BOSS1_INITIAL_Y;
+                break;
+        }
+        data.bossX = pref.getFloat("bossX", defaultBossX);
+        data.bossY = pref.getFloat("bossY", defaultBossY);
 
         data.isSkill1ASelected = pref.getBoolean("isSkill1ASelected", false);
         data.skill1ACooldownTimer = pref.getFloat("skill1ACooldownTimer", Constants.PADDLE_SKILL_COOLDOWN);
         data.skill1BCooldownTimer = pref.getFloat("skill1BCooldownTimer", Constants.PADDLE_SKILL_COOLDOWN);
 
+        data.isSkill2ASelected = pref.getBoolean("isSkill2ASelected", true);
+        data.skill2ACooldownTimer = pref.getFloat("skill2ACooldownTimer", 0f);
+        data.skill2AReady = pref.getBoolean("skill2AReady", true);
+        data.skill2BCooldownTimer = pref.getFloat("skill2BCooldownTimer", 0f);
+        data.skill2BReady = pref.getBoolean("skill2BReady", true);
         // Load vị trí gạch nếu có
         data.brickPositions = new ArrayList<>();
         for (int i = 0; i < data.bricksRemaining; i++) {
@@ -396,8 +429,12 @@ public static void addRankEntry(String name, float time, int stage) {
         public boolean isSkill1ASelected;
         public float skill1ACooldownTimer;
         public float skill1BCooldownTimer;
-        public boolean hasSkill2A;
+
+        public boolean isSkill2ASelected;
         public float skill2ACooldownTimer;
+        public boolean skill2AReady;
+        public float skill2BCooldownTimer;
+        public boolean skill2BReady;
     }
 
     public static class BrickPosition {
@@ -424,5 +461,10 @@ public static void addRankEntry(String name, float time, int stage) {
             this.x = x;
             this.y = y;
         }
+    }
+
+    public static void clearSave() {
+        pref.clear();
+        pref.flush();
     }
 }

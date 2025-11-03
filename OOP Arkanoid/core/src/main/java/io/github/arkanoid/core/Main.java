@@ -48,7 +48,7 @@ public class Main extends ApplicationAdapter {
      * Initialize all Singleton managers
      */
     private void initializeSingletons() {
-        System.out.println("Main: Initializing Singleton managers...");
+
 
         // Initialize GameManager
         GameManager gameManager = GameManager.getInstance();
@@ -68,7 +68,7 @@ public class Main extends ApplicationAdapter {
         // Initialize SceneManager
         SceneManager sceneManager = SceneManager.getInstance();
 
-        System.out.println("Main: All Singleton managers initialized");
+
 
         // Singleton managers are ready to use
     }
@@ -126,7 +126,7 @@ public class Main extends ApplicationAdapter {
             Button.Mode choice = menuStage.getSelectedMode();
             switch (choice) {
                 case PLAY:
-                    // Go to NameInputStage first, then TutorialStage
+
                     nextStage = new NameInputStage();
                     changeStage(nextStage);
                     break;
@@ -170,10 +170,11 @@ public class Main extends ApplicationAdapter {
                 currentFlow = GameFlow.LOADING;
                 powerUpNumber++;
 
+                // Store skill1 selection in GameManager for Boss2Stage
                 if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL1) {
-                    ((Boss2Stage) nextStage).setSkill1ASelected(true);
+                    GameManager.getInstance().setHasSkill1A(true);
                 } else if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL2) {
-                    ((Boss2Stage) nextStage).setSkill1ASelected(false);
+                    GameManager.getInstance().setHasSkill1A(false);
                 }
 
             } else if (powerUpNumber == 1) {
@@ -183,6 +184,16 @@ public class Main extends ApplicationAdapter {
                 currentFlow = GameFlow.LOADING;
                 powerUpNumber++;
 
+                // Set skill2 selection based on PowerUpMenu choice
+                if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL1) {
+                    // Player chose SKILL1 -> use skill2A (Bee Bullet)
+                    GameManager.getInstance().setHasSkill2A(true);
+
+                } else if (powerUpMenuStage.getSelectedOption() == PowerUpMenu.Option.SKILL2) {
+                    // Player chose SKILL2 -> use skill2B (Honey Shield)
+                    GameManager.getInstance().setHasSkill2A(false);
+
+                }
             }
 
         } else if (currentStage instanceof Boss2Stage boss2Stage) {
@@ -191,14 +202,14 @@ public class Main extends ApplicationAdapter {
                 changeStage(nextStage);
                 return;
             } else {
-                // Boss defeated - show power up menu
+
                 nextStage = new PowerUpMenuStage();
                 ((PowerUpMenuStage) nextStage).setLayerNumber(1);
                 changeStage(nextStage);
                 return;
             }
         } else if (currentStage instanceof NameInputStage) {
-            // After name input, go to TutorialStage with loading screen
+
             nextStage = new TutorialStage();
             loadingScreen = new LoadingScreen(stageTextures[0]);
             currentFlow = GameFlow.LOADING;
@@ -233,14 +244,22 @@ public class Main extends ApplicationAdapter {
             case 0:
                 nextStage = new TutorialStage(saveData);
                 loadingScreen = new LoadingScreen(stageTextures[0]);
+                powerUpNumber = 0; // Reset powerUpNumber for Tutorial
                 break;
             case 1:
                 nextStage = new Boss1Stage(saveData);
                 loadingScreen = new LoadingScreen(stageTextures[1]);
+                powerUpNumber = 0; // Boss1 completed will show first PowerUpMenu
                 break;
             case 2:
                 nextStage = new Boss2Stage(saveData);
                 loadingScreen = new LoadingScreen(stageTextures[2]);
+                powerUpNumber = 1; // Boss2 completed will show second PowerUpMenu -> Boss3
+                break;
+            case 3:
+                nextStage = new Boss3Stage(saveData);
+                loadingScreen = new LoadingScreen(stageTextures[3]);
+                powerUpNumber = 2; // Boss3 is final stage
                 break;
             default:
                 // ko save game thi load se la new game
@@ -264,7 +283,6 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        System.out.println("Main: Disposing application...");
 
         if (currentStage != null) {
             currentStage.exit();
@@ -278,7 +296,7 @@ public class Main extends ApplicationAdapter {
             texture.dispose();
         }
 
-        System.out.println("Main: Application disposed");
+
     }
 
     /**
@@ -293,10 +311,7 @@ public class Main extends ApplicationAdapter {
         // Dispose ResourceManager
         ResourceManager.getInstance().dispose();
 
-        // AudioManager removed - not being used
 
-        // Note: GameManager and InputManager don't need explicit disposal
-        // as they don't hold disposable resources
 
         System.out.println("Main: All Singleton managers disposed");
     }

@@ -12,6 +12,14 @@ public class PaddleSkill2A implements PaddleSkill {
     private float skill2ACooldownTimer = 0f;
     private boolean isSkill2AReady = true;
 
+    public boolean isSkill2AReady() {
+        return isSkill2AReady;
+    }
+
+    public void setIsSkill2AReady(boolean ready) {
+        this.isSkill2AReady = ready;
+    }
+
     private Texture beeTexture;
     public PaddleSkill2A(Paddle owner) {
         this.owner = owner;
@@ -26,12 +34,10 @@ public class PaddleSkill2A implements PaddleSkill {
                 isSkill2AReady = true;
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.K) && isSkill2AReady) {
-            fire(paddle);
-        }
+        // Không xử lý input ở đây nữa, để Boss3Stage xử lý thông qua InputManager
     }
 
-    private void fire(Paddle paddle) {
+    public void fire(Paddle paddle) {
         isSkill2AReady = false;
         skill2ACooldownTimer = PADDLE_SKILL_COOLDOWN;
 
@@ -61,9 +67,5 @@ public class PaddleSkill2A implements PaddleSkill {
 
     public void setSkill2ACooldownTimer(float timer) {
         this.skill2ACooldownTimer = timer;
-    }
-
-    public void setIsSkill2AReady(boolean isReady) {
-        this.isSkill2AReady = isReady;
     }
 }

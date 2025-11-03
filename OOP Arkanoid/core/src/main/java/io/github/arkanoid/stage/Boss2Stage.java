@@ -82,7 +82,7 @@ public class Boss2Stage implements GameStage {
         GameManager gameManager = GameManager.getInstance();
         gameManager.setCurrentStage(2);
         gameManager.setCurrentPlayerName(Save.loadPlayerName());
-        System.out.println("Boss2Stage: Initialized with GameManager");
+
     }
 
     public Boss2Stage(Save.SaveData saveData) {
@@ -135,6 +135,10 @@ public class Boss2Stage implements GameStage {
             ball = new Ball(ballImage, 0, 0);
             boss2 = new Boss2(2, BOSS2_INITIAL_X, BOSS2_INITIAL_Y, 100);
 
+            // Get skill1 selection from GameManager (from Boss1 PowerUpMenu)
+            isSkill1ASelected = GameManager.getInstance().hasSkill1A();
+
+
             paddle.initializeSkills(isSkill1ASelected, 0f, 0f);
 
             if (isSkill1ASelected) {
@@ -161,13 +165,17 @@ public class Boss2Stage implements GameStage {
         skillIconJ = new SkillIcon(paddle, skillIconTexture, "J", 20, 20);
         stage.addActor(skillIconJ);
 
-
-        if (saveData != null && saveData.beePositions != null) {
-            for (Save.BeePosition beePos : saveData.beePositions) {
-                io.github.arkanoid.boss2.BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
-                    new Texture("Boss2/" + "skill" + "1" +".png"), beePos.x, beePos.y
-                );
-                stage.addActor(bee);
+        // Restore saved projectiles (preferred) or fallback to legacy bee positions
+        if (saveData != null) {
+            if (saveData.projectileData != null && !saveData.projectileData.isEmpty()) {
+                ProjectileSaveManager.restoreProjectiles(stage, saveData.projectileData);
+            } else if (saveData.beePositions != null) {
+                for (Save.BeePosition beePos : saveData.beePositions) {
+                BeeEnemy bee = new io.github.arkanoid.boss2.BeeEnemy(
+                        new Texture("Boss2/" + "skill" + "1" + ".png"), beePos.x, beePos.y
+                    );
+                    stage.addActor(bee);
+                }
             }
         }
     }
@@ -242,7 +250,7 @@ public class Boss2Stage implements GameStage {
 
                 }
 
-                // ... (Logic nhấn phím J ở trên) ...
+
 
                 if (keepJBefore) {
                     paddleSkill1A2Timer += delta;
@@ -309,6 +317,9 @@ public class Boss2Stage implements GameStage {
                 isCompleted = true;
                 saveRank(2);
 
+                // Save progression to Boss3 so if player loads, they go to Boss3
+                saveProgressionToBoss3();
+
             }
         }
         for (Actor actor : stage.getActors()) {
@@ -328,10 +339,6 @@ public class Boss2Stage implements GameStage {
         String playerName = gameManager.getCurrentPlayerName();
         float totalGameTime = Save.getTotalGameTime();
 
-        System.out.println("Boss2Stage: saveRank() called via GameManager");
-        System.out.println("Boss2Stage: Player name: '" + playerName + "'");
-        System.out.println("Boss2Stage: Stage number: " + stageNumber);
-        System.out.println("Boss2Stage: Total game time: " + totalGameTime);
 
         // Ensure we have a valid name
         if (playerName == null || playerName.trim().isEmpty()) {
@@ -419,11 +426,18 @@ public class Boss2Stage implements GameStage {
     }
 
     private void saveGame() {
+        // Don't allow saving if boss is already defeated
+        if (bossDefeated) {
+
+            return;
+        }
+
         // Collect all projectiles using ProjectileSaveManager
         ProjectileSaveManager.ProjectileData projectileData =
             ProjectileSaveManager.collectProjectiles(stage);
+
         Save.saveGameWithProjectiles(
-            2, // Boss2 stage
+            2, // Boss2 stage - only save if still in progress
             boss2.getHp(),
             paddle.getState(),
             projectileData,
@@ -434,7 +448,35 @@ public class Boss2Stage implements GameStage {
             boss2.getX(), boss2.getY(),
             paddle.isSkill1ASelected(),
             paddle.getSkill1ACooldownTimer(),
-            paddle.getSkill1BCooldownTimer()
+            paddle.getSkill1BCooldownTimer(),
+            false, // isSkill2ASelected - not available in Boss2
+            0f,    // skill2ACooldownTimer - default
+            true,  // skill2AReady - default
+            0f,    // skill2BCooldownTimer - default
+            true   // skill2BReady - default
         );
+
+        ;
+    }
+
+    /**
+     * Save progression to Boss3 when Boss2 is completed
+     */
+    private void saveProgressionToBoss3() {
+        // Save minimal data to indicate Boss2 is completed and ready for Boss3
+        Save.saveGameWithProjectiles(
+            3, // Save as Boss3 stage
+            100, // Boss3 full HP
+            paddle.getState(),
+            new ProjectileSaveManager.ProjectileData(), // Empty projectile data
+            PADDLE_INITIAL_X, PADDLE_INITIAL_Y, // Reset paddle position
+            0, 0, 0, 0, false, // Reset ball
+            BOSS3_INITIAL_X, BOSS3_INITIAL_Y, // Boss3 position
+            paddle.isSkill1ASelected(),
+            0f, 0f, // Reset skill cooldowns
+            false, // skill2 will be selected in PowerUpMenu
+            0f, true, 0f, true
+        );
+
     }
 }

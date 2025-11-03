@@ -12,6 +12,14 @@ public class PaddleSkill2B implements PaddleSkill {
     private final Paddle owner;
     private float skill2BCooldownTimer = 0f;
     private boolean isSkill2BReady = true;
+
+    public boolean isSkill2BReady() {
+        return isSkill2BReady;
+    }
+
+    public void setIsSkill2BReady(boolean ready) {
+        this.isSkill2BReady = ready;
+    }
     PaddleHoneyShield paddleHoneyShield;
     Texture honeyShield;
 
@@ -33,6 +41,7 @@ public class PaddleSkill2B implements PaddleSkill {
             skill2BCooldownTimer += delta;
             if (skill2BCooldownTimer >= PADDLE_SKILL_COOLDOWN) {
                 isSkill2BReady = true;
+                skill2BCooldownTimer = PADDLE_SKILL_COOLDOWN; // Reset về max để tính toán frame đúng
             }
         }
         if (isSkill2Start) {
@@ -44,12 +53,7 @@ public class PaddleSkill2B implements PaddleSkill {
             }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.K) && isSkill2BReady) {
-            owner.getStage().addActor(paddleHoneyShield);
-            owner.setInvincible(true);
-            isSkill2Start = true;
-            isSkill2BReady = false;
-        }
+        // Không xử lý input ở đây nữa, để Boss3Stage xử lý thông qua InputManager
 
     }
 
@@ -65,11 +69,35 @@ public class PaddleSkill2B implements PaddleSkill {
         paddleShieldTime = 0;
     }
 
+    public void activate(Paddle paddle) {
+        if (isSkill2BReady) {
+            paddleHoneyShield = new PaddleHoneyShield(honeyShield, paddle.getX(), paddle.getY(), paddle.getState());
+            owner.getStage().addActor(paddleHoneyShield);
+            owner.setInvincible(true);
+            isSkill2Start = true;
+            isSkill2BReady = false;
+            skill2BCooldownTimer = 0;
+            paddleShieldTime = 0;
+        }
+    }
+
     @Override
     public void cleanup() {
         if (paddleHoneyShield != null) {
             paddleHoneyShield.remove();
             paddleHoneyShield = null;
         }
+    }
+
+    public boolean isDone() {
+        return !isSkill2Start;
+    }
+
+    public float getSkill2BCooldownTimer() {
+        return skill2BCooldownTimer;
+    }
+
+    public void setSkill2BCooldownTimer(float timer) {
+        this.skill2BCooldownTimer = timer;
     }
 }

@@ -284,7 +284,12 @@ private float stageTime = 0f;
             boss1.getX(), boss1.getY(),
             isSkillASelected,
             skill1ACooldownTimer,
-            skill1BCooldownTimer
+            skill1BCooldownTimer,
+            false, // isSkill2ASelected - not available in Boss1
+            0f,    // skill2ACooldownTimer - default
+            true,  // skill2AReady - default
+            0f,    // skill2BCooldownTimer - default
+            true   // skill2BReady - default
         );
     }
 }
