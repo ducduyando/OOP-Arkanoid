@@ -85,24 +85,21 @@ public class Boss2 extends Boss {
     @Override
     public void takeDamage(int damage) {
         if (state == State.NORMAL) {
-            if (isShielded && heal) {
-                if (this.getHp() + damage > this.getMaxHp()) {
-                    this.setHp(this.getMaxHp());
-                } else {
-                    this.setHp(this.getHp() + damage);
+            if (isShielded) {
+                if (heal) {
+                    if (this.getHp() + damage > this.getMaxHp()) {
+                        this.setHp(this.getMaxHp());
+                    } else {
+                        this.setHp(this.getHp() + damage);
+                    }
+                    heal = false;
                 }
+                return;
+            }
+            super.takeDamage(damage);
 
-                heal = false;
-            } else if (!isShielded) {
-                this.setHp(this.getHp() - damage);
+            if (!isDead()) {
                 this.skill1();
-                if (this.getHp() <= 0) {
-                    this.setHp(0);
-                }
-                if (this.getHp() > 0) {
-                    this.state = State.TAKING_DAMAGE;
-                    this.takeDamageTimer = 0;
-                }
             }
         }
     }
