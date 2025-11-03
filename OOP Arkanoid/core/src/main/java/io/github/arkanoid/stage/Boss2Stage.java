@@ -315,9 +315,6 @@ public class Boss2Stage implements GameStage {
             if (boss2.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;
-                saveRank(2);
-
-                // Save progression to Boss3 so if player loads, they go to Boss3
                 saveProgressionToBoss3();
 
             }
@@ -333,27 +330,7 @@ public class Boss2Stage implements GameStage {
         stage.act(delta);
     }
 
-    // luu thu muc rank
-    private void saveRank(int stageNumber) {
-        GameManager gameManager = GameManager.getInstance();
-        String playerName = gameManager.getCurrentPlayerName();
-        float totalGameTime = Save.getTotalGameTime();
 
-
-        // Ensure we have a valid name
-        if (playerName == null || playerName.trim().isEmpty()) {
-            playerName = "Player";
-            gameManager.setCurrentPlayerName(playerName);
-        }
-
-        // Use total game time instead of stage time
-        Save.addRankEntry(playerName, totalGameTime, stageNumber);
-
-        // Stop game time tracking
-        Save.stopGame();
-
-        // GameManager state updated
-    }
 
     private void handlePauseInput() {
         boolean pKeyCurrentlyPressed = (Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE));

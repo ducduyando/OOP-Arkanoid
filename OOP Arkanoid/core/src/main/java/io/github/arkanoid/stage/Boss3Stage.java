@@ -11,6 +11,8 @@ import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.paddle.*;
 import io.github.arkanoid.ui.*;
+import io.github.arkanoid.core.GameManager;
+import io.github.arkanoid.core.Save;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -51,6 +53,7 @@ public class Boss3Stage implements GameStage {
     private boolean quitRequested = false;
     private boolean isCompleted = false;
     private boolean gameOver = false;
+
 
     // Save data for loading
     private Save.SaveData saveData;
@@ -297,12 +300,32 @@ public class Boss3Stage implements GameStage {
             if (boss3.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;
+                saveRank(3);
             }
         }
 
         stage.act(delta);
 
     }
+
+    private void saveRank(int stageNumber) {
+        GameManager gameManager = GameManager.getInstance();
+        String playerName = gameManager.getCurrentPlayerName();
+        float totalGameTime = Save.getTotalGameTime();
+
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Player";
+            gameManager.setCurrentPlayerName(playerName);
+        }
+
+        if (stageNumber == 3) {
+            Save.addRankEntry(playerName, totalGameTime, stageNumber);
+        }
+
+        Save.stopGame();
+    }
+
+
 
     private void handlePauseInput() {
         boolean pKeyCurrentlyPressed = (Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE));

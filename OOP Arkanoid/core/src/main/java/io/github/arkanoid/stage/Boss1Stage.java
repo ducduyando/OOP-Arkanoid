@@ -54,7 +54,7 @@ private float stageTime = 0f;
         this.saveData = null;
         // Reset game time when starting new game
         Save.resetGameTime();
-        
+
         // Update GameManager state
         GameManager gameManager = GameManager.getInstance();
         gameManager.setCurrentStage(1);
@@ -172,37 +172,14 @@ private float stageTime = 0f;
             if (boss1.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;
-                // Save rank when winning Boss1
-                saveRank(1);
+
 
             }
         }
 
         stage.act(delta);
     }
-    // save bang rank
-    private void saveRank(int stageNumber) {
-        GameManager gameManager = GameManager.getInstance();
-        String playerName = gameManager.getCurrentPlayerName();
-        float totalGameTime = Save.getTotalGameTime();
 
-        System.out.println("Boss1Stage: saveRank() called via GameManager");
-        System.out.println("Boss1Stage: Player name: '" + playerName + "'");
-        System.out.println("Boss1Stage: Stage number: " + stageNumber);
-        System.out.println("Boss1Stage: Total game time: " + totalGameTime);
-
-        if (playerName == null || playerName.trim().isEmpty()) {
-            playerName = "Player";
-            gameManager.setCurrentPlayerName(playerName);
-        }
-
-        Save.addRankEntry(playerName, totalGameTime, stageNumber);
-
-        // Stop game time tracking
-        Save.stopGame();
-        
-        // GameManager state updated
-    }
 
     private void handlePauseInput() {
         boolean pKeyCurrentlyPressed = (Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE));

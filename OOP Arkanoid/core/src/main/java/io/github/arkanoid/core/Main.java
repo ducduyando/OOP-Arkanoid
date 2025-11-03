@@ -104,7 +104,13 @@ public class Main extends ApplicationAdapter {
                     batch.begin();
                     ((GameLoseStage) currentStage).drawDirect(batch);
                     batch.end();
-                } else if (currentStage instanceof NameInputStage) {
+                }
+                else if (currentStage instanceof GameWinStage) {
+                    batch.begin();
+                    ((GameWinStage) currentStage).drawDirect(batch);
+                    batch.end();
+                }
+                else if (currentStage instanceof NameInputStage) {
                     ((NameInputStage) currentStage).draw();
                 } else if (currentStage instanceof RankStage) {
                     ((RankStage) currentStage).draw();
@@ -208,6 +214,16 @@ public class Main extends ApplicationAdapter {
                 changeStage(nextStage);
                 return;
             }
+        } else if (currentStage instanceof Boss3Stage boss3Stage) {
+            if (boss3Stage.isGameOver()) {
+                nextStage = new GameLoseStage();
+                changeStage(nextStage);
+                return;
+            } else {
+                nextStage = new GameWinStage();
+                changeStage(nextStage);
+                return;
+            }
         } else if (currentStage instanceof NameInputStage) {
 
             nextStage = new TutorialStage();
@@ -218,7 +234,13 @@ public class Main extends ApplicationAdapter {
             nextStage = new RankStage();
             changeStage(nextStage);
             return;
-        } else if (currentStage instanceof RankStage) {
+        }
+        else if (currentStage instanceof GameWinStage) {
+            nextStage = new RankStage();
+            changeStage(nextStage);
+            return;
+        }
+        else if (currentStage instanceof RankStage) {
             // After rank screen, go back to MenuStage
             nextStage = new MenuStage();
             changeStage(nextStage);
