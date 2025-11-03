@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
@@ -20,6 +21,7 @@ public class Saw extends Actor {
     private float targetY;
 
     private int rotationAngle;
+    private Rectangle hitBox;
 
     private boolean isVertical;
     private boolean isSawSkillFinished = false;
@@ -54,6 +56,7 @@ public class Saw extends Actor {
             }
         }
         setSize(BOSS3_SKILL_RIGHT_WIDTH, BOSS3_SKILL_RIGHT_HEIGHT);
+        hitBox = new Rectangle(getX(), getY(), getWidth(), getHeight());
         setOrigin(BOSS3_SKILL_RIGHT_WIDTH / 2f, BOSS3_SKILL_RIGHT_HEIGHT / 2f);
 
         int maxSawFrame = sawTexture.getWidth() / BOSS3_SKILL_RIGHT_WIDTH;
@@ -64,6 +67,14 @@ public class Saw extends Actor {
         }
         sawSkillAnimation = new Animation<>(FRAME_DURATION, sawSkillFrames);
         currentFrame = sawSkillAnimation.getKeyFrame(0);
+    }
+
+    public boolean isSawSkillFinished() {
+        return isSawSkillFinished;
+    }
+
+    public Rectangle getHitBox() {
+        return hitBox;
     }
 
     private void target(Texture targetTexture, float x, float y) {
@@ -79,9 +90,6 @@ public class Saw extends Actor {
         }
     }
 
-    public boolean isSawSkillFinished() {
-        return isSawSkillFinished;
-    }
 
     @Override
     public void act(float delta) {
@@ -97,7 +105,7 @@ public class Saw extends Actor {
             isSawSkillFinished = true;
             return;
         }
-
+        hitBox.setPosition(getX(), getY());
         stateTimer += delta;
         currentFrame = sawSkillAnimation.getKeyFrame(stateTimer, true);
     }

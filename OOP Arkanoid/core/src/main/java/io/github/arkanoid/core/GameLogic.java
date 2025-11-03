@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.arkanoid.boss1.BombProjectile;
 import io.github.arkanoid.boss1.LaserEffect;
 import io.github.arkanoid.boss2.BeeEnemy;
+import io.github.arkanoid.boss3.Rocket;
+import io.github.arkanoid.boss3.Saw;
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.entities.MiniBoss;
 import io.github.arkanoid.paddle.Paddle;
@@ -251,6 +253,16 @@ public class GameLogic {
                     bee.remove();
                 }
             }
+            else if (actor instanceof Saw saw) {
+                if (saw.getHitBox().overlaps(paddleHitbox)) {
+                    paddleRef.takeDamage();
+                }
+            }
+            else if (actor instanceof Rocket rocket) {
+                if (rocket.getHitBox().overlaps(paddleHitbox)) {
+                    paddleRef.takeDamage();
+                }
+            }
         }
     }
 
@@ -262,14 +274,6 @@ public class GameLogic {
         }
 
         Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
-
-
-//        if (miniBossRef != null) {
-//            Rectangle miniBossRect = miniBossRef.getHitBox();
-//            if (paddleLaserRect.overlaps(miniBossRect)) {
-//                miniBossRef.takeDamage();
-//            }
-//        }
 
         if (bossRef != null) {
             Rectangle bossRect = bossRef.getHitBox();

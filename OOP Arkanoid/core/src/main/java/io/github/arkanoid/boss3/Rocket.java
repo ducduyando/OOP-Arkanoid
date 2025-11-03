@@ -34,7 +34,7 @@ public class Rocket extends Actor {
         float yy = SCREEN_HEIGHT - HP_HEIGHT;
         setPosition(xx, yy);
         setSize(BOSS3_SKILL_LEFT_WIDTH, BOSS3_SKILL_LEFT_HEIGHT);
-        hitBox = new Rectangle(SCREEN_WIDTH, SCREEN_HEIGHT, BOSS3_SKILL_LEFT_WIDTH, BOSS3_SKILL_LEFT_HEIGHT);
+        hitBox = new Rectangle(SCREEN_WIDTH, SCREEN_HEIGHT, target.getWidth(), target.getHeight());
 
         int maxFrame = rocketSkillTexture.getWidth() / BOSS3_SKILL_LEFT_WIDTH;
         TextureRegion[] rocketSkillFrames = new TextureRegion[maxFrame];
@@ -46,6 +46,10 @@ public class Rocket extends Actor {
         rocketSkillAnimation = new Animation<>(FRAME_DURATION * 1.5f, rocketSkillFrames);
         currentFrame = rocketSkillAnimation.getKeyFrame(0);
 
+    }
+
+    public Rectangle getHitBox() {
+        return hitBox;
     }
 
     public boolean isRocketSkillFinished() {
@@ -66,7 +70,6 @@ public class Rocket extends Actor {
             isRocketSkillFinished = false;
             isInTarget = false;
         } else {
-
             moveBy(0, targetY - getY());
             hitBox.setPosition(getX(), getY());
             isInTarget = true;

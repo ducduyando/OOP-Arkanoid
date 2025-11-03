@@ -9,9 +9,16 @@ import static io.github.arkanoid.core.Constants.*;
 
 public class Boss3 extends FinalBoss {
 
+    public enum Boss3State{
+        NORMAL,
+        UPGRADE
+    }
+
     Boss3Skill1A rocketSkill;
     Boss3Skill1B sawSkill;
     Boss3RandomMovement randomMovement;
+
+    Boss3State boss3State = Boss3State.NORMAL;
 
     public Boss3(float x, float y, int maxHp) {
         super(x, y, BOSS3_WIDTH, BOSS3_HEIGHT, BOSS3_VELOCITY, maxHp);
@@ -48,7 +55,9 @@ public class Boss3 extends FinalBoss {
 
     @Override
     public void act(float delta) {
-        randomMovement.updateMovement(this, delta);
-        super.act(delta);
+        if (boss3State == Boss3State.NORMAL) {
+            randomMovement.updateMovement(this, delta);
+            super.act(delta);
+        }
     }
 }
