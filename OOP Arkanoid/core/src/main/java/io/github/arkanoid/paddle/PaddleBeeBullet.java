@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.arkanoid.boss2.Boss2;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.arkanoid.boss3.Boss3;
+
 import java.awt.*;
 import static io.github.arkanoid.core.Constants.*;
 
@@ -32,9 +34,9 @@ public class PaddleBeeBullet extends Actor {
         if (getStage() != null) {
             for (Actor actor : getStage().getActors()) {
                 if (actor == this) continue;
-                if(actor instanceof Boss2 boss) {
-                    if(hitBox.overlaps(boss.getHitBox()) ) {
-                        boss.takeDamage(10);
+                if(actor instanceof Boss3 boss3) {
+                    if(hitBox.overlaps(boss3.getHitBox()) ) {
+                        boss3.takeDamage(10);
                         this.remove();
                         return;
                     }

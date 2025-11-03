@@ -12,12 +12,12 @@ import java.awt.*;
 
 
 public class PaddleHoneyShield extends Actor {
-    private Texture texture;
+    private TextureRegion shield;
     private Rectangle hitbox;
 
 
     public PaddleHoneyShield(Texture texture, float paddleX, float paddleY, int state) {
-        this.texture = texture;
+        shield = new TextureRegion(texture, state * 32, 0, PADDLE_WIDTH - (64 * state), PADDLE_HEIGHT);
         setPosition(paddleX, paddleY);
         setSize(PADDLE_WIDTH - state * 64, PADDLE_HEIGHT);
         hitbox = new Rectangle(paddleX, paddleY, getWidth(), getHeight());
@@ -30,7 +30,6 @@ public class PaddleHoneyShield extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        TextureRegion honeyShield = new TextureRegion(texture, getX(), getY(), getWidth(), getHeight());
-        batch.draw(honeyShield, getX(), getY(), getWidth(), getHeight());
+        batch.draw(shield, getX(), getY(), getWidth(), getHeight());
     }
 }

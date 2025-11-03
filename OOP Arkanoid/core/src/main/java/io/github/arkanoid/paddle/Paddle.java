@@ -20,6 +20,8 @@ public class Paddle extends Actor {
     private float blinkTimer = 0f;
     private boolean isVisible = true;
 
+    private boolean isShield = false;
+
     private PaddleSkill1A skill1A;
     private PaddleSkill1B skill1B;
     private PaddleSkill2A skill2A; // New skill2A
@@ -50,18 +52,22 @@ public class Paddle extends Actor {
         return state;
     }
 
+    public void setShield(boolean shield) {
+        isShield = shield;
+    }
+
     public void setState(int newState) {
         this.state = newState;
         this.textureRegion.setRegion(PADDLE_WIDTH * newState, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
 
         float newWidth = PADDLE_WIDTH - (64 * newState);
-        float newXOffset = 32 * newState;
+        float newX = hitBox.getX() + hitBox.getWidth() / 2f - newWidth / 2f;
 
         if (isGameOver()) {
             this.hitBox.setSize(0, 0);
         } else {
             this.hitBox.setWidth(newWidth);
-            this.hitBox.setPosition(getX() + newXOffset, getY());
+            this.hitBox.setPosition(newX, getY());
         }
     }
 
@@ -91,7 +97,7 @@ public class Paddle extends Actor {
     }
 
     public void takeDamage() {
-        if (!isInvincible) {
+        if (!isInvincible && !isShield) {
             int currentState = getState() + 1;
             setState(currentState);
             isInvincible = true;

@@ -43,15 +43,15 @@ public class GameWinStage implements GameStage {
         tex2 = new Texture("Win/" + "scene2" + ".png");
 
         TextureRegion[][] regions0 = TextureRegion.split(tex0, tex0.getWidth(), tex0.getHeight() / 4);
-        anim0 = new Animation<>(Constants.FRAME_DURATION, flattenV(regions0));
+        anim0 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions0));
         anim0.setPlayMode(Animation.PlayMode.NORMAL);
 
         TextureRegion[][] regions1 = TextureRegion.split(tex1, tex1.getWidth(), tex1.getHeight() / 8);
-        anim1 = new Animation<>(Constants.FRAME_DURATION, flattenV(regions1));
+        anim1 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions1));
         anim1.setPlayMode(Animation.PlayMode.NORMAL);
 
         TextureRegion[][] regions2 = TextureRegion.split(tex2, tex2.getWidth(), tex2.getHeight() / 4);
-        anim2 = new Animation<>(Constants.FRAME_DURATION, flattenV(regions2));
+        anim2 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions2));
         anim2.setPlayMode(Animation.PlayMode.NORMAL);
 
         animations = new Animation[]{anim0, anim1, anim2};

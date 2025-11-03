@@ -34,7 +34,7 @@ public class PaddleSkill2B implements PaddleSkill {
     public void update(Paddle paddle, float delta) {
 
         if (paddleHoneyShield != null) {
-            paddleHoneyShield.setPosition(paddle.getX(), paddle.getY());
+            paddleHoneyShield.setPosition(paddle.getHitBox().getX(), paddle.getHitBox().getY());
 
         }
         if (!isSkill2BReady) {
@@ -47,7 +47,7 @@ public class PaddleSkill2B implements PaddleSkill {
         if (isSkill2Start) {
             paddleShieldTime += delta;
             if (paddleShieldTime >= 4f) {
-                owner.setInvincible(false);
+                owner.setShield(false);
                 isSkill2Start = false;
                 cleanup();
             }
@@ -59,21 +59,16 @@ public class PaddleSkill2B implements PaddleSkill {
 
     @Override
     public void enter(Paddle paddle) {
-        if (paddle.getState() > 0) {
-            paddle.setState(paddle.getState() - 1);
-            paddle.setPosition(paddle.getX() - 34, paddle.getY());
-        }
-        paddleHoneyShield = new PaddleHoneyShield(honeyShield, paddle.getX(), paddle.getY(), paddle.getState());
-        skill2BCooldownTimer = 0;
-        isSkill2Start = true;
-        paddleShieldTime = 0;
     }
 
     public void activate(Paddle paddle) {
         if (isSkill2BReady) {
-            paddleHoneyShield = new PaddleHoneyShield(honeyShield, paddle.getX(), paddle.getY(), paddle.getState());
+            if (paddle.getState() > 0) {
+                paddle.setState(paddle.getState() - 1);
+            }
+            paddleHoneyShield = new PaddleHoneyShield(honeyShield, paddle.getHitBox().getX(), paddle.getHitBox().getY(), paddle.getState());
             owner.getStage().addActor(paddleHoneyShield);
-            owner.setInvincible(true);
+            owner.setShield(true);
             isSkill2Start = true;
             isSkill2BReady = false;
             skill2BCooldownTimer = 0;

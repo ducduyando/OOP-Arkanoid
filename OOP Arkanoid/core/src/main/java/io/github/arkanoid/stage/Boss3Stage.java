@@ -98,10 +98,14 @@ public class Boss3Stage implements GameStage {
             boss3.setHp(saveData.bossHP); // Set current HP from save data
 
             // Get skill2 selection from GameManager (since save doesn't include skill2 yet)
-            isSkill2ASelected = GameManager.getInstance().hasSkill2A();
+            isSkill2ASelected = saveData.isSkill2ASelected;
 
             // Initialize skill2
-            paddle.initializeSkill2(isSkill2ASelected, 0f, 0f);
+            paddle.initializeSkill2(
+                isSkill2ASelected,
+                saveData.skill2ACooldownTimer,
+                saveData.skill2BCooldownTimer
+            );
 
             // Sync skill1 selection
             if (saveData.isSkill1ASelected) {
@@ -116,13 +120,13 @@ public class Boss3Stage implements GameStage {
 
             // Sync skill2 selection
             if (isSkill2ASelected) {
-                paddleSkill2A = paddle.getSkill2A();
-                paddleSkill2B = null;
-
+                if (paddle.getSkill2A() != null) {
+                    paddle.getSkill2A().setIsSkill2AReady(saveData.skill2AReady);
+                }
             } else {
-                paddleSkill2B = paddle.getSkill2B();
-                paddleSkill2A = null;
-
+                if (paddle.getSkill2B() != null) {
+                    paddle.getSkill2B().setIsSkill2BReady(saveData.skill2BReady);
+                }
             }
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
@@ -392,6 +396,10 @@ public class Boss3Stage implements GameStage {
         // Collect all projectiles using ProjectileSaveManager
         ProjectileSaveManager.ProjectileData projectileData =
             ProjectileSaveManager.collectProjectiles(stage);
+
+        boolean skill2AReady = (paddle.getSkill2A() != null) ? paddle.getSkill2A().isSkill2AReady() : true;
+        boolean skill2BReady = (paddle.getSkill2B() != null) ? paddle.getSkill2B().isSkill2BReady() : true;
+
         Save.saveGameWithProjectiles(
             3, // Boss3 stage
             boss3.getHp(),
@@ -407,9 +415,9 @@ public class Boss3Stage implements GameStage {
             paddle.getSkill1BCooldownTimer(),
             paddle.isSkill2ASelected(),
             paddle.getSkill2ACooldownTimer(),
-            paddleSkill2A.isSkill2AReady() ,
+            skill2AReady ,
             paddle.getSkill2BCooldownTimer(),
-            paddleSkill2B.isSkill2BReady()
+            skill2BReady
         );
     }
 }
