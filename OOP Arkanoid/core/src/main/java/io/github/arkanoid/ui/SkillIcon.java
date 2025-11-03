@@ -95,6 +95,7 @@ public class  SkillIcon extends Actor {
 
             if (currentFrame != null) {
                 batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
+
             }
         } else if (skillKey.equals("K")) {
             PaddleSkill2A skill2A = paddle.getSkill2A();
