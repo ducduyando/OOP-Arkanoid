@@ -38,9 +38,9 @@ public class GameWinStage implements GameStage {
         this.isFinished = false;
         this.currentAnimation = 0;
         this.stateTime = 0;
-        tex0 = new Texture("scene0.png");
-        tex1 = new Texture("scene1.png");
-        tex2 = new Texture("scene2.png");
+        tex0 = new Texture("Win/" + "scene0" + ".png");
+        tex1 = new Texture("Win/" + "scene1" + ".png");
+        tex2 = new Texture("Win/" + "scene2" + ".png");
 
         TextureRegion[][] regions0 = TextureRegion.split(tex0, tex0.getWidth(), tex0.getHeight() / 4);
         anim0 = new Animation<>(Constants.FRAME_DURATION, flattenV(regions0));

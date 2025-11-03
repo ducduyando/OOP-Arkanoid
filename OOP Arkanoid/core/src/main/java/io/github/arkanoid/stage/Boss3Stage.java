@@ -94,7 +94,7 @@ public class Boss3Stage implements GameStage {
             ball.setLaunched(saveData.ballLaunched);
 
             // Create boss with full HP first, then set current HP
-            boss3 = new Boss3(saveData.bossX, saveData.bossY, 100);
+            boss3 = new Boss3(saveData.bossX, saveData.bossY, 100, paddle);
             boss3.setHp(saveData.bossHP); // Set current HP from save data
 
             // Get skill2 selection from GameManager (since save doesn't include skill2 yet)
@@ -127,7 +127,7 @@ public class Boss3Stage implements GameStage {
         } else {
             paddle = new Paddle(paddleImage, PADDLE_INITIAL_X, PADDLE_INITIAL_Y);
             ball = new Ball(ballImage, 0, 0);
-            boss3 = new Boss3(BOSS3_INITIAL_X, BOSS3_INITIAL_Y, 100);
+            boss3 = new Boss3(BOSS3_INITIAL_X, BOSS3_INITIAL_Y, 100, paddle);
 
             // Get skill1 selection from GameManager (from Boss1 PowerUpMenu)
             boolean isSkill1ASelected = GameManager.getInstance().hasSkill1A();
@@ -229,7 +229,7 @@ public class Boss3Stage implements GameStage {
             gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.finalBossCollision(ball);
-            gameLogic.skillCollision(stage);
+            gameLogic.skillCollision(stage, ball);
 
             if (paddleSkill1A != null) {
                 InputManager inputManager = InputManager.getInstance();

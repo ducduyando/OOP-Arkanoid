@@ -107,11 +107,14 @@ public class Constants {
     public static final float BOSS3_INITIAL_X = (SCREEN_WIDTH - BOSS3_WIDTH) / 2f;
     public static final float BOSS3_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
-    public static final int BOSS3_SKILL_RIGHT_WIDTH = 256;
-    public static final int BOSS3_SKILL_RIGHT_HEIGHT = 256;
+    public static final int BOSS3_SKILL_1B_WIDTH = 256;
+    public static final int BOSS3_SKILL_1B_HEIGHT = 256;
 
-    public static final int BOSS3_SKILL_LEFT_WIDTH = 352;
-    public static final int BOSS3_SKILL_LEFT_HEIGHT = 352;
+    public static final int BOSS3_SKILL_1A_WIDTH = 352;
+    public static final int BOSS3_SKILL_1A_HEIGHT = 352;
+
+    public static final int BOSS3_SKILL_2A_WIDTH = 328;
+    public static final int BOSS3_SKILL_2A_HEIGHT = 416;
 
     public static final int ROTATION_SPEED = 720;
 

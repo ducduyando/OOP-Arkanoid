@@ -167,7 +167,7 @@ private float stageTime = 0f;
             gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.bossCollision(ball);
-            gameLogic.skillCollision(stage);
+            gameLogic.skillCollision(stage, ball);
 
             if (boss1.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;

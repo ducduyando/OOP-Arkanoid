@@ -163,14 +163,12 @@ public class FinalBoss extends Actor {
 
             if (deathAnimation.isAnimationFinished(deathTimer)) {
                 isReadyToDeath = true;
-                this.remove();
             }
             return;
         }
 
         if (isDead()) {
             state = State.DYING;
-            hitBox.setSize(0, 0);
 
             if (currentSkill != null) {
                 currentSkill.cleanup();

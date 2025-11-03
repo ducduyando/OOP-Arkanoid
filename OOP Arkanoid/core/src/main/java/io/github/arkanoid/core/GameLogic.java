@@ -11,8 +11,8 @@ import io.github.arkanoid.boss1.LaserEffect;
 import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.boss3.Rocket;
 import io.github.arkanoid.boss3.Saw;
+import io.github.arkanoid.boss3.Spike;
 import io.github.arkanoid.entities.FinalBoss;
-import io.github.arkanoid.entities.MiniBoss;
 import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.paddle.PaddleLaserEffect;
 import io.github.arkanoid.paddle.PaddleSkill1A;
@@ -233,8 +233,9 @@ public class GameLogic {
         }
     }
 
-    public void skillCollision(Stage stage) {
+    public void skillCollision(Stage stage, Ball ball) {
         Rectangle paddleHitbox = paddleRef.getHitBox();
+        Rectangle ballHitBox = ball.getHitBox();
         for (Actor actor : stage.getActors()) {
             if (actor instanceof BombProjectile bomb) {
                 if (bomb.getHitbox().overlaps(paddleHitbox)) {
@@ -261,6 +262,40 @@ public class GameLogic {
             else if (actor instanceof Rocket rocket) {
                 if (rocket.getHitBox().overlaps(paddleHitbox)) {
                     paddleRef.takeDamage();
+                }
+            }
+            else if (actor instanceof Spike spike) {
+                if (spike.getHitBox().overlaps(ballHitBox)) {
+                    float ballCenterX = ballHitBox.x + ballHitBox.width / 2f;
+                    float ballCenterY = ballHitBox.y + ballHitBox.height / 2f;
+                    float finalBossCenterX = spike.getHitBox().x + spike.getHitBox().width / 2f;
+                    float finalBossCenterY = spike.getHitBox().y + spike.getHitBox().height / 2f;
+
+                    float overlapX = (ballHitBox.width / 2 + spike.getHitBox().width / 2f) - Math.abs(ballCenterX - finalBossCenterX);
+                    float overlapY = (ballHitBox.height / 2 + spike.getHitBox().height / 2f) - Math.abs(ballCenterY - finalBossCenterY);
+
+                    Vector2 normal = new Vector2();
+
+                    if (overlapX < overlapY) {
+                        if (ballCenterX < finalBossCenterX) {
+                            normal.set(-1, 0);
+                            ball.setX(spike.getHitBox().x - ballHitBox.width);
+                        } else {
+                            normal.set(1, 0);
+                            ball.setX(spike.getHitBox().x + spike.getHitBox().width);
+                        }
+                    } else {
+                        if (ballCenterY < finalBossCenterY) {
+                            normal.set(0, -1);
+                            ball.setY(spike.getHitBox().y - ballHitBox.height);
+                        } else {
+                            normal.set(0, 1);
+                            ball.setY(spike.getHitBox().y + spike.getHitBox().height);
+                        }
+                    }
+
+                    Vector2 reflectVector = reflect(ball.getVelocity(), normal);
+                    ball.setVelocity(reflectVector.x, reflectVector.y);
                 }
             }
         }

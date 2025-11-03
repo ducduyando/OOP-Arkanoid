@@ -39,31 +39,31 @@ public class Saw extends Actor {
         if (!isVertical) {
             if (new Random().nextBoolean()) {
                 direction = 1;
-                setPosition(- BOSS3_SKILL_RIGHT_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
+                setPosition(-BOSS3_SKILL_1B_WIDTH, y - BOSS3_SKILL_1B_HEIGHT / 2f);
             }
             else {
                 direction = -1;
-                setPosition(SCREEN_WIDTH, y - BOSS3_SKILL_RIGHT_HEIGHT / 2f);
+                setPosition(SCREEN_WIDTH, y - BOSS3_SKILL_1B_HEIGHT / 2f);
             }
         } else {
             if (new Random().nextBoolean()) {
                 direction = 1;
-                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, - BOSS3_SKILL_RIGHT_HEIGHT);
+                setPosition(x - BOSS3_SKILL_1B_WIDTH / 2f, -BOSS3_SKILL_1B_HEIGHT);
             }
             else {
                 direction = -1;
-                setPosition(x - BOSS3_SKILL_RIGHT_WIDTH / 2f, SCREEN_HEIGHT - HP_HEIGHT);
+                setPosition(x - BOSS3_SKILL_1B_WIDTH / 2f, SCREEN_HEIGHT - HP_HEIGHT);
             }
         }
-        setSize(BOSS3_SKILL_RIGHT_WIDTH, BOSS3_SKILL_RIGHT_HEIGHT);
+        setSize(BOSS3_SKILL_1B_WIDTH, BOSS3_SKILL_1B_HEIGHT);
         hitBox = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        setOrigin(BOSS3_SKILL_RIGHT_WIDTH / 2f, BOSS3_SKILL_RIGHT_HEIGHT / 2f);
+        setOrigin(BOSS3_SKILL_1B_WIDTH / 2f, BOSS3_SKILL_1B_HEIGHT / 2f);
 
-        int maxSawFrame = sawTexture.getWidth() / BOSS3_SKILL_RIGHT_WIDTH;
+        int maxSawFrame = sawTexture.getWidth() / BOSS3_SKILL_1B_WIDTH;
         TextureRegion[] sawSkillFrames = new TextureRegion[maxSawFrame];
         for (int i = 0; i < maxSawFrame; i++) {
-            sawSkillFrames[i] = new TextureRegion(sawTexture, i * BOSS3_SKILL_RIGHT_WIDTH, 0,
-                BOSS3_SKILL_RIGHT_WIDTH, BOSS3_SKILL_RIGHT_HEIGHT);
+            sawSkillFrames[i] = new TextureRegion(sawTexture, i * BOSS3_SKILL_1B_WIDTH, 0,
+                BOSS3_SKILL_1B_WIDTH, BOSS3_SKILL_1B_HEIGHT);
         }
         sawSkillAnimation = new Animation<>(FRAME_DURATION, sawSkillFrames);
         currentFrame = sawSkillAnimation.getKeyFrame(0);
@@ -99,8 +99,8 @@ public class Saw extends Actor {
         } else {
             moveBy(0,VERTICAL_SAW_SPEED * delta * direction);
         }
-        if (getX() >= SCREEN_WIDTH || getX() <= -BOSS3_SKILL_RIGHT_WIDTH
-            || getY() >= UP_BOUNDARY || getY() <= -BOSS3_SKILL_RIGHT_HEIGHT) {
+        if (getX() >= SCREEN_WIDTH || getX() <= -BOSS3_SKILL_1B_WIDTH
+            || getY() >= UP_BOUNDARY || getY() <= -BOSS3_SKILL_1B_HEIGHT) {
             this.remove();
             isSawSkillFinished = true;
             return;

@@ -86,10 +86,19 @@ public class Boss3RandomMovement implements FinalBossSkill {
 
         skillTimer += delta;
         if (skillTimer >= SKILL_INTERVAL) {
-            if (new Random().nextBoolean()) {
-                nextSkill = owner.getRocketSkill();
-            } else {
-                nextSkill = owner.getSawSkill();
+            if (owner.getBoss3State() == Boss3.Boss3State.NORMAL) {
+                if (new Random().nextBoolean()) {
+                    nextSkill = owner.getRocketSkill();
+                } else {
+                    nextSkill = owner.getSawSkill();
+                }
+            }
+            else {
+                if (new Random().nextBoolean()) {
+                    nextSkill = owner.getSpikeSkill();
+                } else {
+                    nextSkill = owner.getLaserSkill();
+                }
             }
             finalBoss.setSkill(nextSkill);
         }

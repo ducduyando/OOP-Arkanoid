@@ -2,8 +2,6 @@ package io.github.arkanoid.boss3;
 
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.entities.FinalBossSkill;
-import io.github.arkanoid.entities.MiniBoss;
-import io.github.arkanoid.entities.MiniBossSkill;
 
 import java.util.Random;
 
@@ -24,14 +22,14 @@ public class Boss3Skill1B implements FinalBossSkill {
     public Boss3Skill1B(Boss3 owner) {
         this.owner = owner;
 
-        float cellXSize = (SCREEN_WIDTH - BOSS3_SKILL_RIGHT_WIDTH) / (float) (COLS);
-        float cellYSize = (SCREEN_HEIGHT - BOSS3_SKILL_RIGHT_HEIGHT - HP_HEIGHT) / (float) (ROWS);
+        float cellXSize = (SCREEN_WIDTH - BOSS3_SKILL_1B_WIDTH) / (float) (COLS);
+        float cellYSize = (SCREEN_HEIGHT - BOSS3_SKILL_1B_HEIGHT - HP_HEIGHT) / (float) (ROWS);
 
         for (int c = 0; c < COLS; c++) {
-            positionTargetX[c] = BOSS3_SKILL_RIGHT_WIDTH / 2f + c * cellXSize;
+            positionTargetX[c] = BOSS3_SKILL_1B_WIDTH / 2f + c * cellXSize;
         }
         for (int r = 0; r < ROWS; r++) {
-            positionTargetY[r] = BOSS3_SKILL_RIGHT_HEIGHT / 2f + r * cellYSize;
+            positionTargetY[r] = BOSS3_SKILL_1B_HEIGHT / 2f + r * cellYSize;
         }
     }
 

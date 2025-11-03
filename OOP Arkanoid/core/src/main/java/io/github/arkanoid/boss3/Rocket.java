@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import com.badlogic.gdx.math.Rectangle;
+import io.github.arkanoid.core.Constants;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -30,17 +31,17 @@ public class Rocket extends Actor {
 
     public Rocket(Texture rocketSkillTexture, Texture targetTexture, float x, float y) {
         target(targetTexture, x, y);
-        float xx = x - BOSS3_SKILL_LEFT_WIDTH / 2f;
+        float xx = x - Constants.BOSS3_SKILL_1A_WIDTH / 2f;
         float yy = SCREEN_HEIGHT - HP_HEIGHT;
         setPosition(xx, yy);
-        setSize(BOSS3_SKILL_LEFT_WIDTH, BOSS3_SKILL_LEFT_HEIGHT);
+        setSize(Constants.BOSS3_SKILL_1A_WIDTH, BOSS3_SKILL_1A_HEIGHT);
         hitBox = new Rectangle(SCREEN_WIDTH, SCREEN_HEIGHT, target.getWidth(), target.getHeight());
 
-        int maxFrame = rocketSkillTexture.getWidth() / BOSS3_SKILL_LEFT_WIDTH;
+        int maxFrame = rocketSkillTexture.getWidth() / Constants.BOSS3_SKILL_1A_WIDTH;
         TextureRegion[] rocketSkillFrames = new TextureRegion[maxFrame];
         for (int i = 0; i < maxFrame; i++) {
-            rocketSkillFrames[i] = new TextureRegion(rocketSkillTexture, i * BOSS3_SKILL_LEFT_WIDTH, 0,
-                BOSS3_SKILL_LEFT_WIDTH, BOSS3_SKILL_LEFT_HEIGHT);
+            rocketSkillFrames[i] = new TextureRegion(rocketSkillTexture, i * Constants.BOSS3_SKILL_1A_WIDTH, 0,
+                Constants.BOSS3_SKILL_1A_WIDTH, BOSS3_SKILL_1A_HEIGHT);
         }
 
         rocketSkillAnimation = new Animation<>(FRAME_DURATION * 1.5f, rocketSkillFrames);

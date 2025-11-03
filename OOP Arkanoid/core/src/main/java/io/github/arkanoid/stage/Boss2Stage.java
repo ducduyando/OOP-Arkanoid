@@ -231,7 +231,7 @@ public class Boss2Stage implements GameStage {
             gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.bossCollision(ball);
-            gameLogic.skillCollision(stage);
+            gameLogic.skillCollision(stage, ball);
 
             if (paddleSkill1A1 != null && paddleSkill1A2 != null) {
                 InputManager inputManager = InputManager.getInstance();
