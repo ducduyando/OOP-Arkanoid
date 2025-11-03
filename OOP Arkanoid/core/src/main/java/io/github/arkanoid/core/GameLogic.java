@@ -185,51 +185,51 @@ public class GameLogic {
         }
     }
 
-//    public void miniBossCollision(Ball ball) {
-//        if (miniBossRef == null) {
-//            return;
-//        }
-//        Rectangle paddleRect = paddleRef.getHitBox();
-//        Rectangle ballRect = ball.getHitBox();
-//        Rectangle miniBossRect = miniBossRef.getHitBox();
-//
-//        if (ballRect.overlaps(miniBossRect)) {
-//            miniBossRef.takeDamage();
-//            float ballCenterX = ballRect.x + ballRect.width / 2;
-//            float ballCenterY = ballRect.y + ballRect.height / 2;
-//            float miniBossCenterX = miniBossRect.x + miniBossRect.width / 2;
-//            float miniBossCenterY = miniBossRect.y + miniBossRect.height / 2;
-//
-//            float overlapX = (ballRect.width / 2 + miniBossRect.width / 2) - Math.abs(ballCenterX - miniBossCenterX);
-//            float overlapY = (ballRect.height / 2 + miniBossRect.height / 2) - Math.abs(ballCenterY - miniBossCenterY);
-//
-//            Vector2 normal = new Vector2();
-//
-//            if (overlapX < overlapY) {
-//                if (ballCenterX < miniBossCenterX) {
-//                    normal.set(-1, 0);
-//                    ball.setX(miniBossRect.x - ballRect.width);
-//                } else {
-//                    normal.set(1, 0);
-//                    ball.setX(miniBossRect.x + miniBossRect.width);
-//                }
-//            } else {
-//                if (ballCenterY < miniBossCenterY) {
-//                    normal.set(0, -1);
-//                    ball.setY(miniBossRect.y - ballRect.height);
-//                } else {
-//                    normal.set(0, 1);
-//                    ball.setY(miniBossRect.y + miniBossRect.height);
-//                }
-//            }
-//
-//            Vector2 reflectVector = reflect(ball.getVelocity(), normal);
-//            ball.setVelocity(reflectVector.x, reflectVector.y);
-//        }
-//        if (paddleRect.overlaps(miniBossRect)) {
-//            paddleRef.takeDamage();
-//        }
-//    }
+    public void finalBossCollision(Ball ball) {
+        if (finalBossRef == null) {
+            return;
+        }
+        Rectangle paddleRect = paddleRef.getHitBox();
+        Rectangle ballRect = ball.getHitBox();
+        Rectangle finalBossRect = finalBossRef.getHitBox();
+
+        if (ballRect.overlaps(finalBossRect)) {
+            finalBossRef.takeDamage(ball.getDamage());
+            float ballCenterX = ballRect.x + ballRect.width / 2f;
+            float ballCenterY = ballRect.y + ballRect.height / 2f;
+            float finalBossCenterX = finalBossRect.x + finalBossRect.width / 2f;
+            float finalBossCenterY = finalBossRect.y + finalBossRect.height / 2f;
+
+            float overlapX = (ballRect.width / 2 + finalBossRect.width / 2f) - Math.abs(ballCenterX - finalBossCenterX);
+            float overlapY = (ballRect.height / 2 + finalBossRect.height / 2f) - Math.abs(ballCenterY - finalBossCenterY);
+
+            Vector2 normal = new Vector2();
+
+            if (overlapX < overlapY) {
+                if (ballCenterX < finalBossCenterX) {
+                    normal.set(-1, 0);
+                    ball.setX(finalBossRect.x - ballRect.width);
+                } else {
+                    normal.set(1, 0);
+                    ball.setX(finalBossRect.x + finalBossRect.width);
+                }
+            } else {
+                if (ballCenterY < finalBossCenterY) {
+                    normal.set(0, -1);
+                    ball.setY(finalBossRect.y - ballRect.height);
+                } else {
+                    normal.set(0, 1);
+                    ball.setY(finalBossRect.y + finalBossRect.height);
+                }
+            }
+
+            Vector2 reflectVector = reflect(ball.getVelocity(), normal);
+            ball.setVelocity(reflectVector.x, reflectVector.y);
+        }
+        if (paddleRect.overlaps(finalBossRect)) {
+            paddleRef.takeDamage();
+        }
+    }
 
     public void skillCollision(Stage stage) {
         Rectangle paddleHitbox = paddleRef.getHitBox();
@@ -262,7 +262,8 @@ public class GameLogic {
         }
 
         Rectangle paddleLaserRect = paddleLaserEffect.getHitbox();
-        Rectangle bossRect = bossRef.getHitBox();
+
+
 //        if (miniBossRef != null) {
 //            Rectangle miniBossRect = miniBossRef.getHitBox();
 //            if (paddleLaserRect.overlaps(miniBossRect)) {
@@ -270,8 +271,18 @@ public class GameLogic {
 //            }
 //        }
 
-        if (paddleLaserRect.overlaps(bossRect)) {
-            bossRef.takeDamage(PADDLE_DAMAGE);
+        if (bossRef != null) {
+            Rectangle bossRect = bossRef.getHitBox();
+            if (paddleLaserRect.overlaps(bossRect)) {
+                bossRef.takeDamage(PADDLE_DAMAGE);
+            }
+        }
+
+        if (finalBossRef != null) {
+            Rectangle finalBossRect = finalBossRef.getHitBox();
+            if (paddleLaserRect.overlaps(finalBossRect)) {
+                finalBossRef.takeDamage(PADDLE_DAMAGE);
+            }
         }
     }
 }

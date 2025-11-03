@@ -107,12 +107,6 @@ public class Constants {
     public static final float BOSS3_INITIAL_X = (SCREEN_WIDTH - BOSS3_WIDTH) / 2f;
     public static final float BOSS3_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
-    public static final int BOSS3_RIGHT_WIDTH = 128;
-    public static final int BOSS3_RIGHT_HEIGHT = 128;
-
-    public static final int BOSS3_LEFT_WIDTH = 112;
-    public static final int BOSS3_LEFT_HEIGHT = 176;
-
     public static final int BOSS3_SKILL_RIGHT_WIDTH = 256;
     public static final int BOSS3_SKILL_RIGHT_HEIGHT = 256;
 

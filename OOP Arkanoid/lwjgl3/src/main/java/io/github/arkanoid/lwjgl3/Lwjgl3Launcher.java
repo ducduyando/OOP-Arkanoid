@@ -23,7 +23,7 @@ public class  Lwjgl3Launcher {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setTitle("OOP Arkanoid");
         //// Vsync limits the frames per second to what your hardware can display, and helps eliminate
-        //// screen tearing. This setting doesn't always work on Linux, so the line after is a safeguard.
+        //// screen tearing. This setting doesn't always work on Linux, so the line after is a safeguardsa.
         configuration.useVsync(true);
 
 

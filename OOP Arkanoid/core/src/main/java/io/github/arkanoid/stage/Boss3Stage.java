@@ -184,7 +184,7 @@ public class Boss3Stage implements GameStage {
             gameLogic.launch(ball);
             gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
-            gameLogic.bossCollision(ball);
+            gameLogic.finalBossCollision(ball);
             gameLogic.skillCollision(stage);
 
             if (paddleSkill1A != null) {

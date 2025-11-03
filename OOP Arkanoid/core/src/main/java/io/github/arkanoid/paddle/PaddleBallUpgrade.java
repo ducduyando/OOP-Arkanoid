@@ -20,7 +20,7 @@ public class PaddleBallUpgrade extends Actor {
 
     public PaddleBallUpgrade(Texture ballUpgrade, float paddleX, float paddleY) {
         this.ballUpgrade = new TextureRegion(ballUpgrade);
-        float x = paddleX + (PADDLE_WIDTH + BALL_WIDTH) / 2f;
+        float x = paddleX + (PADDLE_WIDTH - BALL_WIDTH) / 2f;
         float y = paddleY + PADDLE_HEIGHT;
         setPosition(x, y);
         hitBox = new Rectangle(x, y, BALL_WIDTH, BALL_HEIGHT);

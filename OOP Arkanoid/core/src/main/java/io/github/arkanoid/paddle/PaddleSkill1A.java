@@ -23,6 +23,13 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
     private Phase currentPhase = Phase.DONE;
 
     private boolean skill1AReady = true;
+
+    public PaddleSkill1A(Paddle paddle) {
+        super(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
+        owner = paddle;
+        ballUpgrade = new Texture("PaddleSkill/" + "1a" + ".png");
+    }
+
     public float getSkill1ACooldownTimer() {
         return skill1ACooldownTimer;
     }
@@ -42,12 +49,6 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         skill1ACooldownTimer = PADDLE_SKILL_COOLDOWN;
     }
 
-    public PaddleSkill1A(Paddle paddle) {
-        super(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
-        owner = paddle;
-        ballUpgrade = new Texture("PaddleSkill/" + "1a" + ".png");
-    }
-
     @Override
     public void update(Paddle paddle, float delta) {
         // Always update cooldown timer
@@ -61,6 +62,8 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         // Update skill effects if ball is active
         if (paddleBallUpgrade != null) {
             if (currentPhase == Phase.CHARGING) {
+                setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
+                paddleBallUpgrade.setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
                 // Short charging phase
                 skill1AFiringTime += delta;
                 if (skill1AFiringTime >= 0.5f) {
@@ -76,8 +79,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
                     paddleBallUpgrade.setPosition(getX(), getY());
 
                     skill1AFiringTime += delta;
-                    // End skill after 5 seconds or if ball goes off screen
-                    if (skill1AFiringTime >= 5f || getY() > UP_BOUNDARY || getY() < DOWN_BOUNDARY) {
+                    if (getY() < DOWN_BOUNDARY) {
                         cleanup();
                         currentPhase = Phase.DONE;
                     }
@@ -88,12 +90,12 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
 
     @Override
     public void enter(Paddle paddle) {
-        setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
         paddleBallUpgrade = new PaddleBallUpgrade(ballUpgrade, paddle.getX(), paddle.getY());
         owner.getStage().addActor(this.paddleBallUpgrade);
         currentPhase = Phase.CHARGING;
         skill1AFiringTime = 0f;
         setLaunched(false); // Reset launch state
+        setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
     }
 
     @Override

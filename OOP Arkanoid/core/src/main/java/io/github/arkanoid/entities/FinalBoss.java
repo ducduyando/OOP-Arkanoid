@@ -185,7 +185,7 @@ public class FinalBoss extends Actor {
             currentFrame = takeDamageAnimation.getKeyFrame(takeDamageTimer, false);
 
             if (takeDamageAnimation.isAnimationFinished(takeDamageTimer)) {
-                setOrigin(getWidth() / 2f, getHeight() / 2f);
+
                 state = State.NORMAL;
             }
         }
@@ -210,6 +210,6 @@ public class FinalBoss extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getOriginX(), getOriginY(), getScaleX(), getScaleY(), getRotation());
+        batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

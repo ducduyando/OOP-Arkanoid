@@ -38,11 +38,11 @@ public class Boss3RandomMovement implements FinalBossSkill {
     public Boss3RandomMovement(Boss3 owner) {
         this.owner = owner;
 
-        float cellXSize = (SCREEN_WIDTH - BOSS3_WIDTH - BOSS3_LEFT_WIDTH - BOSS3_RIGHT_WIDTH) / (float) (COLS);
+        float cellXSize = (SCREEN_WIDTH - BOSS3_WIDTH) / (float) (COLS);
         float cellYSize = (SCREEN_HEIGHT / 2f - BOSS3_HEIGHT - HP_HEIGHT) / (float) (ROWS);
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
-                positionGridX[r][c] = BOSS3_LEFT_WIDTH + c * cellXSize;
+                positionGridX[r][c] = c * cellXSize;
                 positionGridY[r][c] = SCREEN_HEIGHT / 2f + r * cellYSize;
 
             }
