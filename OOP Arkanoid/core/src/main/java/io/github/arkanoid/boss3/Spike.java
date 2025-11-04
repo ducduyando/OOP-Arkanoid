@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.arkanoid.paddle.Paddle;
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Spike extends Actor {
 
@@ -20,6 +21,7 @@ public class Spike extends Actor {
     private float stateTimer = 0f;
     private boolean isLastFrame = false;
     private boolean hasArrived = false;
+    private long spikeSoundId;
 
     private Animation<TextureRegion> spikeAnimation;
 
@@ -45,6 +47,8 @@ public class Spike extends Actor {
         setOrigin(BOSS3_SKILL_2A_WIDTH / 2f, BOSS3_SKILL_2A_HEIGHT / 2f);
 
         currentFrame = spikeAnimation.getKeyFrame(0);
+
+        this.spikeSoundId = playEffect("spikeSound");
     }
 
     public Rectangle getHitBox() {
@@ -108,5 +112,11 @@ public class Spike extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+    }
+
+    @Override
+    public boolean remove() {
+        stopEffect("spikeSound", spikeSoundId);
+        return super.remove();
     }
 }

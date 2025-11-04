@@ -22,6 +22,7 @@ public class PaddleSkill1B implements PaddleSkill {
     private float skill1BCooldownTimer = 0f; // Start ready
     private boolean isSkill1BReady = true;
 
+    private long laserBeamSoundId;
     public PaddleSkill1B(Paddle owner) {
         laserEffect = new Texture("PaddleSkill/" + "1b" + ".png");
         this.owner = owner;
@@ -62,7 +63,7 @@ public class PaddleSkill1B implements PaddleSkill {
         this.paddleLaserEffect = new PaddleLaserEffect(laserEffect, paddle.getX(), paddle.getY());
         owner.getStage().addActor(this.paddleLaserEffect);
         currentPhase = Phase.CHARGING;
-        playEffect("laserBeamSound");
+        this.laserBeamSoundId = playEffect("laserBeamSound");
     }
 
     public void update(Paddle paddle, float delta) {
@@ -102,6 +103,7 @@ public class PaddleSkill1B implements PaddleSkill {
             paddleLaserEffect.remove();
             paddleLaserEffect = null;
         }
+        stopEffect("laserBeamSound", laserBeamSoundId);
         currentPhase = Phase.DONE;
     }
 

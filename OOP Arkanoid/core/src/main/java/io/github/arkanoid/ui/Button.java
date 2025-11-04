@@ -28,6 +28,8 @@ public class Button extends Actor {
     private final Animation<TextureRegion> quitAnimation;
     private Mode mode = Mode.PLAY;
 
+    private long currentSoundId;
+
     public Button() {
         TextureRegion[] playFrames = new TextureRegion[2];
         TextureRegion[] loadFrames = new TextureRegion[2];
@@ -99,7 +101,7 @@ public class Button extends Actor {
             }
             isGameModeChosen = false;
 
-            playEffect("switchSound");
+            currentSoundId = playEffect("switchSound");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -115,9 +117,7 @@ public class Button extends Actor {
             }
             isGameModeChosen = false;
 
-            playEffect("switchSound");
-
-
+            currentSoundId = playEffect("switchSound");
         }
     }
 

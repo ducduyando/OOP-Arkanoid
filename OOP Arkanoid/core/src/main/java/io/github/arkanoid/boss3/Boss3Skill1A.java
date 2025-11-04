@@ -66,7 +66,6 @@ public class Boss3Skill1A implements FinalBossSkill {
     public void enter(FinalBoss finalBoss) {
 
         this.actionCounter = 0;
-        playEffect("rocketSound");
     }
 
     @Override

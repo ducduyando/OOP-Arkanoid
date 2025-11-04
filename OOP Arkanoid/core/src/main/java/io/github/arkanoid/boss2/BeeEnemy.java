@@ -8,19 +8,23 @@ import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.paddle.PaddleBallUpgrade;
 import io.github.arkanoid.paddle.PaddleLaserEffect;
-import io.github.arkanoid.paddle.PaddleSkill1B;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class BeeEnemy extends Actor {
     private final Texture texture;
     private Rectangle hitBox;
+
+    private long beeSoundId;
 
     public BeeEnemy(Texture texture, float x, float y) {
         this.texture = texture;
         setPosition(x - BOSS2_SKILL1_WIDTH / 2f, y);
         setSize(BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
         this.hitBox = new Rectangle(getX(), getY(), BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
+
+        this.beeSoundId = playEffect("beeSound");
     }
 
     @Override
@@ -84,5 +88,9 @@ public class BeeEnemy extends Actor {
         return hitBox;
     }
 
-
+    @Override
+    public boolean remove() {
+        stopEffect("beeSound", beeSoundId);
+        return false;
+    }
 }

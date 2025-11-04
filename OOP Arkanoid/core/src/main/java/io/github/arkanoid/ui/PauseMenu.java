@@ -34,6 +34,8 @@ public class PauseMenu extends Actor {
     private final Animation<TextureRegion> saveAnimation;
     private final Animation<TextureRegion> quitAnimation;
 
+    private long currentSoundId;
+
     public PauseMenu() {
         TextureRegion[] resumeFrames = new TextureRegion[2];
         TextureRegion[] saveFrames = new TextureRegion[2];
@@ -120,7 +122,7 @@ public class PauseMenu extends Actor {
                 option = Option.SAVE;
             }
 
-            playEffect("switchSound");
+            currentSoundId = playEffect("switchSound");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -134,7 +136,7 @@ public class PauseMenu extends Actor {
             } else if (option == Option.QUIT) {
                 option = Option.RESUME;
             }
-            playEffect("switchSound");
+            currentSoundId = playEffect("switchSound");
         }
     }
 

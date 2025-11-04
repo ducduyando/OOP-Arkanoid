@@ -47,6 +47,8 @@ public class Boss extends Actor {
 
     protected boolean isReadyToDeath = false;
 
+    private long getHitSoundId;
+
 
     public Boss(int number, float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
 
@@ -113,7 +115,7 @@ public class Boss extends Actor {
             }
             this.state = State.TAKING_DAMAGE;
             this.takeDamageTimer = 0f;
-            playEffect("getHitSound");
+            this.getHitSoundId = playEffect("getHitSound");
         }
     }
 
@@ -166,7 +168,6 @@ public class Boss extends Actor {
             if (deathAnimation.isAnimationFinished(deathTimer)) {
                 isReadyToDeath = true;
                 this.remove();
-                playEffect("deadSound");
             }
             return;
         }
@@ -211,6 +212,12 @@ public class Boss extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+    }
+
+    @Override
+    public boolean remove() {
+        stopEffect("getHitSound", getHitSoundId);
+        return super.remove();
     }
 }
 

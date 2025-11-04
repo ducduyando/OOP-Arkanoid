@@ -31,6 +31,8 @@ public class GameLogic {
     Boss bossRef;
     FinalBoss finalBossRef;
 
+    private long currentPaddleEffectId;
+
     public GameLogic(Paddle paddleRef) {
         this.paddleRef = paddleRef;
     }
@@ -105,7 +107,7 @@ public class GameLogic {
                 float speed = ball.getVelocity().len();
                 ball.setVelocity(speed * (float) Math.sin(bounceAngle(ballRect, paddleRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, paddleRect))));
             }
-            playEffect("collisionSound");
+            this.currentPaddleEffectId = playEffect("collisionSound");
         }
     }
 
@@ -124,17 +126,17 @@ public class GameLogic {
         if (ball.getX() + ball.getVelocity().x * delta <= LEFT_BOUNDARY) {
             ball.setPosition(LEFT_BOUNDARY, ball.getY());
             reflect(ball.getVelocity(), new Vector2(1,0));
-            playEffect("collisionSound");
+            this.currentPaddleEffectId = playEffect("collisionSound");
         }
         if (ball.getX() + BALL_WIDTH + ball.getVelocity().x * delta  >= RIGHT_BOUNDARY) {
             ball.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ball.getY());
             reflect(ball.getVelocity(), new Vector2(-1, 0));
-            playEffect("collisionSound");
+            this.currentPaddleEffectId = playEffect("collisionSound");
         }
         if (ball.getY() + BALL_HEIGHT + ball.getVelocity().y * delta >= topBoundary) {
             ball.setPosition(ball.getX(),  topBoundary - BALL_HEIGHT);
             reflect(ball.getVelocity(), new Vector2(0, -1));
-            playEffect("collisionSound");
+            this.currentPaddleEffectId = playEffect("collisionSound");
         }
     }
 
