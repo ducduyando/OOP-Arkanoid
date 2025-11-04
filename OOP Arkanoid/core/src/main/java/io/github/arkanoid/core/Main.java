@@ -161,7 +161,7 @@ public class Main extends ApplicationAdapter {
                 return;
             } else {
                 nextStage = new PowerUpMenuStage();
-                ((PowerUpMenuStage) nextStage).setLayerNumber(0);
+                ((PowerUpMenuStage) nextStage).setPowerUpNumber(0);
                 changeStage(nextStage);
                 return;
             }
@@ -210,7 +210,7 @@ public class Main extends ApplicationAdapter {
             } else {
 
                 nextStage = new PowerUpMenuStage();
-                ((PowerUpMenuStage) nextStage).setLayerNumber(1);
+                ((PowerUpMenuStage) nextStage).setPowerUpNumber(1);
                 changeStage(nextStage);
                 return;
             }

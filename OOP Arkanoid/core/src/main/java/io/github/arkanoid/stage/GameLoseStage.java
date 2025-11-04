@@ -88,15 +88,14 @@ public class GameLoseStage implements GameStage {
         private boolean isAnimationFinished = false;
 
         public LoseEffectActor() {
-
             for (int i = 0; i < 3; i++) {
                 loseTextures[i] = new Texture("Lose/" + "scene" + i + ".png");
             }
 
             for (int i = 0; i < 3; i++) {
-                int maxFrame = loseTextures[i].getHeight() / SCREEN_HEIGHT;
-                loseFrames[i] = new TextureRegion[maxFrame];
-                for (int j = 0; j < maxFrame; j++) {
+                int maxFrames = loseTextures[i].getHeight() / SCREEN_HEIGHT;
+                loseFrames[i] = new TextureRegion[maxFrames];
+                for (int j = 0; j < maxFrames; j++) {
                     loseFrames[i][j] = new TextureRegion(loseTextures[i], 0, j * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
                 }
                 loseAnimation[i] = new Animation<>(FRAME_DURATION * 1.5f, loseFrames[i]);

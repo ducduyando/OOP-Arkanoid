@@ -10,17 +10,17 @@ public class PowerUpMenuStage implements GameStage {
     private PowerUpMenu powerUpMenu;
     private Texture powerUpMenuTexture;
 
-    private int layerNumber = 0;
+    private int powerUpNumber = 0;
 
-    public void setLayerNumber(int layerNumber) {
-        this.layerNumber = layerNumber;
+    public void setPowerUpNumber(int powerUpNumber) {
+        this.powerUpNumber = powerUpNumber;
     }
 
     @Override
     public void enter() {
         this.gdxStage = new Stage(new ScreenViewport());
 
-        this.powerUpMenuTexture = new Texture("PowerUp/" + "layer" + layerNumber + ".png");
+        this.powerUpMenuTexture = new Texture("PowerUp/" + "layer" + powerUpNumber + ".png");
         this.powerUpMenu = new PowerUpMenu(powerUpMenuTexture);
 
         this.gdxStage.addActor(this.powerUpMenu);

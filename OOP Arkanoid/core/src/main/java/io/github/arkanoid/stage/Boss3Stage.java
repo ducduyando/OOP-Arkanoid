@@ -39,11 +39,9 @@ public class Boss3Stage implements GameStage {
     private PaddleSkill1B paddleSkill1B;
 
     private float paddleSkill1A2Timer  = 0;
-    private final double PADDLE_SKILL_1A2_TIMER = 0.5;
 
     private boolean keepJBefore = false;
     private boolean skill1AIsCurrentlyActive = false;
-
 
     private PaddleSkill2A paddleSkill2A;
     private PaddleSkill2B paddleSkill2B;
@@ -268,7 +266,7 @@ public class Boss3Stage implements GameStage {
 
                 if (keepJBefore) {
                     paddleSkill1A2Timer += delta;
-                    if (paddleSkill1A2Timer >= PADDLE_SKILL_1A2_TIMER) {
+                    if (paddleSkill1A2Timer >= SECOND_BALL_DELAY) {
                         paddleSkill1A2Timer = 0f;
                         paddleSkill1A2.enter(paddle);
                         paddleSkill1A2.setLaunched(true);

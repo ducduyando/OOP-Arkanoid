@@ -142,7 +142,7 @@ public class TutorialStage implements GameStage {
         }
 
         paddle.setTutorial(true);
-        paddle.setTutorialUpBoundary(SCREEN_HEIGHT * 0.5f);
+        paddle.setUpBoundary(TUTORIAL_UP_BOUNDARY);
         bricks = new ArrayList<>();
 
         this.gameLogic = new GameLogic(paddle);

@@ -1,7 +1,6 @@
 package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.graphics.Texture;
-import io.github.arkanoid.core.Constants;
 import io.github.arkanoid.entities.Ball;
 
 import static io.github.arkanoid.core.Constants.*;
@@ -65,7 +64,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
                 paddleBallUpgrade.setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
                 // Short charging phase
                 skill1AFiringTime += delta;
-                if (skill1AFiringTime >= 0.5f) {
+                if (skill1AFiringTime >= SECOND_BALL_DELAY) {
                     currentPhase = Phase.FIRING;
                     setLaunched(true);
                     skill1AFiringTime = 0f;

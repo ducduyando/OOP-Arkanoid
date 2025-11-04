@@ -45,15 +45,12 @@ public class PaddleSkill2B implements PaddleSkill {
         }
         if (isSkill2Start) {
             paddleShieldTime += delta;
-            if (paddleShieldTime >= 4f) {
+            if (paddleShieldTime >= HONEY_SHIELD_DURATION) {
                 owner.setShield(false);
                 isSkill2Start = false;
                 cleanup();
             }
         }
-
-        // Không xử lý input ở đây nữa, để Boss3Stage xử lý thông qua InputManager
-
     }
 
     @Override

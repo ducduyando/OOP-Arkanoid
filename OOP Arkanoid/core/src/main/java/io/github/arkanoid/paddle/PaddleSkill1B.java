@@ -21,6 +21,12 @@ public class PaddleSkill1B implements PaddleSkill {
     private float skill1BCooldownTimer = 0f; // Start ready
     private boolean isSkill1BReady = true;
 
+    public PaddleSkill1B(Paddle owner) {
+        laserEffect = new Texture("PaddleSkill/" + "1b" + ".png");
+        this.owner = owner;
+        this.currentPhase = Phase.DONE;
+    }
+
     public void startSkill1BCooldown() {
         isSkill1BReady = false;
         skill1BCooldownTimer = PADDLE_SKILL_COOLDOWN;
@@ -41,18 +47,11 @@ public class PaddleSkill1B implements PaddleSkill {
         return isSkill1BReady;
     }
 
-    public PaddleSkill1B(Paddle owner) {
-        laserEffect = new Texture("PaddleSkill/" + "1b" + ".png");
-        this.owner = owner;
-        this.currentPhase = Phase.DONE;
-    }
+
     public float getPaddleLaserTime() {
         return paddleLaserTime;
     }
 
-    public static float getSKILL1B_LASER_DURATION() {
-        return 3f;
-    }
 
     public Phase getCurrentPhase() {
         return currentPhase;
@@ -87,7 +86,7 @@ public class PaddleSkill1B implements PaddleSkill {
                 }
             } else if (currentPhase == Phase.FIRING) {
                 paddleLaserTime += delta;
-                if (paddleLaserTime >= 3f) {
+                if (paddleLaserTime >= LASER_DURATION) {
                     cleanup();
                     currentPhase = Phase.DONE;
                     startSkill1BCooldown(); // Start cooldown when skill finishes

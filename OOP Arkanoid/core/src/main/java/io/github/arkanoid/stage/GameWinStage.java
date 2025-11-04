@@ -82,7 +82,7 @@ public class GameWinStage implements GameStage {
         private final Animation<TextureRegion>[] winAnimation = new Animation[3];
         private int sceneNumber = 0;
 
-        private final TextureRegion[] winFrames = new TextureRegion[3];
+        private final TextureRegion[][] winFrames = new TextureRegion[3][];
         private TextureRegion currentFrame;
         private float stateTime = 0f;
         private boolean isAnimationFinished = false;
@@ -93,14 +93,15 @@ public class GameWinStage implements GameStage {
             }
 
             for (int i = 0; i < 3; i++) {
-                int maxFrame = winTextures[i].getHeight() / SCREEN_HEIGHT;
-                for (int j = 0; j < 3; j++) {
-                    winFrames[i] =  new TextureRegion(winTextures[i], 0, j * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+                int maxFrames = winTextures[i].getHeight() / SCREEN_HEIGHT;
+                winFrames[i] = new TextureRegion[maxFrames];
+                for (int j = 0; j < maxFrames; j++) {
+                    winFrames[i][j] =  new TextureRegion(winTextures[i], 0, j * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
                 }
-                winAnimation[i] = new Animation<>(FRAME_DURATION * 3f, winFrames[i]);
+                winAnimation[i] = new Animation<>(FRAME_DURATION * 1.5f, winFrames[i]);
             }
 
-            this.currentFrame = winFrames[0];
+            this.currentFrame = winFrames[0][0];
 
             setPosition(0, 0);
             setSize(SCREEN_WIDTH, SCREEN_HEIGHT);

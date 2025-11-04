@@ -18,15 +18,17 @@ public class Constants {
     public static final int COLS = 12;
     public static final float FRAME_DURATION = 0.15f;
 
-    /** Screen boundary. */
-    public static final int LEFT_BOUNDARY = 0;
-    public static final int RIGHT_BOUNDARY = SCREEN_WIDTH;
-    public static final int UP_BOUNDARY = SCREEN_HEIGHT - HP_HEIGHT;
-    public static final int DOWN_BOUNDARY = 0;
+    /** Ball. */
+    public static final int BALL_WIDTH = 64;
+    public static final int BALL_HEIGHT = 64;
+    public static final Vector2 BALL_VELOCITY = new Vector2(900f, 900f);
+    public static int BALL_DAMAGE = 10;
 
-    /** Transition. */
-    public static final int TRANSITION_WIDTH = 1920;
-    public static final int TRANSITION_HEIGHT = 1080;
+    /** Brick. */
+    public static final int BRICK_ROWS = 4;
+    public static final int BRICK_COLS = 10;
+    public static final int BRICK_WIDTH = 192;
+    public static final int BRICK_HEIGHT = 96;
 
     /** Paddle. */
     public static final int PADDLE_WIDTH = 464;
@@ -40,23 +42,20 @@ public class Constants {
 
     public static final float PADDLE_SKILL_COOLDOWN = 12f;
 
-    /** Brick. */
-    public static final int BRICK_ROWS = 4;
-    public static final int BRICK_COLS = 10;
-    public static final int BRICK_WIDTH = 192;
-    public static final int BRICK_HEIGHT = 96;
+    /** Screen boundary. */
+    public static final int LEFT_BOUNDARY = 0;
+    public static final int RIGHT_BOUNDARY = SCREEN_WIDTH;
+    public static final int UP_BOUNDARY = SCREEN_HEIGHT - HP_HEIGHT;
+    public static final int TUTORIAL_UP_BOUNDARY = SCREEN_HEIGHT - BALL_HEIGHT - BRICK_HEIGHT * BRICK_ROWS;
+    public static final int DOWN_BOUNDARY = 0;
+
+    /** Transition. */
+    public static final int TRANSITION_WIDTH = 1920;
+    public static final int TRANSITION_HEIGHT = 1080;
 
     /** Power Up. */
     public static final int POWER_UP_WIDTH = 1920;
     public static final int POWER_UP_HEIGHT = 1080;
-
-
-    /** Ball. */
-    public static final int BALL_WIDTH = 64;
-    public static final int BALL_HEIGHT = 64;
-    public static final Vector2 BALL_VELOCITY = new Vector2(900f, 900f);
-    public static int BALL_DAMAGE = 10;
-
 
     /** Boss1. */
     public static final int BOSS1_WIDTH = 272;
@@ -151,9 +150,18 @@ public class Constants {
     public static final int MAX_LASER_BEAMS = 5;
     public static final float LASER_DELAY = 0.5f;
 
+    /** Paddle Skill 1-A. */
+    public static final float SECOND_BALL_DELAY = 0.5f;
+
+    /** Paddle Skill 1-B. */
+    public static final float LASER_DURATION = 2f;
 
     /** Paddle Skill 2-A. */
+    public static final int MAX_BEES = 3;
     public static final float BEE_BULLET_SPEED_Y = 300f;
+
+    /** Paddle Skill 2-B. */
+    public static final float HONEY_SHIELD_DURATION = 4f;
 
     /** Skill icons. */
     public static final int SKILL_ICON_WIDTH = 144;

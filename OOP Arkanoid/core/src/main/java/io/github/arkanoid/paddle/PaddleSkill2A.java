@@ -33,7 +33,6 @@ public class PaddleSkill2A implements PaddleSkill {
                 isSkill2AReady = true;
             }
         }
-        // Không xử lý input ở đây nữa, để Boss3Stage xử lý thông qua InputManager
     }
 
     public void fire(Paddle paddle) {
