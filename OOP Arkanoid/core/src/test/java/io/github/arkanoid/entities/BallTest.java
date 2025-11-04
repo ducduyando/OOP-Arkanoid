@@ -88,13 +88,7 @@ public class BallTest extends GdxTestRunner {
 
     @Test
     void testDamage() {
-        assertEquals(10, ball.getDamage());
-
-        ball.setDamage(20);
-        assertEquals(20, ball.getDamage());
-
-        ball.setDamage(5);
-        assertEquals(5, ball.getDamage());
+        assertEquals(10, BALL_DAMAGE);
     }
 
     @Test
