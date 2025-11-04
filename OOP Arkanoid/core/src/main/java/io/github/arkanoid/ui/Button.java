@@ -10,12 +10,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicResource.*;
 
 public class Button extends Actor {
     private TextureRegion currentFrame;
     private float stateTime = 0f;
     private final Texture buttonSprite = new Texture("Menu/" + "layer" + 4 + ".png");
-    private Sound swichSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Switch" + ".wav"));
     public enum Mode {
         PLAY,
         LOAD,
@@ -99,7 +99,7 @@ public class Button extends Actor {
             }
             isGameModeChosen = false;
 
-            swichSound.play();
+            SWITCH_SOUND.play();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -115,7 +115,7 @@ public class Button extends Actor {
             }
             isGameModeChosen = false;
 
-            swichSound.play();
+            SWITCH_SOUND.play();
         }
     }
 
@@ -127,6 +127,5 @@ public class Button extends Actor {
     public void dispose() {
 
         buttonSprite.dispose();
-        swichSound.dispose();
     }
 }

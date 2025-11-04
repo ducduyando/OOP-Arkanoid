@@ -25,6 +25,7 @@ import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
 import static io.github.arkanoid.core.GameLogic.reflect;
+import static io.github.arkanoid.core.MusicResource.*;
 
 public class TutorialStage implements GameStage {
     private Stage gdxStage;
@@ -52,7 +53,6 @@ public class TutorialStage implements GameStage {
     // Save data for loading
     private Save.SaveData saveData;
 
-    private Sound collisionSound;
 
     Cutscene cutscene;
 
@@ -130,7 +130,6 @@ public class TutorialStage implements GameStage {
         paddleImage = new Texture("Universal/" + "paddle" + ".png");
         ballImage = new Texture("Ball/" + "normal" + ".png");
 
-        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
 
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
@@ -228,7 +227,7 @@ public class TutorialStage implements GameStage {
             checkBrickCollisions();
 
             if (gameLogic.paddleCollision(ball)) {
-                collisionSound.play();
+                COLLISION_SOUND.play();
             }
 
         } else if (bricks.isEmpty() && !isCompleted) {
@@ -270,7 +269,7 @@ public class TutorialStage implements GameStage {
             BrickActor brick = iterator.next();
             if (!brick.isDestroyed() && ballRect.overlaps(brick.getHitBox())) {
 
-                collisionSound.play();
+                COLLISION_SOUND.play();
 
                 Rectangle brickRect = brick.getHitBox();
 
@@ -322,9 +321,6 @@ public class TutorialStage implements GameStage {
         }
         pauseMenu.dispose();
         gdxStage.dispose();
-        if (collisionSound != null) {
-            collisionSound.dispose();
-        }
 
     }
 

@@ -10,7 +10,7 @@ import io.github.arkanoid.boss1.BombProjectile;
 import io.github.arkanoid.boss1.LaserEffect;
 import io.github.arkanoid.boss2.BeeEnemy;
 import io.github.arkanoid.boss3.Rocket;
-import io.github.arkanoid.boss3.Saw;
+import io.github.arkanoid.boss3.Chainsaw;
 import io.github.arkanoid.boss3.Spike;
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.paddle.Paddle;
@@ -255,7 +255,7 @@ public class GameLogic {
                     bee.remove();
                 }
             }
-            else if (actor instanceof Saw saw) {
+            else if (actor instanceof Chainsaw saw) {
                 if (saw.getHitBox().overlaps(paddleHitbox)) {
                     paddleRef.takeDamage();
                 }

@@ -85,7 +85,7 @@ public class Boss3RandomMovement implements FinalBossSkill {
                 if (new Random().nextBoolean()) {
                     nextSkill = owner.getRocketSkill();
                 } else {
-                    nextSkill = owner.getSawSkill();
+                    nextSkill = owner.getChainsawSkill();
                 }
             }
             else {

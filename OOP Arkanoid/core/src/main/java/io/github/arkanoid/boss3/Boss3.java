@@ -1,11 +1,8 @@
 package io.github.arkanoid.boss3;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.paddle.Paddle;
-
-import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -18,7 +15,7 @@ public class Boss3 extends FinalBoss {
 
     Paddle paddle;
     Boss3Skill1A rocketSkill;
-    Boss3Skill1B sawSkill;
+    Boss3Skill1B chainsawSkill;
 
     Boss3Skill2A spikeSkill;
     Boss3Skill2B laserSkill;
@@ -36,11 +33,11 @@ public class Boss3 extends FinalBoss {
         this.paddle = paddle;
 
         this.rocketSkill = new Boss3Skill1A(this);
-        this.sawSkill = new Boss3Skill1B(this);
+        this.chainsawSkill = new Boss3Skill1B(this);
         this.randomMovement = new Boss3RandomMovement(this);
 
         rocketSkill.setNextSkill(randomMovement);
-        sawSkill.setNextSkill(randomMovement);
+        chainsawSkill.setNextSkill(randomMovement);
 
         spikeSkill = new Boss3Skill2A(this);
         laserSkill = new Boss3Skill2B(this, paddle);
@@ -59,8 +56,8 @@ public class Boss3 extends FinalBoss {
         return rocketSkill;
     }
 
-    public Boss3Skill1B getSawSkill() {
-        return sawSkill;
+    public Boss3Skill1B getChainsawSkill() {
+        return chainsawSkill;
     }
 
     public Boss3Skill2A getSpikeSkill() {
@@ -91,7 +88,7 @@ public class Boss3 extends FinalBoss {
 
     public void skill1B(float targetX, float targetY, boolean isVertical) {
         if (getStage() != null) {
-            getStage().addActor(new Saw(this.skill1BTexture, this.target1BTexture, targetX, targetY, isVertical));
+            getStage().addActor(new Chainsaw(this.skill1BTexture, this.target1BTexture, targetX, targetY, isVertical));
         }
     }
 

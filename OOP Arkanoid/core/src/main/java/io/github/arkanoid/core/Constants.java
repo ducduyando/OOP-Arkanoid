@@ -129,10 +129,10 @@ public class Constants {
     /** Boss3 Skill 1-B. */
     public static final int BOSS3_SKILL_1B_WIDTH = 256;
     public static final int BOSS3_SKILL_1B_HEIGHT = 256;
-    public static final int HORIZONTAL_SAW_SPEED = 889;
-    public static final int VERTICAL_SAW_SPEED = 500;
+    public static final int HORIZONTAL_CHAINSAW_SPEED = 889;
+    public static final int VERTICAL_CHAINSAW_SPEED = 500;
 
-    public static final int MAX_SAWS = 2;
+    public static final int MAX_CHAINSAWS = 2;
 
     /** Boss3 Skill 2-A. */
     public static final int BOSS3_SKILL_2A_WIDTH = 328;

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicResource.*;
 
 
 public class PowerUpMenu extends Actor {
@@ -24,7 +25,6 @@ public class PowerUpMenu extends Actor {
 
 
     private final Texture transitionSprite = new Texture("PowerUp/" + "transition" + ".png");
-    private Sound swichSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Switch" + ".wav"));
 
     private TextureRegion currentFrame;
 
@@ -112,7 +112,7 @@ public class PowerUpMenu extends Actor {
                 || Gdx.input.isKeyJustPressed(Input.Keys.A)
                 || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
 
-                swichSound.play();
+                SWITCH_SOUND.play();
                 option = (option == PowerUpMenu.Option.SKILL1) ? PowerUpMenu.Option.SKILL2 : PowerUpMenu.Option.SKILL1;
             }
         }
@@ -140,6 +140,6 @@ public class PowerUpMenu extends Actor {
 
     public void dispose() {
         transitionSprite.dispose();
-        swichSound.dispose();
+        SWITCH_SOUND.dispose();
     }
 }

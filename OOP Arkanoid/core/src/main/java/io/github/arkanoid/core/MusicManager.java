@@ -14,8 +14,9 @@ public class MusicManager implements Disposable {
     private static MusicManager instance;
 
 
-    private Map<String, Music> musicMap;
-    private Map<String, Sound> effectMap;
+    private Map<String, Music> soundtrackMap;
+    private Map<String, Sound> sfxMap;
+
 
     private float musicVolume = 1.0f;
     private float effectVolume = 1.0f;
@@ -26,9 +27,10 @@ public class MusicManager implements Disposable {
 
 
     private MusicManager() {
-        musicMap = new HashMap<>();
-        effectMap = new HashMap<>();
+        soundtrackMap = new HashMap<>();
+        sfxMap = new HashMap<>();
 
+        sfxMap["collisionSound"] = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
     }
 
 
@@ -44,7 +46,7 @@ public class MusicManager implements Disposable {
 
         Music music = Gdx.audio.newMusic(Gdx.files.internal(source));
         if (music != null) {
-            musicMap.put(id, music);
+            soundtrackMap.put(id, music);
 
         }
 
@@ -55,7 +57,7 @@ public class MusicManager implements Disposable {
 
         Sound effect = Gdx.audio.newSound(Gdx.files.internal(source));
         if (effect != null) {
-            effectMap.put(id, effect);
+            sfxMap.put(id, effect);
 
         }
 
@@ -63,7 +65,7 @@ public class MusicManager implements Disposable {
 
 
     public void playMusic(String id) {
-        Music music = musicMap.get(id);
+        Music music = soundtrackMap.get(id);
         if (music != null) {
             // Stop current music if playing
             if (currentMusic != null && currentMusic.isPlaying()) {
@@ -80,7 +82,7 @@ public class MusicManager implements Disposable {
 
 
     public void playEffect(String id) {
-        Sound effect = effectMap.get(id);
+        Sound effect = sfxMap.get(id);
         if (effect != null) {
             effect.play(effectVolume);
         }
@@ -88,7 +90,7 @@ public class MusicManager implements Disposable {
 
 
     public void playEffect(String id, float volume) {
-        Sound effect = effectMap.get(id);
+        Sound effect = sfxMap.get(id);
         if (effect != null) {
             effect.play(volume);
         }
@@ -143,12 +145,12 @@ public class MusicManager implements Disposable {
 
 
     public boolean hasMusicLoaded(String id) {
-        return musicMap.containsKey(id);
+        return soundtrackMap.containsKey(id);
     }
 
 
     public boolean hasEffectLoaded(String id) {
-        return effectMap.containsKey(id);
+        return sfxMap.containsKey(id);
     }
 
 
@@ -183,16 +185,16 @@ public class MusicManager implements Disposable {
             currentMusicId = null;
         }
 
-        for (Map.Entry<String, Music> entry : musicMap.entrySet()) {
+        for (Map.Entry<String, Music> entry : soundtrackMap.entrySet()) {
             entry.getValue().dispose();
         }
-        musicMap.clear();
+        soundtrackMap.clear();
 
         // Dispose all effects
-        for (Map.Entry<String, Sound> entry : effectMap.entrySet()) {
+        for (Map.Entry<String, Sound> entry : sfxMap.entrySet()) {
             entry.getValue().dispose();
         }
-        effectMap.clear();
+        sfxMap.clear();
 
     }
 

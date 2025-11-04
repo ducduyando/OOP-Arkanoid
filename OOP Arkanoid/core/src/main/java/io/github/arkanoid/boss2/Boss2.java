@@ -19,8 +19,6 @@ public class Boss2 extends Boss {
     private boolean heal = false;
     protected boolean isShielded = false;
 
-    private final Sound hpUpSound = HP_UP_SOUND;
-
     public Boss2(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2_VELOCITY, maxHp);
 
@@ -69,6 +67,7 @@ public class Boss2 extends Boss {
 
     public void skill1() {
         if (getStage() != null) {
+            BEE_SOUND.play();
             getStage().addActor(new BeeEnemy(this.skill1Texture, getX() + getWidth() / 2 + BOSS2_SKILL1_WIDTH , getY() - BOSS2_SKILL1_HEIGHT ));
         }
     }
@@ -100,23 +99,15 @@ public class Boss2 extends Boss {
                         this.setHp(this.getHp() + damage);
                     }
                     heal = false;
-                    hpUpSound.play();
+                    HP_UP_SOUND.play();
                 }
                 return;
             }
-            getHitSound.play();
             super.takeDamage(damage);
 
             if (!isDead()) {
                 this.skill1();
             }
         }
-    }
-
-    public void dispose() {
-        if (hpUpSound != null) {
-            hpUpSound.dispose();
-        }
-        super.dispose();
     }
 }

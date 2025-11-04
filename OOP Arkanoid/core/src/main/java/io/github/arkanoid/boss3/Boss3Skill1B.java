@@ -40,7 +40,7 @@ public class Boss3Skill1B implements FinalBossSkill {
         this.nextSkill = nextSkill;
     }
 
-    public void launchNewSaw(boolean isVertical) {
+    public void launchNewChainsaw(boolean isVertical) {
         Random random = new Random();
         int r = random.nextInt(ROWS);
         int c = random.nextInt(COLS);
@@ -57,15 +57,15 @@ public class Boss3Skill1B implements FinalBossSkill {
 
     @Override
     public void update(FinalBoss finalBoss, float delta) {
-        if (actionCounter >= MAX_SAWS) {
+        if (actionCounter >= MAX_CHAINSAWS) {
             finalBoss.setSkill(nextSkill);
         }
         else {
             if (actionCounter == 0) {
-                launchNewSaw(true);
+                launchNewChainsaw(true);
             }
             else {
-                launchNewSaw(false);
+                launchNewChainsaw(false);
             }
             actionCounter++;
         }

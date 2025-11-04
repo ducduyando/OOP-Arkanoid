@@ -2,8 +2,7 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+import static io.github.arkanoid.core.MusicResource.*;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -53,8 +52,6 @@ public class Boss1Stage implements GameStage {
     // time
     private float stageTime = 0f;
 
-    private Sound collisionSound;
-
     public Boss1Stage() {
         this.saveData = null;
         // Reset game time when starting new game
@@ -82,8 +79,6 @@ public class Boss1Stage implements GameStage {
         for (int i = 0; i < 5; i++) {
             bgTextures[i] = new Texture("Background/" + "Stage1/" + "layer" + i + ".png");
         }
-
-        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
 
 
         // Create entities with saved positions if available
@@ -176,7 +171,7 @@ public class Boss1Stage implements GameStage {
             gameLogic.skillCollision(stage, ball);
             gameLogic.bossCollision(ball);
             if (gameLogic.paddleCollision(ball)) {
-                collisionSound.play();
+                COLLISION_SOUND.play();
             }
             if (boss1.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
@@ -226,9 +221,6 @@ public class Boss1Stage implements GameStage {
         }
         if (stage != null) {
             stage.dispose();
-        }
-        if (collisionSound != null) {
-            collisionSound.dispose();
         }
     }
 

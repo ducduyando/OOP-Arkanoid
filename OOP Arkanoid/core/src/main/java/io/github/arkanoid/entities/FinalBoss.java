@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicResource.*;
 
 public class FinalBoss extends Actor {
     public enum State {
@@ -49,16 +50,8 @@ public class FinalBoss extends Actor {
 
     protected boolean isReadyToDeath = false;
 
-    private Sound getHitSound;
-    private Music deadMusic;
-    private boolean isExiting = false;
-
 
     public FinalBoss(float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
-
-        getHitSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Get hit" + ".wav"));
-        deadMusic = Gdx.audio.newMusic(Gdx.files.internal("SFX/" + "Dead" + ".wav"));
-
 
         this.normalSprite = new Texture("Boss3/" + "normal" + ".png");
         this.takeDamageSprite = new Texture("Boss3/" + "take_damage" + ".png");
@@ -124,7 +117,7 @@ public class FinalBoss extends Actor {
             }
             this.state = State.TAKING_DAMAGE;
             this.takeDamageTimer = 0f;
-            getHitSound.play();
+            GET_HIT_SOUND.play();
         }
     }
 
@@ -175,17 +168,8 @@ public class FinalBoss extends Actor {
             currentFrame = deathAnimation.getKeyFrame(deathTimer, false);
 
             if (deathAnimation.isAnimationFinished(deathTimer)) {
-                if (!isExiting) {
-                    deadMusic.play();
-                    isExiting = true;
-                }
-                else {
-                    if (!deadMusic.isPlaying()) {
-                        isReadyToDeath = true;
-                        isExiting = false;
-                        this.remove();
-                    }
-                }
+                isReadyToDeath = true;
+                this.remove();
             }
             return;
         }
@@ -227,12 +211,6 @@ public class FinalBoss extends Actor {
         skill1BTexture.dispose();
         skill2ATexture.dispose();
         skill2BTexture.dispose();
-        if (getHitSound != null) {
-            getHitSound.dispose();
-        }
-        if (deadMusic != null) {
-            deadMusic.dispose();
-        }
     }
 
     @Override
