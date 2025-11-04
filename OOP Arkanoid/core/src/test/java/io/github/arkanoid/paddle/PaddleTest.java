@@ -1,5 +1,5 @@
 // Đặt trong: core/src/test/java/io/github/arkanoid/paddle/
-package paddle;
+package io.github.arkanoid.paddle;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
