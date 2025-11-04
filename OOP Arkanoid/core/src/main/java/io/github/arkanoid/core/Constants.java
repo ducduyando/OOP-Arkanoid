@@ -158,6 +158,7 @@ public class Constants {
 
     /** Paddle Skill 2-A. */
     public static final int MAX_BEES = 3;
+    public static final float NEXT_BEE_SPAWN_DELAY = 0.25f;
     public static final float BEE_BULLET_SPEED_Y = 300f;
 
     /** Paddle Skill 2-B. */

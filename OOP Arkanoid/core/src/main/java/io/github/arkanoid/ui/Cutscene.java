@@ -38,7 +38,6 @@ public class Cutscene extends Actor {
         }
 
         int maxTransitionFrame = transitionTexture.getWidth() / TRANSITION_WIDTH;
-        TextureRegion[] transition = new TextureRegion[maxTransitionFrame];
         transitionFrames = new TextureRegion[maxTransitionFrame];
         for (int i = 0; i < maxTransitionFrame; i++) {
             transitionFrames[i] = new TextureRegion(transitionTexture, TRANSITION_WIDTH * i, 0, TRANSITION_WIDTH, TRANSITION_HEIGHT);
@@ -51,7 +50,7 @@ public class Cutscene extends Actor {
             for (int j = 0; j < maxFrames; j++) {
                 cutsceneFrames[i][j] = new TextureRegion(cutsceneTextures[i], 0, SCREEN_HEIGHT * j, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
-            cutsceneAnimation[i + 1] = new Animation<>(FRAME_DURATION * 2f, transitionFrames);
+            cutsceneAnimation[i + 1] = new Animation<>(FRAME_DURATION * 2f, cutsceneFrames[i]);
         }
 
         this.currentFrame = transitionFrames[0];

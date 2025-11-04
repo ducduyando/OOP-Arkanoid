@@ -335,7 +335,7 @@ public class Boss3Stage implements GameStage {
                 if (inputManager.isActionJustPressed(ACTION_SKILL_2)
                     && paddleSkill2A.isSkill2AReady()) {
 
-                    paddleSkill2A.fire(paddle);
+                    paddleSkill2A.fire();
                 }
             }
             // Handle Skill2B (Honey Shield) - K key

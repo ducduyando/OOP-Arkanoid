@@ -11,6 +11,10 @@ public class PaddleSkill2A implements PaddleSkill {
     private float skill2ACooldownTimer = 0f;
     private boolean isSkill2AReady = true;
 
+    private float spawnTimer = 0f;
+    private int actionCounter = 0;
+    private boolean isSkillActivated = false;
+
     public boolean isSkill2AReady() {
         return isSkill2AReady;
     }
@@ -31,21 +35,39 @@ public class PaddleSkill2A implements PaddleSkill {
             skill2ACooldownTimer -= delta;
             if (skill2ACooldownTimer <= 0) {
                 isSkill2AReady = true;
+                actionCounter = 0;
+            }
+        }
+        else {
+            if (isSkillActivated) {
+                if (actionCounter >= MAX_BEES) {
+                    isSkill2AReady = false;
+                    isSkillActivated = false;
+                    skill2ACooldownTimer = PADDLE_SKILL_COOLDOWN;
+                }
+                else {
+                    spawnTimer += delta;
+                    if (spawnTimer >= SPAWN_BEE_DELAY) {
+                        spawnTimer = 0;
+                        launchNewBee();
+                        actionCounter++;
+                    }
+                }
             }
         }
     }
 
-    public void fire(Paddle paddle) {
-        isSkill2AReady = false;
-        skill2ACooldownTimer = PADDLE_SKILL_COOLDOWN;
+    public void launchNewBee() {
+        if (this.owner.getStage() != null) {
+            float spawnX = owner.getX() + owner.getWidth() / 2f;
+            float spawnY = owner.getY() + owner.getHeight();
 
-        float spawnX = paddle.getX() + paddle.getWidth() / 2f;
-        float spawnY = paddle.getY() + paddle.getHeight();
-
-        PaddleBeeBullet bee = new PaddleBeeBullet(beeTexture, spawnX, spawnY);
-        if (owner.getStage() != null) {
-            owner.getStage().addActor(bee);
+            this.owner.getStage().addActor(new PaddleBeeBullet(beeTexture, spawnX, spawnY));
         }
+    }
+
+    public void fire() {
+        isSkillActivated = true;
     }
 
 
