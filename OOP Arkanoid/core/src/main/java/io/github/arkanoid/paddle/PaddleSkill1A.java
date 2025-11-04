@@ -119,7 +119,4 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         return skill1AFiringTime;
     }
 
-    public static float getSKILL1A_FIRING_DURATION() {
-        return 5f;
-    }
 }

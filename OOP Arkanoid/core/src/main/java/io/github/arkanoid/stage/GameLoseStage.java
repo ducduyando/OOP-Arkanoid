@@ -82,7 +82,7 @@ public class GameLoseStage implements GameStage {
         private final Animation<TextureRegion>[] loseAnimation = new Animation[3];
         private int sceneNumber = 0;
 
-        private final TextureRegion[] loseFrames = new TextureRegion[3];
+        private final TextureRegion[][] loseFrames = new TextureRegion[3][];
         private TextureRegion currentFrame;
         private float stateTime = 0f;
         private boolean isAnimationFinished = false;
@@ -95,13 +95,14 @@ public class GameLoseStage implements GameStage {
 
             for (int i = 0; i < 3; i++) {
                 int maxFrame = loseTextures[i].getHeight() / SCREEN_HEIGHT;
+                loseFrames[i] = new TextureRegion[maxFrame];
                 for (int j = 0; j < maxFrame; j++) {
-                    loseFrames[i] = new TextureRegion(loseTextures[i], 0, j * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    loseFrames[i][j] = new TextureRegion(loseTextures[i], 0, j * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
                 }
-                loseAnimation[i] = new Animation<>(FRAME_DURATION * 3f, loseFrames[i]);
+                loseAnimation[i] = new Animation<>(FRAME_DURATION * 1.5f, loseFrames[i]);
             }
 
-            this.currentFrame = loseFrames[0];
+            this.currentFrame = loseFrames[0][0];
 
             setPosition(0, 0);
             setSize(SCREEN_WIDTH, SCREEN_HEIGHT);

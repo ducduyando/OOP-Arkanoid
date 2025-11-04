@@ -4,100 +4,56 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.arkanoid.core.Constants;
 
+import static io.github.arkanoid.core.Constants.*;
+
 public class GameWinStage implements GameStage {
     private Stage stage;
+    private WinEffectActor winEffectActor;
     private boolean isFinished = false;
-
-    private Texture tex0, tex1, tex2;
-    private Animation<TextureRegion> anim0, anim1, anim2;
-    private Animation<TextureRegion>[] animations;
-
-    private int currentAnimation = 0;
-    private float stateTime = 0f;
+    private boolean isQuitRequested = false;
 
     public GameWinStage() {
-
     }
 
-    private TextureRegion[] flattenV(TextureRegion[][] regions) {
-        TextureRegion[] flat = new TextureRegion[regions.length];
-        for(int i = 0; i< regions.length; i++) {
-            flat[i] = regions[i][0];
-        }
-        return flat;
-    }
     @Override
     public void enter() {
-        this.stage = new Stage(new ScreenViewport());
-        this.isFinished = false;
-        this.currentAnimation = 0;
-        this.stateTime = 0;
-        tex0 = new Texture("Win/" + "scene0" + ".png");
-        tex1 = new Texture("Win/" + "scene1" + ".png");
-        tex2 = new Texture("Win/" + "scene2" + ".png");
-
-        TextureRegion[][] regions0 = TextureRegion.split(tex0, tex0.getWidth(), tex0.getHeight() / 4);
-        anim0 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions0));
-        anim0.setPlayMode(Animation.PlayMode.NORMAL);
-
-        TextureRegion[][] regions1 = TextureRegion.split(tex1, tex1.getWidth(), tex1.getHeight() / 8);
-        anim1 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions1));
-        anim1.setPlayMode(Animation.PlayMode.NORMAL);
-
-        TextureRegion[][] regions2 = TextureRegion.split(tex2, tex2.getWidth(), tex2.getHeight() / 4);
-        anim2 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions2));
-        anim2.setPlayMode(Animation.PlayMode.NORMAL);
-
-        animations = new Animation[]{anim0, anim1, anim2};
+        stage = new Stage(new ScreenViewport());
+        winEffectActor = new WinEffectActor();
+        stage.addActor(winEffectActor);
+        Gdx.input.setInputProcessor(stage);
     }
     @Override
     public void update(float delta) {
-        if (isFinished) {
-            return;
-        }
-        stateTime += delta;
-        Animation<TextureRegion> currentAnim = animations[currentAnimation];
-        if(currentAnim.isAnimationFinished(stateTime)) {
-            currentAnimation++;
-            stateTime = 0;
-        }
+        stage.act(delta);
 
-        if (currentAnimation >= animations.length) {
-            isFinished = true;
-        }
-    }
-    public void drawDirect(SpriteBatch batch) {
-        if (isFinished || currentAnimation >= animations.length) {
-            return;
+        if (winEffectActor.isAnimationFinished()) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                isFinished = true;
+                isQuitRequested = false;
+            }
         }
 
-        // Xoa màn hình
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //Lay frame hien tai
-        Animation<TextureRegion> currentAnim = animations[currentAnimation];
-        TextureRegion currentFrame = currentAnim.getKeyFrame(stateTime, false);
-
-        // Ve frame ra giua man hinh
-        float x = (Constants.SCREEN_WIDTH - currentFrame.getRegionWidth()) / 2f;
-        float y = (Constants.SCREEN_HEIGHT - currentFrame.getRegionHeight()) / 2f;
-
-        batch.draw(currentFrame, x, y);
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            Gdx.app.exit();
+        }
     }
 
     @Override
     public void exit() {
-        tex0.dispose();
-       tex1.dispose();
-        tex2.dispose();
-         stage.dispose();
+        if (winEffectActor != null) {
+            winEffectActor.dispose();
+        }
+        if (stage != null) {
+            stage.dispose();
+        }
     }
 
     @Override
@@ -108,5 +64,85 @@ public class GameWinStage implements GameStage {
     @Override
     public boolean isFinished() {
         return isFinished;
+    }
+
+    public boolean isQuitRequested() {
+        return isQuitRequested;
+    }
+
+    public void drawDirect(SpriteBatch batch) {
+        if (winEffectActor != null) {
+            winEffectActor.drawDirect(batch);
+        }
+    }
+
+    private static class WinEffectActor extends Actor {
+        private final Texture[] winTextures = new Texture[3];
+
+        private final Animation<TextureRegion>[] winAnimation = new Animation[3];
+        private int sceneNumber = 0;
+
+        private final TextureRegion[] winFrames = new TextureRegion[3];
+        private TextureRegion currentFrame;
+        private float stateTime = 0f;
+        private boolean isAnimationFinished = false;
+
+        public WinEffectActor() {
+            for (int i = 0; i < 3; i++) {
+                winTextures[i] = new Texture("Win/" + "scene" + i + ".png");
+            }
+
+            for (int i = 0; i < 3; i++) {
+                int maxFrame = winTextures[i].getHeight() / SCREEN_HEIGHT;
+                for (int j = 0; j < 3; j++) {
+                    winFrames[i] =  new TextureRegion(winTextures[i], 0, j * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+                }
+                winAnimation[i] = new Animation<>(FRAME_DURATION * 3f, winFrames[i]);
+            }
+
+            this.currentFrame = winFrames[0];
+
+            setPosition(0, 0);
+            setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        }
+
+        public boolean isAnimationFinished() {
+            return isAnimationFinished;
+        }
+
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            if (!isAnimationFinished) {
+                stateTime += delta;
+                currentFrame = winAnimation[sceneNumber].getKeyFrame(stateTime, false);
+                if (winAnimation[sceneNumber].isAnimationFinished(stateTime)) {
+                    stateTime = 0f;
+                    sceneNumber++;
+                    if (sceneNumber >= winAnimation.length) {
+                        isAnimationFinished = true;
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+
+        }
+
+        public void drawDirect(SpriteBatch batch) {
+            if (currentFrame != null) {
+                batch.draw(currentFrame, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            }
+        }
+
+        public void dispose() {
+            for (Texture texture : winTextures) {
+                if (texture != null) {
+                    texture.dispose();
+                }
+            }
+        }
     }
  }
