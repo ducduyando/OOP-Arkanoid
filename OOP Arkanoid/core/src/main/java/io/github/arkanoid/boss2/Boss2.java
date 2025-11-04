@@ -5,6 +5,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import io.github.arkanoid.entities.Boss;
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicResource.*;
+
 import java.util.Random;
 
 public class Boss2 extends Boss {
@@ -17,12 +19,11 @@ public class Boss2 extends Boss {
     private boolean heal = false;
     protected boolean isShielded = false;
 
-    private Sound hpUpSound;
+    private final Sound hpUpSound = HP_UP_SOUND;
 
     public Boss2(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2_VELOCITY, maxHp);
 
-        hpUpSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Hp up" + ".wav"));
 
         this.randomMovement = new Boss2RandomMovement(this);
 
