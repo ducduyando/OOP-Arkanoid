@@ -75,7 +75,6 @@ public class MusicManager implements Disposable {
         Sound effect = Gdx.audio.newSound(Gdx.files.internal(source));
         if (effect != null) {
             sfxMap.put(id, effect);
-
         }
 
     }
@@ -98,18 +97,25 @@ public class MusicManager implements Disposable {
     }
 
 
-    public static void playEffect(String name) {
+    public static long playEffect(String name) {
         Sound effect = sfxMap.get(name);
         if (effect != null) {
-            effect.play(effectVolume);
+            return effect.play(effectVolume);
         }
+        return -1;
     }
-
 
     public static void playEffect(String name, float volume) {
         Sound effect = sfxMap.get(name);
         if (effect != null) {
             effect.play(volume);
+        }
+    }
+
+    public static void stopEffect(String name, long soundId) {
+        Sound effect = sfxMap.get(name);
+        if (effect != null) {
+            effect.stop(soundId);
         }
     }
 
@@ -127,7 +133,7 @@ public class MusicManager implements Disposable {
     }
 
 
-    public void resumeMusic() {
+    public static void resumeMusic() {
         if (currentMusic != null && !currentMusic.isPlaying()) {
             currentMusic.play();
         }

@@ -67,8 +67,7 @@ public class Main extends ApplicationAdapter {
 
         // Initialize SceneManager
         SceneManager sceneManager = SceneManager.getInstance();
-
-
+        MusicManager musicManager = MusicManager.getInstance();
 
         // Singleton managers are ready to use
     }

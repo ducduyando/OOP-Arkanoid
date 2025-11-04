@@ -33,7 +33,6 @@ public class Boss1 extends Boss {
 
     public void skill1() {
         if (getStage() != null) {
-            playEffect("bombSound");
             getStage().addActor(new BombProjectile(this.skill1Texture, getX() + getWidth() / 2, getY()));
         }
     }

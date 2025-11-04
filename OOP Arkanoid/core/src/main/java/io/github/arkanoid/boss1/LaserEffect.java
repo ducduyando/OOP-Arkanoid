@@ -8,6 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.playEffect;
+import static io.github.arkanoid.core.MusicManager.stopEffect;
+
 //
 public class LaserEffect extends Actor {
     private Animation<TextureRegion> laserAnimation;
@@ -54,10 +57,13 @@ public class LaserEffect extends Actor {
     public void act(float delta) {
         hitbox.setPosition(getX(), getY());
 
+        long soundId = playEffect("laserBeamSound");
+
         if (!isLaserFinished) {
             stateTime += delta;
             if (laserAnimation.isAnimationFinished(stateTime)) {
                 isLaserFinished = true;
+                stopEffect("laserBeamSound", soundId);
             }
         }
     }

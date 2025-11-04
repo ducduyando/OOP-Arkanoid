@@ -3,11 +3,14 @@ package io.github.arkanoid.boss1;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.playEffect;
+import static io.github.arkanoid.core.MusicManager.stopEffect;
 
 public class BombProjectile extends Actor {
     private final Animation<TextureRegion> animation;
@@ -44,11 +47,13 @@ public class BombProjectile extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+        long soundId = playEffect("bombSound");
         stateTime += delta;
         moveBy(0, -BOMB_SPEED_Y * delta);
         hitBox.setPosition(getX(), getY());
 
         if (getY() + getHeight() < 0) {
+            stopEffect("bombSound", soundId);
             this.remove();
         }
     }

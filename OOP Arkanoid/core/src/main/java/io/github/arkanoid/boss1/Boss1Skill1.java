@@ -7,6 +7,7 @@ import io.github.arkanoid.entities.BossSkill;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.playEffect;
 
 public class Boss1Skill1 implements BossSkill {
     private final Boss1 owner;
@@ -19,6 +20,8 @@ public class Boss1Skill1 implements BossSkill {
     private float targetY;
     private final float[][] positionGridX = new float [ROWS][COLS];
     private final float[][] positionGridY = new float [ROWS][COLS];
+
+    private long soundId;
 
     public Boss1Skill1(Boss1 owner) {
         this.owner = owner;

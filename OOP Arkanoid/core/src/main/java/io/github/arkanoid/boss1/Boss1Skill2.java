@@ -35,8 +35,6 @@ public class Boss1Skill2 implements BossSkill {
 
         currentPhase = Phase.CHARGING;
 
-        playEffect("laserBeamSound");
-
         if (new Random().nextBoolean()) {
             sweepDirection = 1;
         } else {
