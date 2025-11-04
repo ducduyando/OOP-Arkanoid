@@ -81,11 +81,11 @@ public class GameLogic {
         }
     }
 
-    public void paddleCollision(Ball ball) {
+    public boolean paddleCollision(Ball ball) {
         // Force check game over first
         if (paddleRef.isGameOver()) {
             System.out.println("GameLogic: paddleCollision skipped - paddle is game over (state: " + paddleRef.getState() + ")");
-            return;
+            return false;
         }
 
         Rectangle ballRect = ball.getHitBox();
@@ -93,7 +93,7 @@ public class GameLogic {
 
         // Double check - if paddle rect is empty, skip
         if (paddleRect.width <= 0 || paddleRect.height <= 0) {
-            return;
+            return false;
         }
 
         if (ballRect.overlaps(paddleRect)) {
@@ -104,7 +104,9 @@ public class GameLogic {
                 float speed = ball.getVelocity().len();
                 ball.setVelocity(speed * (float) Math.sin(bounceAngle(ballRect, paddleRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, paddleRect))));
             }
+            return true;
         }
+        return false;
     }
 
     public void boundaryCollision(Ball ball, float delta, int topBoundary) {

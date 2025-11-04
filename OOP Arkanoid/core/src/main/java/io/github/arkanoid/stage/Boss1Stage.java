@@ -2,6 +2,9 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -47,8 +50,10 @@ public class Boss1Stage implements GameStage {
     // Save data for loading
     private Save.SaveData saveData;
 
-// time
-private float stageTime = 0f;
+    // time
+    private float stageTime = 0f;
+
+    private Sound collisionSound;
 
     public Boss1Stage() {
         this.saveData = null;
@@ -77,6 +82,9 @@ private float stageTime = 0f;
         for (int i = 0; i < 5; i++) {
             bgTextures[i] = new Texture("Background/" + "Stage1/" + "layer" + i + ".png");
         }
+
+        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
+
 
         // Create entities with saved positions if available
         if (saveData != null) {
@@ -164,16 +172,15 @@ private float stageTime = 0f;
             // Add time to global game time
             Save.addTime(delta);
             gameLogic.launch(ball);
-            gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
-            gameLogic.bossCollision(ball);
             gameLogic.skillCollision(stage, ball);
-
+            gameLogic.bossCollision(ball);
+            if (gameLogic.paddleCollision(ball)) {
+                collisionSound.play();
+            }
             if (boss1.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;
-
-
             }
         }
 
@@ -219,6 +226,9 @@ private float stageTime = 0f;
         }
         if (stage != null) {
             stage.dispose();
+        }
+        if (collisionSound != null) {
+            collisionSound.dispose();
         }
     }
 

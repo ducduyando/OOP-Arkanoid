@@ -2,6 +2,7 @@ package io.github.arkanoid.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,6 +15,7 @@ public class Button extends Actor {
     private TextureRegion currentFrame;
     private float stateTime = 0f;
     private final Texture buttonSprite = new Texture("Menu/" + "layer" + 4 + ".png");
+    private Sound swichSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Switch" + ".wav"));
     public enum Mode {
         PLAY,
         LOAD,
@@ -96,6 +98,8 @@ public class Button extends Actor {
                 mode = Mode.LOAD;
             }
             isGameModeChosen = false;
+
+            swichSound.play();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -110,6 +114,8 @@ public class Button extends Actor {
                 mode = Mode.PLAY;
             }
             isGameModeChosen = false;
+
+            swichSound.play();
         }
     }
 
@@ -119,6 +125,8 @@ public class Button extends Actor {
     }
 
     public void dispose() {
+
         buttonSprite.dispose();
+        swichSound.dispose();
     }
 }

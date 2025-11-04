@@ -2,6 +2,8 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -71,7 +73,7 @@ public class Boss2Stage implements GameStage {
     // time
     private float stageTime = 0f;
 
-
+    private Sound collisionSound;
     // Save data for loading
     private Save.SaveData saveData;
 
@@ -100,6 +102,8 @@ public class Boss2Stage implements GameStage {
         for (int i = 0; i < 6; i++) {
             bgTextures[i] = new Texture("Background/" + "Stage2/" + "layer" + i + ".png");
         }
+
+        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
 
         // Create entities with saved positions if available
         if (saveData != null) {
@@ -228,10 +232,19 @@ public class Boss2Stage implements GameStage {
             // Add time to global game time
             Save.addTime(delta);
             gameLogic.launch(ball);
-            gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
-            gameLogic.bossCollision(ball);
             gameLogic.skillCollision(stage, ball);
+            gameLogic.bossCollision(ball);
+
+            if (gameLogic.paddleCollision(ball)) {
+                collisionSound.play();
+            }
+
+            if (boss2.isReadyToDeath() && !bossDefeated) {
+                bossDefeated = true;
+                isCompleted = true;
+                saveProgressionToBoss3();
+            }
 
             if (paddleSkill1A1 != null && paddleSkill1A2 != null) {
                 InputManager inputManager = InputManager.getInstance();
@@ -249,8 +262,6 @@ public class Boss2Stage implements GameStage {
                     keepJBefore = true;
 
                 }
-
-
 
                 if (keepJBefore) {
                     paddleSkill1A2Timer += delta;
@@ -312,12 +323,6 @@ public class Boss2Stage implements GameStage {
                 }
             }
 
-            if (boss2.isReadyToDeath() && !bossDefeated) {
-                bossDefeated = true;
-                isCompleted = true;
-                saveProgressionToBoss3();
-
-            }
         }
         for (Actor actor : stage.getActors()) {
             if (actor instanceof BeeEnemy bee) {
@@ -371,6 +376,9 @@ public class Boss2Stage implements GameStage {
         // SkillIcon texture will be disposed automatically by LibGDX
         if (stage != null) {
             stage.dispose();
+        }
+        if (collisionSound != null) {
+            collisionSound.dispose();
         }
     }
 

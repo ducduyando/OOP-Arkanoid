@@ -2,6 +2,7 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -19,6 +20,8 @@ public class GameLoseStage implements GameStage {
     private boolean isFinished = false;
     private boolean isQuitRequested = false;
 
+    private Music defeatedMusic;
+
     public GameLoseStage() {
     }
 
@@ -28,6 +31,9 @@ public class GameLoseStage implements GameStage {
         loseEffectActor = new LoseEffectActor();
         stage.addActor(loseEffectActor);
         Gdx.input.setInputProcessor(stage);
+
+        defeatedMusic = Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Defeated theme" + ".mp3"));
+        defeatedMusic.play();
     }
 
     @Override
@@ -53,6 +59,9 @@ public class GameLoseStage implements GameStage {
         }
         if (stage != null) {
             stage.dispose();
+        }
+        if (defeatedMusic != null) {
+            defeatedMusic.dispose();
         }
     }
 

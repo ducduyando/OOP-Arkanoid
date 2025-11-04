@@ -29,6 +29,7 @@ public class Boss3 extends FinalBoss {
 
     Boss3State boss3State = Boss3State.NORMAL;
 
+
     public Boss3(float x, float y, int maxHp, Paddle paddle) {
         super(x, y, BOSS3_WIDTH, BOSS3_HEIGHT, BOSS3_VELOCITY, maxHp);
 

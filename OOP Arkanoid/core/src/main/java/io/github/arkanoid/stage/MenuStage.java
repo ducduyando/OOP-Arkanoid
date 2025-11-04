@@ -1,6 +1,7 @@
 package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -17,6 +18,7 @@ MenuStage implements GameStage {
 
     private Texture[] menuTextures;
 
+
     @Override
     public void enter() {
         this.gdxStage = new Stage(new ScreenViewport());
@@ -26,8 +28,8 @@ MenuStage implements GameStage {
             menuTextures[i] = new Texture("Menu/" + "layer" + i + ".png");
         }
         this.menuBackground = new ParallaxBackground(menuTextures, new float[] {0f, 100f, 0f, 0f}, false);
-
         this.menuButton = new Button();
+
 
         this.gdxStage.addActor(this.menuBackground);
         this.gdxStage.addActor(this.menuButton);

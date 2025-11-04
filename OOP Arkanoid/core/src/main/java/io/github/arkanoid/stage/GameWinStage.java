@@ -1,6 +1,7 @@
 package io.github.arkanoid.stage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -20,6 +21,8 @@ public class GameWinStage implements GameStage {
     private boolean isFinished = false;
     private boolean isQuitRequested = false;
 
+    private Music victoryMusic;
+
     public GameWinStage() {
     }
 
@@ -29,6 +32,9 @@ public class GameWinStage implements GameStage {
         winEffectActor = new WinEffectActor();
         stage.addActor(winEffectActor);
         Gdx.input.setInputProcessor(stage);
+
+        victoryMusic = Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Victory theme" + ".mp3"));
+        victoryMusic.play();
     }
     @Override
     public void update(float delta) {
@@ -53,6 +59,9 @@ public class GameWinStage implements GameStage {
         }
         if (stage != null) {
             stage.dispose();
+        }
+        if (victoryMusic != null) {
+            victoryMusic.dispose();
         }
     }
 

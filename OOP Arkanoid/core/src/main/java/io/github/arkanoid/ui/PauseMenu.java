@@ -2,6 +2,7 @@ package io.github.arkanoid.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,6 +15,9 @@ public class PauseMenu extends Actor {
 
     private final Texture pauseBackground = new Texture("Pause/" + "layer" + 0 + ".png");
     private final Texture buttonSprite = new Texture("Pause/" + "layer" + 1 +".png");
+
+    private Sound swichSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Switch" + ".wav"));
+
 
     private TextureRegion currentFrame;
     private float stateTime = 0f;
@@ -116,6 +120,7 @@ public class PauseMenu extends Actor {
             } else if (option == Option.QUIT) {
                 option = Option.SAVE;
             }
+            swichSound.play();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -129,6 +134,7 @@ public class PauseMenu extends Actor {
             } else if (option == Option.QUIT) {
                 option = Option.RESUME;
             }
+            swichSound.play();
         }
     }
 
@@ -151,5 +157,6 @@ public class PauseMenu extends Actor {
     public void dispose() {
         pauseBackground.dispose();
         buttonSprite.dispose();
+        swichSound.dispose();
     }
 }

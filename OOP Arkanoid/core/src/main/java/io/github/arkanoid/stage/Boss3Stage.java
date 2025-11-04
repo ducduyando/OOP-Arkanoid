@@ -2,6 +2,8 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -63,6 +65,8 @@ public class Boss3Stage implements GameStage {
     // Save data for loading
     private Save.SaveData saveData;
 
+    private Sound collisionSound;
+
     public Boss3Stage() {
         this.saveData = null;
     }
@@ -82,6 +86,9 @@ public class Boss3Stage implements GameStage {
         for (int i = 0; i < 6; i++) {
             bgTextures[i] = new Texture("Background/" + "Stage3/" + "layer" + i + ".png");
         }
+
+        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
+
 
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
@@ -242,10 +249,18 @@ public class Boss3Stage implements GameStage {
 
         if (!isCompleted && !bossDefeated) {
             gameLogic.launch(ball);
-            gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
-            gameLogic.finalBossCollision(ball);
             gameLogic.skillCollision(stage, ball);
+            gameLogic.finalBossCollision(ball);
+            if (gameLogic.paddleCollision(ball)) {
+                collisionSound.play();
+            }
+
+            if (boss3.isReadyToDeath() && !bossDefeated) {
+                bossDefeated = true;
+                isCompleted = true;
+                saveRank(3);
+            }
 
             if (paddleSkill1A1 != null && paddleSkill1A2 != null) {
                 InputManager inputManager = InputManager.getInstance();
@@ -349,12 +364,6 @@ public class Boss3Stage implements GameStage {
 
                     paddleSkill2B.activate(paddle);
                 }
-            }
-
-            if (boss3.isReadyToDeath() && !bossDefeated) {
-                bossDefeated = true;
-                isCompleted = true;
-                saveRank(3);
             }
         }
 
@@ -472,6 +481,9 @@ public class Boss3Stage implements GameStage {
         // SkillIcon texture will be disposed automatically by LibGDX
         if (stage != null) {
             stage.dispose();
+        }
+        if (collisionSound != null) {
+            collisionSound.dispose();
         }
     }
 

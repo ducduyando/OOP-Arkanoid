@@ -2,6 +2,7 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -50,6 +51,8 @@ public class TutorialStage implements GameStage {
 
     // Save data for loading
     private Save.SaveData saveData;
+
+    private Sound collisionSound;
 
     Cutscene cutscene;
 
@@ -126,6 +129,8 @@ public class TutorialStage implements GameStage {
         brickTextures[3] = new Texture("Brick/" + "orange" + ".png");
         paddleImage = new Texture("Universal/" + "paddle" + ".png");
         ballImage = new Texture("Ball/" + "normal" + ".png");
+
+        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
 
         if (saveData != null) {
             paddle = new Paddle(paddleImage, saveData.paddleX, saveData.paddleY);
@@ -219,10 +224,12 @@ public class TutorialStage implements GameStage {
             }
 
             gameLogic.launch(ball);
-            gameLogic.paddleCollision(ball);
             gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
             checkBrickCollisions();
 
+            if (gameLogic.paddleCollision(ball)) {
+                collisionSound.play();
+            }
 
         } else if (bricks.isEmpty() && !isCompleted) {
              if (cutscene == null) {
@@ -262,6 +269,9 @@ public class TutorialStage implements GameStage {
         while (iterator.hasNext()) {
             BrickActor brick = iterator.next();
             if (!brick.isDestroyed() && ballRect.overlaps(brick.getHitBox())) {
+
+                collisionSound.play();
+
                 Rectangle brickRect = brick.getHitBox();
 
                 float ballCenterX = ballRect.x + ballRect.width / 2f;
@@ -312,6 +322,9 @@ public class TutorialStage implements GameStage {
         }
         pauseMenu.dispose();
         gdxStage.dispose();
+        if (collisionSound != null) {
+            collisionSound.dispose();
+        }
 
     }
 

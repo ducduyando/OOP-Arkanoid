@@ -1,5 +1,7 @@
 package io.github.arkanoid.boss2;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import io.github.arkanoid.entities.Boss;
 import static io.github.arkanoid.core.Constants.*;
@@ -15,8 +17,12 @@ public class Boss2 extends Boss {
     private boolean heal = false;
     protected boolean isShielded = false;
 
+    private Sound hpUpSound;
+
     public Boss2(int number, float x, float y, int maxHp) {
         super(number, x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2_VELOCITY, maxHp);
+
+        hpUpSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Hp up" + ".wav"));
 
         this.randomMovement = new Boss2RandomMovement(this);
 
@@ -93,14 +99,23 @@ public class Boss2 extends Boss {
                         this.setHp(this.getHp() + damage);
                     }
                     heal = false;
+                    hpUpSound.play();
                 }
                 return;
             }
+            getHitSound.play();
             super.takeDamage(damage);
 
             if (!isDead()) {
                 this.skill1();
             }
         }
+    }
+
+    public void dispose() {
+        if (hpUpSound != null) {
+            hpUpSound.dispose();
+        }
+        super.dispose();
     }
 }

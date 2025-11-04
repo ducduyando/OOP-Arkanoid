@@ -2,6 +2,8 @@ package io.github.arkanoid.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -20,8 +22,9 @@ public class PowerUpMenu extends Actor {
 
     protected State state = State.TRANSITION;
 
+
     private final Texture transitionSprite = new Texture("PowerUp/" + "transition" + ".png");
-    private final Texture powerUpButton;
+    private Sound swichSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Switch" + ".wav"));
 
     private TextureRegion currentFrame;
 
@@ -37,7 +40,6 @@ public class PowerUpMenu extends Actor {
 
 
     public PowerUpMenu(Texture powerUpButton) {
-        this.powerUpButton = powerUpButton;
 
         int transitionFrameCount = transitionSprite.getWidth() / TRANSITION_WIDTH;
         TextureRegion[] transitionFrames = new TextureRegion[transitionFrameCount];
@@ -109,6 +111,8 @@ public class PowerUpMenu extends Actor {
                 || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
                 || Gdx.input.isKeyJustPressed(Input.Keys.A)
                 || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+
+                swichSound.play();
                 option = (option == PowerUpMenu.Option.SKILL1) ? PowerUpMenu.Option.SKILL2 : PowerUpMenu.Option.SKILL1;
             }
         }
@@ -136,5 +140,6 @@ public class PowerUpMenu extends Actor {
 
     public void dispose() {
         transitionSprite.dispose();
+        swichSound.dispose();
     }
 }
