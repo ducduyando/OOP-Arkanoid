@@ -148,7 +148,7 @@ public class SceneManagerTest {
         // Test that StageType enum values exist
         SceneManager.StageType[] types = SceneManager.StageType.values();
         assertTrue(types.length > 0);
-
+//
         // Verify some expected types exist
         boolean hasMenu = false;
         boolean hasTutorial = false;
