@@ -132,7 +132,7 @@ public class  SkillIcon extends Actor {
                     // Show cooldown animation - skill2B sử dụng logic tăng từ 0 lên MAX_COOLDOWN
                     float cooldown = paddle.getSkill2BCooldownTimer();
                     if (cooldown >= 0 && cooldown < PADDLE_SKILL_COOLDOWN) {
-                        float completionRatio = cooldown / MAX_COOLDOWN; // 0 = bắt đầu cooldown, 1 = sắp ready
+                        float completionRatio = 1.0f - cooldown / MAX_COOLDOWN; // 0 = bắt đầu cooldown, 1 = sắp ready
 
                         int[] cooldownFrames = {4, 3, 2, 1}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
                         int numCooldownFrames = cooldownFrames.length;

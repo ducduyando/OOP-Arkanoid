@@ -38,7 +38,7 @@ public class Constants {
 
     public static final int PADDLE_DAMAGE = 10;
 
-    public static final float PADDLE_SKILL_COOLDOWN = 5f;
+    public static final float PADDLE_SKILL_COOLDOWN = 12f;
 
     /** Brick. */
     public static final int BRICK_ROWS = 4;
@@ -98,7 +98,7 @@ public class Constants {
     /** J. */
     public static final int SKILL_ICON_WIDTH = 144;
     public static final int SKILL_ICON_HEIGHT = 144;
-    public static  final float MAX_COOLDOWN = 5.0f;
+    public static  final float MAX_COOLDOWN = 12f;
 
     /** Boss3. */
     public static final int BOSS3_WIDTH = 248;

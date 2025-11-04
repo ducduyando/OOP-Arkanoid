@@ -77,7 +77,6 @@ public class GameLoseStage implements GameStage {
         }
     }
 
-
     private static class LoseEffectActor extends Actor {
         private final Texture lose1Texture;
         private final Texture lose2Texture;

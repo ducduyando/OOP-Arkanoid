@@ -38,8 +38,8 @@ public class PaddleSkill2B implements PaddleSkill {
 
         }
         if (!isSkill2BReady) {
-            skill2BCooldownTimer += delta;
-            if (skill2BCooldownTimer >= PADDLE_SKILL_COOLDOWN) {
+            skill2BCooldownTimer -= delta;
+            if (skill2BCooldownTimer <= 0) {
                 isSkill2BReady = true;
                 skill2BCooldownTimer = PADDLE_SKILL_COOLDOWN; // Reset về max để tính toán frame đúng
             }
@@ -71,7 +71,7 @@ public class PaddleSkill2B implements PaddleSkill {
             owner.setShield(true);
             isSkill2Start = true;
             isSkill2BReady = false;
-            skill2BCooldownTimer = 0;
+            skill2BCooldownTimer = PADDLE_SKILL_COOLDOWN;
             paddleShieldTime = 0;
         }
     }
