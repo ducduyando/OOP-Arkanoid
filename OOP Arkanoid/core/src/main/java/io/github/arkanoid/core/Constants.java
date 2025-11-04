@@ -55,6 +55,7 @@ public class Constants {
     public static final int BALL_WIDTH = 64;
     public static final int BALL_HEIGHT = 64;
     public static final Vector2 BALL_VELOCITY = new Vector2(900f, 900f);
+    public static int BALL_DAMAGE = 10;
 
 
     /** Boss1. */
@@ -64,9 +65,14 @@ public class Constants {
     public static final float BOSS1_INITIAL_X = (SCREEN_WIDTH - BOSS1_WIDTH) / 2f;
     public static final float BOSS1_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
+    /** Boss1 Centering. */
+    public static final float BOSS1_COOLDOWN_DURATION = 3f;
+
     /** Boss1 Skill 1. */
     public static final int BOSS1_SKILL1_WIDTH = 80;
     public static final int BOSS1_SKILL1_HEIGHT = 144;
+
+    public static final int MAX_BOMBS = 3;
 
     public static final float BOMB_SPEED_Y = 400f;
     public static final float BOSS_STOP_TIME = 1f;
@@ -75,6 +81,8 @@ public class Constants {
     public static final int LASER_WIDTH = 80;
     public static final int LASER_HEIGHT = 1080;
 
+    public static final float SWEEP_SPEED = 400f;
+
     /** Boss2. */
     public static final int BOSS2_WIDTH = 448;
     public static final int BOSS2_HEIGHT = 272;
@@ -82,23 +90,24 @@ public class Constants {
     public static final float BOSS2_INITIAL_X = (SCREEN_WIDTH - BOSS2_WIDTH) / 2f;
     public static final float BOSS2_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
+    /** Boss2 Random moving. */
+    public static final float BOSS2_COOLDOWN_DURATION = 2f;
+    public static final float BOSS2_SKILL_INTERVAL = 5f;
+
     /** Boss2 Skill 1. */
     public static final int BOSS2_SKILL1_WIDTH = 96;
     public static final int BOSS2_SKILL1_HEIGHT = 96;
 
+    public static final float SPAWN_INTERVAL = 5f;
+    public static final float SPAWN_BEE_DELAY = 0.5f;
     public static final float BEE_SPEED_Y = 400f;
 
     /** Boss2 Skill 2. */
     public static final int BOSS2_SKILL2_WIDTH = 448;
     public static final int BOSS2_SKILL2_HEIGHT = 272;
 
-    /** Paddle Skill 2-A. */
-    public static final float BEE_BULLET_SPEED_Y = 300f;
-
-    /** J. */
-    public static final int SKILL_ICON_WIDTH = 144;
-    public static final int SKILL_ICON_HEIGHT = 144;
-    public static  final float MAX_COOLDOWN = 12f;
+    public static final float HEALING_COOLDOWN = 1.5f;
+    public static final float MAX_SHIELD_DURATION = 4f;
 
     /** Boss3. */
     public static final int BOSS3_WIDTH = 248;
@@ -107,16 +116,49 @@ public class Constants {
     public static final float BOSS3_INITIAL_X = (SCREEN_WIDTH - BOSS3_WIDTH) / 2f;
     public static final float BOSS3_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
-    public static final int BOSS3_SKILL_1B_WIDTH = 256;
-    public static final int BOSS3_SKILL_1B_HEIGHT = 256;
+    /** Boss3 Random moving. */
+    public static final float BOSS3_COOLDOWN_DURATION = 2f;
+    public static final float BOSS3_SKILL_INTERVAL = 5f;
 
+    /** Boss3 Skill 1-A. */
     public static final int BOSS3_SKILL_1A_WIDTH = 352;
     public static final int BOSS3_SKILL_1A_HEIGHT = 352;
+    public static final int ROCKET_SPEED = 550;
 
+    public static final int MAX_ROCKETS = 3;
+
+    /** Boss3 Skill 1-B. */
+    public static final int BOSS3_SKILL_1B_WIDTH = 256;
+    public static final int BOSS3_SKILL_1B_HEIGHT = 256;
+    public static final int HORIZONTAL_SAW_SPEED = 889;
+    public static final int VERTICAL_SAW_SPEED = 500;
+
+    public static final int MAX_SAWS = 2;
+
+    /** Boss3 Skill 2-A. */
     public static final int BOSS3_SKILL_2A_WIDTH = 328;
     public static final int BOSS3_SKILL_2A_HEIGHT = 416;
 
-    public static final int ROTATION_SPEED = 720;
+    public static final int ROTATION_SPEED = 1080;
+
+    /** Boss3 Skill 2-B. */
+    public static final Vector2 LASER_SPEED = new Vector2(400f, 400f);
+
+    public static final int EYES_DISTANCE = 120;
+    public static final Vector2 LEFT_EYE_COORDINATE = new Vector2(55, 184);
+    public static final Vector2 RIGHT_EYE_COORDINATE = new Vector2(175, 184);
+
+    public static final int MAX_LASER_BEAMS = 5;
+    public static final float LASER_DELAY = 0.5f;
+
+
+    /** Paddle Skill 2-A. */
+    public static final float BEE_BULLET_SPEED_Y = 300f;
+
+    /** Skill icons. */
+    public static final int SKILL_ICON_WIDTH = 144;
+    public static final int SKILL_ICON_HEIGHT = 144;
+    public static  final float MAX_COOLDOWN = 12f;
 
     /** Save rank. */
     public static final int MAX_RANK_ENTRIES = 3;
@@ -132,4 +174,21 @@ public class Constants {
     public static final float HORIZONTAL_PAD = 12f;
     public static final float VERTICAL_PAD = 8f;
 
+    /** Default key bindings. */
+    public static final String ACTION_MOVE_LEFT = "move_left";
+    public static final String ACTION_MOVE_RIGHT = "move_right";
+    public static final String ACTION_SKILL_1 = "skill_1";
+    public static final String ACTION_SKILL_2 = "skill_2";
+    public static final String ACTION_PAUSE = "pause";
+    public static final String ACTION_CONFIRM = "confirm";
+    public static final String ACTION_CANCEL = "cancel";
+
+    /** Save. */
+    public static final String SAVE_FILE = "game_save";
+    public static final String RANK_PREFIX = "rank_";
+    public static final String KEY_PLAYER_NAME = "playerName";
+    public static final String KEY_TOTAL_GAME_TIME = "totalGameTime";
+
+    public static float totalGameTime = 0f;
+    public static boolean isGameStarted = false;
 }

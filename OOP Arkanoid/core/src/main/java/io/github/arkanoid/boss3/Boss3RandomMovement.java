@@ -1,8 +1,6 @@
 package io.github.arkanoid.boss3;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.arkanoid.entities.Boss;
-import io.github.arkanoid.entities.BossSkill;
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.entities.FinalBossSkill;
 
@@ -18,10 +16,7 @@ public class Boss3RandomMovement implements FinalBossSkill {
     private FinalBossSkill nextSkill;
     private boolean hasArrived = false;
     private float cooldownTimer = 0f;
-    private final float COOLDOWN_DURATION = 2f;
-
     private float skillTimer = 0f;
-    private final float SKILL_INTERVAL = 5f;
 
     private float targetX;
     private float targetY;
@@ -73,7 +68,7 @@ public class Boss3RandomMovement implements FinalBossSkill {
         } else {
             cooldownTimer += delta;
 
-            if (cooldownTimer >= COOLDOWN_DURATION) {
+            if (cooldownTimer >= BOSS3_COOLDOWN_DURATION) {
                 chooseRandomTarget();
                 hasArrived = false;
             }
@@ -85,7 +80,7 @@ public class Boss3RandomMovement implements FinalBossSkill {
     public void update(FinalBoss finalBoss, float delta) {
 
         skillTimer += delta;
-        if (skillTimer >= SKILL_INTERVAL) {
+        if (skillTimer >= BOSS3_SKILL_INTERVAL) {
             if (owner.getBoss3State() == Boss3.Boss3State.NORMAL) {
                 if (new Random().nextBoolean()) {
                     nextSkill = owner.getRocketSkill();

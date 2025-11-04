@@ -127,7 +127,7 @@ public class NameInputStage implements GameStage  {
 
         stage.act(Math.min(delta, 1 / 30f));
 
-        if (inputManager.isActionJustPressed(InputManager.ACTION_CONFIRM) ||
+        if (inputManager.isActionJustPressed(ACTION_CONFIRM) ||
             Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             String playerName = nameTextField.getText().trim();
             if (!playerName.isEmpty()) {
@@ -138,7 +138,7 @@ public class NameInputStage implements GameStage  {
         }
 
         // Check for ESCAPE to cancel (with fallback to direct input)
-        if (inputManager.isActionJustPressed(InputManager.ACTION_CANCEL) ||
+        if (inputManager.isActionJustPressed(ACTION_CANCEL) ||
             Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             isFinished = true;
         }

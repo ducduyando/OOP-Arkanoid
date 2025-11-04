@@ -1,7 +1,6 @@
 package io.github.arkanoid.boss3;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -15,13 +14,6 @@ public class Laser extends Actor {
     Texture laserTexture;
     Boss3 owner;
     Paddle paddle;
-
-    private final Vector2 LASER_SPEED = new Vector2(400f, 400f);
-
-    private final int EYE_DST = 120;
-    private final int EYE_L_X = 55;
-    private final int EYE_R_X = 175;
-    private final int EYE_Y = 184;
 
     private float eyeX;
     private float eyeY;
@@ -39,14 +31,14 @@ public class Laser extends Actor {
         this.paddle = paddle;
 
         if (isLeftEye) {
-            target = new Vector2(targetX - EYE_DST / 2f, targetY);
-            eyeX = owner.getX() + EYE_L_X;
-            eyeY = owner.getY() + EYE_Y;
+            target = new Vector2(targetX - EYES_DISTANCE / 2f, targetY);
+            eyeX = owner.getX() + LEFT_EYE_COORDINATE.x;
+            eyeY = owner.getY() + LEFT_EYE_COORDINATE.y;
         }
         else {
-            target = new Vector2(targetX + EYE_DST / 2f, targetY);
-            eyeX = owner.getX() + EYE_R_X;
-            eyeY = owner.getY() + EYE_Y;
+            target = new Vector2(targetX + EYES_DISTANCE / 2f, targetY);
+            eyeX = owner.getX() + RIGHT_EYE_COORDINATE.x;
+            eyeY = owner.getY() + RIGHT_EYE_COORDINATE.y;
         }
 
         float deltaX = target.x - eyeX;

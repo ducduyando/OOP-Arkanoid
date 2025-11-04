@@ -11,7 +11,6 @@ import static io.github.arkanoid.core.Constants.*;
 public class Boss1Skill1 implements BossSkill {
     private final Boss1 owner;
     private BossSkill nextSkill;
-    private final int REPEAT_COUNT = 3;
 
     private float stopTimer = 0f;
     private boolean isStopped = false;
@@ -65,7 +64,7 @@ public class Boss1Skill1 implements BossSkill {
             if (stopTimer >= BOSS_STOP_TIME) {
                 isStopped = false;
                 stopTimer = 0f;
-                if (actionCounter >= REPEAT_COUNT) {
+                if (actionCounter >= MAX_BOMBS) {
                     boss.setSkill(nextSkill);
                 }
                 else {

@@ -50,7 +50,7 @@ public class RankStage implements GameStage {
                 new FreeTypeFontGenerator.FreeTypeFontParameter();
 
             parameter.size = 80;
-        parameter.color = new Color(24/255f, 58/255f, 66/255f, 1f);
+            parameter.color = new Color(24/255f, 58/255f, 66/255f, 1f);
             parameter.minFilter = Texture.TextureFilter.Linear;
             parameter.magFilter = Texture.TextureFilter.Linear;
             parameter.flip = false;
@@ -122,12 +122,12 @@ public class RankStage implements GameStage {
 
         // Check for SPACE key to finish
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ||
-            inputManager.isActionJustPressed(InputManager.ACTION_CONFIRM)) {
+            inputManager.isActionJustPressed(ACTION_CONFIRM)) {
             isFinished = true;
         }
 
         // Check for ESCAPE to finish
-        if (inputManager.isActionJustPressed(InputManager.ACTION_CANCEL)) {
+        if (inputManager.isActionJustPressed(ACTION_CANCEL)) {
             isFinished = true;
         }
     }

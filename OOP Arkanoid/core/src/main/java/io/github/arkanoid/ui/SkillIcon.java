@@ -55,7 +55,7 @@ public class  SkillIcon extends Actor {
                     if (cooldown > 0) {
                         float completionRatio = 1.0f - (cooldown / MAX_COOLDOWN); // 0 = bắt đầu cooldown, 1 = sắp ready
 
-                        int[] cooldownFrames = {4, 3, 2, 1}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
+                        int[] cooldownFrames = {1, 2, 3, 4}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
                         int numCooldownFrames = cooldownFrames.length;
 
                         int cooldownIndex = (int) (completionRatio * numCooldownFrames);
@@ -80,7 +80,7 @@ public class  SkillIcon extends Actor {
                     if (cooldown > 0) {
                         float completionRatio = 1.0f - (cooldown / MAX_COOLDOWN); // 0 = bắt đầu cooldown, 1 = sắp ready
 
-                        int[] cooldownFrames = {4, 3, 2, 1}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
+                        int[] cooldownFrames = {1, 2, 3, 4}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
                         int numCooldownFrames = cooldownFrames.length;
 
                         int cooldownIndex = (int) (completionRatio * numCooldownFrames);
@@ -111,7 +111,7 @@ public class  SkillIcon extends Actor {
                     if (cooldown > 0) {
                         float completionRatio = 1.0f - (cooldown / MAX_COOLDOWN); // 0 = bắt đầu cooldown, 1 = sắp ready
 
-                        int[] cooldownFrames = {4, 3, 2, 1}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
+                        int[] cooldownFrames = {1, 2, 3, 4}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
                         int numCooldownFrames = cooldownFrames.length;
 
                         int cooldownIndex = (int) (completionRatio * numCooldownFrames);
@@ -134,7 +134,7 @@ public class  SkillIcon extends Actor {
                     if (cooldown >= 0 && cooldown < PADDLE_SKILL_COOLDOWN) {
                         float completionRatio = 1.0f - cooldown / MAX_COOLDOWN; // 0 = bắt đầu cooldown, 1 = sắp ready
 
-                        int[] cooldownFrames = {4, 3, 2, 1}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
+                        int[] cooldownFrames = {1, 2, 3, 4}; // Frame 4 = cooldown mới bắt đầu, Frame 1 = sắp ready
                         int numCooldownFrames = cooldownFrames.length;
 
                         int cooldownIndex = (int) (completionRatio * numCooldownFrames);

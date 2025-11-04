@@ -28,10 +28,6 @@ public class Saw extends Actor {
 
     private Animation<TextureRegion> sawSkillAnimation;
 
-    private final int HORIZONTAL_SAW_SPEED = 889;
-    private final int VERTICAL_SAW_SPEED = 500;
-
-
     public Saw(Texture sawTexture, Texture targetTexture, float x, float y, boolean isVertical) {
         this.isVertical = isVertical;
         target(targetTexture, x, y);

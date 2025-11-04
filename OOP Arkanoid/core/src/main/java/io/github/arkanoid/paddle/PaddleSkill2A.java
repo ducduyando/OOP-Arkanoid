@@ -7,7 +7,6 @@ import static io.github.arkanoid.core.Constants.*;
 
 
 public class PaddleSkill2A implements PaddleSkill {
-
     private final Paddle owner;
     private float skill2ACooldownTimer = 0f;
     private boolean isSkill2AReady = true;

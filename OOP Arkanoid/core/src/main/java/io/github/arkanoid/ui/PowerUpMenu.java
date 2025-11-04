@@ -15,7 +15,7 @@ public class PowerUpMenu extends Actor {
 
     protected enum State {
         TRANSITION,
-        POWERUPMENU
+        DONE
     }
 
     protected State state = State.TRANSITION;
@@ -89,7 +89,7 @@ public class PowerUpMenu extends Actor {
     public void act(float delta) {
         stateTime += delta;
 
-        if (state == State.POWERUPMENU) {
+        if (state == State.DONE) {
             if (option == Option.SKILL1) {
                 currentFrame = skill1Animation.getKeyFrame(stateTime, true);
             } else if (option == Option.SKILL2) {
@@ -115,7 +115,7 @@ public class PowerUpMenu extends Actor {
         else {
             currentFrame = transitionAnimation.getKeyFrame(stateTime, false);
             if (transitionAnimation.isAnimationFinished(stateTime)) {
-                state = State.POWERUPMENU;
+                state = State.DONE;
             }
         }
     }

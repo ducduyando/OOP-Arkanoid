@@ -3,10 +3,11 @@ package io.github.arkanoid.boss2;
 import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.BossSkill;
 
+import static io.github.arkanoid.core.Constants.*;
+
 public class Boss2Skill2 implements BossSkill {
 
-    private final double COOLDOWN_HEALING = 1.5;
-    private double healingTime = COOLDOWN_HEALING;
+    private double healingTime = HEALING_COOLDOWN;
 
     private Boss2 owner;
     private HoneyShield honeyShield;
@@ -41,7 +42,7 @@ public class Boss2Skill2 implements BossSkill {
             honeyShield.setPosition(boss.getX(), boss.getY());
             honeyShield.setShieldDuration(boss.getStateTime());
 
-            if (shieldTime >= 4f) {
+            if (shieldTime >= MAX_SHIELD_DURATION) {
                 shieldTime = 0f;
                 honeyShield.setHasShield(false);
 
@@ -52,7 +53,7 @@ public class Boss2Skill2 implements BossSkill {
             }
             if (!owner.isHeal()) {
                 healingTime += delta;
-                if (healingTime >= COOLDOWN_HEALING) {
+                if (healingTime >= HEALING_COOLDOWN) {
                     healingTime = 0;
                     owner.setHeal(true);
                 }

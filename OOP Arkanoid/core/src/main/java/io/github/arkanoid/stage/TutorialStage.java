@@ -42,11 +42,10 @@ public class TutorialStage implements GameStage {
     // Pause functionality
     private boolean isPaused = false;
     private PauseMenu pauseMenu;
-    private boolean pKeyPressed = false;
+    private boolean isPlayPressed = false;
 
     // Game state
     private boolean isCompleted = false;
-
     private boolean isFinished = false;
 
     // Save data for loading
@@ -240,7 +239,7 @@ public class TutorialStage implements GameStage {
     private void handlePauseInput() {
         boolean pKeyCurrentlyPressed = (Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
 
-        if (pKeyCurrentlyPressed && !pKeyPressed) {
+        if (pKeyCurrentlyPressed && !isPlayPressed) {
             isPaused = !isPaused;
 
             if (isPaused) {
@@ -250,7 +249,7 @@ public class TutorialStage implements GameStage {
             }
         }
 
-        pKeyPressed = pKeyCurrentlyPressed;
+        isPlayPressed = pKeyCurrentlyPressed;
     }
 
     private void checkBrickCollisions() {

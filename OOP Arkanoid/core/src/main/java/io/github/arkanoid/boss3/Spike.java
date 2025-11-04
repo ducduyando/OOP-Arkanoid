@@ -17,7 +17,7 @@ public class Spike extends Actor {
     private Rectangle hitBox;
     private TextureRegion currentFrame;
 
-    private float stateTimer = 0;
+    private float stateTimer = 0f;
     private boolean isLastFrame = false;
     private boolean hasArrived = false;
 

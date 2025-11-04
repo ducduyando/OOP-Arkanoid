@@ -1,6 +1,5 @@
 package io.github.arkanoid.stage;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -14,9 +13,9 @@ public class GameWinStage implements GameStage {
     private Stage stage;
     private boolean isFinished = false;
 
-    private Texture tex0, tex1, tex2;
-    private Animation<TextureRegion> anim0, anim1, anim2;
-    private Animation<TextureRegion>[] animations;
+    private Texture texture0, texture1, texture2;
+    private Animation<TextureRegion> animation0, animation1, animation2;
+    private Animation<TextureRegion>[] animation;
 
     private int currentAnimation = 0;
     private float stateTime = 0f;
@@ -38,23 +37,23 @@ public class GameWinStage implements GameStage {
         this.isFinished = false;
         this.currentAnimation = 0;
         this.stateTime = 0;
-        tex0 = new Texture("Win/" + "scene0" + ".png");
-        tex1 = new Texture("Win/" + "scene1" + ".png");
-        tex2 = new Texture("Win/" + "scene2" + ".png");
+        texture0 = new Texture("Win/" + "scene0" + ".png");
+        texture1 = new Texture("Win/" + "scene1" + ".png");
+        texture2 = new Texture("Win/" + "scene2" + ".png");
 
-        TextureRegion[][] regions0 = TextureRegion.split(tex0, tex0.getWidth(), tex0.getHeight() / 4);
-        anim0 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions0));
-        anim0.setPlayMode(Animation.PlayMode.NORMAL);
+        TextureRegion[][] regions0 = TextureRegion.split(texture0, texture0.getWidth(), texture0.getHeight() / 4);
+        animation0 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions0));
+        animation0.setPlayMode(Animation.PlayMode.NORMAL);
 
-        TextureRegion[][] regions1 = TextureRegion.split(tex1, tex1.getWidth(), tex1.getHeight() / 8);
-        anim1 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions1));
-        anim1.setPlayMode(Animation.PlayMode.NORMAL);
+        TextureRegion[][] regions1 = TextureRegion.split(texture1, texture1.getWidth(), texture1.getHeight() / 8);
+        animation1 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions1));
+        animation1.setPlayMode(Animation.PlayMode.NORMAL);
 
-        TextureRegion[][] regions2 = TextureRegion.split(tex2, tex2.getWidth(), tex2.getHeight() / 4);
-        anim2 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions2));
-        anim2.setPlayMode(Animation.PlayMode.NORMAL);
+        TextureRegion[][] regions2 = TextureRegion.split(texture2, texture2.getWidth(), texture2.getHeight() / 4);
+        animation2 = new Animation<>(Constants.FRAME_DURATION * 3, flattenV(regions2));
+        animation2.setPlayMode(Animation.PlayMode.NORMAL);
 
-        animations = new Animation[]{anim0, anim1, anim2};
+        animation = new Animation[]{animation0, animation1, animation2};
     }
     @Override
     public void update(float delta) {
@@ -62,18 +61,18 @@ public class GameWinStage implements GameStage {
             return;
         }
         stateTime += delta;
-        Animation<TextureRegion> currentAnim = animations[currentAnimation];
+        Animation<TextureRegion> currentAnim = animation[currentAnimation];
         if(currentAnim.isAnimationFinished(stateTime)) {
             currentAnimation++;
             stateTime = 0;
         }
 
-        if (currentAnimation >= animations.length) {
+        if (currentAnimation >= animation.length) {
             isFinished = true;
         }
     }
     public void drawDirect(SpriteBatch batch) {
-        if (isFinished || currentAnimation >= animations.length) {
+        if (isFinished || currentAnimation >= animation.length) {
             return;
         }
 
@@ -82,7 +81,7 @@ public class GameWinStage implements GameStage {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Lay frame hien tai
-        Animation<TextureRegion> currentAnim = animations[currentAnimation];
+        Animation<TextureRegion> currentAnim = animation[currentAnimation];
         TextureRegion currentFrame = currentAnim.getKeyFrame(stateTime, false);
 
         // Ve frame ra giua man hinh
@@ -94,9 +93,9 @@ public class GameWinStage implements GameStage {
 
     @Override
     public void exit() {
-        tex0.dispose();
-       tex1.dispose();
-        tex2.dispose();
+        texture0.dispose();
+       texture1.dispose();
+        texture2.dispose();
          stage.dispose();
     }
 

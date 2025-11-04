@@ -10,7 +10,6 @@ import static io.github.arkanoid.core.Constants.*;
 public class Boss3Skill1B implements FinalBossSkill {
     Boss3 owner;
     private FinalBossSkill nextSkill;
-    private final int REPEAT_COUNT = 2;
 
     private int actionCounter = 0;
 
@@ -58,7 +57,7 @@ public class Boss3Skill1B implements FinalBossSkill {
 
     @Override
     public void update(FinalBoss finalBoss, float delta) {
-        if (actionCounter >= REPEAT_COUNT) {
+        if (actionCounter >= MAX_SAWS) {
             finalBoss.setSkill(nextSkill);
         }
         else {

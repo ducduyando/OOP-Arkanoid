@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.github.arkanoid.core.Constants.*;
+
+
 /**
  * InputManager - Singleton Pattern
  * Quản lý input và key bindings của game
@@ -19,15 +22,6 @@ public class InputManager {
     // Key states for preventing multiple triggers
     private Map<Integer, Boolean> keyPressed;
     private Map<Integer, Boolean> keyJustPressed;
-
-    // Default key bindings
-    public static final String ACTION_MOVE_LEFT = "move_left";
-    public static final String ACTION_MOVE_RIGHT = "move_right";
-    public static final String ACTION_SKILL_1 = "skill_1";
-    public static final String ACTION_SKILL_2 = "skill_2";
-    public static final String ACTION_PAUSE = "pause";
-    public static final String ACTION_CONFIRM = "confirm";
-    public static final String ACTION_CANCEL = "cancel";
 
     // Private constructor
     private InputManager() {

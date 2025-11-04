@@ -12,10 +12,7 @@ public class Boss2RandomMovement implements BossSkill {
     private BossSkill nextSkill;
     private boolean hasArrived = false;
     private float cooldownTimer = 0f;
-    private final float COOLDOWN_DURATION = 2f;
-
     private float skillTimer = 0f;
-    private final float SKILL_INTERVAL = 5f;
 
     private float targetX;
     private float targetY;
@@ -81,7 +78,7 @@ public class Boss2RandomMovement implements BossSkill {
         } else {
             cooldownTimer += delta;
 
-            if (cooldownTimer >= COOLDOWN_DURATION) {
+            if (cooldownTimer >= BOSS2_COOLDOWN_DURATION) {
 
                 chooseRandomTarget();
                 hasArrived = false;
@@ -96,7 +93,7 @@ public class Boss2RandomMovement implements BossSkill {
             && owner.getShieldSkill().isSkill2Done()) {
 
             skillTimer += delta;
-            if (skillTimer >= SKILL_INTERVAL) {
+            if (skillTimer >= BOSS2_SKILL_INTERVAL) {
                 if (new Random().nextBoolean()) {
                     nextSkill = owner.getShieldSkill();
                 } else {

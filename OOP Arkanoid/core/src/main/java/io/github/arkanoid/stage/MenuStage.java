@@ -9,7 +9,8 @@ import io.github.arkanoid.ui.Button.*;
 import io.github.arkanoid.ui.ParallaxBackground;
 import org.w3c.dom.Text;
 
-public class MenuStage implements GameStage {
+public class
+MenuStage implements GameStage {
     private Stage gdxStage;
     private ParallaxBackground menuBackground;
     private Button menuButton;

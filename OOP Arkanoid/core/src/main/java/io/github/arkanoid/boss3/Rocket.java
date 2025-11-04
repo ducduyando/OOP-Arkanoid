@@ -24,10 +24,7 @@ public class Rocket extends Actor {
     private boolean isInTarget = false;
     private boolean isRocketSkillFinished = false;
 
-    private final int ROCKET_SPEED = 550;
-
     private Animation<TextureRegion> rocketSkillAnimation;
-
 
     public Rocket(Texture rocketSkillTexture, Texture targetTexture, float x, float y) {
         target(targetTexture, x, y);

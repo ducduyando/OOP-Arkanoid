@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleLaserEffect extends Actor {
-
-
     private final Animation<TextureRegion> paddleLaserAnimation;
     private float stateTime = 0f;
     private Rectangle hitbox;

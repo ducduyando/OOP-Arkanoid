@@ -7,7 +7,6 @@ import io.github.arkanoid.entities.Ball;
 import static io.github.arkanoid.core.Constants.*;
 
 public class PaddleSkill1A extends Ball implements PaddleSkill  {
-
     public enum Phase {
         CHARGING,
         FIRING,

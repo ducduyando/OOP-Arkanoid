@@ -15,7 +15,6 @@ public class Boss1Centering implements BossSkill {
     private boolean hasArrived = false;
 
     private float cooldownTimer = 0f;
-    private final float COOLDOWN_DURATION = 3f;
 
     public Boss1Centering(Boss1 owner) {
         this.owner = owner;
@@ -51,7 +50,7 @@ public class Boss1Centering implements BossSkill {
         } else {
             cooldownTimer += delta;
 
-            if (cooldownTimer >= COOLDOWN_DURATION) {
+            if (cooldownTimer >= BOSS1_COOLDOWN_DURATION) {
                 if (new Random().nextBoolean()) {
                     boss.setSkill(bombingSkill);
                 } else {

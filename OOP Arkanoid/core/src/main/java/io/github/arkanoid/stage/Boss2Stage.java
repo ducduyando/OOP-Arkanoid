@@ -235,7 +235,7 @@ public class Boss2Stage implements GameStage {
 
             if (paddleSkill1A1 != null && paddleSkill1A2 != null) {
                 InputManager inputManager = InputManager.getInstance();
-                if (inputManager.isActionJustPressed(InputManager.ACTION_SKILL_1)
+                if (inputManager.isActionJustPressed(ACTION_SKILL_1)
                     && paddleSkill1A1.isSkill1AReady()
                     && !paddleSkill1A1.isLaunched()
                     && paddleSkill1A2.isSkill1AReady()
@@ -301,7 +301,7 @@ public class Boss2Stage implements GameStage {
                 paddleSkill1B.update(paddle, delta);
 
                 InputManager inputManager = InputManager.getInstance();
-                if (paddleSkill1B.isDone() && inputManager.isActionJustPressed(InputManager.ACTION_SKILL_1)
+                if (paddleSkill1B.isDone() && inputManager.isActionJustPressed(ACTION_SKILL_1)
                     && paddleSkill1B.isSkill1BReady()) {
 
                     paddleSkill1B.enter(paddle);

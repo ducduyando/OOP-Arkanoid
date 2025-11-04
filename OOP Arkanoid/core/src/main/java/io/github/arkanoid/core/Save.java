@@ -8,16 +8,7 @@ import java.util.List;
 
 import static io.github.arkanoid.core.Constants.*;
 public class Save {
-    private static final String SAVE_FILE = "game_save";
-    private static final String RANK_PREFIX = "rank_";
-    private static final String KEY_PLAYER_NAME = "playerName";
-    private static final String KEY_TOTAL_GAME_TIME = "totalGameTime";
-
     private static final Preferences pref = Gdx.app.getPreferences(SAVE_FILE);
-
-    // Global game time tracking
-    private static float totalGameTime = 0f;
-    private static boolean isGameStarted = false;
 
     public static void saveGame(int stageNumber, int bossHP, int paddleState, int bricksRemaining,
                                 float paddleX, float paddleY, float ballX, float ballY,

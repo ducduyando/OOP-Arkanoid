@@ -13,14 +13,12 @@ public class Boss2Skill1 implements BossSkill {
 
     private boolean isSkill1Done = true;
 
-    private final float SPAWN_INTERVAL = 5f;
     private int beeCountToSpawn = 0;
 
     private float stopTimer = 0f;
     private boolean isStopped = false;
     private int actionCounter = 0;
     private float spawnDelayTimer = 0f;
-    private final float SPAWN_BEE_DELAY = 0.5f;
 
     private float targetX;
     private final float[] positionGridX = new float [COLS];

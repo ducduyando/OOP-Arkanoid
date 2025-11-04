@@ -10,10 +10,8 @@ public class Boss3Skill2B implements FinalBossSkill {
     Boss3 owner;
     Paddle paddle;
 
-    private final int REPEAT_COUNT = 5;
     private int actionCounter = 0;
 
-    private final float LASER_DELAY = 0.5f;
     private float nextLaserTimer = 0f;
 
     private FinalBossSkill nextSKill;
@@ -29,7 +27,7 @@ public class Boss3Skill2B implements FinalBossSkill {
 
     @Override
     public void update(FinalBoss finalBoss, float delta) {
-        if (actionCounter >= REPEAT_COUNT) {
+        if (actionCounter >= MAX_LASER_BEAMS) {
             finalBoss.setSkill(nextSKill);
         }
         else {

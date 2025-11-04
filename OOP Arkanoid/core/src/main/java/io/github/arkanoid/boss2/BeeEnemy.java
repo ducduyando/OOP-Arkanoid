@@ -16,12 +16,6 @@ public class BeeEnemy extends Actor {
     private final Texture texture;
     private Rectangle hitBox;
 
-    public BeeEnemy(float x, float y, String texturePath) {
-        this.texture = new Texture(texturePath);
-        setPosition(x, y);
-        this.hitBox = new Rectangle(x, y, BOSS2_SKILL1_WIDTH, BOSS2_SKILL1_HEIGHT);
-    }
-
     public BeeEnemy(Texture texture, float x, float y) {
         this.texture = texture;
         setPosition(x - BOSS2_SKILL1_WIDTH / 2f, y);

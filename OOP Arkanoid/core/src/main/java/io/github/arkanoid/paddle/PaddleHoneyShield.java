@@ -15,7 +15,6 @@ public class PaddleHoneyShield extends Actor {
     private TextureRegion shield;
     private Rectangle hitbox;
 
-
     public PaddleHoneyShield(Texture texture, float paddleX, float paddleY, int state) {
         shield = new TextureRegion(texture, state * 32, 0, PADDLE_WIDTH - (64 * state), PADDLE_HEIGHT);
         setPosition(paddleX, paddleY);

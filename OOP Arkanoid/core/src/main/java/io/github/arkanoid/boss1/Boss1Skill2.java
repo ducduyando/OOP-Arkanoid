@@ -18,7 +18,6 @@ public class Boss1Skill2 implements BossSkill {
     private Phase currentPhase;
     private LaserEffect laserInstance;
     private int sweepDirection;
-    private final float SWEEP_SPEED = 400f;
 
     public Boss1Skill2(Boss1 owner) {
         this.owner = owner;
