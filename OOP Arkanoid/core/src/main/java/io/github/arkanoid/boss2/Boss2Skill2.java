@@ -4,6 +4,7 @@ import io.github.arkanoid.entities.Boss;
 import io.github.arkanoid.entities.BossSkill;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Boss2Skill2 implements BossSkill {
 
@@ -73,6 +74,7 @@ public class Boss2Skill2 implements BossSkill {
         boss.setState(Boss.State.NORMAL);
 
         isSkill2Done = false;
+        playEffect("honeyShieldSound");
 
     }
 

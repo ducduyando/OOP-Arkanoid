@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class FinalBoss extends Actor {
     public enum State {
@@ -117,7 +117,7 @@ public class FinalBoss extends Actor {
             }
             this.state = State.TAKING_DAMAGE;
             this.takeDamageTimer = 0f;
-            GET_HIT_SOUND.play();
+            playEffect("getHitSound");
         }
     }
 

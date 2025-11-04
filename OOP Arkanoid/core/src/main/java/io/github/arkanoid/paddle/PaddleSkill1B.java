@@ -3,6 +3,7 @@ package io.github.arkanoid.paddle;
 import com.badlogic.gdx.graphics.Texture;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class PaddleSkill1B implements PaddleSkill {
     public enum Phase {
@@ -61,6 +62,7 @@ public class PaddleSkill1B implements PaddleSkill {
         this.paddleLaserEffect = new PaddleLaserEffect(laserEffect, paddle.getX(), paddle.getY());
         owner.getStage().addActor(this.paddleLaserEffect);
         currentPhase = Phase.CHARGING;
+        playEffect("laserBeamSound");
     }
 
     public void update(Paddle paddle, float delta) {

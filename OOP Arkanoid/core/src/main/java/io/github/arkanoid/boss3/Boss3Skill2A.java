@@ -2,6 +2,7 @@ package io.github.arkanoid.boss3;
 
 import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.entities.FinalBossSkill;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Boss3Skill2A implements FinalBossSkill {
 
@@ -25,9 +26,11 @@ public class Boss3Skill2A implements FinalBossSkill {
 
     @Override
     public void enter(FinalBoss finalBoss) {
+
         boss3.setUsingSkill2A(true);
         boss3.skill2A();
         boss3.setSkill2AFinished(false);
+        playEffect("spikeSound");
     }
 
     @Override

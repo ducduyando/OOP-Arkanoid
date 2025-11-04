@@ -25,7 +25,7 @@ import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
 import static io.github.arkanoid.core.GameLogic.reflect;
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class TutorialStage implements GameStage {
     private Stage gdxStage;
@@ -225,10 +225,7 @@ public class TutorialStage implements GameStage {
             gameLogic.launch(ball);
             gameLogic.boundaryCollision(ball, delta, SCREEN_HEIGHT);
             checkBrickCollisions();
-
-            if (gameLogic.paddleCollision(ball)) {
-                COLLISION_SOUND.play();
-            }
+            gameLogic.paddleCollision(ball);
 
         } else if (bricks.isEmpty() && !isCompleted) {
              if (cutscene == null) {
@@ -269,7 +266,7 @@ public class TutorialStage implements GameStage {
             BrickActor brick = iterator.next();
             if (!brick.isDestroyed() && ballRect.overlaps(brick.getHitBox())) {
 
-                COLLISION_SOUND.play();
+                playEffect("collisionSound");
 
                 Rectangle brickRect = brick.getHitBox();
 

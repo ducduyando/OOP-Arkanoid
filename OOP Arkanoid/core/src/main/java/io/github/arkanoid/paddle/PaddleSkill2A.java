@@ -1,9 +1,9 @@
 package io.github.arkanoid.paddle;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
+
 
 
 public class PaddleSkill2A implements PaddleSkill {
@@ -68,6 +68,7 @@ public class PaddleSkill2A implements PaddleSkill {
 
     public void fire() {
         isSkillActivated = true;
+        playEffect("beeSound");
     }
 
 

@@ -6,6 +6,7 @@ import io.github.arkanoid.entities.FinalBossSkill;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Boss3Skill1B implements FinalBossSkill {
     Boss3 owner;
@@ -73,7 +74,9 @@ public class Boss3Skill1B implements FinalBossSkill {
 
     @Override
     public void enter(FinalBoss finalBoss) {
+
         this.actionCounter = 0;
+        playEffect("chainsawSound");
     }
 
     @Override

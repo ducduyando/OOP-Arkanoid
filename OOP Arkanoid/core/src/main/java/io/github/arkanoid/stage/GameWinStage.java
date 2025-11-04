@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -31,7 +31,7 @@ public class GameWinStage implements GameStage {
         stage.addActor(winEffectActor);
         Gdx.input.setInputProcessor(stage);
 
-        VICTORY_THEME.play();
+        playMusic("victoryTheme");
     }
     @Override
     public void update(float delta) {

@@ -6,6 +6,7 @@ import io.github.arkanoid.entities.*;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Boss3Skill1A implements FinalBossSkill {
     private Boss3 owner;
@@ -63,7 +64,9 @@ public class Boss3Skill1A implements FinalBossSkill {
 
     @Override
     public void enter(FinalBoss finalBoss) {
+
         this.actionCounter = 0;
+        playEffect("rocketSound");
     }
 
     @Override

@@ -14,23 +14,40 @@ public class MusicManager implements Disposable {
     private static MusicManager instance;
 
 
-    private Map<String, Music> soundtrackMap;
-    private Map<String, Sound> sfxMap;
+    private static final Map<String, Music> soundtrackMap = new HashMap<>();
+    private static final Map<String, Sound> sfxMap = new HashMap<>();
 
 
-    private float musicVolume = 1.0f;
-    private float effectVolume = 1.0f;
+    private static float musicVolume = 1.0f;
+    private static float effectVolume = 1.0f;
 
 
-    private Music currentMusic;
-    private String currentMusicId;
+    private static Music currentMusic;
+    private static String currentMusicId;
 
 
     private MusicManager() {
-        soundtrackMap = new HashMap<>();
-        sfxMap = new HashMap<>();
 
-        sfxMap["collisionSound"] = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
+        sfxMap.put("collisionSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav")));
+        sfxMap.put("deadSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Dead" + ".wav")));
+        sfxMap.put("getHitSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Get hit" + ".wav")));
+        sfxMap.put("hpUpSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Hp up" + ".wav")));
+        sfxMap.put("switchSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "switch" + ".wav")));
+        sfxMap.put("beeSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Bee" + ".wav")));
+        sfxMap.put("bombSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Bomb" + ".wav")));
+        sfxMap.put("chainsawSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Chainsaw" + ".wav")));
+        sfxMap.put("honeyShieldSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Honey Shield" + ".wav")));
+        sfxMap.put("laserBeamSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Laser Beam" + ".wav")));
+        sfxMap.put("laserSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Laser" + ".wav")));
+        sfxMap.put("rocketSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Rocket" + ".wav")));
+        sfxMap.put("spikeSound", Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Spike" + ".wav")));
+
+        soundtrackMap.put("defeatedTheme", Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Defeated theme" + ".mp3")));
+        soundtrackMap.put("victoryTheme", Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Victory theme" + ".mp3")));
+        soundtrackMap.put("stage1Theme", Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Stage1 theme" + ".mp3")));
+        soundtrackMap.put("menuTheme", Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Menu theme" + ".mp3")));
+        soundtrackMap.put("stage2Theme", Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Stage2 theme" + ".mp3")));
+        soundtrackMap.put("stage3Theme", Gdx.audio.newMusic(Gdx.files.internal("Soundtrack/" + "Stage3 theme" + ".mp3")));
     }
 
 
@@ -42,7 +59,7 @@ public class MusicManager implements Disposable {
     }
 
 
-    public void loadMusic(String id, String source) {
+    public static void loadMusic(String id, String source) {
 
         Music music = Gdx.audio.newMusic(Gdx.files.internal(source));
         if (music != null) {
@@ -53,7 +70,7 @@ public class MusicManager implements Disposable {
     }
 
 
-    public void loadEffect(String id, String source) {
+    public static void loadEffect(String id, String source) {
 
         Sound effect = Gdx.audio.newSound(Gdx.files.internal(source));
         if (effect != null) {
@@ -64,8 +81,8 @@ public class MusicManager implements Disposable {
     }
 
 
-    public void playMusic(String id) {
-        Music music = soundtrackMap.get(id);
+    public static void playMusic(String name) {
+        Music music = soundtrackMap.get(name);
         if (music != null) {
             // Stop current music if playing
             if (currentMusic != null && currentMusic.isPlaying()) {
@@ -73,7 +90,7 @@ public class MusicManager implements Disposable {
             }
 
             currentMusic = music;
-            currentMusicId = id;
+            currentMusicId = name;
             currentMusic.setVolume(musicVolume);
             currentMusic.setLooping(true);
             currentMusic.play();
@@ -81,29 +98,29 @@ public class MusicManager implements Disposable {
     }
 
 
-    public void playEffect(String id) {
-        Sound effect = sfxMap.get(id);
+    public static void playEffect(String name) {
+        Sound effect = sfxMap.get(name);
         if (effect != null) {
             effect.play(effectVolume);
         }
     }
 
 
-    public void playEffect(String id, float volume) {
-        Sound effect = sfxMap.get(id);
+    public static void playEffect(String name, float volume) {
+        Sound effect = sfxMap.get(name);
         if (effect != null) {
             effect.play(volume);
         }
     }
 
-    public void stopMusic() {
+    public static void stopMusic() {
         if (currentMusic != null && currentMusic.isPlaying()) {
             currentMusic.stop();
         }
     }
 
 
-    public void pauseMusic() {
+    public static void pauseMusic() {
         if (currentMusic != null && currentMusic.isPlaying()) {
             currentMusic.pause();
         }
@@ -116,50 +133,50 @@ public class MusicManager implements Disposable {
         }
     }
 
-    public void setMusicVolume(float volume) {
-        this.musicVolume = Math.max(0.0f, Math.min(1.0f, volume));
+    public static void setMusicVolume(float volume) {
+        musicVolume = Math.max(0.0f, Math.min(1.0f, volume));
         if (currentMusic != null) {
-            currentMusic.setVolume(this.musicVolume);
+            currentMusic.setVolume(musicVolume);
         }
     }
 
 
-    public void setEffectVolume(float volume) {
-        this.effectVolume = Math.max(0.0f, Math.min(1.0f, volume));
+    public static void setEffectVolume(float volume) {
+        effectVolume = Math.max(0.0f, Math.min(1.0f, volume));
     }
 
 
-    public float getMusicVolume() {
+    public static float getMusicVolume() {
         return musicVolume;
     }
 
 
-    public float getEffectVolume() {
+    public static float getEffectVolume() {
         return effectVolume;
     }
 
 
-    public boolean isMusicPlaying() {
+    public static boolean isMusicPlaying() {
         return currentMusic != null && currentMusic.isPlaying();
     }
 
 
-    public boolean hasMusicLoaded(String id) {
+    public static boolean hasMusicLoaded(String id) {
         return soundtrackMap.containsKey(id);
     }
 
 
-    public boolean hasEffectLoaded(String id) {
+    public static boolean hasEffectLoaded(String id) {
         return sfxMap.containsKey(id);
     }
 
 
-    public String getCurrentMusicId() {
+    public static String getCurrentMusicId() {
         return currentMusicId;
     }
 
 
-    public void preloadGameSounds() {
+    public static void preloadGameSounds() {
         // Load common game sounds
         loadEffect("paddle_hit", "sounds/paddle_hit.wav");
         loadEffect("brick_break", "sounds/brick_break.wav");
@@ -177,7 +194,7 @@ public class MusicManager implements Disposable {
     }
 
 
-    public void clean() {
+    public static void clean() {
         // Stop current music
         if (currentMusic != null) {
             currentMusic.stop();

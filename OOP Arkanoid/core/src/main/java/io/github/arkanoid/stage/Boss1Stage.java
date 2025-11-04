@@ -2,7 +2,7 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -119,6 +119,8 @@ public class Boss1Stage implements GameStage {
         if (saveData != null && saveData.projectileData != null) {
             restoreProjectiles(stage, saveData.projectileData);
         }
+
+        playMusic("stage1Theme");
     }
 
     @Override
@@ -170,9 +172,7 @@ public class Boss1Stage implements GameStage {
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.skillCollision(stage, ball);
             gameLogic.bossCollision(ball);
-            if (gameLogic.paddleCollision(ball)) {
-                COLLISION_SOUND.play();
-            }
+            gameLogic.paddleCollision(ball);
             if (boss1.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
                 isCompleted = true;

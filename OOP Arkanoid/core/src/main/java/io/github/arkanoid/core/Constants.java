@@ -65,7 +65,7 @@ public class Constants {
     public static final float BOSS1_INITIAL_Y = SCREEN_HEIGHT * 0.6f;
 
     /** Boss1 Centering. */
-    public static final float BOSS1_COOLDOWN_DURATION = 3f;
+    public static final float BOSS1_COOLDOWN_DURATION = 2f;
 
     /** Boss1 Skill 1. */
     public static final int BOSS1_SKILL1_WIDTH = 80;
@@ -74,7 +74,7 @@ public class Constants {
     public static final int MAX_BOMBS = 3;
 
     public static final float BOMB_SPEED_Y = 400f;
-    public static final float BOSS_STOP_TIME = 1f;
+    public static final float BOSS_STOP_TIME = 0.75f;
 
     /** Boss1 Skill 2. */
     public static final int LASER_WIDTH = 80;
@@ -91,14 +91,14 @@ public class Constants {
 
     /** Boss2 Random moving. */
     public static final float BOSS2_COOLDOWN_DURATION = 2f;
-    public static final float BOSS2_SKILL_INTERVAL = 5f;
+    public static final float BOSS2_SKILL_INTERVAL = 3f;
 
     /** Boss2 Skill 1. */
     public static final int BOSS2_SKILL1_WIDTH = 96;
     public static final int BOSS2_SKILL1_HEIGHT = 96;
 
-    public static final float SPAWN_INTERVAL = 5f;
-    public static final float SPAWN_BEE_DELAY = 0.5f;
+    public static final float SPAWN_INTERVAL = 3f;
+    public static final float SPAWN_BEE_DELAY = 0.25f;
     public static final float BEE_SPEED_Y = 400f;
 
     /** Boss2 Skill 2. */
@@ -117,12 +117,12 @@ public class Constants {
 
     /** Boss3 Random moving. */
     public static final float BOSS3_COOLDOWN_DURATION = 2f;
-    public static final float BOSS3_SKILL_INTERVAL = 5f;
+    public static final float BOSS3_SKILL_INTERVAL = 3f;
 
     /** Boss3 Skill 1-A. */
     public static final int BOSS3_SKILL_1A_WIDTH = 352;
     public static final int BOSS3_SKILL_1A_HEIGHT = 352;
-    public static final int ROCKET_SPEED = 550;
+    public static final int ROCKET_SPEED = 600;
 
     public static final int MAX_ROCKETS = 3;
 
@@ -141,11 +141,11 @@ public class Constants {
     public static final int ROTATION_SPEED = 1080;
 
     /** Boss3 Skill 2-B. */
-    public static final Vector2 LASER_SPEED = new Vector2(400f, 400f);
+    public static final Vector2 LASER_SPEED = new Vector2(800f, 800f);
 
     public static final int EYES_DISTANCE = 120;
-    public static final Vector2 LEFT_EYE_COORDINATE = new Vector2(55, 184);
-    public static final Vector2 RIGHT_EYE_COORDINATE = new Vector2(175, 184);
+    public static final Vector2 LEFT_EYE_COORDINATE = new Vector2(56, 184);
+    public static final Vector2 RIGHT_EYE_COORDINATE = new Vector2(176, 184);
 
     public static final int MAX_LASER_BEAMS = 5;
     public static final float LASER_DELAY = 0.5f;
@@ -159,7 +159,7 @@ public class Constants {
     /** Paddle Skill 2-A. */
     public static final int MAX_BEES = 3;
     public static final float NEXT_BEE_SPAWN_DELAY = 0.25f;
-    public static final float BEE_BULLET_SPEED_Y = 300f;
+    public static final float BEE_BULLET_SPEED_Y = 600f;
 
     /** Paddle Skill 2-B. */
     public static final float HONEY_SHIELD_DURATION = 4f;

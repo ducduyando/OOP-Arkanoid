@@ -11,7 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
+
 
 
 public class PowerUpMenu extends Actor {
@@ -112,7 +113,7 @@ public class PowerUpMenu extends Actor {
                 || Gdx.input.isKeyJustPressed(Input.Keys.A)
                 || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
 
-                SWITCH_SOUND.play();
+                playEffect("switchSound");
                 option = (option == PowerUpMenu.Option.SKILL1) ? PowerUpMenu.Option.SKILL2 : PowerUpMenu.Option.SKILL1;
             }
         }
@@ -140,6 +141,6 @@ public class PowerUpMenu extends Actor {
 
     public void dispose() {
         transitionSprite.dispose();
-        SWITCH_SOUND.dispose();
+        playEffect("switchSound");
     }
 }

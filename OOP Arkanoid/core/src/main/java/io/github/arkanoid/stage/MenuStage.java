@@ -9,6 +9,8 @@ import io.github.arkanoid.ui.Button;
 import io.github.arkanoid.ui.Button.*;
 import io.github.arkanoid.ui.ParallaxBackground;
 import org.w3c.dom.Text;
+import static io.github.arkanoid.core.MusicManager.*;
+
 
 public class
 MenuStage implements GameStage {
@@ -33,6 +35,8 @@ MenuStage implements GameStage {
 
         this.gdxStage.addActor(this.menuBackground);
         this.gdxStage.addActor(this.menuButton);
+
+        playMusic("menuTheme");
     }
 
     @Override

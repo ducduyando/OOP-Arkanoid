@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import io.github.arkanoid.entities.Ball;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.playEffect;
 
 public class PaddleSkill1A extends Ball implements PaddleSkill  {
     public enum Phase {
@@ -94,6 +95,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         skill1AFiringTime = 0f;
         setLaunched(false); // Reset launch state
         setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
+        playEffect("bombSound");
     }
 
     @Override

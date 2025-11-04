@@ -5,6 +5,7 @@ import io.github.arkanoid.entities.BossSkill;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Boss2Skill1 implements BossSkill {
     private final Boss2 owner;

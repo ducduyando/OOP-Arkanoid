@@ -2,8 +2,6 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -26,6 +24,8 @@ import io.github.arkanoid.ui.PauseMenu;
 import io.github.arkanoid.ui.SkillIcon;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
+
 
 public class Boss2Stage implements GameStage {
     private Stage stage;
@@ -73,7 +73,6 @@ public class Boss2Stage implements GameStage {
     // time
     private float stageTime = 0f;
 
-    private Sound collisionSound;
     // Save data for loading
     private Save.SaveData saveData;
 
@@ -103,7 +102,6 @@ public class Boss2Stage implements GameStage {
             bgTextures[i] = new Texture("Background/" + "Stage2/" + "layer" + i + ".png");
         }
 
-        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
 
         // Create entities with saved positions if available
         if (saveData != null) {
@@ -182,6 +180,8 @@ public class Boss2Stage implements GameStage {
                 }
             }
         }
+
+        playMusic("stage2Theme");
     }
 
     @Override
@@ -235,10 +235,8 @@ public class Boss2Stage implements GameStage {
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.skillCollision(stage, ball);
             gameLogic.bossCollision(ball);
+            gameLogic.paddleCollision(ball);
 
-            if (gameLogic.paddleCollision(ball)) {
-                collisionSound.play();
-            }
 
             if (boss2.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
@@ -253,6 +251,7 @@ public class Boss2Stage implements GameStage {
                     && !paddleSkill1A1.isLaunched()
                     && paddleSkill1A2.isSkill1AReady()
                     && !paddleSkill1A2.isLaunched()) {
+
 
                     paddleSkill1A1.enter(paddle);
                     paddleSkill1A1.setLaunched(true);
@@ -376,9 +375,6 @@ public class Boss2Stage implements GameStage {
         // SkillIcon texture will be disposed automatically by LibGDX
         if (stage != null) {
             stage.dispose();
-        }
-        if (collisionSound != null) {
-            collisionSound.dispose();
         }
     }
 

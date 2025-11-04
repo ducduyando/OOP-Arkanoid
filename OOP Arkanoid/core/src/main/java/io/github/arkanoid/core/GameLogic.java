@@ -21,6 +21,7 @@ import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.entities.Boss;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 
 
@@ -81,11 +82,11 @@ public class GameLogic {
         }
     }
 
-    public boolean paddleCollision(Ball ball) {
+    public void paddleCollision(Ball ball) {
         // Force check game over first
         if (paddleRef.isGameOver()) {
             System.out.println("GameLogic: paddleCollision skipped - paddle is game over (state: " + paddleRef.getState() + ")");
-            return false;
+            return;
         }
 
         Rectangle ballRect = ball.getHitBox();
@@ -93,7 +94,7 @@ public class GameLogic {
 
         // Double check - if paddle rect is empty, skip
         if (paddleRect.width <= 0 || paddleRect.height <= 0) {
-            return false;
+            return;
         }
 
         if (ballRect.overlaps(paddleRect)) {
@@ -104,9 +105,8 @@ public class GameLogic {
                 float speed = ball.getVelocity().len();
                 ball.setVelocity(speed * (float) Math.sin(bounceAngle(ballRect, paddleRect)), Math.abs(speed * (float) Math.cos(bounceAngle(ballRect, paddleRect))));
             }
-            return true;
+            playEffect("collisionSound");
         }
-        return false;
     }
 
     public void boundaryCollision(Ball ball, float delta, int topBoundary) {
@@ -124,14 +124,17 @@ public class GameLogic {
         if (ball.getX() + ball.getVelocity().x * delta <= LEFT_BOUNDARY) {
             ball.setPosition(LEFT_BOUNDARY, ball.getY());
             reflect(ball.getVelocity(), new Vector2(1,0));
+            playEffect("collisionSound");
         }
         if (ball.getX() + BALL_WIDTH + ball.getVelocity().x * delta  >= RIGHT_BOUNDARY) {
             ball.setPosition(RIGHT_BOUNDARY - BALL_WIDTH, ball.getY());
             reflect(ball.getVelocity(), new Vector2(-1, 0));
+            playEffect("collisionSound");
         }
         if (ball.getY() + BALL_HEIGHT + ball.getVelocity().y * delta >= topBoundary) {
             ball.setPosition(ball.getX(),  topBoundary - BALL_HEIGHT);
             reflect(ball.getVelocity(), new Vector2(0, -1));
+            playEffect("collisionSound");
         }
     }
 

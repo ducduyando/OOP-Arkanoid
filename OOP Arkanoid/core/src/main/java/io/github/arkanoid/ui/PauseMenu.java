@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class PauseMenu extends Actor {
 
@@ -119,7 +119,8 @@ public class PauseMenu extends Actor {
             } else if (option == Option.QUIT) {
                 option = Option.SAVE;
             }
-            SWITCH_SOUND.play();
+
+            playEffect("switchSound");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -133,7 +134,7 @@ public class PauseMenu extends Actor {
             } else if (option == Option.QUIT) {
                 option = Option.RESUME;
             }
-            SWITCH_SOUND.play();
+            playEffect("switchSound");
         }
     }
 

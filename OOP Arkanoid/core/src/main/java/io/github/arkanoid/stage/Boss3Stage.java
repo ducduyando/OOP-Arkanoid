@@ -16,6 +16,8 @@ import io.github.arkanoid.core.GameManager;
 import io.github.arkanoid.core.Save;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
+
 
 public class Boss3Stage implements GameStage {
 
@@ -65,7 +67,6 @@ public class Boss3Stage implements GameStage {
     // Save data for loading
     private Save.SaveData saveData;
 
-    private Sound collisionSound;
 
     public Boss3Stage() {
         this.saveData = null;
@@ -87,7 +88,6 @@ public class Boss3Stage implements GameStage {
             bgTextures[i] = new Texture("Background/" + "Stage3/" + "layer" + i + ".png");
         }
 
-        collisionSound = Gdx.audio.newSound(Gdx.files.internal("SFX/" + "Collision" + ".wav"));
 
 
         if (saveData != null) {
@@ -205,6 +205,8 @@ public class Boss3Stage implements GameStage {
         Texture skillIconKTexture = new Texture("SkillButton/" + "k" + ".png");
         skillIconK = new SkillIcon(paddle, skillIconKTexture, "K", 40 + SKILL_ICON_WIDTH, 20);
         stage.addActor(skillIconK);
+
+        playMusic("stage3Theme");
     }
 
     @Override
@@ -252,9 +254,7 @@ public class Boss3Stage implements GameStage {
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.skillCollision(stage, ball);
             gameLogic.finalBossCollision(ball);
-            if (gameLogic.paddleCollision(ball)) {
-                collisionSound.play();
-            }
+            gameLogic.paddleCollision(ball);
 
             if (boss3.isReadyToDeath() && !bossDefeated) {
                 bossDefeated = true;
@@ -481,9 +481,6 @@ public class Boss3Stage implements GameStage {
         // SkillIcon texture will be disposed automatically by LibGDX
         if (stage != null) {
             stage.dispose();
-        }
-        if (collisionSound != null) {
-            collisionSound.dispose();
         }
     }
 

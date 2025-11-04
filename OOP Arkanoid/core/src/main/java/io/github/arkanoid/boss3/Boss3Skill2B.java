@@ -4,6 +4,7 @@ import io.github.arkanoid.entities.FinalBoss;
 import io.github.arkanoid.entities.FinalBossSkill;
 import io.github.arkanoid.paddle.Paddle;
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Boss3Skill2B implements FinalBossSkill {
 
@@ -46,6 +47,7 @@ public class Boss3Skill2B implements FinalBossSkill {
     public void enter(FinalBoss finalBoss) {
         actionCounter = 0;
         nextLaserTimer = 0;
+        playEffect("laserSound");
     }
 
     @Override

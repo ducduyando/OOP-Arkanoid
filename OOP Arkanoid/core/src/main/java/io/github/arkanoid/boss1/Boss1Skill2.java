@@ -6,6 +6,7 @@ import io.github.arkanoid.entities.BossSkill;
 import java.util.Random;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class Boss1Skill2 implements BossSkill {
     private enum Phase {
@@ -33,6 +34,8 @@ public class Boss1Skill2 implements BossSkill {
         owner.getStage().addActor(this.laserInstance);
 
         currentPhase = Phase.CHARGING;
+
+        playEffect("laserBeamSound");
 
         if (new Random().nextBoolean()) {
             sweepDirection = 1;

@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 
 public class Boss extends Actor {
@@ -113,7 +113,7 @@ public class Boss extends Actor {
             }
             this.state = State.TAKING_DAMAGE;
             this.takeDamageTimer = 0f;
-            GET_HIT_SOUND.play();
+            playEffect("getHitSound");
         }
     }
 
@@ -166,7 +166,7 @@ public class Boss extends Actor {
             if (deathAnimation.isAnimationFinished(deathTimer)) {
                 isReadyToDeath = true;
                 this.remove();
-                DEAD_SOUND.play();
+                playEffect("deadSound");
             }
             return;
         }

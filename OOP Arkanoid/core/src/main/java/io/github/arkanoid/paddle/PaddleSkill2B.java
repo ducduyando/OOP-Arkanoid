@@ -1,10 +1,11 @@
 package io.github.arkanoid.paddle;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+
 import com.badlogic.gdx.graphics.Texture;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
+
 
 
 public class PaddleSkill2B implements PaddleSkill {
@@ -69,6 +70,7 @@ public class PaddleSkill2B implements PaddleSkill {
             isSkill2BReady = false;
             skill2BCooldownTimer = PADDLE_SKILL_COOLDOWN;
             paddleShieldTime = 0;
+            playEffect("honeyShieldSound");
         }
     }
 

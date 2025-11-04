@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicResource.*;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class GameLoseStage implements GameStage {
     private Stage stage;
@@ -31,7 +31,7 @@ public class GameLoseStage implements GameStage {
         stage.addActor(loseEffectActor);
         Gdx.input.setInputProcessor(stage);
 
-        DEFEATED_THEME.play();
+        playMusic("defeatedTheme");
     }
 
     @Override

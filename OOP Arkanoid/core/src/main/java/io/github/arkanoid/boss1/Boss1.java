@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import io.github.arkanoid.entities.Boss;
 
 import static io.github.arkanoid.core.Constants.*;
+import static io.github.arkanoid.core.MusicManager.*;
+
 
 public class Boss1 extends Boss {
 
@@ -31,6 +33,7 @@ public class Boss1 extends Boss {
 
     public void skill1() {
         if (getStage() != null) {
+            playEffect("bombSound");
             getStage().addActor(new BombProjectile(this.skill1Texture, getX() + getWidth() / 2, getY()));
         }
     }
