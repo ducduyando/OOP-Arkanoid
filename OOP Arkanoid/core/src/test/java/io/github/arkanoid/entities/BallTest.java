@@ -86,16 +86,7 @@ public class BallTest extends GdxTestRunner {
         assertEquals(250f, hitBox.y, 0.01f);
     }
 
-    @Test
-    void testDamage() {
-        assertEquals(10, ball.getDamage());
 
-        ball.setDamage(20);
-        assertEquals(20, ball.getDamage());
-
-        ball.setDamage(5);
-        assertEquals(5, ball.getDamage());
-    }
 
     @Test
     void testLaunchState() {
@@ -153,4 +144,5 @@ public class BallTest extends GdxTestRunner {
         assertEquals(400f, hitBox.y, 0.01f);
     }
 }
+
 

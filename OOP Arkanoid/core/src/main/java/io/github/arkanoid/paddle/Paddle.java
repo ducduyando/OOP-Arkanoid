@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.arkanoid.core.Constants;
 
 import static io.github.arkanoid.core.Constants.*;
 
@@ -20,6 +21,7 @@ public class Paddle extends Actor {
     private float blinkTimer = 0f;
     private boolean isVisible = true;
 
+    private boolean isTutorial = false;
     private boolean isShield = false;
 
     private PaddleSkill1A skill1A;
@@ -31,6 +33,8 @@ public class Paddle extends Actor {
     private boolean isSkill2ASelected = true;
 
     private PaddleSkill activeSkill;
+    private float tutorialUpBoundary = Constants.UP_BOUNDARY;
+
     public Paddle(Texture texture, float x, float y) {
         this.textureRegion = new TextureRegion(texture, 0, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
         this.hitBox = new Rectangle(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -251,7 +255,8 @@ public class Paddle extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.S) && getY() > DOWN_BOUNDARY) {
             moveBy(0, -PADDLE_VELOCITY.y * delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + PADDLE_HEIGHT + BALL_HEIGHT < UP_BOUNDARY) {
+        float currentUpBoundary = isTutorial ? tutorialUpBoundary : UP_BOUNDARY;
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && getY() + PADDLE_HEIGHT + BALL_HEIGHT < currentUpBoundary) {
             moveBy(0, PADDLE_VELOCITY.y * delta);
         }
 
@@ -278,5 +283,11 @@ public class Paddle extends Actor {
         if (skill2A != null) {
             skill2A.update(this, delta);
         }
+    }
+    public void setTutorialUpBoundary(float boundary) {
+        this.tutorialUpBoundary = boundary;
+    }
+    public void setTutorial(boolean isTutorial) {
+        this.isTutorial = isTutorial;
     }
 }

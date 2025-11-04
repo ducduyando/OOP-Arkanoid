@@ -1,6 +1,8 @@
-// Đặt trong: core/src/test/java/io/github/arkanoid/paddle/
+
 package io.github.arkanoid.paddle;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import io.github.arkanoid.GdxTestRunner; // <-- Kế thừa lớp setup
@@ -18,24 +20,27 @@ class PaddleTest extends GdxTestRunner {
     // Phương thức này chạy TRƯỚC MỖI @Test
     @BeforeEach
     void setUp() {
-        // Tạo một Texture giả.
-        // File "badlogic.jpg" là file mặc định có trong mọi dự án LibGDX
-        // nó sẽ nằm trong core/src/main/assets/
-        dummyTexture = new Texture("badlogic.jpg");
+        // Tạo một Texture giả bằng cách tạo Pixmap 1x1 pixel
+        // Thay vì load file không tồn tại
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        dummyTexture = new Texture(pixmap);
+        pixmap.dispose();
 
         // Khởi tạo Paddle ở (100, 100)
         paddle = new Paddle(dummyTexture, 100, 100);
     }
 
-    // --- CÁC TEST CASE ---
+
 
     @Test
     void testPaddleInitialization() {
         assertNotNull(paddle);
         assertEquals(100, paddle.getX());
         assertEquals(100, paddle.getY());
-        assertEquals(0, paddle.getState()); // Trạng thái ban đầu là 0
-        assertFalse(paddle.isInvincible()); // Ban đầu không bất tử
+        assertEquals(0, paddle.getState());
+        assertFalse(paddle.isInvincible());
     }
 
     @Test
@@ -56,13 +61,13 @@ class PaddleTest extends GdxTestRunner {
     void testTakeDamage_WhenInvincible() {
         // 1. Arrange
         paddle.setInvincible(true);
-        paddle.setState(1); // Giả sử đã bị thương
+        paddle.setState(1);
 
         // 2. Act
-        paddle.takeDamage(); // Cố gắng nhận thêm sát thương
+        paddle.takeDamage();
 
         // 3. Assert
-        assertEquals(1, paddle.getState()); // Trạng thái không đổi
+        assertEquals(1, paddle.getState());
         assertTrue(paddle.isInvincible());
     }
 

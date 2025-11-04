@@ -140,6 +140,9 @@ public class TutorialStage implements GameStage {
                 paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,
                 paddle.getY() + PADDLE_HEIGHT);
         }
+
+        paddle.setTutorial(true);
+        paddle.setTutorialUpBoundary(SCREEN_HEIGHT * 0.5f);
         bricks = new ArrayList<>();
 
         this.gameLogic = new GameLogic(paddle);

@@ -127,14 +127,18 @@ public class Boss3Stage implements GameStage {
 
             }
 
-            // Sync skill2 selection
+            // Initialize skill2 references (from Boss2 selection)
             if (isSkill2ASelected) {
-                if (paddle.getSkill2A() != null) {
-                    paddle.getSkill2A().setIsSkill2AReady(saveData.skill2AReady);
+                paddleSkill2A = paddle.getSkill2A();
+                paddleSkill2B = null;
+                if (paddleSkill2A != null) {
+                    paddleSkill2A.setIsSkill2AReady(saveData.skill2AReady);
                 }
             } else {
-                if (paddle.getSkill2B() != null) {
-                    paddle.getSkill2B().setIsSkill2BReady(saveData.skill2BReady);
+                paddleSkill2B = paddle.getSkill2B();
+                paddleSkill2A = null;
+                if (paddleSkill2B != null) {
+                    paddleSkill2B.setIsSkill2BReady(saveData.skill2BReady);
                 }
             }
         } else {
@@ -377,6 +381,57 @@ public class Boss3Stage implements GameStage {
         Save.stopGame();
     }
 
+    private void saveGame() {
+        // Don't allow saving if boss is already defeated
+        if (bossDefeated) {
+            return;
+        }
+
+        // Collect all projectiles using ProjectileSaveManager
+        ProjectileSaveManager.ProjectileData projectileData =
+            ProjectileSaveManager.collectProjectiles(stage);
+
+        // Get skill cooldown timers and ready states
+        boolean isSkill1ASelected = paddle.isSkill1ASelected();
+        float skill1ACooldownTimer = paddle.getSkill1ACooldownTimer();
+        float skill1BCooldownTimer = paddle.getSkill1BCooldownTimer();
+
+        // Get skill2 cooldown timers and ready states
+        boolean isSkill2ASelected = this.isSkill2ASelected;
+        float skill2ACooldownTimer = 0f;
+        boolean skill2AReady = true;
+        float skill2BCooldownTimer = 0f;
+        boolean skill2BReady = true;
+
+        if (paddleSkill2A != null) {
+            skill2ACooldownTimer = paddleSkill2A.getSkill2ACooldownTimer();
+            skill2AReady = paddleSkill2A.isSkill2AReady();
+        }
+        if (paddleSkill2B != null) {
+            skill2BCooldownTimer = paddleSkill2B.getSkill2BCooldownTimer();
+            skill2BReady = paddleSkill2B.isSkill2BReady();
+        }
+
+        Save.saveGameWithProjectiles(
+            3, // Boss3 stage
+            boss3.getHp(),
+            paddle.getState(),
+            projectileData,
+            paddle.getX(), paddle.getY(),
+            ball.getX(), ball.getY(),
+            ball.getVelocity().x, ball.getVelocity().y,
+            ball.isLaunched(),
+            boss3.getX(), boss3.getY(),
+            isSkill1ASelected,
+            skill1ACooldownTimer,
+            skill1BCooldownTimer,
+            isSkill2ASelected,
+            skill2ACooldownTimer,
+            skill2AReady,
+            skill2BCooldownTimer,
+            skill2BReady
+        );
+    }
 
 
     private void handlePauseInput() {
@@ -438,34 +493,5 @@ public class Boss3Stage implements GameStage {
 
     public boolean isGameOver() {
         return gameOver;
-    }
-
-    private void saveGame() {
-        // Collect all projectiles using ProjectileSaveManager
-        ProjectileSaveManager.ProjectileData projectileData =
-            ProjectileSaveManager.collectProjectiles(stage);
-
-        boolean skill2AReady = (paddle.getSkill2A() != null) ? paddle.getSkill2A().isSkill2AReady() : true;
-        boolean skill2BReady = (paddle.getSkill2B() != null) ? paddle.getSkill2B().isSkill2BReady() : true;
-
-        Save.saveGameWithProjectiles(
-            3, // Boss3 stage
-            boss3.getHp(),
-            paddle.getState(),
-            projectileData,
-            paddle.getX(), paddle.getY(),
-            ball.getX(), ball.getY(),
-            ball.getVelocity().x, ball.getVelocity().y,
-            ball.isLaunched(),
-            boss3.getX(), boss3.getY(),
-            paddle.isSkill1ASelected(),
-            paddle.getSkill1ACooldownTimer(),
-            paddle.getSkill1BCooldownTimer(),
-            paddle.isSkill2ASelected(),
-            paddle.getSkill2ACooldownTimer(),
-            skill2AReady ,
-            paddle.getSkill2BCooldownTimer(),
-            skill2BReady
-        );
     }
 }
