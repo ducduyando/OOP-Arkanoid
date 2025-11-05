@@ -26,6 +26,8 @@
 - You will control the paddle with WASD
 - The abilities are controlled with J and K
 
+  https://github.com/user-attachments/assets/055ca51b-fa0f-441d-ac64-b88278f505d4
+
 ## **Installation instructions**
 - Download the code and run it with Intellij
 - To launch the game, go to OOP-Arkanoid/OOP Arkanoid/lwjgl3/src/main/java/io/github/lwjgl3/Lwjgl3Launcher and then click run
@@ -35,7 +37,7 @@
 - Code: Coded on Intellij, LibGdx with the help of Gemini and instruction videos on Youtube
 - Sprite : Self-made with the help of Freepik, Gemini and online references
 - Sountracks and SFXs : 
-  + Menu : Adventure Time - Come Along With Me
-  + Stage 1 : Astro Bot - Come On Then
-  + Stage 2 : Pokemon - Battle Music
-  + Stage 3 : Redstone 128 - The Final Battle
+  + Menu : [Adventure Time - Come Along With Me 8bit Version]((https://www.youtube.com/watch?v=nhp6y5deuC8))
+  + Stage 1 : [Astro Bot - Come On Then](https://youtu.be/nTOItgCH-9A?si=PWR3dxLbULPhcFDn)
+  + Stage 2 : [Pokemon - Battle Music](https://youtu.be/ptjVj4RwzKE?si=slqW5pWPbx6WpmBr)
+  + Stage 3 : [Redstone 128 - The Final Battle](https://youtu.be/_wmT9U1X7Cw?si=Y2Gn3xQz6AbXngKp)
