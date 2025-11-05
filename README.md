@@ -26,11 +26,12 @@
 - You will control the paddle with WASD
 - The abilities are controlled with J and K
 
-  https://github.com/user-attachments/assets/055ca51b-fa0f-441d-ac64-b88278f505d4
+
 
 ## **Installation instructions**
 - Download the code and run it with Intellij
-- To launch the game, go to OOP-Arkanoid/OOP Arkanoid/lwjgl3/src/main/java/io/github/lwjgl3/Lwjgl3Launcher and then click run
+- To launch the game, go to OOP-Arkanoid/OOP Arkanoid/lwjgl3/src/main/java/io/github/lwjgl3/Lwjgl3Launcher
+- Click run and you good to go
 
 ## **Sources**
 
