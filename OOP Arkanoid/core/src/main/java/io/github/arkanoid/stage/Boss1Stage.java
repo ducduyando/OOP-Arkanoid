@@ -57,7 +57,6 @@ public class Boss1Stage implements GameStage {
     public Boss1Stage() {
         this.saveData = null;
         // Reset game time when starting new game
-        deleteSave();
         resetGameTime();
 
         // Update GameManager state
