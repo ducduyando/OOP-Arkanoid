@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.arkanoid.paddle.Paddle;
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.*;
 
 public class Laser extends Actor {
 
@@ -24,8 +23,6 @@ public class Laser extends Actor {
 
     private Vector2 target;
     private Vector2 direction;
-
-    private long laserSoundId;
 
     public Laser(Texture laserTexture, Boss3 owner, Paddle paddle, float targetX, float targetY, boolean isLeftEye) {
 
@@ -56,8 +53,6 @@ public class Laser extends Actor {
         setRotation(rotationAngle);
 
         direction = target.cpy().sub(new Vector2(getX(), getY())).nor();
-
-        this.laserSoundId = playEffect("laserSound");
     }
 
     public Rectangle getHitBox() {
@@ -84,11 +79,5 @@ public class Laser extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(new TextureRegion(laserTexture), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-    }
-
-    @Override
-    public boolean remove() {
-        stopEffect("laserSound", laserSoundId);
-        return super.remove();
     }
 }

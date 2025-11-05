@@ -105,12 +105,11 @@ public class MusicManager implements Disposable {
         return -1;
     }
 
-    public static long playEffect(String name, float volume) {
+    public static void playEffect(String name, float volume) {
         Sound effect = sfxMap.get(name);
         if (effect != null) {
-            return effect.play(volume);
+            effect.play(volume);
         }
-        return -1;
     }
 
     public static void stopEffect(String name, long soundId) {

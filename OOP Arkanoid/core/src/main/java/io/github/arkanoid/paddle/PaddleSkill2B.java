@@ -1,7 +1,6 @@
 package io.github.arkanoid.paddle;
 
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 
 import static io.github.arkanoid.core.Constants.*;
@@ -27,7 +26,6 @@ public class PaddleSkill2B implements PaddleSkill {
     private float paddleShieldTime;
     private boolean isSkill2Start;
 
-    private long honeyShieldSoundId;
     public PaddleSkill2B(Paddle paddle) {
         owner = paddle;
         honeyShield = new Texture("PaddleSkill/" + "2b" + ".png");
@@ -58,7 +56,6 @@ public class PaddleSkill2B implements PaddleSkill {
 
     @Override
     public void enter(Paddle paddle) {
-        this.honeyShieldSoundId = playEffect("honeyShieldSound");
     }
 
     public void activate(Paddle paddle) {
@@ -73,6 +70,7 @@ public class PaddleSkill2B implements PaddleSkill {
             isSkill2BReady = false;
             skill2BCooldownTimer = PADDLE_SKILL_COOLDOWN;
             paddleShieldTime = 0;
+            playEffect("honeyShieldSound");
         }
     }
 
@@ -81,7 +79,6 @@ public class PaddleSkill2B implements PaddleSkill {
         if (paddleHoneyShield != null) {
             paddleHoneyShield.remove();
             paddleHoneyShield = null;
-            stopEffect("honeyShieldSound", honeyShieldSoundId);
         }
     }
 

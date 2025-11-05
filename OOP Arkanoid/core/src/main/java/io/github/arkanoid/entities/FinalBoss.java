@@ -50,7 +50,6 @@ public class FinalBoss extends Actor {
 
     protected boolean isReadyToDeath = false;
 
-    private long getHitSoundId;
 
     public FinalBoss(float x, float y, int bossWidth, int bossHeight, Vector2 velocity, int maxHp) {
 
@@ -118,7 +117,7 @@ public class FinalBoss extends Actor {
             }
             this.state = State.TAKING_DAMAGE;
             this.takeDamageTimer = 0f;
-            this.getHitSoundId = playEffect("getHitSound");
+            playEffect("getHitSound");
         }
     }
 
@@ -217,11 +216,5 @@ public class FinalBoss extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-    }
-
-    @Override
-    public boolean remove() {
-        stopEffect("getHitSound", getHitSoundId);
-        return super.remove();
     }
 }

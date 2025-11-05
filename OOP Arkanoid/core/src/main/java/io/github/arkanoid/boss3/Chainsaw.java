@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.*;
 
 public class Chainsaw extends Actor {
 
@@ -26,7 +25,6 @@ public class Chainsaw extends Actor {
 
     private boolean isVertical;
     private boolean isChainsawSkillFinished = false;
-    private long chainsawSoundId;
 
     private Animation<TextureRegion> chainsawSkillAnimation;
 
@@ -65,8 +63,6 @@ public class Chainsaw extends Actor {
         }
         chainsawSkillAnimation = new Animation<>(FRAME_DURATION, sawSkillFrames);
         currentFrame = chainsawSkillAnimation.getKeyFrame(0);
-
-        this.chainsawSoundId = playEffect("chainsawSound");
     }
 
     public boolean isChainsawSkillFinished() {
@@ -114,11 +110,5 @@ public class Chainsaw extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(target, targetX, targetY, 0, 0, target.getRegionWidth(), target.getRegionHeight(), 1f, 1f, rotationAngle);
         batch.draw(currentFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-    }
-
-    @Override
-    public boolean remove() {
-        stopEffect("chainsawSound", chainsawSoundId);
-        return super.remove();
     }
 }

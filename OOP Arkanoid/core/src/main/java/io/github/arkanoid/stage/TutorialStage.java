@@ -2,6 +2,7 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -52,7 +53,6 @@ public class TutorialStage implements GameStage {
     // Save data for loading
     private Save.SaveData saveData;
 
-    private long currentSoundId;
 
     Cutscene cutscene;
 
@@ -228,10 +228,10 @@ public class TutorialStage implements GameStage {
             gameLogic.paddleCollision(ball);
 
         } else if (bricks.isEmpty() && !isCompleted) {
-             if (cutscene == null) {
-                 cutscene = new Cutscene();
-                 gdxStage.addActor(cutscene);
-             }
+            if (cutscene == null) {
+                cutscene = new Cutscene();
+                gdxStage.addActor(cutscene);
+            }
 
             if (cutscene.getState() == Cutscene.State.DONE) {
                 isFinished = true;
@@ -266,7 +266,7 @@ public class TutorialStage implements GameStage {
             BrickActor brick = iterator.next();
             if (!brick.isDestroyed() && ballRect.overlaps(brick.getHitBox())) {
 
-                currentSoundId = playEffect("collisionSound");
+                playEffect("collisionSound");
 
                 Rectangle brickRect = brick.getHitBox();
 

@@ -24,8 +24,6 @@ public class PaddleSkill2A implements PaddleSkill {
     }
 
     private Texture beeTexture;
-
-    private long beeSoundId;
     public PaddleSkill2A(Paddle owner) {
         this.owner = owner;
         this.beeTexture = new Texture("PaddleSkill/" + "2a" + ".png");
@@ -70,17 +68,17 @@ public class PaddleSkill2A implements PaddleSkill {
 
     public void fire() {
         isSkillActivated = true;
+        playEffect("beeSound");
     }
 
 
     @Override
     public void enter(Paddle paddle) {
-        this.beeSoundId = playEffect("beeSound");
+
     }
 
     @Override
     public void cleanup() {
-        stopEffect("beeSound", beeSoundId);
     }
 
 

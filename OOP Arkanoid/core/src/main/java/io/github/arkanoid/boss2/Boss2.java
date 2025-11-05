@@ -68,6 +68,7 @@ public class Boss2 extends Boss {
 
     public void skill1() {
         if (getStage() != null) {
+            playEffect("beeSound");
             getStage().addActor(new BeeEnemy(this.skill1Texture, getX() + getWidth() / 2 + BOSS2_SKILL1_WIDTH , getY() - BOSS2_SKILL1_HEIGHT ));
         }
     }
@@ -99,6 +100,7 @@ public class Boss2 extends Boss {
                         this.setHp(this.getHp() + damage);
                     }
                     heal = false;
+                    playEffect("hpUpSound");
                 }
                 return;
             }

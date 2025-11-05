@@ -12,7 +12,6 @@ import io.github.arkanoid.paddle.Paddle;
 
 import static io.github.arkanoid.core.Constants.*;
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.*;
 
 
 public class HoneyShield extends Actor {
@@ -21,8 +20,6 @@ public class HoneyShield extends Actor {
     private int shieldFrameCount;
     private final Animation<TextureRegion> shieldAnimation;
     private TextureRegion currentFrame;
-
-    private long hpUpSoundId;
 
     public HoneyShield(Texture texture, float x, float y) {
 
@@ -35,7 +32,6 @@ public class HoneyShield extends Actor {
         }
         shieldAnimation = new Animation<TextureRegion>(FRAME_DURATION, shieldFrames);
 
-        this.hpUpSoundId = playEffect("hpUpSound");
     }
 
     public void setHasShield(boolean hasShield) {
@@ -64,11 +60,5 @@ public class HoneyShield extends Actor {
         if (hasShield && currentFrame != null) {
             batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
         }
-    }
-
-    @Override
-    public boolean remove() {
-        stopEffect("hpUpSound", hpUpSoundId);
-        return super.remove();
     }
 }

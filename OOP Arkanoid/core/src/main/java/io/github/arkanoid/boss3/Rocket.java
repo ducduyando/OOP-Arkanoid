@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.arkanoid.core.Constants;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.*;
 
 public class Rocket extends Actor {
 
@@ -24,7 +23,6 @@ public class Rocket extends Actor {
 
     private boolean isInTarget = false;
     private boolean isRocketSkillFinished = false;
-    private long rocketSoundId;
 
     private Animation<TextureRegion> rocketSkillAnimation;
 
@@ -46,7 +44,6 @@ public class Rocket extends Actor {
         rocketSkillAnimation = new Animation<>(FRAME_DURATION * 1.5f, rocketSkillFrames);
         currentFrame = rocketSkillAnimation.getKeyFrame(0);
 
-        this.rocketSoundId = playEffect("rocketSound");
     }
 
     public Rectangle getHitBox() {
@@ -92,11 +89,5 @@ public class Rocket extends Actor {
             batch.draw(target, targetX, targetY);
             batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
         }
-    }
-
-    @Override
-    public boolean remove() {
-        stopEffect("rocketSound", rocketSoundId);
-        return super.remove();
     }
 }

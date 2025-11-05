@@ -30,7 +30,7 @@ public class Boss3Skill2A implements FinalBossSkill {
         boss3.setUsingSkill2A(true);
         boss3.skill2A();
         boss3.setSkill2AFinished(false);
-        playEffect("spikeSound");
+
     }
 
     @Override

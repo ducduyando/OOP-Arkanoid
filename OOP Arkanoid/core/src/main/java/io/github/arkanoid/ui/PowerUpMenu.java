@@ -39,7 +39,6 @@ public class PowerUpMenu extends Actor {
     private final Animation<TextureRegion> skill2Animation;
     public final Animation<TextureRegion> transitionAnimation;
 
-    private long currentSoundId;
 
     public PowerUpMenu(Texture powerUpButton) {
 
@@ -114,7 +113,7 @@ public class PowerUpMenu extends Actor {
                 || Gdx.input.isKeyJustPressed(Input.Keys.A)
                 || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
 
-                currentSoundId = playEffect("switchSound");
+                playEffect("switchSound");
                 option = (option == PowerUpMenu.Option.SKILL1) ? PowerUpMenu.Option.SKILL2 : PowerUpMenu.Option.SKILL1;
             }
         }
@@ -142,6 +141,6 @@ public class PowerUpMenu extends Actor {
 
     public void dispose() {
         transitionSprite.dispose();
-        currentSoundId = playEffect("switchSound");
+        playEffect("switchSound");
     }
 }
