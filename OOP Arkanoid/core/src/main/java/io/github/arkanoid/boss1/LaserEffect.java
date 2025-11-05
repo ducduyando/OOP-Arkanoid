@@ -8,8 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.playEffect;
-import static io.github.arkanoid.core.MusicManager.stopEffect;
+import static io.github.arkanoid.core.MusicManager.*;
 
 //
 public class LaserEffect extends Actor {

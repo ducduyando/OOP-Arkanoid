@@ -4,8 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import io.github.arkanoid.entities.Ball;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.playEffect;
-
+import static io.github.arkanoid.core.MusicManager.*;
 public class PaddleSkill1A extends Ball implements PaddleSkill  {
     public enum Phase {
         CHARGING,
@@ -22,6 +21,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
     private Phase currentPhase = Phase.DONE;
 
     private boolean skill1AReady = true;
+    private long bombSoundId;
 
     public PaddleSkill1A(Paddle paddle) {
         super(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
@@ -95,7 +95,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
         skill1AFiringTime = 0f;
         setLaunched(false); // Reset launch state
         setPosition(paddle.getX() + (PADDLE_WIDTH - BALL_WIDTH) / 2f,paddle.getY() + PADDLE_HEIGHT);
-        playEffect("bombSound");
+        this.bombSoundId = playEffect("bombSound");
     }
 
     @Override
@@ -104,6 +104,7 @@ public class PaddleSkill1A extends Ball implements PaddleSkill  {
             paddleBallUpgrade.remove();
             paddleBallUpgrade = null;
         }
+        stopEffect("bombSound", bombSoundId);
         currentPhase = Phase.DONE;
         setLaunched(false);
     }

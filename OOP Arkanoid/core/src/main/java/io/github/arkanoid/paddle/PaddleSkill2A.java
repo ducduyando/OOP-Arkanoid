@@ -14,6 +14,7 @@ public class PaddleSkill2A implements PaddleSkill {
     private float spawnTimer = 0f;
     private int actionCounter = 0;
     private boolean isSkillActivated = false;
+    private long beeSoundId;
 
     public boolean isSkill2AReady() {
         return isSkill2AReady;
@@ -68,17 +69,17 @@ public class PaddleSkill2A implements PaddleSkill {
 
     public void fire() {
         isSkillActivated = true;
-        playEffect("beeSound");
     }
 
 
     @Override
     public void enter(Paddle paddle) {
-
+        this.beeSoundId = playEffect("beeSound");
     }
 
     @Override
     public void cleanup() {
+        stopEffect("beeSound", beeSoundId);
     }
 
 

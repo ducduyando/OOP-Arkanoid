@@ -16,7 +16,7 @@ public class PauseMenu extends Actor {
 
     private final Texture pauseBackground = new Texture("Pause/" + "layer" + 0 + ".png");
     private final Texture buttonSprite = new Texture("Pause/" + "layer" + 1 +".png");
-
+    private long currentSoundId;
 
     private TextureRegion currentFrame;
     private float stateTime = 0f;
@@ -120,7 +120,7 @@ public class PauseMenu extends Actor {
                 option = Option.SAVE;
             }
 
-            playEffect("switchSound");
+            currentSoundId = playEffect("switchSound");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)
@@ -134,7 +134,7 @@ public class PauseMenu extends Actor {
             } else if (option == Option.QUIT) {
                 option = Option.RESUME;
             }
-            playEffect("switchSound");
+            currentSoundId = playEffect("switchSound");
         }
     }
 

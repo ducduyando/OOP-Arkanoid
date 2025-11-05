@@ -2,7 +2,6 @@ package io.github.arkanoid.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -52,6 +51,7 @@ public class TutorialStage implements GameStage {
 
     // Save data for loading
     private Save.SaveData saveData;
+    private long currentSoundId;
 
 
     Cutscene cutscene;
@@ -266,7 +266,7 @@ public class TutorialStage implements GameStage {
             BrickActor brick = iterator.next();
             if (!brick.isDestroyed() && ballRect.overlaps(brick.getHitBox())) {
 
-                playEffect("collisionSound");
+                currentSoundId = playEffect("collisionSound");
 
                 Rectangle brickRect = brick.getHitBox();
 
