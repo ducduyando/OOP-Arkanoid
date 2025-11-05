@@ -91,6 +91,6 @@ public class BeeEnemy extends Actor {
     @Override
     public boolean remove() {
         stopEffect("beeSound", beeSoundId);
-        return false;
+        return super.remove();
     }
 }
