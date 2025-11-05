@@ -19,6 +19,8 @@
 - This game focuses on countering and understand how bosses' abilities work, skillfully control the paddle to catch the ball while dodging the bosses' skill
 - This upgraded version of Arkanoid is remade with different concepts, pixel art styles, 8bit and retro arcade soundtracks and SFXs
 
+  ![Menu](https://github.com/user-attachments/assets/929280d5-89f5-4ad5-aa89-803bf7263496)
+
 ## **Binding buttons**
 
 - You will control the paddle with WASD
