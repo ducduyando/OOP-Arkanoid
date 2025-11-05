@@ -9,14 +9,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.playEffect;
-import static io.github.arkanoid.core.MusicManager.stopEffect;
+import static io.github.arkanoid.core.MusicManager.*;
 
 public class BombProjectile extends Actor {
     private final Animation<TextureRegion> animation;
     private float stateTime = 0f;
     private final Rectangle hitBox;
 
+    private long bombSoundId;//Id
     public BombProjectile(Texture texture, float x, float y) {
         int frameCount = texture.getWidth() / BOSS1_SKILL1_WIDTH;
 
@@ -30,6 +30,8 @@ public class BombProjectile extends Actor {
         setPosition(x - BOSS1_SKILL1_WIDTH / 2f, y);
         setSize(BOSS1_SKILL1_WIDTH, BOSS1_SKILL1_HEIGHT);
         this.hitBox = new Rectangle(getX(), getY(), BOSS1_SKILL1_WIDTH, BOSS1_SKILL1_HEIGHT);
+
+        this.bombSoundId = playEffect("bombSound");
     }
 
     public Rectangle getHitbox() {
@@ -47,13 +49,10 @@ public class BombProjectile extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        long soundId = playEffect("bombSound");
-        stateTime += delta;
         moveBy(0, -BOMB_SPEED_Y * delta);
         hitBox.setPosition(getX(), getY());
 
         if (getY() + getHeight() < 0) {
-            stopEffect("bombSound", soundId);
             this.remove();
         }
     }
@@ -62,5 +61,11 @@ public class BombProjectile extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
+    }
+
+    @Override
+    public boolean remove() {
+        stopEffect("bombSound", this.bombSoundId);
+        return super.remove();
     }
 }
