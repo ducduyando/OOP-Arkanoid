@@ -33,5 +33,9 @@
 ## **Sources**
 
 - Code: Coded on Intellij, LibGdx with the help of Gemini and instruction videos on Youtube
-- Sprite
-- Sountracks and SFXs
+- Sprite : Self-made with the help of Freepik, Gemini and online references
+- Sountracks and SFXs : 
+  + Menu : Adventure Time - Come Along With Me
+  + Stage 1 : Astro Bot - Come On Then
+  + Stage 2 : Pokemon - Battle Music
+  + Stage 3 : Redstone 128 - The Final Battle
