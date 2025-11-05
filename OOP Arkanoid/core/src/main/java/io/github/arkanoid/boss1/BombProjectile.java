@@ -16,7 +16,7 @@ public class BombProjectile extends Actor {
     private float stateTime = 0f;
     private final Rectangle hitBox;
 
-    private long bombSoundId;
+    private long bombSoundId; //Id
     public BombProjectile(Texture texture, float x, float y) {
         int frameCount = texture.getWidth() / BOSS1_SKILL1_WIDTH;
 
