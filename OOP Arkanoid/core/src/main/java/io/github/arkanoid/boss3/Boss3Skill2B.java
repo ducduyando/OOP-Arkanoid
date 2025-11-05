@@ -47,6 +47,7 @@ public class Boss3Skill2B implements FinalBossSkill {
     public void enter(FinalBoss finalBoss) {
         actionCounter = 0;
         nextLaserTimer = 0;
+        playEffect("laserSound");
     }
 
     @Override

@@ -76,6 +76,7 @@ public class Boss3Skill1B implements FinalBossSkill {
     public void enter(FinalBoss finalBoss) {
 
         this.actionCounter = 0;
+        playEffect("chainsawSound");
     }
 
     @Override

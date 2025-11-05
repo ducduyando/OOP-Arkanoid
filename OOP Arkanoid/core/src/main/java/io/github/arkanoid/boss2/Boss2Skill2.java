@@ -74,6 +74,7 @@ public class Boss2Skill2 implements BossSkill {
         boss.setState(Boss.State.NORMAL);
 
         isSkill2Done = false;
+        playEffect("honeyShieldSound");
 
     }
 

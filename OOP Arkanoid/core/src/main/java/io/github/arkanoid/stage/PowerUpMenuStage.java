@@ -22,7 +22,7 @@ public class PowerUpMenuStage implements GameStage {
 
         this.powerUpMenuTexture = new Texture("PowerUp/" + "layer" + powerUpNumber + ".png");
         this.powerUpMenu = new PowerUpMenu(powerUpMenuTexture);
-
+        this.powerUpMenu.reset();
         this.gdxStage.addActor(this.powerUpMenu);
     }
 

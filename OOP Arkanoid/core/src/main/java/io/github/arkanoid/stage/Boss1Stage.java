@@ -11,7 +11,7 @@ import io.github.arkanoid.boss1.Boss1;
 import io.github.arkanoid.core.GameLogic;
 import io.github.arkanoid.core.GameManager;
 import io.github.arkanoid.core.ProjectileSaveManager;
-import io.github.arkanoid.core.Save;
+import io.github.arkanoid.core.Save.*;
 import io.github.arkanoid.entities.Ball;
 import io.github.arkanoid.paddle.Paddle;
 import io.github.arkanoid.ui.HealthBar;
@@ -20,6 +20,8 @@ import io.github.arkanoid.ui.PauseMenu;
 
 import static io.github.arkanoid.core.Constants.*;
 import static io.github.arkanoid.core.ProjectileSaveManager.restoreProjectiles;
+import static io.github.arkanoid.core.Save.*;
+
 
 public class Boss1Stage implements GameStage {
     private Stage stage;
@@ -47,7 +49,7 @@ public class Boss1Stage implements GameStage {
     private boolean isCompleted = false;
 
     // Save data for loading
-    private Save.SaveData saveData;
+    private SaveData saveData;
 
     // time
     private float stageTime = 0f;
@@ -55,16 +57,17 @@ public class Boss1Stage implements GameStage {
     public Boss1Stage() {
         this.saveData = null;
         // Reset game time when starting new game
-        Save.resetGameTime();
+        deleteSave();
+        resetGameTime();
 
         // Update GameManager state
         GameManager gameManager = GameManager.getInstance();
         gameManager.setCurrentStage(1);
-        gameManager.setCurrentPlayerName(Save.loadPlayerName());
+        gameManager.setCurrentPlayerName(loadPlayerName());
         System.out.println("Boss1Stage: Initialized with GameManager");
     }
 
-    public Boss1Stage(Save.SaveData saveData) {
+    public Boss1Stage(SaveData saveData) {
         this.saveData = saveData;
     }
 
@@ -167,7 +170,7 @@ public class Boss1Stage implements GameStage {
         if (!isCompleted && !bossDefeated) {
             stageTime += delta;
             // Add time to global game time
-            Save.addTime(delta);
+            addTime(delta);
             gameLogic.launch(ball);
             gameLogic.boundaryCollision(ball, delta, UP_BOUNDARY);
             gameLogic.skillCollision(stage, ball);
@@ -251,7 +254,7 @@ public class Boss1Stage implements GameStage {
         boolean isSkillASelected = paddle.isSkill1ASelected();
         float skill1ACooldownTimer = paddle.getSkill1ACooldownTimer();
         float skill1BCooldownTimer = paddle.getSkill1BCooldownTimer();
-        Save.saveGameWithProjectiles(
+        saveGameWithProjectiles(
             1, // Boss1 stage
             boss1.getHp(),
             paddle.getState(),

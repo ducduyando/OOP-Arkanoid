@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static io.github.arkanoid.core.Constants.*;
-import static io.github.arkanoid.core.MusicManager.*;
+import static io.github.arkanoid.core.MusicManager.playEffect;
+import static io.github.arkanoid.core.MusicManager.stopEffect;
 
 //
 public class LaserEffect extends Actor {
@@ -16,7 +17,6 @@ public class LaserEffect extends Actor {
     private float stateTime = 0f;
     private Rectangle hitbox;
 
-    private long laserSoundId;
     private boolean isLaserFinished = false;
 
     public LaserEffect(Texture texture, float bossX, float bossY) {
@@ -35,8 +35,6 @@ public class LaserEffect extends Actor {
         setPosition(x, y);
         setSize(LASER_WIDTH, LASER_HEIGHT);
         hitbox = new Rectangle(getX(), getY(), getWidth(), getHeight());
-
-        this.laserSoundId = playEffect("laserBeamSound");
     }
 
     public Rectangle getHitbox() {
@@ -58,10 +56,14 @@ public class LaserEffect extends Actor {
     @Override
     public void act(float delta) {
         hitbox.setPosition(getX(), getY());
+
+        long soundId = playEffect("laserBeamSound");
+
         if (!isLaserFinished) {
             stateTime += delta;
             if (laserAnimation.isAnimationFinished(stateTime)) {
                 isLaserFinished = true;
+                stopEffect("laserBeamSound", soundId);
             }
         }
     }
@@ -70,11 +72,5 @@ public class LaserEffect extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         TextureRegion currentFrame = laserAnimation.getKeyFrame(stateTime, false);
         batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
-    }
-
-    @Override
-    public boolean remove() {
-        stopEffect("laserBeamSound", this.laserSoundId);
-        return super.remove();
     }
 }

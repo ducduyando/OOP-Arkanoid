@@ -224,7 +224,7 @@ public class Main extends ApplicationAdapter {
                 return;
             }
         } else if (currentStage instanceof NameInputStage) {
-
+            this.powerUpNumber = 0;
             nextStage = new TutorialStage();
             loadingScreen = new LoadingScreen(stageTextures[0]);
             currentFlow = GameFlow.LOADING;
